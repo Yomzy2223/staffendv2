@@ -17,6 +17,7 @@ import Separator from "../separator";
 export const Header = () => {
   return (
     <>
+      {/* Desktop header */}
       <div className="hidden items-center gap-8 w-full h-20 md:flex">
         <Image
           src={SidebriefLogo}
@@ -27,7 +28,7 @@ export const Header = () => {
         <Separator vertical />
         <div className="flex items-center justify-between py-4 gap-8 w-full">
           <div className="flex flex-1 items-center gap-8">
-            <h2 className="sb-text-24 font-semibold">
+            <h2 className="sb-text-24 font-semibold whitespace-nowrap">
               Hello, <span className="text-foreground-4">Joshua</span>👋
             </h2>
             <SearchComp icon={() => <Search color="#727474" />} />
@@ -47,6 +48,7 @@ export const Header = () => {
         </div>
       </div>
 
+      {/* Mobile header */}
       <div className="flex justify-between py-4 md:hidden">
         <div className="flex items-center gap-4">
           <Button color="ghost" size="fit" className="flex items-center">

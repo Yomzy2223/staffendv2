@@ -1,60 +1,67 @@
+"use client";
+
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Button } from "flowbite-react";
+import { Button, Select } from "flowbite-react";
+import { usePathname } from "next/navigation";
 
-const navroutes = [
-  {
-    name: "Home",
-    to: "/",
-    active: true,
-  },
-  {
-    name: "Business Registration",
-    to: "/",
-    active: false,
-  },
-  {
-    name: "Manage Business",
-    to: "/",
-    active: false,
-  },
-  {
-    name: "Diligence",
-    to: "/",
-    active: false,
-  },
-  {
-    name: "Compliance",
-    to: "/",
-    active: false,
-  },
-  {
-    name: "Bank Account",
-    to: "/",
-    active: false,
-  },
-  {
-    name: "Settings",
-    to: "/",
-    active: false,
-  },
-];
+interface propTypes {
+  navRoutes: {
+    name: string;
+    to: string;
+    type?: string;
+    options?: (string | number)[];
+  }[];
+  className?: string;
+}
 
-export const Navigation = () => {
+export const Navigation = ({ navRoutes, className }: propTypes) => {
+  const pathname = usePathname();
+
   return (
-    <div className="py-5 flex">
-      {navroutes.map((el, i) => (
-        <Link key={i} href={el.to}>
-          <Button
-            color={el.active ? "primary" : "ghost"}
-            className={cn("text-gray-500", {
-              "text-primary-foreground": el.active,
-            })}
-          >
-            {el.name}
-          </Button>
-        </Link>
-      ))}
+    <div
+      className={cn(
+        "flex gap-2 max-w-full overflow-auto p-1 md:gap-4",
+        className
+      )}
+    >
+      {navRoutes.map((el, i) => {
+        const isActive =
+          i === 0 ? el.to === pathname : pathname.includes(el.to);
+
+        return (
+          <div key={i}>
+            {el?.type === "select" && el?.options ? (
+              <Select
+                id="countries"
+                className={cn(
+                  "[&_select]:!bg-transparent [&_select]:border-none rounded-lg min-w-max whitespace-nowrap",
+                  {
+                    "bg-primary [&_select]:text-primary-foreground": isActive,
+                  }
+                )}
+                onSelect={(el) => console.log(el)}
+                required
+              >
+                {el.options.map((el) => (
+                  <option key={el}>{el}</option>
+                ))}
+              </Select>
+            ) : (
+              <Link href={el.to}>
+                <Button
+                  color="ghost"
+                  className={cn("text-foreground-3 whitespace-nowrap", {
+                    "bg-primary text-primary-foreground": isActive,
+                  })}
+                >
+                  {el.name}
+                </Button>
+              </Link>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 };

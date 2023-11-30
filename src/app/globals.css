@@ -30,8 +30,8 @@
     --destructive: 7 61% 95%; /* Destructive background color */
     --destructive-foreground: 7 61% 48%; /* Destructive foreground color */
 
-    --success: 140 100% 42%;
-    --success-foreground: 0 0% 100%;
+    --success: 154 61% 92%;
+    --success-foreground: 164 93% 17%;
 
     /* cmyk base colors */
     --sb-cyan: 100%, 0%, 0%, 0%;
@@ -48,6 +48,7 @@
 
   body {
     @apply text-foreground;
+    touch-action: pan-y;
   }
 }
 
@@ -59,7 +60,7 @@
     @apply text-2xl sm:text-[26px] md:text-[28px] xl:text-[30px];
   }
   .sb-text-24 {
-    @apply text-lg md:text-xl xl:text-2xl;
+    @apply text-xl xl:text-2xl;
   }
   .sb-text-18 {
     @apply text-base lg:text-lg;

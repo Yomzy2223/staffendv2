@@ -28,10 +28,10 @@ const SearchComp = ({
   buttonProps,
 }: propTypes) => {
   return (
-    <div className="hidden w-full max-w-[364px] md:flex">
+    <div className="hidden w-full max-w-[364px] h-max md:flex">
       <TextInput
         type={type || "text"}
-        icon={icon}
+        icon={icon ? icon : () => <Search color="#727474" />}
         placeholder={"Search..." || placeholder}
         onChange={onChange}
         className={cn("w-full", {
@@ -41,7 +41,7 @@ const SearchComp = ({
       {onSubmit && (
         <Button
           onClick={onSubmit}
-          className={cn("text-sm font-medium", {
+          className={cn("text-sm font-medium bg-primary", {
             "rounded-l-none": onSubmit,
           })}
           {...buttonProps}

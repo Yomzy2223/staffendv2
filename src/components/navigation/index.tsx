@@ -3,19 +3,25 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button, Select } from "flowbite-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 interface propTypes {
   navRoutes: {
     name: string;
     to: string;
     type?: string;
-    options?: (string | number)[];
+    options?: { name: string; to: string }[];
   }[];
   className?: string;
+  inactiveClassName?: string;
 }
 
-export const Navigation = ({ navRoutes, className }: propTypes) => {
+export const Navigation = ({
+  navRoutes,
+  className,
+  inactiveClassName = "",
+}: propTypes) => {
+  const router = useRouter();
   const pathname = usePathname();
 
   return (
@@ -26,25 +32,27 @@ export const Navigation = ({ navRoutes, className }: propTypes) => {
       )}
     >
       {navRoutes.map((el, i) => {
-        const isActive =
-          i === 0 ? el.to === pathname : pathname.includes(el.to);
+        let isActive = i === 0 ? el.to === pathname : pathname.includes(el.to);
+        isActive =
+          el.type === "select" && el.options
+            ? el.options.some((each) => pathname.includes(each.to))
+            : isActive;
 
         return (
           <div key={i}>
             {el?.type === "select" && el?.options ? (
               <Select
-                id="countries"
                 className={cn(
                   "[&_select]:!bg-transparent [&_select]:border-none rounded-lg min-w-max whitespace-nowrap",
                   {
                     "bg-primary [&_select]:text-primary-foreground": isActive,
+                    [inactiveClassName]: !isActive,
                   }
                 )}
-                onSelect={(el) => console.log(el)}
-                required
+                onChange={(el) => router.push(el.target.value.toLowerCase())}
               >
-                {el.options.map((el) => (
-                  <option key={el}>{el}</option>
+                {el.options.map((each) => (
+                  <option key={each.name}>{each.name}</option>
                 ))}
               </Select>
             ) : (
@@ -53,6 +61,7 @@ export const Navigation = ({ navRoutes, className }: propTypes) => {
                   color="ghost"
                   className={cn("text-foreground-3 whitespace-nowrap", {
                     "bg-primary text-primary-foreground": isActive,
+                    [inactiveClassName]: !isActive,
                   })}
                 >
                   {el.name}

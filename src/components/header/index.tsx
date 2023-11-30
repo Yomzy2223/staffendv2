@@ -1,38 +1,81 @@
+"use client";
+
 import Image from "next/image";
 import { SidebriefLogo } from "@/assets/images";
-import { BellRing, Search, Settings } from "lucide-react";
-import { Button } from "flowbite-react";
+import {
+  ArrowDown,
+  BellRing,
+  ChevronDown,
+  MenuIcon,
+  Search,
+  Settings,
+} from "lucide-react";
+import { Avatar, Button, FooterDivider } from "flowbite-react";
+import SearchComp from "../search";
+import Separator from "../separator";
 
 export const Header = () => {
   return (
-    <div className="h-[80px] flex items-center w-full">
-      <Image src={SidebriefLogo} alt="sidebrief" quality={100} />
-      <div className="w-[2px] h-[80px] bg-border ml-8 mr-10" />
-      <div className="flex items-center justify-between w-full">
-        <h2 className="text-foreground text-2xl font-semibold leading-normal">
-          Hello, <span className="text-foreground-light-grey">Joshua</span>👋
-        </h2>
-        <div className="flex space-x-6 items-center">
-          <div className="flex gap-4">
-            <Button color="ghost" size="fit" className="w-fit h-fit p-2">
-              <Search />
-            </Button>
-            <Button color="ghost" size="fit" className="w-fit h-fit p-2">
-              <BellRing />
-            </Button>
-            <Button color="ghost" size="fit" className="w-fit h-fit p-2">
-              <Settings />
-            </Button>
+    <>
+      {/* Desktop header */}
+      <div className="hidden items-center gap-8 w-full h-20 md:flex">
+        <Image
+          src={SidebriefLogo}
+          alt="sidebrief"
+          quality={100}
+          className="object-contain py-4"
+        />
+        <Separator vertical />
+        <div className="flex items-center justify-between py-4 gap-8 w-full">
+          <div className="flex flex-1 items-center gap-8">
+            <h2 className="sb-text-24 font-semibold whitespace-nowrap">
+              Hello, <span className="text-foreground-4">Joshua</span>👋
+            </h2>
+            <SearchComp icon={() => <Search color="#727474" />} />
           </div>
-          <div>
-            {/* User avatar | can be image */}
-            <div className="w-12 h-12 grid place-content-center rounded-lg bg-[hsla(180,8%,97%,1)]">
-              <span className="text-base leading-none font-medium">OG</span>
-            </div>
-            {/* There should be an icon here */}
+          <div className="flex items-center gap-4">
+            <Button color="ghost" size="fit" className="p-1">
+              <BellRing color={iconColor} />
+            </Button>
+            <Button color="ghost" size="fit" className="p-1">
+              <Settings color={iconColor} />
+            </Button>
+            <Button color="ghost" size="fit" className="flex items-center">
+              <Avatar placeholderInitials="OG" rounded />
+              <ChevronDown color={iconColor} />
+            </Button>
           </div>
         </div>
       </div>
-    </div>
+
+      {/* Mobile header */}
+      <div className="flex justify-between py-4 md:hidden">
+        <div className="flex items-center gap-4">
+          <Button color="ghost" size="fit" className="flex items-center">
+            <MenuIcon color={iconColor} />
+          </Button>
+          <Image
+            src={SidebriefLogo}
+            alt="sidebrief"
+            quality={100}
+            className="object-contain"
+          />
+        </div>
+        <div className="flex items-center gap-3">
+          <Button color="ghost" size="fit" className="p-1">
+            <Search color={iconColor} />
+          </Button>
+          <Button color="ghost" size="fit" className="p-1">
+            <BellRing color={iconColor} />
+          </Button>
+          <Button color="ghost" size="fit" className="flex items-center">
+            <Avatar placeholderInitials="OG" rounded />
+            <ChevronDown color={iconColor} />
+          </Button>
+        </div>
+      </div>
+    </>
   );
 };
+
+const iconColor = "hsl(var(--foreground-3))";

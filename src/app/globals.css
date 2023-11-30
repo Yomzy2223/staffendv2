@@ -7,7 +7,7 @@
     --background: 0 0% 100%; /* General pages background */
     --foreground: 200 4% 15%; /* Main text color - Grey 1 */
     --foreground-3: 195 2% 31%; /* Text color - Grey 3 */
-    --forground-4: 180 1% 45%; /* Text color - Grey 4*/
+    --foreground-4: 180 1% 45%; /* Text color - Grey 4*/
     --foreground-5: 220 9% 46%; /* Text color - Grey 500 */
 
     --primary: 194 100% 42%; /* Sidebrief's primary color - Blue */
@@ -30,8 +30,8 @@
     --destructive: 7 61% 95%; /* Destructive background color */
     --destructive-foreground: 7 61% 48%; /* Destructive foreground color */
 
-    --success: 140 100% 42%;
-    --success-foreground: 0 0% 100%;
+    --success: 154 61% 92%;
+    --success-foreground: 164 93% 17%;
 
     /* cmyk base colors */
     --sb-cyan: 100%, 0%, 0%, 0%;
@@ -45,20 +45,22 @@
 
     --sb-blue-light: 194 100% 90%; /* #CCF3FF */
   }
+
+  body {
+    @apply text-foreground;
+    touch-action: pan-y;
+  }
 }
 
 @layer utilities {
   .sb-text-40 {
     @apply text-2xl sm:text-[28px] md:text-3xl xl:text-4xl 2xl:text-[40px];
   }
-  .sb-text-24 {
-    @apply text-base sm:text-lg md:text-xl xl:text-2xl;
-  }
   .sb-text-32 {
     @apply text-2xl sm:text-[26px] md:text-[28px] xl:text-[30px];
   }
   .sb-text-24 {
-    @apply text-lg md:text-xl xl:text-2xl;
+    @apply text-xl xl:text-2xl;
   }
   .sb-text-18 {
     @apply text-base lg:text-lg;

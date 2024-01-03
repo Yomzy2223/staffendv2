@@ -3,18 +3,19 @@ import React, { ReactNode } from "react";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="pb-12">
+    <div>
       <Navigation
         navRoutes={navRoutes}
         className="hidden py-5 md:flex bg-label/[0.02]"
       />
-      {children}
+      <div className="flex-1 px-5 md:px-8">{children}</div>
     </div>
   );
 };
 
 export default Layout;
 
+// Dashboard navigation routes
 const navRoutes = [
   {
     name: "Home",

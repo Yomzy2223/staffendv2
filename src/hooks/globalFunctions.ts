@@ -19,7 +19,9 @@ export const useGlobalFucntions = () => {
   );
 
   const setQuery = (name: string, value: string | number) => {
-    router.push(pathname + "?" + createQueryString(name, value));
+    router.push(pathname + "?" + createQueryString(name, value), {
+      scroll: false,
+    });
   };
 
   return {

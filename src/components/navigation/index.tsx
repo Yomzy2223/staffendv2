@@ -27,7 +27,7 @@ export const Navigation = ({
   return (
     <div
       className={cn(
-        "flex gap-2 max-w-full overflow-auto p-1 md:gap-4",
+        "flex gap-2 max-w-full overflow-auto p-1 px-5 md:px-8 md:gap-4 hide-scrollbar",
         className
       )}
     >
@@ -49,10 +49,17 @@ export const Navigation = ({
                     [inactiveClassName]: !isActive,
                   }
                 )}
-                onChange={(el) => router.push(el.target.value.toLowerCase())}
+                onChange={(el) =>
+                  router.push("/" + el.target.value.toLowerCase())
+                }
               >
                 {el.options.map((each) => (
-                  <option key={each.name}>{each.name}</option>
+                  <option
+                    key={each.name}
+                    onMouseDown={() => console.log("You clicked")}
+                  >
+                    {each.name}
+                  </option>
                 ))}
               </Select>
             ) : (

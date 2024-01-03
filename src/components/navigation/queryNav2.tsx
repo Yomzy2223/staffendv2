@@ -24,10 +24,7 @@ const QueryNav2 = ({ queryNav, defaultActive = 0, variant }: propsType) => {
             : el.value === searchParams.get(el.name);
 
         return (
-          <div
-            key={el.value}
-            className="flex items-center gap-2 cursor-pointer"
-          >
+          <div key={el.value} className="flex items-center cursor-pointer">
             <Radio
               id={el.value}
               name={el.name}
@@ -37,7 +34,7 @@ const QueryNav2 = ({ queryNav, defaultActive = 0, variant }: propsType) => {
             />
             <Label
               htmlFor={el.value}
-              className="text-sm font-normal first-letter:uppercase cursor-pointer"
+              className="text-sm font-normal first-letter:uppercase cursor-pointer pl-2"
             >
               {el.value}
             </Label>

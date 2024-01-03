@@ -17,9 +17,11 @@ const config: Config = {
         },
         foreground: {
           DEFAULT: "hsl(var(--foreground))",
+          1: "hsl(var(--foreground-1))",
           3: "hsl(var(--foreground-3))",
           4: "hsl(var(--foreground-4))",
           5: "hsl(var(--foreground-5))",
+          9: "hsl(var(--foreground-9))",
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",
@@ -77,6 +79,7 @@ const config: Config = {
       },
       backgroundImage: {
         authPattern: "url(../assets/svg/auth_pattern.svg)",
+        serviceCardBG: "url(../assets/images/service-card-background.png)",
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",

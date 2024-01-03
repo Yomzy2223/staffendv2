@@ -1,8 +1,6 @@
-import AnalyticsSection from "@/components/features/dashboard/analyticsSection";
-import OverviewSection from "@/components/features/dashboard/overviewSection";
-import ServicesSection from "@/components/features/dashboard/servicesSection";
-import { Header } from "@/components/header";
-import { Navigation } from "@/components/navigation";
+import AnalyticsSection from "@/components/sections/homeSections/analyticsSection";
+import OverviewSection from "@/components/sections/homeSections/homeOverviewSection";
+import ServicesSection from "@/components/sections/homeSections/servicesSection";
 import SelectMonthAndYear from "@/components/select/selectMonthAndYear";
 import React from "react";
 
@@ -16,10 +14,29 @@ const Home = () => {
       <div className="flex flex-col gap-8">
         <OverviewSection />
         <AnalyticsSection />
-        <ServicesSection />
+        <ServicesSection serviceTableNav={serviceTableNav} />
       </div>
     </div>
   );
 };
 
 export default Home;
+
+export const serviceTableNav = [
+  {
+    name: "service",
+    value: "onboard",
+  },
+  {
+    name: "service",
+    value: "launch",
+  },
+  {
+    name: "service",
+    value: "manage",
+  },
+  {
+    name: "service",
+    value: "tax",
+  },
+];

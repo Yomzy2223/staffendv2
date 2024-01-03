@@ -11,12 +11,12 @@ import {
   Settings,
 } from "lucide-react";
 import { Avatar, Button, FooterDivider } from "flowbite-react";
-import SearchComp from "../search";
-import Separator from "../separator";
+import SearchComp from "../../search";
+import Separator from "../../separator";
 
 export const Header = () => {
   return (
-    <>
+    <div className="sticky top-0 bg-background border-b z-20 px-5 md:px-8 ">
       {/* Desktop header */}
       <div className="hidden items-center gap-8 w-full h-20 md:flex">
         <Image
@@ -74,7 +74,7 @@ export const Header = () => {
           </Button>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

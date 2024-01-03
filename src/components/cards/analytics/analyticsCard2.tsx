@@ -16,7 +16,7 @@ const AnalyticsCard2 = ({
   return (
     <CardWrapper
       className={cn(
-        "flex flex-col justify-between gap-4 min-w-[280px] max-w-[280px]",
+        "flex flex-col justify-between gap-4 min-w-[200px] max-w-[300px]",
         className
       )}
     >

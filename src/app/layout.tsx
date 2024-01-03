@@ -1,6 +1,9 @@
-import { Header } from "@/components/header";
+import { Header } from "@/components/header/mainHeader";
+import { cn } from "@/lib/utils";
+import { Flowbite } from "flowbite-react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { customTheme } from "./baseCustomTheme";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -17,11 +20,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <div className="px-5 md:px-8">
+      <body
+        className={cn(inter.className, "selection:bg-primary/30 min-h-screen")}
+      >
+        <Flowbite theme={customTheme}>
           <Header />
           {children}
-        </div>
+        </Flowbite>
       </body>
     </html>
   );

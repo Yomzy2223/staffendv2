@@ -3,17 +3,16 @@ import type { ThemeProps } from "flowbite-react";
 export const customTheme: ThemeProps = {
   theme: {
     button: {
-      base: "transition transition-all active:scale-95",
+      base: "w-max focus:!ring-0 hover:opacity-80 active:opacity-90",
       color: {
         primary:
           "bg-primary text-primary-foreground border border-transparent enabled:hover:bg-primary-dark",
         magenta:
           "bg-magenta text-magenta-foreground border border-transparent enabled:hover:bg-magenta-dark",
-        ghost: "bg-transparent text-foreground enabled:hover:bg-foreground/10",
-        plain: "bg-transparent text-foreground",
+        ghost: "bg-transparent text-foreground",
       },
       outline: {
-        on: "flex justify-center bg-transparent text-inherit transition-all duration-75 ease-in group-enabled:group-hover:bg-opacity-0 group-enabled:group-hover:text-inherit dark:bg-gray-900 dark:text-white w-full",
+        on: "bg-yellow-300",
         color: {
           white: "border border-white enabled:hover:bg-foreground/10",
           primary:
@@ -23,7 +22,7 @@ export const customTheme: ThemeProps = {
         },
       },
       size: {
-        fit: "p-0 h-max",
+        fit: "p-0 h-max w-max",
       },
     },
   },

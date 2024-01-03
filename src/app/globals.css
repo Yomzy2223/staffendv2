@@ -6,9 +6,11 @@
   :root {
     --background: 0 0% 100%; /* General pages background */
     --foreground: 200 4% 15%; /* Main text color - Grey 1 */
+    --foreground-1: 220 14% 96%; /* Text color - Grey 100 */
     --foreground-3: 195 2% 31%; /* Text color - Grey 3 */
     --foreground-4: 180 1% 45%; /* Text color - Grey 4*/
     --foreground-5: 220 9% 46%; /* Text color - Grey 500 */
+    --foreground-9: 219 40% 11%; /* Text color - Grey 900 */
 
     --primary: 194 100% 42%; /* Sidebrief's primary color - Blue */
     --primary-foreground: 0 0% 100%; /* For primary background's foreground */
@@ -45,11 +47,6 @@
 
     --sb-blue-light: 194 100% 90%; /* #CCF3FF */
   }
-
-  body {
-    @apply text-foreground;
-    touch-action: pan-y;
-  }
 }
 
 @layer utilities {
@@ -60,7 +57,10 @@
     @apply text-2xl sm:text-[26px] md:text-[28px] xl:text-[30px];
   }
   .sb-text-24 {
-    @apply text-xl xl:text-2xl;
+    @apply text-xl lg:text-2xl;
+  }
+  .sb-text-20 {
+    @apply text-lg lg:text-xl;
   }
   .sb-text-18 {
     @apply text-base lg:text-lg;
@@ -71,4 +71,11 @@
   .sb-text-14 {
     @apply text-xs lg:text-sm;
   }
+  .select-arrow-white {
+  }
+}
+
+body {
+  @apply text-foreground;
+  touch-action: pan-y;
 }

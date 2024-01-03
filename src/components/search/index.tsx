@@ -22,7 +22,7 @@ const SearchComp = ({
   type,
   icon,
   placeholder,
-  onChange,
+  onChange = () => {},
   searchText,
   onSubmit,
   buttonProps,

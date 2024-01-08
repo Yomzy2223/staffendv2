@@ -7,11 +7,13 @@ const DoChecks = ({
   items,
   errorText,
   emptyText,
+  className,
 }: {
   children: ReactNode;
   items: (string | number)[];
   errorText?: string;
   emptyText?: string;
+  className?: string;
 }) => {
   if (errorText) return <p>{errorText}</p>;
 
@@ -23,7 +25,7 @@ const DoChecks = ({
       </div>
     );
 
-  return <div>{children}</div>;
+  return <div className={className}>{children}</div>;
 };
 
 export default DoChecks;

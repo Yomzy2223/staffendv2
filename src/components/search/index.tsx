@@ -4,6 +4,7 @@ import { Search } from "lucide-react";
 import React, {
   ChangeEventHandler,
   FunctionComponent,
+  HTMLAttributes,
   MouseEventHandler,
   SVGProps,
 } from "react";
@@ -15,7 +16,8 @@ interface propTypes {
   onChange?: ChangeEventHandler<HTMLInputElement>;
   searchText?: string;
   onSubmit?: MouseEventHandler<HTMLButtonElement>;
-  buttonProps?: Object;
+  buttonProps?: HTMLAttributes<HTMLButtonElement>;
+  wrapperClassName?: string;
 }
 
 const SearchComp = ({
@@ -26,9 +28,15 @@ const SearchComp = ({
   searchText,
   onSubmit,
   buttonProps,
+  wrapperClassName,
 }: propTypes) => {
   return (
-    <div className="hidden w-full max-w-[364px] h-max md:flex">
+    <div
+      className={cn(
+        "hidden w-full max-w-[364px] h-max md:flex",
+        wrapperClassName
+      )}
+    >
       <TextInput
         type={type || "text"}
         icon={icon ? icon : () => <Search color="#727474" />}
@@ -37,11 +45,13 @@ const SearchComp = ({
         className={cn("w-full", {
           "[&_input]:rounded-r-none": onSubmit,
         })}
+        theme={{ field: { input: { base: "!py-2 w-full" } } }}
       />
       {onSubmit && (
         <Button
+          size="md"
           onClick={onSubmit}
-          className={cn("text-sm font-medium bg-primary", {
+          className={cn("text-sm font-medium bg-primary h-max", {
             "rounded-l-none": onSubmit,
           })}
           {...buttonProps}

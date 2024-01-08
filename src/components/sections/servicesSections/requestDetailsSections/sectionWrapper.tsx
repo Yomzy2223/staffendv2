@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Button } from "flowbite-react";
+import { Button, Card } from "flowbite-react";
 import { BriefcaseIcon, LucideIcon } from "lucide-react";
 import Image from "next/image";
 import React, { ReactNode } from "react";
@@ -37,7 +37,7 @@ const RequestDetailsSectionWrapper = ({
 
       <div
         className={cn(
-          "flex-1 rounded border border-border p-4 w-full max-w-[542px] overflow-auto",
+          "flex-1 rounded border border-border p-4 w-full max-w-[542px] overflow-auto shadow-none",
           className
         )}
       >

@@ -20,7 +20,7 @@ const TextWithDetails = ({
       {text && (
         <p
           className={cn(
-            "text-base font-normal text-foreground-5 mt-1 ",
+            "text-base font-normal text-foreground-5 mt-1 max-w-max",
             textClassName
           )}
         >

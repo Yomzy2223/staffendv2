@@ -22,6 +22,7 @@ const AnalyticsCard3 = ({
 }) => {
   const difference = current - previous;
   let perc = ((100 * difference) / previous).toFixed(2) || 0;
+  perc = parseInt(perc.toString());
   const decreased = perc < 0;
 
   return (

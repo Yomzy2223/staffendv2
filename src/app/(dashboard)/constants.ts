@@ -185,3 +185,22 @@ export const useTableInfo = () => {
     tableBody,
   };
 };
+
+export const serviceTableNav = [
+  {
+    name: "service",
+    value: "onboard",
+  },
+  {
+    name: "service",
+    value: "launch",
+  },
+  {
+    name: "service",
+    value: "manage",
+  },
+  {
+    name: "service",
+    value: "tax",
+  },
+];

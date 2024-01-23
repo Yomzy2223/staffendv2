@@ -1,3 +1,5 @@
+"use client";
+
 import { PaymentAnalyticsImg, ServiceAnalyticsImg } from "@/assets/svg";
 import AnalyticsCard1 from "@/components/cards/analytics/analyticsCard1";
 import AnalyticsCard2 from "@/components/cards/analytics/analyticsCard2";

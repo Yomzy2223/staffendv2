@@ -6,6 +6,7 @@ import {
   Label,
   Radio,
   Select,
+  Textarea,
   TextInput,
   ToggleSwitch,
 } from "flowbite-react";
@@ -14,6 +15,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { DynamicFormProps } from "./constants";
+import { cn } from "@/lib/utils";
 
 const DynamicForm = ({
   children,
@@ -21,6 +23,7 @@ const DynamicForm = ({
   defaultValues = {},
   formSchema,
   onFormSubmit,
+  className,
 }: DynamicFormProps) => {
   type formType = z.infer<typeof formSchema>;
 
@@ -43,16 +46,20 @@ const DynamicForm = ({
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className={cn("space-y-8", className)}
+    >
       {formInfo.map((el, i: number) => {
         const isTextInput =
           el.type === "text" || el.type === "password" || el.type === "email";
+        const errorMsg = errors[el.name]?.message;
 
         return (
           <div key={i}>
             {el.label && (
               <div className="mb-2 block">
-                <Label htmlFor={el.name} value={el.label} />
+                <Label htmlFor={el.name} value={el.label} {...el.labelProp} />
               </div>
             )}
 
@@ -60,10 +67,25 @@ const DynamicForm = ({
               <TextInput
                 id={el.name}
                 type={el.type}
-                sizing="md"
-                helperText={<>{errors[el.name]?.message}</>}
+                sizing={el.size || "md"}
+                helperText={<>{errorMsg}</>}
                 color={errors[el.name] && "failure"}
+                className={errorMsg ? "focus:[&_input]:outline-none" : ""}
                 {...el.textInputProp}
+                {...register(el.name)}
+              />
+            )}
+
+            {el.type === "textarea" && (
+              <Textarea
+                id={el.name}
+                rows={7}
+                helperText={<>{errorMsg}</>}
+                color={errors[el.name] && "failure"}
+                className={cn("p-2.5 resize-none", {
+                  "focus:outline-none": errorMsg,
+                })}
+                {...el.textAreaProp}
                 {...register(el.name)}
               />
             )}
@@ -87,7 +109,6 @@ const DynamicForm = ({
             {el.type === "select" && el.selectOptions && (
               <Select
                 id={el.name}
-                placeholder="dkcdslcj"
                 color={errors[el.name] && "failure"}
                 helperText={<>{errors[el.name]?.message}</>}
                 {...el.selectProp}

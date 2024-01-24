@@ -4,8 +4,8 @@ import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Upload } from "@/assets/icons";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/flowbite";
 import { FileIcon, defaultStyles, DefaultExtensionType } from "react-file-icon";
+import { Button } from "flowbite-react";
 
 export const FileInput = ({ name }: { name: string }) => {
   const [file, setFile] = useState<File>();

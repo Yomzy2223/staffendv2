@@ -6,8 +6,11 @@ export interface FormInput {
   name: string;
   label?: string;
   type: string;
-  textInputProp?: Record<string, any>;
-  selectProp?: Record<string, any>;
+  size?: string;
+  labelProp?: Record<string, string | number>;
+  textInputProp?: Record<string, string | number>;
+  textAreaProp?: Record<string, string | number>;
+  selectProp?: Record<string, string | number>;
   fileProp?: Record<string, any>;
   selectOptions?: string[];
 }
@@ -18,4 +21,5 @@ export interface DynamicFormProps {
   defaultValues?: Record<string, any>;
   formSchema: ZodType<any, any, any>;
   onFormSubmit: (values: any) => void;
+  className?: string;
 }

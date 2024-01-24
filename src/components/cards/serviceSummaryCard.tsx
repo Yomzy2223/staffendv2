@@ -1,11 +1,12 @@
 "use client";
 
+import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import { Button } from "flowbite-react";
-import { ExternalLink, Link2Icon } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
+import { ExternalLink } from "lucide-react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
+import ServiceForm from "../form/serviceForm";
 import CardWrapper from "../wrappers/cardWrapper";
-import DialogWrapper from "../wrappers/dialogWrapper";
 
 const ServiceSummaryCard = ({
   title,
@@ -16,9 +17,14 @@ const ServiceSummaryCard = ({
 }) => {
   const [open, setOpen] = useState(false);
 
+  const { setQuery } = useGlobalFucntions();
   const { push } = useRouter();
   const { service } = useParams();
-  console.log(service);
+
+  const openServiceForm = () => {
+    setOpen(true);
+    setQuery("action", "edit");
+  };
 
   return (
     <CardWrapper
@@ -36,14 +42,13 @@ const ServiceSummaryCard = ({
         size="fit"
         color="ghost"
         className="w-max"
-        onMouseDown={() => setOpen(true)}
+        onMouseDown={openServiceForm}
       >
         <span className="text-sm font-normal mr-2">See service form</span>
-        <DialogWrapper open={open} setOpen={setOpen} title="Title">
-          Hello, wrap me
-        </DialogWrapper>
         <ExternalLink size={16} />
       </Button>
+
+      <ServiceForm setOpen={setOpen} open={open} />
     </CardWrapper>
   );
 };

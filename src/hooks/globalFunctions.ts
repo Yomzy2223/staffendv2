@@ -1,11 +1,12 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
+import useMediaQuery from "./useMediaQuery";
 
 export const useGlobalFucntions = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
-
+  const isDesktop = useMediaQuery("(min-width: 800px)");
   // Get a new searchParams string by merging the current
   // searchParams with a provided key/value pair
   const createQueryString = useCallback(
@@ -27,5 +28,6 @@ export const useGlobalFucntions = () => {
   return {
     createQueryString,
     setQuery,
+    isDesktop,
   };
 };

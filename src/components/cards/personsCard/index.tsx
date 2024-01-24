@@ -8,7 +8,7 @@ import { Button, Card, Navbar, NavbarCollapse } from "flowbite-react";
 import { Minus, Plus, User } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 
 const PersonsCard = ({
   title,
@@ -39,89 +39,77 @@ const PersonsCard = ({
     setQuery(title.toLowerCase(), "all");
   };
 
-  // traction, tally, airtable
   return (
-    <motion.div
-      className={cn("flex flex-wrap gap-4 border-none", {
+    <div
+      className={cn("flex flex-wrap gap-4 ", {
         "border border-border p-4": collapseAll,
+        "border-none": !collapseAll,
       })}
     >
       {info?.map(
         (ind, i) =>
           ((clicked && position === i) || collapseAll) && (
-            <Card
+            <div
               key={i}
-              className={cn("shadow-none transition-all", {
-                // "w-[235px]": collapseAll,
-                // "w-[600px] overflow-auto": !collapseAll,
-              })}
+              className={cn(
+                "shadow-none transition-all border border-border rounded-md",
+                {
+                  "w-[235px]": collapseAll,
+                  "w-[800px] overflow-auto": !collapseAll,
+                }
+              )}
             >
-              <AnimatePresence initial={false}>
-                <motion.div
-                  // className="min-w-max"
-                  className="overflow-hidden"
-                  key="person-card"
-                  initial={false}
-                  animate={{
-                    width: collapseAll ? "300px" : "600px",
-                    height: collapseAll ? "100px" : "400px",
-                  }}
-                  exit="collapsed"
-                  // variants={{
-                  //   open: { width: collapseAll ? "auto" : "400px" },
-                  //   collapsed: { width: 235 },
-                  // }}
-                  transition={{
-                    duration: 0.8,
-                    easeInOut: [0.04, 0.62, 0.23, 0.98],
-                  }}
+              <motion.div className="min-w-max">
+                <Navbar
+                  className={cn(
+                    "flex justify-between gap-6 p-4 bg-background left-0 sticky max-w-full",
+                    {
+                      "pb-0": collapseAll,
+                    }
+                  )}
                 >
-                  <Navbar className="flex justify-between gap-6 !p-0">
-                    <NavbarCollapse>
-                      <QueryNav3
-                        queryNav={collapseAll ? [queryNav[i]] : queryNav}
-                        defaultActive={0}
-                      />
-                    </NavbarCollapse>
-                    <Button className="cursor-pointer" size="fit" color="ghost">
-                      {collapseAll ? (
-                        <Plus size={16} onClick={() => showDetails(i)} />
-                      ) : (
-                        <Minus size={16} onClick={hideDetails} />
-                      )}
-                    </Button>
-                  </Navbar>
+                  <NavbarCollapse>
+                    <QueryNav3
+                      queryNav={collapseAll ? [queryNav[i]] : queryNav}
+                      defaultActive={0}
+                    />
+                  </NavbarCollapse>
+                  <Button className="cursor-pointer" size="fit" color="ghost">
+                    {collapseAll ? (
+                      <Plus size={16} onClick={() => showDetails(i)} />
+                    ) : (
+                      <Minus size={16} onClick={hideDetails} />
+                    )}
+                  </Button>
+                </Navbar>
 
-                  <div className="flex gap-4">
-                    {!collapseAll && <User />}
-                    <div
-                      className={cn("grid grid-cols-3 gap-4", {
-                        flex: collapseAll,
-                      })}
-                    >
-                      {details?.map((el) => (
-                        <div key={el?.field}>
-                          {el?.type === "doc" ? (
-                            <TextWithDetails
-                              title={el?.field}
-                              text={el?.value}
-                            />
-                          ) : (
-                            <TextWithDetails
-                              title={el?.field}
-                              text={el?.value}
-                            />
-                          )}
-                        </div>
-                      ))}
-                    </div>
+                <div
+                  className={cn("flex gap-4 p-4 ", {
+                    "bg-[#F9FAFB]": !collapseAll,
+                  })}
+                >
+                  {!collapseAll && <User />}
+                  <div
+                    className={cn("grid grid-cols-3 gap-4", {
+                      flex: collapseAll,
+                    })}
+                  >
+                    {details?.map((el) => (
+                      <div key={el?.field}>
+                        {el?.type === "doc" ? (
+                          <TextWithDetails title={el?.field} text={el?.value} />
+                        ) : (
+                          <TextWithDetails title={el?.field} text={el?.value} />
+                        )}
+                      </div>
+                    ))}
                   </div>
-                </motion.div>
-              </AnimatePresence>
-            </Card>
+                </div>
+              </motion.div>
+            </div>
           )
       )}
-    </motion.div>
+    </div>
   );
 };
 

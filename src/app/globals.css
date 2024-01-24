@@ -18,7 +18,7 @@
     --card: 194 100% 90%; /* Cards background color when active */
     --card-2: 0 0% 100% / 0.12; /* Card background 2 - used in auth layout */
 
-    --border: 216 37% 95%; /* Cards border color */
+    --border: 220 13% 91%; /* Cards border color */
     --input: 216 12% 84%; /* Inputs border color */
 
     --secondary: 325 100% 46%; /* Sidebrief's secondary color - Magenta */

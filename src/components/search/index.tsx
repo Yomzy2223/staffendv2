@@ -9,7 +9,7 @@ import React, {
   SVGProps,
 } from "react";
 
-interface propTypes {
+interface propType {
   type?: string;
   icon?: FunctionComponent<SVGProps<SVGSVGElement>>;
   placeholder?: string;
@@ -29,7 +29,7 @@ const SearchComp = ({
   onSubmit,
   buttonProps,
   wrapperClassName,
-}: propTypes) => {
+}: propType) => {
   return (
     <div
       className={cn(

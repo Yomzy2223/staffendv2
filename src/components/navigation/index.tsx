@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { Button, Select } from "flowbite-react";
 import { usePathname, useRouter } from "next/navigation";
 
-interface propTypes {
+interface propType {
   navRoutes: {
     name: string;
     to: string;
@@ -20,7 +20,7 @@ export const Navigation = ({
   navRoutes,
   className,
   inactiveClassName = "",
-}: propTypes) => {
+}: propType) => {
   const router = useRouter();
   const pathname = usePathname();
 

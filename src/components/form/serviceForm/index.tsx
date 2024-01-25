@@ -3,9 +3,9 @@ import DynamicForm from "../dynamicForm";
 import * as z from "zod";
 import { Button } from "flowbite-react";
 import { cn } from "@/lib/utils";
-import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import DialogWrapper from "@/components/wrappers/dialogWrapper";
 import { useSearchParams } from "next/navigation";
+import DynamicQuestionForm from "../dynamicQuestionForm";
 
 const ServiceForm = ({
   open,
@@ -16,7 +16,6 @@ const ServiceForm = ({
 }) => {
   const [section, setSection] = useState(1);
   const { get } = useSearchParams();
-  const { isDesktop } = useGlobalFucntions();
 
   const isEdit = get("action") === "edit";
   const title1 = isEdit ? "Update Service" : "Add Service";
@@ -39,31 +38,34 @@ const ServiceForm = ({
 
   return (
     <DialogWrapper open={open} setOpen={setOpen} title={title}>
-      <DynamicForm
-        formInfo={formInfo}
-        defaultValues={defaultValues}
-        formSchema={serviceSchema}
-        onFormSubmit={handleCreateService}
-        className={cn("space-y-4")}
-      >
-        <div className="flex items-center justify-end gap-4">
-          {section === 2 && (
-            <Button color="outline" outline onClick={handleBack}>
-              Back
-            </Button>
-          )}
-          {section !== 2 && (
-            <Button color="primary" onClick={() => setSection(section + 1)}>
-              Next
-            </Button>
-          )}
-          {section === 2 && (
-            <Button type="submit" color="primary">
-              Create service
-            </Button>
-          )}
-        </div>
-      </DynamicForm>
+      {section === 1 && (
+        <DynamicForm
+          formInfo={section1FormInfo}
+          defaultValues={defaultValues}
+          formSchema={serviceSchema}
+          onFormSubmit={handleCreateService}
+          className={cn("space-y-4")}
+        >
+          <div className="flex items-center justify-end gap-4">
+            {section === 2 && (
+              <Button color="outline" outline onClick={handleBack}>
+                Back
+              </Button>
+            )}
+            {section !== 2 && (
+              <Button color="primary" onClick={() => setSection(section + 1)}>
+                Next
+              </Button>
+            )}
+          </div>
+        </DynamicForm>
+      )}
+      {section === 2 && <DynamicQuestionForm />}
+      {section === 2 && (
+        <Button type="submit" color="primary">
+          Create service
+        </Button>
+      )}
     </DialogWrapper>
   );
 };

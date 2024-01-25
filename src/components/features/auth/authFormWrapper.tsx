@@ -6,13 +6,13 @@ import { FooterDivider } from "flowbite-react/lib/esm/components/Footer/FooterDi
 import Image from "next/image";
 import React, { ReactNode } from "react";
 
-interface propTypes {
+interface propType {
   children: ReactNode;
   login?: boolean;
   handlers: { google: () => void; yahoo: () => void };
 }
 
-const AuthFormWrapper = ({ children, login, handlers }: propTypes) => {
+const AuthFormWrapper = ({ children, login, handlers }: propType) => {
   const title = login ? "Welcome back👋" : "Create an account for free";
 
   const description = login

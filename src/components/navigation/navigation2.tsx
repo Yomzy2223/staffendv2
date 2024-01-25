@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
-interface propTypes {
+interface propType {
   navRoutes: {
     name: string;
     to: string;
@@ -12,7 +12,7 @@ interface propTypes {
   className?: string;
 }
 
-const Navigation2 = ({ className, navRoutes }: propTypes) => {
+const Navigation2 = ({ className, navRoutes }: propType) => {
   const pathname = usePathname();
 
   return (

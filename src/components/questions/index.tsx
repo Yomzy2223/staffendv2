@@ -9,7 +9,7 @@ import { Delete, Edit } from "lucide-react";
 interface propType {
   type: string;
   number: number;
-  title: string;
+  title?: string;
   submitHandler: (values: formType) => void;
 }
 
@@ -37,7 +37,7 @@ const Question = ({ type, number, title, submitHandler }: propType) => {
 
   return (
     <Card>
-      <QuestionHeader title={title} />
+      <QuestionHeader title={title} number={number} />
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
         <TextInput
           id="question"

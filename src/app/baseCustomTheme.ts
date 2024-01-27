@@ -3,7 +3,7 @@ import type { ThemeProps } from "flowbite-react";
 export const customTheme: ThemeProps = {
   theme: {
     button: {
-      base: "w-max focus:!ring-0 hover:opacity-80 active:opacity-90 transition transition-all",
+      base: "w-max focus:!ring-0 hover:opacity-80 active:opacity-90 transition transition-all text-sm",
       color: {
         primary:
           "bg-primary text-primary-foreground border border-transparent enabled:hover:bg-primary-dark",
@@ -37,6 +37,11 @@ export const customTheme: ThemeProps = {
     },
     textarea: {
       base: "block w-full rounded-lg border disabled:cursor-not-allowed disabled:opacity-50 text-sm outline-primary",
+    },
+    checkbox: {
+      root: {
+        base: "h-4 w-4 rounded focus:ring-0",
+      },
     },
   },
 };

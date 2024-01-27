@@ -22,4 +22,5 @@ export interface DynamicFormProps {
   formSchema: ZodType<any, any, any>;
   onFormSubmit: (values: any) => void;
   className?: string;
+  formClassName?: string;
 }

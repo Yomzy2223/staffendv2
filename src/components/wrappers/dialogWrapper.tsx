@@ -9,15 +9,17 @@ import {
 import { Modal } from "flowbite-react";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import { X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface propsType {
   title: string;
   children: React.ReactNode;
   open: boolean;
   setOpen: (open: boolean) => void;
+  fit?: boolean;
 }
 
-const DialogWrapper = ({ title, children, open, setOpen }: propsType) => {
+const DialogWrapper = ({ title, children, open, setOpen, fit }: propsType) => {
   const { isDesktop } = useGlobalFucntions();
 
   return (
@@ -29,11 +31,17 @@ const DialogWrapper = ({ title, children, open, setOpen }: propsType) => {
               {title}
             </span>
           </Modal.Header>
-          <Modal.Body className="p-5 pt-4">{children}</Modal.Body>
+          <Modal.Body
+            className={cn("flex flex-col p-5 pt-4", { "min-h-[70vh]": !fit })}
+          >
+            {children}
+          </Modal.Body>
         </Modal>
       ) : (
         <Drawer open={open} onOpenChange={setOpen}>
-          <DrawerContent className="p-5 pt-0 rounded-t-3xl">
+          <DrawerContent
+            className={cn("p-5 pt-0 rounded-t-3xl", { "h-[90%]": !fit })}
+          >
             <DrawerHeader className="flex justify-between px-0">
               <DrawerTitle className="text-lg font-semibold text-foreground">
                 {title}

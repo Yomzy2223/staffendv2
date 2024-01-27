@@ -30,6 +30,7 @@ const config = {
           3: "hsl(var(--foreground-3))",
           4: "hsl(var(--foreground-4))",
           5: "hsl(var(--foreground-5))",
+          7: "hsl(var(--foreground-7))",
           9: "hsl(var(--foreground-9))",
         },
         primary: {

@@ -5,6 +5,7 @@ import FieldTypePopUp from "./fieldTypePopUp";
 import { MoreHorizontal } from "lucide-react";
 import { FieldError, UseFormSetValue } from "react-hook-form";
 import { cn } from "@/lib/utils";
+import { formFieldType } from ".";
 
 const QuestionHeader = ({
   title,
@@ -70,7 +71,7 @@ export default QuestionHeader;
 interface propType {
   title?: string;
   number: number;
-  setValue: UseFormSetValue<FieldType | undefined>;
+  setValue: UseFormSetValue<formFieldType>;
   error?: FieldError;
   edit: boolean;
   checked: boolean;

@@ -10,7 +10,7 @@ import CardWrapper from "@/components/wrappers/cardWrapper";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import React from "react";
-import { useTableInfo } from "../constants";
+import { useTableInfo } from "../../constants";
 
 const Service = () => {
   const { service } = useParams();

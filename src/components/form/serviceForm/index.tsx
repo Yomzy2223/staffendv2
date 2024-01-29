@@ -7,6 +7,7 @@ import DialogWrapper from "@/components/wrappers/dialogWrapper";
 import { useSearchParams } from "next/navigation";
 import DynamicFormCreator from "../dynamicFormCreator";
 import { FieldType } from "@/components/form/dynamicFormCreator/formField/constants";
+import { useGlobalFucntions } from "@/hooks/globalFunctions";
 
 const ServiceForm = ({
   open,
@@ -17,9 +18,10 @@ const ServiceForm = ({
 }) => {
   const [section, setSection] = useState(1);
   const { get } = useSearchParams();
+  const { isDesktop } = useGlobalFucntions();
 
   const isEdit = get("action") === "edit";
-  const title1 = isEdit ? "Update Service" : "Add Service";
+  const title1 = isEdit ? "Update Service" : "Create Service";
   const title2 = isEdit ? "Update Service Form" : "Add Service Form";
   const title = section === 1 ? title1 : title2;
 
@@ -41,8 +43,15 @@ const ServiceForm = ({
     console.log(value);
   };
 
+  const wide = form2Info.length > 2 && section === 2 && isDesktop;
+
   return (
-    <DialogWrapper open={open} setOpen={setOpen} title={title}>
+    <DialogWrapper
+      open={open}
+      setOpen={setOpen}
+      title={title}
+      size={wide ? "5xl" : "xl"}
+    >
       {section === 1 && (
         <DynamicForm
           formInfo={section1FormInfo}
@@ -51,7 +60,7 @@ const ServiceForm = ({
           onFormSubmit={handleCreateService}
           className={cn("space-y-4")}
         >
-          <div className="flex items-center justify-end">
+          <div className="bg-white flex items-center justify-end pt-4 sticky bottom-0">
             <Button type="submit" color="primary">
               Next
             </Button>
@@ -64,8 +73,9 @@ const ServiceForm = ({
           <DynamicFormCreator
             formInfo={form2Info}
             onEachSubmit={handleFormSubmit}
+            className={cn({ "grid grid-cols-2": wide })}
           />
-          <div className="flex items-center justify-end gap-4">
+          <div className="bg-white flex items-center justify-end gap-4 pt-4 sticky bottom-0">
             <Button color="outline" outline onClick={handleBack}>
               Back
             </Button>
@@ -161,5 +171,22 @@ const form2Info = [
     type: "paragraph",
     title: "Describe the please",
     compulsory: false,
+  },
+  {
+    type: "Person",
+    title: "Describe the pleases",
+    compulsory: false,
+    options: [
+      {
+        type: "paragraph",
+        title: "Describe the please",
+        compulsory: false,
+      },
+      {
+        type: "paragraph",
+        title: "Describe the service ",
+        compulsory: false,
+      },
+    ],
   },
 ];

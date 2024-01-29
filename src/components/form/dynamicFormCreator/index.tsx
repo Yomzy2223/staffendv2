@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { Button } from "flowbite-react";
 import { PlusCircle } from "lucide-react";
 import React, { useState } from "react";
@@ -5,12 +6,16 @@ import FormField from "./formField";
 import { FieldType } from "./formField/constants";
 import FieldTypePopUp from "./formField/fieldTypePopUp";
 
-const DynamicFormCreator = ({ title, onEachSubmit, formInfo }: propType) => {
+const DynamicFormCreator = ({
+  title,
+  onEachSubmit,
+  formInfo,
+  className,
+}: propType) => {
   const [selectedType, setSelectedType] = useState<FieldType>();
 
   const btnText =
-    (formInfo.length > 0 ? "Add another " : "Create a ") +
-    (title || "question");
+    (formInfo.length > 0 ? "Add another " : "Create a ") + (title || "field");
 
   const handleSelect = (type?: FieldType) => {
     if (!type) return;
@@ -19,7 +24,7 @@ const DynamicFormCreator = ({ title, onEachSubmit, formInfo }: propType) => {
 
   return (
     <div>
-      <div className="flex flex-col flex-wrap gap-4">
+      <div className={cn("flex flex-col flex-wrap gap-4", className)}>
         {formInfo.map((info, i) => (
           <FormField
             key={info.title}
@@ -35,6 +40,7 @@ const DynamicFormCreator = ({ title, onEachSubmit, formInfo }: propType) => {
             info={selectedType}
             title={title}
             submitHandler={onEachSubmit}
+            isNew
           />
         )}
       </div>
@@ -57,7 +63,8 @@ interface propType {
   formInfo: {
     type: string;
     title: string;
-    options?: [];
+    options?: FieldType[];
     compulsory: boolean;
   }[];
+  className?: string;
 }

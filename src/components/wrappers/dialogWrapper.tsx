@@ -11,28 +11,34 @@ import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-interface propsType {
-  title: string;
-  children: React.ReactNode;
-  open: boolean;
-  setOpen: (open: boolean) => void;
-  fit?: boolean;
-}
-
-const DialogWrapper = ({ title, children, open, setOpen, fit }: propsType) => {
+const DialogWrapper = ({
+  title,
+  children,
+  open,
+  setOpen,
+  fit,
+  size,
+}: propsType) => {
   const { isDesktop } = useGlobalFucntions();
 
   return (
     <div>
       {isDesktop ? (
-        <Modal size="lg" show={open} onClose={() => setOpen(false)} dismissible>
+        <Modal
+          size={size || "xl"}
+          show={open}
+          onClose={() => setOpen(false)}
+          dismissible
+        >
           <Modal.Header>
             <span className="text-lg font-semibold text-foreground">
               {title}
             </span>
           </Modal.Header>
           <Modal.Body
-            className={cn("flex flex-col p-5 pt-4", { "min-h-[70vh]": !fit })}
+            className={cn("flex flex-col p-5 pt-4 pb-0 mb-5", {
+              "min-h-[70vh]": !fit,
+            })}
           >
             {children}
           </Modal.Body>
@@ -40,7 +46,9 @@ const DialogWrapper = ({ title, children, open, setOpen, fit }: propsType) => {
       ) : (
         <Drawer open={open} onOpenChange={setOpen}>
           <DrawerContent
-            className={cn("p-5 pt-0 rounded-t-3xl", { "h-[90%]": !fit })}
+            className={cn("p-5 pt-0 rounded-t-3xl ", {
+              "h-[90%]": !fit,
+            })}
           >
             <DrawerHeader className="flex justify-between px-0">
               <DrawerTitle className="text-lg font-semibold text-foreground">
@@ -50,7 +58,7 @@ const DialogWrapper = ({ title, children, open, setOpen, fit }: propsType) => {
                 <X color="hsl(var(--foreground-5))" />
               </DrawerClose>
             </DrawerHeader>
-            {children}
+            <div className="flex flex-col overflow-auto flex-1">{children}</div>
           </DrawerContent>
         </Drawer>
       )}
@@ -59,3 +67,12 @@ const DialogWrapper = ({ title, children, open, setOpen, fit }: propsType) => {
 };
 
 export default DialogWrapper;
+
+interface propsType {
+  title: string;
+  children: React.ReactNode;
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  fit?: boolean;
+  size?: string;
+}

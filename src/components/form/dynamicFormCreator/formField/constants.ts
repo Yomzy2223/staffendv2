@@ -6,10 +6,11 @@ import {
   FlagIcon,
   FormInput,
   Gem,
-  LocateIcon,
   LucideIcon,
+  Mail,
   MapPin,
   PhoneOutgoing,
+  User,
 } from "lucide-react";
 
 export interface FieldType {
@@ -48,6 +49,10 @@ export const fieldTypes: FieldType[] = [
     icon: ChevronDown,
   },
   {
+    type: "Email address",
+    icon: Mail,
+  },
+  {
     type: "Paragraph",
     icon: FormInput,
   },
@@ -59,6 +64,7 @@ export const fieldTypes: FieldType[] = [
   {
     type: "Promocode",
     icon: Gem,
+    title: "Enter your promo code",
   },
   {
     type: "Multiple choice",
@@ -67,5 +73,27 @@ export const fieldTypes: FieldType[] = [
   {
     type: "Short answer",
     icon: FormInput,
+  },
+  {
+    type: "Person",
+    icon: User,
+    options: [
+      {
+        type: "Short answer",
+        title: "Enter your first name",
+      },
+      {
+        type: "Short answer",
+        title: "Enter your last name",
+      },
+      {
+        type: "Email address",
+        title: "Enter your email address",
+      },
+      {
+        type: "Phone number",
+        title: "Enter your phone number",
+      },
+    ],
   },
 ];

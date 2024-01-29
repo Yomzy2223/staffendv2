@@ -1,15 +1,19 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Card, TextInput } from "flowbite-react";
+import { Card, TextInput } from "flowbite-react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import QuestionHeader from "./header";
 import * as z from "zod";
 import Footer from "./footer";
-import { FieldType } from "./constants";
-import DynamicField from "./dynamicField";
-import { PlusCircle } from "lucide-react";
+import { FieldType, fieldTypes } from "./constants";
 
-const FormField = ({ info, number, title, submitHandler, isNew }: propType) => {
+const DynamicField = ({
+  info,
+  number,
+  title,
+  submitHandler,
+  isNew,
+}: propType) => {
   const [selectedType, setSelectedType] = useState<FieldType | undefined>({
     ...info,
   });
@@ -39,29 +43,32 @@ const FormField = ({ info, number, title, submitHandler, isNew }: propType) => {
 
   const errorMsg = errors["title"]?.message;
 
-  if (info.type === "Person")
-    return (
-      <Card className="shadow-none [&>div]:p-4 max-w-[500px]">
-        <QuestionHeader
-          title={title}
-          number={number}
-          setValue={setValue}
-          error={errors.type}
-          edit={edit}
-          checked={checked}
-          selectedType={selectedType}
-          setSelectedType={setSelectedType}
+  return (
+    <Card className="shadow-none [&>div]:p-4 max-w-[500px]">
+      <QuestionHeader
+        title={title}
+        number={number}
+        setValue={setValue}
+        error={errors.type}
+        edit={edit}
+        checked={checked}
+        selectedType={selectedType}
+        setSelectedType={setSelectedType}
+      />
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <TextInput
+          id="title"
+          type="text"
+          sizing="md"
+          placeholder="Enter field title"
+          helperText={<>{errorMsg}</>}
+          color={errors["title"] && "failure"}
+          className={errorMsg ? "focus:[&_input]:outline-none" : ""}
+          disabled={!edit}
+          {...register("title")}
         />
-        {info.options?.map((field, i) => (
-          <DynamicField
-            key={field.title}
-            number={i + 1}
-            info={field}
-            submitHandler={submitHandler}
-            isNew={isNew}
-            title={title}
-          />
-        ))}
+        {/* Dynamic Types */}
+
         <Footer
           checked={checked}
           edit={edit}
@@ -69,26 +76,13 @@ const FormField = ({ info, number, title, submitHandler, isNew }: propType) => {
           setChecked={setChecked}
           setValue={setValue}
           getValues={getValues}
-        >
-          <Button color="ghost" size="fit" className="text-foreground-5">
-            <PlusCircle size={20} /> Add new {title || "field"}
-          </Button>
-        </Footer>
-      </Card>
-    );
-
-  return (
-    <DynamicField
-      key={info.title}
-      number={number}
-      info={info}
-      submitHandler={submitHandler}
-      title={title}
-    />
+        />
+      </form>
+    </Card>
   );
 };
 
-export default FormField;
+export default DynamicField;
 
 interface propType {
   info: FieldType;

@@ -23,10 +23,7 @@ export default function RootLayout({
       <body
         className={cn(inter.className, "selection:bg-primary/30 min-h-screen")}
       >
-        <Flowbite theme={customTheme}>
-          <Header />
-          {children}
-        </Flowbite>
+        <Flowbite theme={customTheme}>{children}</Flowbite>
       </body>
     </html>
   );

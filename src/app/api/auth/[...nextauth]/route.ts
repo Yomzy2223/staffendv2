@@ -51,7 +51,6 @@ const handler = NextAuth({
     //   return true;
     // },
     async redirect({ baseUrl, url }) {
-      console.log("Redirecting to" + baseUrl + " or " + url);
       return baseUrl;
     },
     async jwt({ token, account, profile, user, session, trigger }) {
@@ -60,23 +59,33 @@ const handler = NextAuth({
         token.access_token = account.access_token;
         token.refresh_token = account.refresh_token;
       }
+      if (user) {
+        token.user = user;
+        return token as Awaitable<JWT>;
+      }
       if (profile) {
         token.fullname = profile.name;
         token.firstname = profile.given_name;
         token.lastname = profile.family_name;
         token.email = profile.email;
-        (token.picture = profile.picture), (token.expires_at = profile.exp);
-      }
-      if (user) {
-        console.log("if user", user);
-        token.user = user;
-        return token as Awaitable<JWT>;
+        token.picture = profile.picture;
+        token.expires_at = profile.exp;
       }
       return token as Awaitable<JWT>;
     },
     async session({ newSession, session, token, trigger, user }) {
       // console.log(newSession, session, token, trigger, user);
-      console.log("Returning session", token);
+      session.user = {
+        email: token.email,
+        fullname: token.fullname,
+        firstname: token.firstname,
+        lastname: token.lastname,
+        picture: token.picture,
+      };
+      session.expires_at = token.expires_at;
+      session.access_token = token.access_token;
+      session.refresh_token = token.refresh_token;
+      console.log("Returning session", session);
       return session as Awaitable<Session>;
     },
   },

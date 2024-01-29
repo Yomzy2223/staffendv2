@@ -7,19 +7,20 @@ export const customTheme: ThemeProps = {
       color: {
         primary:
           "bg-primary text-primary-foreground border border-transparent enabled:hover:bg-primary-dark",
-        magenta:
+        secondary:
           "bg-magenta text-magenta-foreground border border-transparent enabled:hover:bg-magenta-dark",
         ghost: "bg-transparent text-foreground",
       },
       outline: {
-        on: "border !border-border hover:bg-foreground/10",
         color: {
+          default: "border border-input",
           white: "border border-white enabled:hover:bg-foreground/10",
           primary:
             "border border-primary bg-transparent enabled:hover:bg-primary-dark",
           magenta:
             "border border-magenta bg-transparent enabled:hover:bg-magenta-dark",
         },
+        on: "flex justify-center bg-white text-foreground transition-all duration-75 ease-in group-enabled:group-hover:bg-opacity-0 group-enabled:group-hover:text-inherit dark:bg-gray-900 dark:text-white w-full",
       },
       size: {
         fit: "p-0 h-max w-max",

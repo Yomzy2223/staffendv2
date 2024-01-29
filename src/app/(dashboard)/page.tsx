@@ -9,6 +9,7 @@ import QueryNav from "@/components/navigation/queryNav";
 import SelectMonthAndYear from "@/components/select/selectMonthAndYear";
 import GeneralTable from "@/components/tables/generalTable";
 import CardWrapper from "@/components/wrappers/cardWrapper";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import React from "react";
 import {
@@ -20,6 +21,8 @@ import {
 
 const Home = () => {
   const { tableHeaders, tableBody } = useTableInfo();
+  const session = useSession();
+  console.log(session);
 
   return (
     <div>

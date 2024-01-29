@@ -1,4 +1,5 @@
 import { Header } from "@/components/header/mainHeader";
+import Providers from "@/lib/helpers/provider";
 import { cn } from "@/lib/utils";
 import { Flowbite } from "flowbite-react";
 import type { Metadata } from "next";
@@ -23,7 +24,7 @@ export default function RootLayout({
       <body
         className={cn(inter.className, "selection:bg-primary/30 min-h-screen")}
       >
-        <Flowbite theme={customTheme}>{children}</Flowbite>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

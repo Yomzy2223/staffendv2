@@ -61,7 +61,7 @@ const SignUp = () => {
               Sign In
             </Button>
           </p>
-          <Button type="submit" color="magenta">
+          <Button type="submit" color="secondary">
             Click to create account <ArrowRightCircle className="ml-1" />
           </Button>
         </div>

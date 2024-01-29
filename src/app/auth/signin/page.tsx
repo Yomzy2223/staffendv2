@@ -3,26 +3,32 @@
 import AuthFormWrapper from "@/components/features/auth/authFormWrapper";
 import DynamicForm from "@/components/form/dynamicForm";
 import { Button } from "flowbite-react";
-import { ArrowRight, ArrowRightCircle } from "lucide-react";
-import Link from "next/link";
+import { ArrowRightCircle } from "lucide-react";
 import React from "react";
 import * as z from "zod";
+import { signIn, useSession } from "next-auth/react";
 
 const SignIn = () => {
-  const handleSignIn = (values: any) => {
-    console.log(values);
+  const session = useSession();
+  console.log(session);
+
+  const handleSignIn = async (values: any) => {
+    const response = await signIn("signIn", {
+      redirect: true,
+      email: values.email,
+      password: values.password,
+    });
   };
 
   const handleSignInWithGoogle = async () => {
-    // const response = await signIn("google");
-    // console.log(response);
+    const response = await signIn("google");
+    console.log(response);
   };
 
   const handleSignInWithYahoo = async () => {
-    // const response = await signIn("yahoo");
-    // console.log(response);
+    const response = await signIn("yahoo");
+    console.log(response);
   };
-
   return (
     <AuthFormWrapper
       login
@@ -37,14 +43,24 @@ const SignIn = () => {
         formSchema={signInSchema}
         onFormSubmit={handleSignIn}
       >
-        <div className="flex items-center gap-14">
-          <Button type="submit" color="magenta">
-            Continue to Sign In <ArrowRightCircle className="ml-1" />
+        <div className="flex items-center gap-10">
+          <div className="flex items-center flex-wrap gap-1">
+            <p className="sb-text-16 text-foreground-3">
+              Don&#39;t have an account?{" "}
+            </p>
+            <Button
+              color="ghost2"
+              size="fit"
+              className="text-secondary"
+              href="/auth/signup"
+            >
+              Sign up
+            </Button>
+          </div>
+          <Button type="submit" color="secondary">
+            <span>Continue to Sign in</span>{" "}
+            <ArrowRightCircle className="ml-1" />
           </Button>
-          <p className="sb-text-16 text-foreground-3">
-            Don&#39;t have an account?{" "}
-            <span className="text-primary">Sign Up</span>
-          </p>
         </div>
       </DynamicForm>
     </AuthFormWrapper>

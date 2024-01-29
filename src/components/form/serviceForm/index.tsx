@@ -173,7 +173,7 @@ const form2Info = [
     compulsory: false,
   },
   {
-    type: "Person",
+    type: "person",
     title: "Describe the pleases",
     compulsory: false,
     options: [
@@ -185,6 +185,33 @@ const form2Info = [
       {
         type: "paragraph",
         title: "Describe the service ",
+        compulsory: false,
+      },
+    ],
+  },
+  {
+    type: "person",
+    title: "Describe thed pleases",
+    compulsory: false,
+    options: [
+      {
+        type: "paragraph",
+        title: "Describe theds please",
+        compulsory: false,
+      },
+      {
+        type: "paragraph",
+        title: "Describe the servicesd ",
+        compulsory: false,
+      },
+      {
+        type: "paragraph",
+        title: "Describe the servicedsd ",
+        compulsory: false,
+      },
+      {
+        type: "paragraph",
+        title: "Describe the serzvicesd ",
         compulsory: false,
       },
     ],

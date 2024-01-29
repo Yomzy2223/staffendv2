@@ -7,7 +7,7 @@ import { FieldError, UseFormSetValue } from "react-hook-form";
 import { cn } from "@/lib/utils";
 import { formFieldType } from ".";
 
-const QuestionHeader = ({
+const Header = ({
   title,
   number,
   setValue,
@@ -20,7 +20,7 @@ const QuestionHeader = ({
   const handleSelect = (selected?: FieldType) => {
     if (!selected) return;
     setSelectedType(selected);
-    setValue("type", selected.type, { shouldValidate: true });
+    setValue && setValue("type", selected.type, { shouldValidate: true });
   };
 
   return (
@@ -38,7 +38,7 @@ const QuestionHeader = ({
 
       <div className="flex items-center gap-2.5">
         <span
-          className={cn("text-sm text-foreground-5 font-normal", {
+          className={cn("text-sm text-foreground-5 font-normal capitalize", {
             "text-destructive-foreground": error?.message,
           })}
         >
@@ -66,12 +66,12 @@ const QuestionHeader = ({
   );
 };
 
-export default QuestionHeader;
+export default Header;
 
 interface propType {
   title?: string;
   number: number;
-  setValue: UseFormSetValue<formFieldType>;
+  setValue?: UseFormSetValue<formFieldType>;
   error?: FieldError;
   edit: boolean;
   checked: boolean;

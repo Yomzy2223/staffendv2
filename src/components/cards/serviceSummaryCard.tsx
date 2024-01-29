@@ -15,7 +15,7 @@ const ServiceSummaryCard = ({
   title: string;
   totalProducts: number;
 }) => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   const { setQuery } = useGlobalFucntions();
   const { push } = useRouter();

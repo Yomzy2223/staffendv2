@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "flowbite-react";
 import { PlusCircle } from "lucide-react";
 import React, { useState } from "react";
-import FormField from "./formField";
+import FormField, { formFieldType } from "./formField";
 import { FieldType } from "./formField/constants";
 import FieldTypePopUp from "./formField/fieldTypePopUp";
 
@@ -12,14 +12,19 @@ const DynamicFormCreator = ({
   formInfo,
   className,
 }: propType) => {
-  const [selectedType, setSelectedType] = useState<FieldType>();
+  const [newlyAdded, setNewlyAdded] = useState<FieldType>();
 
   const btnText =
     (formInfo.length > 0 ? "Add another " : "Create a ") + (title || "field");
 
   const handleSelect = (type?: FieldType) => {
     if (!type) return;
-    setSelectedType(type);
+    setNewlyAdded(type);
+  };
+
+  const handleSubmit = async (values: formFieldType) => {
+    await onEachSubmit(values);
+    setNewlyAdded(undefined);
   };
 
   return (
@@ -34,13 +39,13 @@ const DynamicFormCreator = ({
             submitHandler={onEachSubmit}
           />
         ))}
-        {selectedType && (
+        {newlyAdded && (
           <FormField
             number={formInfo.length + 1}
-            info={selectedType}
+            info={newlyAdded}
             title={title}
-            submitHandler={onEachSubmit}
-            isNew
+            submitHandler={handleSubmit}
+            isEdit
           />
         )}
       </div>

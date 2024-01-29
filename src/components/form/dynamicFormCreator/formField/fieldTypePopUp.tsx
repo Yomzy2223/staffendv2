@@ -63,24 +63,26 @@ function QuestionList({
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup>
-          {fieldTypes.map((item: FieldType) => (
-            <CommandItem
-              key={item.type}
-              value={item.type}
-              onSelect={(value) => {
-                handleSelect(
-                  fieldTypes.find(
-                    (type: FieldType) => type.type.toLowerCase() === value
-                  )
-                );
-                setOpen(false);
-              }}
-              className="text-foreground-7"
-            >
-              {item.icon && <item.icon size={14} className="mr-1" />}
-              {item.type}
-            </CommandItem>
-          ))}
+          {fieldTypes
+            .sort((a, b) => a.type.localeCompare(b.type))
+            .map((item: FieldType) => (
+              <CommandItem
+                key={item.type}
+                value={item.type}
+                onSelect={(value) => {
+                  handleSelect(
+                    fieldTypes.find(
+                      (type: FieldType) => type.type.toLowerCase() === value
+                    )
+                  );
+                  setOpen(false);
+                }}
+                className="text-foreground-7 capitalize"
+              >
+                {item.icon && <item.icon size={14} className="mr-1" />}
+                {item.type}
+              </CommandItem>
+            ))}
         </CommandGroup>
       </CommandList>
     </Command>

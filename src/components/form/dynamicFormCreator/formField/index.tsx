@@ -1,52 +1,48 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Card, TextInput } from "flowbite-react";
+import { Button, Card } from "flowbite-react";
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import QuestionHeader from "./header";
+import Header from "./header";
 import * as z from "zod";
 import Footer from "./footer";
 import { FieldType } from "./constants";
 import DynamicField from "./dynamicField";
 import { PlusCircle } from "lucide-react";
+import FieldTypePopUp from "./fieldTypePopUp";
 
-const FormField = ({ info, number, title, submitHandler, isNew }: propType) => {
+const FormField = ({
+  info,
+  number,
+  title,
+  submitHandler,
+  isEdit,
+}: propType) => {
   const [selectedType, setSelectedType] = useState<FieldType | undefined>({
     ...info,
   });
-  const [edit, setEdit] = useState(isNew || false);
+  const [edit, setEdit] = useState(isEdit || false);
   const [checked, setChecked] = useState(info.compulsory as boolean);
+  const [newlyAdded, setNewlyAdded] = useState<FieldType | undefined>();
 
-  const defaultValues = { ...info };
+  const btnText = info?.options
+    ? (info?.options.length > 0 ? "Add another " : "Create a ") +
+      (title || "field")
+    : "";
 
-  // Form definition
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-    getValues,
-    setValue,
-  } = useForm<formFieldType>({
-    resolver: zodResolver(formSchema),
-    defaultValues,
-  });
+  const handleSelect = (type?: FieldType) => {
+    if (!type) return;
+    setNewlyAdded(type);
+  };
 
-  // Submit handler
-  function onSubmit(values: formFieldType) {
-    submitHandler && submitHandler(values);
-    setEdit(false);
-  }
+  const handleSubmit = async (values: formFieldType) => {
+    await submitHandler(values);
+    setNewlyAdded(undefined);
+  };
 
-  const errorMsg = errors["title"]?.message;
-
-  if (info.type === "Person")
+  if (info.type === "person")
     return (
-      <Card className="shadow-none [&>div]:p-4 max-w-[500px]">
-        <QuestionHeader
+      <Card className="shadow-none [&>div]:p-4 max-w-[500px] h-max">
+        <Header
           title={title}
           number={number}
-          setValue={setValue}
-          error={errors.type}
           edit={edit}
           checked={checked}
           selectedType={selectedType}
@@ -57,22 +53,37 @@ const FormField = ({ info, number, title, submitHandler, isNew }: propType) => {
             key={field.title}
             number={i + 1}
             info={field}
-            submitHandler={submitHandler}
-            isNew={isNew}
             title={title}
+            submitHandler={submitHandler}
+            isEdit={edit}
+            isPerson
           />
         ))}
+        {newlyAdded && (
+          <DynamicField
+            number={info.options?.length ?? 0 + 1}
+            info={newlyAdded}
+            title={title}
+            submitHandler={handleSubmit}
+            isEdit={edit}
+            isPerson
+          />
+        )}
         <Footer
           checked={checked}
           edit={edit}
           setEdit={setEdit}
           setChecked={setChecked}
-          setValue={setValue}
-          getValues={getValues}
+          onDoneClick={() => setEdit(false)}
         >
-          <Button color="ghost" size="fit" className="text-foreground-5">
-            <PlusCircle size={20} /> Add new {title || "field"}
-          </Button>
+          {edit && (
+            <FieldTypePopUp handleSelect={handleSelect}>
+              <Button color="ghost" size="fit" className="text-foreground-5">
+                <PlusCircle size={20} />
+                {btnText}
+              </Button>
+            </FieldTypePopUp>
+          )}
         </Footer>
       </Card>
     );
@@ -84,6 +95,7 @@ const FormField = ({ info, number, title, submitHandler, isNew }: propType) => {
       info={info}
       submitHandler={submitHandler}
       title={title}
+      isEdit={edit}
     />
   );
 };
@@ -95,7 +107,7 @@ interface propType {
   number: number;
   title?: string;
   submitHandler: (values: formFieldType) => void;
-  isNew?: boolean;
+  isEdit?: boolean;
 }
 
 const formSchema = z.object({

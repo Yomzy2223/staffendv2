@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Button, Checkbox } from "flowbite-react";
 import { PencilLine, Trash2 } from "lucide-react";
-import React, { ReactNode } from "react";
+import React, { MouseEventHandler, ReactNode } from "react";
 import { UseFormGetValues, UseFormSetValue } from "react-hook-form";
 import { formFieldType } from ".";
 
@@ -13,10 +13,11 @@ const Footer = ({
   setValue,
   getValues,
   children,
+  onDoneClick,
 }: propType) => {
   const onCheckToggle = () => {
     setChecked(!checked);
-    setValue("compulsory", !checked);
+    setValue && setValue("compulsory", !checked);
   };
 
   return (
@@ -36,7 +37,7 @@ const Footer = ({
             <Checkbox
               id={"compulsory"}
               className="accent-primary"
-              checked={getValues().compulsory}
+              checked={getValues ? getValues().compulsory : checked}
               onChange={onCheckToggle}
             />
             <label htmlFor="compulsory">Compulsory</label>
@@ -48,6 +49,7 @@ const Footer = ({
             color="ghost"
             size="fit"
             className="underline text-primary"
+            onClick={onDoneClick}
           >
             Done
           </Button>
@@ -78,7 +80,8 @@ interface propType {
   edit: boolean;
   setEdit: (value: boolean) => void;
   setChecked: (value: boolean) => void;
-  setValue: UseFormSetValue<formFieldType>;
-  getValues: UseFormGetValues<formFieldType>;
+  setValue?: UseFormSetValue<formFieldType>;
+  getValues?: UseFormGetValues<formFieldType>;
   children?: ReactNode;
+  onDoneClick?: MouseEventHandler<HTMLButtonElement>;
 }

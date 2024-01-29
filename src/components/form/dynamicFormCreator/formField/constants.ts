@@ -23,75 +23,75 @@ export interface FieldType {
 
 export const fieldTypes: FieldType[] = [
   {
-    type: "Address",
+    type: "address",
     icon: MapPin,
     title: "Enter company address",
   },
   {
-    type: "Checkbox",
+    type: "checkbox",
     icon: CheckSquare,
   },
   {
-    type: "Countries",
+    type: "countries",
     icon: FlagIcon,
     title: "Select operational country",
   },
   {
-    type: "Document template",
+    type: "document template",
     icon: File,
   },
   {
-    type: "Document upload",
+    type: "document upload",
     icon: File,
   },
   {
-    type: "Dropdown",
+    type: "dropdown",
     icon: ChevronDown,
   },
   {
-    type: "Email address",
+    type: "email address",
     icon: Mail,
   },
   {
-    type: "Paragraph",
+    type: "paragraph",
     icon: FormInput,
   },
   {
-    type: "Phone number",
+    type: "phone number",
     icon: PhoneOutgoing,
     title: "Enter your business phone number",
   },
   {
-    type: "Promocode",
+    type: "promocode",
     icon: Gem,
     title: "Enter your promo code",
   },
   {
-    type: "Multiple choice",
+    type: "multiple choice",
     icon: CircleDot,
   },
   {
-    type: "Short answer",
+    type: "short answer",
     icon: FormInput,
   },
   {
-    type: "Person",
+    type: "person",
     icon: User,
     options: [
       {
-        type: "Short answer",
+        type: "short answer",
         title: "Enter your first name",
       },
       {
-        type: "Short answer",
+        type: "short answer",
         title: "Enter your last name",
       },
       {
-        type: "Email address",
+        type: "email address",
         title: "Enter your email address",
       },
       {
-        type: "Phone number",
+        type: "phone number",
         title: "Enter your phone number",
       },
     ],

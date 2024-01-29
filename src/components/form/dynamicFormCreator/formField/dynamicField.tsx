@@ -6,18 +6,20 @@ import QuestionHeader from "./header";
 import * as z from "zod";
 import Footer from "./footer";
 import { FieldType, fieldTypes } from "./constants";
+import { cn } from "@/lib/utils";
 
 const DynamicField = ({
   info,
   number,
   title,
   submitHandler,
-  isNew,
+  isEdit,
+  isPerson,
 }: propType) => {
   const [selectedType, setSelectedType] = useState<FieldType | undefined>({
     ...info,
   });
-  const [edit, setEdit] = useState(isNew || false);
+  const [edit, setEdit] = useState(isEdit || false);
   const [checked, setChecked] = useState(info.compulsory as boolean);
 
   const defaultValues = { ...info };
@@ -41,6 +43,8 @@ const DynamicField = ({
     setEdit(false);
   }
 
+  const personView = isPerson && !isEdit;
+
   const errorMsg = errors["title"]?.message;
 
   return (
@@ -55,7 +59,10 @@ const DynamicField = ({
         selectedType={selectedType}
         setSelectedType={setSelectedType}
       />
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className={cn({ "space-y-4": !personView })}
+      >
         <TextInput
           id="title"
           type="text"
@@ -69,14 +76,16 @@ const DynamicField = ({
         />
         {/* Dynamic Types */}
 
-        <Footer
-          checked={checked}
-          edit={edit}
-          setEdit={setEdit}
-          setChecked={setChecked}
-          setValue={setValue}
-          getValues={getValues}
-        />
+        {!personView && (
+          <Footer
+            checked={checked}
+            edit={edit}
+            setEdit={setEdit}
+            setChecked={setChecked}
+            setValue={setValue}
+            getValues={getValues}
+          />
+        )}
       </form>
     </Card>
   );
@@ -89,7 +98,8 @@ interface propType {
   number: number;
   title?: string;
   submitHandler: (values: formFieldType) => void;
-  isNew?: boolean;
+  isEdit?: boolean;
+  isPerson?: boolean;
 }
 
 const formSchema = z.object({

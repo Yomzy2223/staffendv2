@@ -73,7 +73,7 @@ const ServiceForm = ({
           <DynamicFormCreator
             formInfo={form2Info}
             onEachSubmit={handleFormSubmit}
-            className={cn({ "grid grid-cols-2": wide })}
+            className={cn({ "grid grid-cols-2 isolate": wide })}
           />
           <div className="bg-white flex items-center justify-end gap-4 pt-4 sticky bottom-0">
             <Button color="outline" outline onClick={handleBack}>
@@ -197,22 +197,22 @@ const form2Info = [
       {
         type: "paragraph",
         title: "Describe theds please",
-        compulsory: false,
+        compulsory: true,
       },
       {
         type: "paragraph",
         title: "Describe the servicesd ",
-        compulsory: false,
+        compulsory: true,
       },
       {
         type: "paragraph",
         title: "Describe the servicedsd ",
-        compulsory: false,
+        compulsory: true,
       },
       {
         type: "paragraph",
         title: "Describe the serzvicesd ",
-        compulsory: false,
+        compulsory: true,
       },
     ],
   },

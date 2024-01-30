@@ -1,10 +1,10 @@
 import axios from "axios";
-import { getSession } from "next-auth/react";
+import { getServerSession } from "next-auth";
 
 export const Client = async () => {
-  const session = await getSession();
+  const session = await getServerSession();
 
-  return axios.create({
+  const client = axios.create({
     baseURL:
       process.env.NODE_ENV === "production"
         ? "https://iapkmjspxh.us-east-1.awsapprunner.com/"
@@ -16,4 +16,5 @@ export const Client = async () => {
         : ``,
     },
   });
+  return client;
 };

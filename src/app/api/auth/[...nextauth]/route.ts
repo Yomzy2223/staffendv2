@@ -1,3 +1,4 @@
+import { Client } from "@/lib/axios";
 import NextAuth, { Awaitable, Session, User } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -41,7 +42,9 @@ const handler = NextAuth({
           placeholder: "Enter your password",
         },
       },
-      authorize(credentials, req) {
+      async authorize(credentials, req) {
+        const client = await Client();
+
         return credentials as Awaitable<User>;
       },
     }),

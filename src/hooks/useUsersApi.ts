@@ -76,12 +76,13 @@ const useUserApi = () => {
     useQuery({
       queryKey: ["user", id],
       queryFn: ({ queryKey }) => getUser(queryKey[1]),
+      enabled: id ? true : false,
     });
 
-  const getAllUsersQuery = useQuery({
-    queryKey: ["user"],
-    queryFn: getAllUsers,
-  });
+  //   const getAllUsersQuery = useQuery({
+  //     queryKey: ["user"],
+  //     queryFn: getAllUsers,
+  //   });
 
   return {
     forgotPasswordMutation,
@@ -89,7 +90,7 @@ const useUserApi = () => {
     verifyUserEmailMutation,
     deleteUserMutation,
     useGetUserQuery,
-    getAllUsersQuery,
+    // getAllUsersQuery,
   };
 };
 

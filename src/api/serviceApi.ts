@@ -19,27 +19,27 @@ interface serviceFormType {
 // Service endpoints
 export const createService = async (formInfo: serviceType) => {
   const client = await Client();
-  return client.post("/services", formInfo);
+  return await client.post("/services", formInfo);
 };
 
 export const updateService = async ({ id, formInfo }: { id: string; formInfo: serviceType }) => {
   const client = await Client();
-  return client.put(`/services/${id}`, formInfo);
+  return await client.put(`/services/${id}`, formInfo);
 };
 
 export const deleteService = async (id: string) => {
   const client = await Client();
-  return client.delete(`/services/${id}`);
+  return await client.delete(`/services/${id}`);
 };
 
 export const getService = async (id: string) => {
   const client = await Client();
-  return client.get(`/services/${id}`);
+  return await client.get(`/services/${id}`);
 };
 
 export const getAllServices = async () => {
   const client = await Client();
-  return client.get(`/services`);
+  return await client.get(`/services`);
 };
 
 export const createServiceForm = async ({
@@ -50,7 +50,7 @@ export const createServiceForm = async ({
   formInfo: serviceFormType;
 }) => {
   const client = await Client();
-  return client.post(`/services/form/${serviceCategoryId}`, formInfo);
+  return await client.post(`/services/form/${serviceCategoryId}`, formInfo);
 };
 
 // Service form endpoints
@@ -62,20 +62,20 @@ export const updateServiceForm = async ({
   formInfo: serviceFormType;
 }) => {
   const client = await Client();
-  return client.put(`/services/form/${id}`, formInfo);
+  return await client.put(`/services/form/${id}`, formInfo);
 };
 
 export const deleteServiceForm = async (id: string) => {
   const client = await Client();
-  return client.delete(`/services/form/${id}`);
+  return await client.delete(`/services/form/${id}`);
 };
 
 export const getServiceForm = async (id: string) => {
   const client = await Client();
-  return client.get(`/services/form/${id}`);
+  return await client.get(`/services/form/${id}`);
 };
 
 export const getAllServiceForm = async (serviceCategoryId: string) => {
   const client = await Client();
-  return client.get(`/services/forms/${serviceCategoryId}`);
+  return await client.get(`/services/forms/${serviceCategoryId}`);
 };

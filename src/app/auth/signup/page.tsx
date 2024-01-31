@@ -42,6 +42,8 @@ const SignUp = () => {
 
   return (
     <AuthFormWrapper
+      title="Create an account for free"
+      description="Join our 500+ customers to scale your business."
       handlers={{
         google: handleSignUpWithGoogle,
         yahoo: handleSignUpWithYahoo,

@@ -22,7 +22,7 @@ const SignIn = () => {
   };
 
   const handleSignInWithGoogle = async () => {
-    const response = await signIn("googleSignIn");
+    const response = await signIn("google");
     console.log(response);
   };
 
@@ -32,8 +32,6 @@ const SignIn = () => {
   };
   return (
     <AuthFormWrapper
-      title="Welcome back👋"
-      description="Happy to see you, sign in to continue"
       login
       handlers={{
         google: handleSignInWithGoogle,

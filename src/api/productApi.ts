@@ -47,27 +47,27 @@ export const createProduct = async ({
   formInfo: productType;
 }) => {
   const client = await Client();
-  return client.post(`/service/product/${serviceCategoryId}`, formInfo);
+  return await client.post(`/service/product/${serviceCategoryId}`, formInfo);
 };
 
 export const updateProduct = async ({ id, formInfo }: { id: string; formInfo: productType }) => {
   const client = await Client();
-  return client.put(`/service/product/${id}`, formInfo);
+  return await client.put(`/service/product/${id}`, formInfo);
 };
 
 export const deleteProduct = async (id: string) => {
   const client = await Client();
-  return client.delete(`/service/product/${id}`);
+  return await client.delete(`/service/product/${id}`);
 };
 
 export const getProduct = async (id: string) => {
   const client = await Client();
-  return client.get(`/service/product/${id}`);
+  return await client.get(`/service/product/${id}`);
 };
 
 export const getAllProducts = async () => {
   const client = await Client();
-  return client.get(`/service/product`);
+  return await client.get(`/service/product`);
 };
 
 // Product form endpoints
@@ -79,7 +79,7 @@ export const createProductForm = async ({
   formInfo: productFormType;
 }) => {
   const client = await Client();
-  return client.post(`/service/product/form/${serviceId}`, formInfo);
+  return await client.post(`/service/product/form/${serviceId}`, formInfo);
 };
 
 export const updateProductForm = async ({
@@ -90,25 +90,25 @@ export const updateProductForm = async ({
   formInfo: productFormType;
 }) => {
   const client = await Client();
-  return client.put(`/service/product/form/${id}`, formInfo);
+  return await client.put(`/service/product/form/${id}`, formInfo);
 };
 
 export const deleteProductForm = async (id: string) => {
   const client = await Client();
-  return client.delete(`/service/product/form/${id}`);
+  return await client.delete(`/service/product/form/${id}`);
 };
 
 export const getProductForm = async (id: string) => {
   const client = await Client();
-  return client.get(`/service/product/form/${id}`);
+  return await client.get(`/service/product/form/${id}`);
 };
 
 export const getServiceProductForms = async (serviceId: string) => {
   const client = await Client();
-  return client.get(`/service/product/form/${serviceId}`);
+  return await client.get(`/service/product/form/${serviceId}`);
 };
 
 export const getAllServicesProductsForm = async () => {
   const client = await Client();
-  return client.get(`/service/product/form/all`);
+  return await client.get(`/service/product/form/all`);
 };

@@ -7,9 +7,6 @@ import GoogleProvider from "next-auth/providers/google";
 const handler = NextAuth({
   pages: {
     signIn: "/auth/signin",
-    signOut: "/auth/signout",
-    error: "/auth/error",
-    verifyRequest: "/auth/verify-request",
   },
   providers: [
     GoogleProvider({
@@ -23,29 +20,81 @@ const handler = NextAuth({
           response_type: "code",
         },
       },
-      profile(profile) {
+      async profile(profile) {
+        if (profile.name && profile.email && profile.sub) {
+          const { name, email, sub } = profile;
+          try {
+            const client = await Client();
+            const payload = {
+              fullName: name,
+              email,
+              googleId: sub,
+              isPartner: false,
+              isStaff: true,
+            };
+            console.log("Payload: ", payload);
+            const response = await client.post("/users/google", payload);
+            console.log("Response", response);
+          } catch (e) {
+            console.log("Google signin error: ", e);
+            // throw new Error(e)
+          }
+        }
         return { id: profile.sub, ...profile };
       },
     }),
     CredentialsProvider({
-      id: "signIn",
-      name: "Sign in",
-      credentials: {
-        email: {
-          label: "Email",
-          type: "text",
-          placeholder: "Enter your email",
-        },
-        password: {
-          label: "Password",
-          type: "password",
-          placeholder: "Enter your password",
-        },
+      id: "signUp",
+      async authorize(credentials) {
+        try {
+          if (
+            credentials?.fullName &&
+            credentials?.email &&
+            credentials?.password &&
+            credentials?.referral &&
+            credentials?.isStaff
+          ) {
+            const client = await Client();
+            const { fullName, email, password, referral, isStaff, isPartner } = credentials;
+            const payload = {
+              fullName,
+              email,
+              password,
+              referral,
+              isStaff: isStaff === "true" ? true : false,
+              isPartner: isPartner === "true" ? true : false,
+            };
+            const response = await client.post("/users", payload, {
+              headers: { "Content-Type": "application/json" },
+            });
+            if (response.data) return response.data as Awaitable<User>;
+            return null;
+          }
+        } catch (e: any) {
+          throw new Error(e.response.data.error);
+        }
       },
+    }),
+    CredentialsProvider({
+      id: "signIn",
       async authorize(credentials, req) {
-        const client = await Client();
-
-        return credentials as Awaitable<User>;
+        if (credentials?.email && credentials?.password) {
+          try {
+            const client = await Client();
+            const { email, password } = credentials;
+            const response = await client.post(
+              "/users/login",
+              JSON.stringify({ email, password }),
+              {
+                headers: { "Content-Type": "application/json" },
+              }
+            );
+            console.log(response.data);
+            if (response.data) return response.data as Awaitable<User>;
+          } catch (e: any) {
+            throw new Error(e.response.data.error);
+          }
+        }
       },
     }),
   ],
@@ -53,9 +102,9 @@ const handler = NextAuth({
     // async signIn({ user, account, email, credentials, profile }) {
     //   return true;
     // },
-    async redirect({ baseUrl, url }) {
-      return baseUrl;
-    },
+    // async redirect({ baseUrl, url }) {
+    //   return baseUrl;
+    // },
     async jwt({ token, account, profile, user, session, trigger }) {
       if (account) {
         token.expires_at = account.expires_at;
@@ -88,7 +137,7 @@ const handler = NextAuth({
       session.expires_at = token.expires_at;
       session.access_token = token.access_token;
       session.refresh_token = token.refresh_token;
-      console.log("Returning session", session);
+      // console.log("Returning session", session);
       return session as Awaitable<Session>;
     },
   },

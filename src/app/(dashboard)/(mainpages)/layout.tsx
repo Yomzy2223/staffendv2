@@ -4,10 +4,7 @@ import { Navigation } from "@/components/navigation";
 const layout = ({ children }: { children: ReactNode }) => {
   return (
     <div>
-      <Navigation
-        navRoutes={navRoutes}
-        className="hidden py-5 md:flex bg-label/[0.02]"
-      />
+      <Navigation navRoutes={navRoutes} className="hidden py-5 md:flex bg-label/[0.02]" />
       {children}
     </div>
   );
@@ -28,19 +25,19 @@ const navRoutes = [
     options: [
       {
         name: "Manage",
-        to: "/manage",
+        to: "/services/manage",
       },
       {
         name: "Launch",
-        to: "/launch",
+        to: "/services/launch",
       },
       {
         name: "Tax",
-        to: "/tax",
+        to: "/services/tax",
       },
       {
         name: "Compliance",
-        to: "/compliance",
+        to: "/services/compliance",
       },
     ],
   },

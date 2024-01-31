@@ -10,7 +10,7 @@ import CardWrapper from "@/components/wrappers/cardWrapper";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import React from "react";
-import { useTableInfo } from "../constants";
+import { useTableInfo } from "../../constants";
 
 const Service = () => {
   const { service } = useParams();
@@ -20,28 +20,10 @@ const Service = () => {
     <DoChecks items={["d"]} emptyText="You have not added any product">
       <div className="flex flex-col gap-8 pt-4 pb-6 lg:flex-row ">
         <div className="flex flex-nowrap gap-8 overflow-auto px-1 py-2 lg:w-1/2 lg:grid lg:grid-cols-2">
-          <ServiceSummaryCard
-            title="Business Registration"
-            totalProducts={34}
-          />
-          <AnalyticsCard3
-            title="Completed requests"
-            total="0"
-            current={244}
-            previous={87}
-          />
-          <AnalyticsCard3
-            title="Completed requests"
-            total="0"
-            current={24}
-            previous={87}
-          />
-          <AnalyticsCard3
-            title="Completed requests"
-            total="0"
-            current={244}
-            previous={87}
-          />
+          <ServiceSummaryCard title="Business Registration" totalProducts={34} />
+          <AnalyticsCard3 title="Completed requests" total="0" current={244} previous={87} />
+          <AnalyticsCard3 title="Completed requests" total="0" current={24} previous={87} />
+          <AnalyticsCard3 title="Completed requests" total="0" current={244} previous={87} />
         </div>
         <CardWrapper className="flex flex-col gap-6 justify-between">
           <AnalyticsHeader

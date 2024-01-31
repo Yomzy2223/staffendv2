@@ -10,14 +10,15 @@ import { signIn, useSession } from "next-auth/react";
 
 const SignIn = () => {
   const session = useSession();
-  console.log(session);
+  // console.log(session);
 
   const handleSignIn = async (values: any) => {
     const response = await signIn("signIn", {
-      redirect: true,
+      redirect: false,
       email: values.email,
       password: values.password,
     });
+    console.log(response);
   };
 
   const handleSignInWithGoogle = async () => {
@@ -45,21 +46,13 @@ const SignIn = () => {
       >
         <div className="flex items-center gap-10">
           <div className="flex items-center flex-wrap gap-1">
-            <p className="sb-text-16 text-foreground-3">
-              Don&#39;t have an account?{" "}
-            </p>
-            <Button
-              color="ghost2"
-              size="fit"
-              className="text-secondary"
-              href="/auth/signup"
-            >
+            <p className="sb-text-16 text-foreground-3">Don&#39;t have an account? </p>
+            <Button color="ghost2" size="fit" className="text-secondary" href="/auth/signup">
               Sign up
             </Button>
           </div>
           <Button type="submit" color="secondary">
-            <span>Continue to Sign in</span>{" "}
-            <ArrowRightCircle className="ml-1" />
+            <span>Continue to Sign in</span> <ArrowRightCircle className="ml-1" />
           </Button>
         </div>
       </DynamicForm>
@@ -89,10 +82,7 @@ const formInfo = [
 ];
 
 const signInSchema = z.object({
-  email: z
-    .string()
-    .email("Enter a valid email")
-    .min(1, { message: "Enter your email address" }),
+  email: z.string().email("Enter a valid email").min(1, { message: "Enter your email address" }),
   password: z.string().min(6, "Password must be 6 or more characters"),
 });
 

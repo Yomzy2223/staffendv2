@@ -42,7 +42,7 @@ export const verifyUserEmail = async (token: string) => {
   return client.post(`/users/verification/${token}`);
 };
 
-export const updateUser = async (id: string, formInfo: signUpType) => {
+export const updateUser = async ({ id, formInfo }: { id: string; formInfo: signUpType }) => {
   const client = await Client();
   return client.put(`/users/${id}`, formInfo);
 };

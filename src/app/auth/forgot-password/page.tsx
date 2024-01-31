@@ -10,7 +10,7 @@ import useUserApi from "@/hooks/useUsersApi";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import { useSearchParams } from "next/navigation";
 
-const SignIn = () => {
+const ForgotPassword = () => {
   const { setQuery } = useGlobalFucntions();
   const { forgotPasswordMutation } = useUserApi();
   const { mutate, isSuccess } = forgotPasswordMutation;
@@ -83,7 +83,7 @@ const SignIn = () => {
               color="ghost2"
               size="fit"
               className="text-primary sb-text-18 font-semibold"
-              href="/auth/signup"
+              href="/auth/signin"
             >
               Sign in
             </Button>
@@ -94,7 +94,7 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default ForgotPassword;
 
 const formInfo = [
   {

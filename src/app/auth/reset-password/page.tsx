@@ -8,7 +8,7 @@ import React from "react";
 import * as z from "zod";
 import { signIn, useSession } from "next-auth/react";
 
-const SignIn = () => {
+const ResetPassword = () => {
   const session = useSession();
   // console.log(session);
 
@@ -21,22 +21,11 @@ const SignIn = () => {
     console.log(response);
   };
 
-  const handleSignInWithGoogle = async () => {
-    const response = await signIn("google");
-    console.log(response);
-  };
-
-  const handleSignInWithYahoo = async () => {
-    const response = await signIn("yahoo");
-    console.log(response);
-  };
   return (
     <AuthFormWrapper
-      login
-      handlers={{
-        google: handleSignInWithGoogle,
-        yahoo: handleSignInWithYahoo,
-      }}
+      title="Reset password"
+      description="Kindly use password combination  you can easily remember."
+      hideSocials
     >
       <DynamicForm
         formInfo={formInfo}
@@ -44,47 +33,46 @@ const SignIn = () => {
         formSchema={signInSchema}
         onFormSubmit={handleSignIn}
       >
-        <div className="flex items-center gap-10">
-          <div className="flex items-center flex-wrap gap-1">
-            <p className="sb-text-16 text-foreground-3">Don&#39;t have an account? </p>
-            <Button color="ghost2" size="fit" className="text-secondary" href="/auth/signup">
-              Sign up
-            </Button>
-          </div>
-          <Button type="submit" color="secondary">
-            <span>Continue to Sign in</span> <ArrowRightCircle className="ml-1" />
-          </Button>
-        </div>
+        <Button type="submit" color="secondary">
+          <span>Reset Password</span> <ArrowRightCircle className="ml-1" />
+        </Button>
       </DynamicForm>
     </AuthFormWrapper>
   );
 };
 
-export default SignIn;
+export default ResetPassword;
 
 const formInfo = [
-  {
-    name: "email",
-    label: "Enter Email Address",
-    type: "email",
-    textInputProp: {
-      placeholder: "Enter your email address",
-    },
-  },
   {
     name: "password",
     label: "Enter Password",
     type: "password",
     textInputProp: {
-      placeholder: "Enter your password",
+      placeholder: "Enter your new password",
+    },
+  },
+  {
+    name: "confirmPassword",
+    label: "Confirm Password",
+    type: "password",
+    textInputProp: {
+      placeholder: "Confirm your new password",
     },
   },
 ];
 
-const signInSchema = z.object({
-  email: z.string().email("Enter a valid email").min(1, { message: "Enter your email address" }),
-  password: z.string().min(6, "Password must be 6 or more characters"),
-});
+const signInSchema = z
+  .object({
+    password: z.string().min(6, "Password must be 6 or more characters"),
+    confirmPassword: z
+      .string({ required_error: "Confirm password" })
+      .min(1, { message: "Confirm password" }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 
 const defaultValues = {
   email: "",

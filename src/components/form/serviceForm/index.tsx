@@ -9,13 +9,7 @@ import DynamicFormCreator from "../dynamicFormCreator";
 import { FieldType } from "@/components/form/dynamicFormCreator/formField/constants";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
 
-const ServiceForm = ({
-  open,
-  setOpen,
-}: {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-}) => {
+const ServiceForm = ({ open, setOpen }: { open: boolean; setOpen: (open: boolean) => void }) => {
   const [section, setSection] = useState(1);
   const { get } = useSearchParams();
   const { isDesktop } = useGlobalFucntions();
@@ -46,12 +40,7 @@ const ServiceForm = ({
   const wide = form2Info.length > 2 && section === 2 && isDesktop;
 
   return (
-    <DialogWrapper
-      open={open}
-      setOpen={setOpen}
-      title={title}
-      size={wide ? "5xl" : "xl"}
-    >
+    <DialogWrapper open={open} setOpen={setOpen} title={title} size={wide ? "5xl" : "xl"}>
       {section === 1 && (
         <DynamicForm
           formInfo={section1FormInfo}

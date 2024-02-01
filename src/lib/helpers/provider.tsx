@@ -6,6 +6,7 @@ import { SessionProvider } from "next-auth/react";
 import React, { ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Toaster } from "@/components/ui/toaster";
 
 const queryClient = new QueryClient();
 
@@ -14,6 +15,7 @@ const Providers = ({ children }: { children: ReactNode }) => {
     <SessionProvider>
       <QueryClientProvider client={queryClient}>
         <Flowbite theme={customTheme}>{children}</Flowbite>
+        <Toaster />
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </SessionProvider>

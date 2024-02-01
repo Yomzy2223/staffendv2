@@ -32,15 +32,14 @@ const handler = NextAuth({
               isPartner: false,
               isStaff: true,
             };
-            console.log("Payload: ", payload);
             const response = await client.post("/users/google", payload);
-            console.log("Response", response);
-          } catch (e) {
-            console.log("Google signin error: ", e);
-            // throw new Error(e)
+            return { id: sub, ...response.data };
+          } catch (e: any) {
+            console.log(e);
+            throw new Error(e);
           }
         }
-        return { id: profile.sub, ...profile };
+        return null;
       },
     }),
     CredentialsProvider({
@@ -94,6 +93,7 @@ const handler = NextAuth({
           } catch (e: any) {
             throw new Error(e.response.data.error);
           }
+          return null;
         }
       },
     }),
@@ -102,41 +102,19 @@ const handler = NextAuth({
     // async signIn({ user, account, email, credentials, profile }) {
     //   return true;
     // },
-    // async redirect({ baseUrl, url }) {
-    //   return baseUrl;
-    // },
-    async jwt({ token, account, profile, user, session, trigger }) {
-      if (account) {
-        token.expires_at = account.expires_at;
-        token.access_token = account.access_token;
-        token.refresh_token = account.refresh_token;
-      }
+    async redirect({ baseUrl, url }) {
+      return baseUrl;
+    },
+    async jwt({ token, user }) {
       if (user) {
         token.user = user;
-        return token as Awaitable<JWT>;
-      }
-      if (profile) {
-        token.fullname = profile.name;
-        token.firstname = profile.given_name;
-        token.lastname = profile.family_name;
-        token.email = profile.email;
-        token.picture = profile.picture;
-        token.expires_at = profile.exp;
       }
       return token as Awaitable<JWT>;
     },
-    async session({ newSession, session, token, trigger, user }) {
-      // console.log(newSession, session, token, trigger, user);
-      session.user = {
-        email: token.email,
-        fullname: token.fullname,
-        firstname: token.firstname,
-        lastname: token.lastname,
-        picture: token.picture,
-      };
-      session.expires_at = token.expires_at;
-      session.access_token = token.access_token;
-      session.refresh_token = token.refresh_token;
+    async session({ session, token }) {
+      console.log("Tokkkken: ", token);
+      session.user = token.user.data;
+      session.message = token.user.message;
       // console.log("Returning session", session);
       return session as Awaitable<Session>;
     },

@@ -3,18 +3,23 @@
 import AuthFormWrapper from "@/components/features/auth/authFormWrapper";
 import DynamicForm from "@/components/form/dynamicForm";
 import { AuthStepper } from "@/components/stepper/auth";
+import { useResponse } from "@/hooks/useResponse";
 import { Button } from "flowbite-react";
 import { ArrowRight, ArrowRightCircle } from "lucide-react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
+import { Oval } from "react-loading-icons";
 import * as z from "zod";
 
 const SignUp = () => {
-  const router = useRouter();
+  const [isPending, setIsPending] = useState(false);
+  const { push } = useRouter();
+  const { handleError, handleSuccess } = useResponse();
 
   const handleSignUp = async (values: signUpType) => {
+    setIsPending(true);
     const response = await signIn("signUp", {
       redirect: false,
       fullName: values.name,
@@ -24,15 +29,17 @@ const SignUp = () => {
       isPartner: false,
       isStaff: false,
     });
-    console.log(response);
-    // router.push("/auth/signup/select-service");
+    setIsPending(false);
+
+    if (response?.error) handleError({ error: response?.error });
+    else {
+      handleSuccess({ data: "Sign up successfully" });
+      push("/");
+    }
   };
 
   const handleSignUpWithGoogle = async () => {
-    const response = await signIn("googleSignUp", {
-      redirect: false,
-    });
-    console.log(response);
+    await signIn("google", { redirect: true });
   };
 
   const handleSignUpWithYahoo = async () => {
@@ -68,15 +75,21 @@ const SignUp = () => {
 
         <AuthStepper />
 
-        <div className="flex items-center gap-14">
+        <div className="flex items-center justify-between gap-14">
           <p className="sb-text-16 text-foreground-3">
             Have an account?{" "}
             <Button color="plain" size="fit" className="text-secondary" href="/auth/signin">
               Sign In
             </Button>
           </p>
-          <Button type="submit" color="secondary">
-            Click to create account <ArrowRightCircle className="ml-1" />
+          <Button
+            type="submit"
+            color="secondary"
+            isProcessing={isPending}
+            disabled={isPending}
+            processingSpinner={<Oval color="white" strokeWidth={4} className="h-6 w-6" />}
+          >
+            Click to create account {!isPending && <ArrowRightCircle className="ml-1" />}
           </Button>
         </div>
       </DynamicForm>

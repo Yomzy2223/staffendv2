@@ -28,7 +28,7 @@ const AuthFormWrapper = ({
   const other = login ? "Or sign in with" : "Or sign up with";
 
   return (
-    <div>
+    <div className="max-w-[600px]">
       <div className="mb-10">
         <h2 className="sb-text-32 font-semibold mb-2">{title}</h2>
         <p className="sb-text-16 font-normal text-foreground-3">{description}</p>

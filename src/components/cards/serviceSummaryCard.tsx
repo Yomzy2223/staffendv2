@@ -8,13 +8,7 @@ import React, { useState } from "react";
 import ServiceForm from "../form/serviceForm";
 import CardWrapper from "../wrappers/cardWrapper";
 
-const ServiceSummaryCard = ({
-  title,
-  totalProducts,
-}: {
-  title: string;
-  totalProducts: number;
-}) => {
+const ServiceSummaryCard = ({ title, totalProducts }: { title: string; totalProducts: number }) => {
   const [open, setOpen] = useState(false);
 
   const { setQuery } = useGlobalFucntions();
@@ -33,17 +27,10 @@ const ServiceSummaryCard = ({
     >
       <div>
         <p className="sb-text-24 font-semibold mb-2">{title}</p>
-        <p className="text-sm font-normal">
-          {totalProducts} products available
-        </p>
+        <p className="text-sm font-normal">{totalProducts} products available</p>
       </div>
 
-      <Button
-        size="fit"
-        color="ghost"
-        className="w-max"
-        onMouseDown={openServiceForm}
-      >
+      <Button size="fit" color="ghost" className="w-max" onMouseDown={openServiceForm}>
         <span className="text-sm font-normal mr-2">See service form</span>
         <ExternalLink size={16} />
       </Button>

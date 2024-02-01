@@ -21,7 +21,7 @@ export const useResponse = () => {
     if (typeof error === "string") errorMessage = error;
     console.log(error);
     toast({
-      className: "bg-red-200 border-destructive-foreground",
+      className: "bg-red-200 border border-destructive-foreground",
       title,
       description: errorMessage,
       success: hideIcon ? null : false,
@@ -30,10 +30,14 @@ export const useResponse = () => {
   };
 
   const handleSuccess = ({ data, title, action, hideIcon }: successType) => {
+    let successMessage;
+    if (data?.data?.message) successMessage = data?.data?.message;
+    if (typeof data === "string") successMessage = data;
+
     toast({
       className: "bg-blue-100",
       title,
-      description: data?.data?.message,
+      description: successMessage,
       success: hideIcon ? null : true,
       action,
     });

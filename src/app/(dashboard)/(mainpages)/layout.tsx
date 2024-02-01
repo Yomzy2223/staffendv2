@@ -3,10 +3,10 @@ import { Navigation } from "@/components/navigation";
 
 const layout = ({ children }: { children: ReactNode }) => {
   return (
-    <div>
+    <>
       <Navigation navRoutes={navRoutes} className="hidden py-5 md:flex bg-label/[0.02]" />
-      {children}
-    </div>
+      <div className="flex flex-col flex-1 px-5 md:px-8">{children}</div>
+    </>
   );
 };
 
@@ -24,12 +24,12 @@ const navRoutes = [
     type: "select",
     options: [
       {
-        name: "Manage",
-        to: "/services/manage",
+        name: "Business Registration",
+        to: "/services/launch",
       },
       {
-        name: "Launch",
-        to: "/services/launch",
+        name: "Manage",
+        to: "/services/manage",
       },
       {
         name: "Tax",

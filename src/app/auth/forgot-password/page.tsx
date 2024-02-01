@@ -9,17 +9,24 @@ import * as z from "zod";
 import useUserApi from "@/hooks/useUsersApi";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import { useSearchParams } from "next/navigation";
+import { Oval } from "react-loading-icons";
 
 const ForgotPassword = () => {
+  const [formValue, setformValue] = useState<forgotPasswordType>({ email: "" });
+
   const { setQuery } = useGlobalFucntions();
   const { forgotPasswordMutation } = useUserApi();
-  const { mutate, isSuccess } = forgotPasswordMutation;
+  const { mutate, isSuccess, isPending } = forgotPasswordMutation;
 
   const { get } = useSearchParams();
   const email = get("verification") || "";
 
-  const handleForgot = async (values: forgotType) => {
-    setQuery("verification", email);
+  useEffect(() => {
+    if (isSuccess && formValue.email) setQuery("verification", formValue.email);
+  }, [isSuccess]);
+
+  const handleForgot = async (values: forgotPasswordType) => {
+    setformValue(values);
     mutate(values.email);
   };
 
@@ -37,16 +44,23 @@ const ForgotPassword = () => {
 
   return (
     <AuthFormWrapper title="Forgotten password" description={description} hideSocials>
-      {!isSuccess ? (
+      {!email ? (
         <>
           <DynamicForm
             formInfo={formInfo}
             defaultValues={defaultValues}
-            formSchema={forgotSchema}
+            formSchema={forgotPasswordSchema}
             onFormSubmit={handleForgot}
           >
-            <Button type="submit" color="secondary">
-              <span>Forgot password</span> <ArrowRightCircle className="ml-1" />
+            <Button
+              type="submit"
+              color="secondary"
+              isProcessing={isPending}
+              disabled={isPending}
+              processingSpinner={<Oval color="white" strokeWidth={4} className="h-6 w-6" />}
+            >
+              <span>Forgot password</span>
+              {!isPending && <ArrowRightCircle className="ml-1" />}
             </Button>
           </DynamicForm>
           <div className="mt-10">
@@ -107,11 +121,11 @@ const formInfo = [
   },
 ];
 
-const forgotSchema = z.object({
+const forgotPasswordSchema = z.object({
   email: z.string().email("Enter a valid email").min(1, { message: "Enter your email address" }),
 });
 
-type forgotType = z.infer<typeof forgotSchema>;
+type forgotPasswordType = z.infer<typeof forgotPasswordSchema>;
 
 const defaultValues = {
   email: "",

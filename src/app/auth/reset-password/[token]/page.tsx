@@ -4,22 +4,26 @@ import AuthFormWrapper from "@/components/features/auth/authFormWrapper";
 import DynamicForm from "@/components/form/dynamicForm";
 import { Button } from "flowbite-react";
 import { ArrowRightCircle } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 import * as z from "zod";
-import { signIn, useSession } from "next-auth/react";
+import { useParams, useRouter } from "next/navigation";
+import useUserApi from "@/hooks/useUsersApi";
+import { Oval } from "react-loading-icons";
 
 const ResetPassword = () => {
-  const session = useSession();
-  // console.log(session);
+  const { resetPasswordMutation } = useUserApi();
+  const { mutate, isPending, isSuccess } = resetPasswordMutation;
 
-  const handleSignIn = async (values: any) => {
-    const response = await signIn("signIn", {
-      redirect: false,
-      email: values.email,
-      password: values.password,
-    });
-    console.log(response);
+  const { token } = useParams();
+  const { push } = useRouter();
+
+  const handleReset = async (values: resetPasswordType) => {
+    mutate({ token: token as string, password: values.password });
   };
+
+  useEffect(() => {
+    if (isSuccess) push("/auth/signin");
+  }, [isSuccess]);
 
   return (
     <AuthFormWrapper
@@ -30,11 +34,17 @@ const ResetPassword = () => {
       <DynamicForm
         formInfo={formInfo}
         defaultValues={defaultValues}
-        formSchema={signInSchema}
-        onFormSubmit={handleSignIn}
+        formSchema={resetPasswordSchema}
+        onFormSubmit={handleReset}
       >
-        <Button type="submit" color="secondary">
-          <span>Reset Password</span> <ArrowRightCircle className="ml-1" />
+        <Button
+          type="submit"
+          color="secondary"
+          isProcessing={isPending}
+          disabled={isPending}
+          processingSpinner={<Oval color="white" strokeWidth={4} className="h-6 w-6" />}
+        >
+          <span>Reset Password</span> {!isPending && <ArrowRightCircle className="ml-1" />}
         </Button>
       </DynamicForm>
     </AuthFormWrapper>
@@ -62,7 +72,7 @@ const formInfo = [
   },
 ];
 
-const signInSchema = z
+const resetPasswordSchema = z
   .object({
     password: z.string().min(6, "Password must be 6 or more characters"),
     confirmPassword: z
@@ -74,7 +84,9 @@ const signInSchema = z
     path: ["confirmPassword"],
   });
 
+type resetPasswordType = z.infer<typeof resetPasswordSchema>;
+
 const defaultValues = {
-  email: "",
   password: "",
+  confirmPassword: "",
 };

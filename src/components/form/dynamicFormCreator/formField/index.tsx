@@ -8,13 +8,7 @@ import DynamicField from "./dynamicField";
 import { PlusCircle } from "lucide-react";
 import FieldTypePopUp from "./fieldTypePopUp";
 
-const FormField = ({
-  info,
-  number,
-  title,
-  submitHandler,
-  isEdit,
-}: propType) => {
+const FormField = ({ info, number, title, submitHandler, isEdit }: propType) => {
   const [selectedType, setSelectedType] = useState<FieldType | undefined>({
     ...info,
   });
@@ -23,8 +17,7 @@ const FormField = ({
   const [newlyAdded, setNewlyAdded] = useState<FieldType | undefined>();
 
   const btnText = info?.options
-    ? (info?.options.length > 0 ? "Add another " : "Create a ") +
-      (title || "field")
+    ? (info?.options.length > 0 ? "Add another " : "Create a ") + (title || "field")
     : "";
 
   const handleSelect = (type?: FieldType) => {
@@ -114,9 +107,7 @@ const formSchema = z.object({
   title: z
     .string({ required_error: "Enter field / field title" })
     .min(3, { message: "Must be at least 3 characters" }),
-  type: z
-    .string({ required_error: "Select type" })
-    .min(1, { message: "Select type" }),
+  type: z.string({ required_error: "Select type" }).min(1, { message: "Select type" }),
   compulsory: z.boolean(),
 });
 export type formFieldType = z.infer<typeof formSchema>;

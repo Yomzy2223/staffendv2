@@ -37,7 +37,7 @@ const ServiceForm = ({ open, setOpen }: { open: boolean; setOpen: (open: boolean
     console.log(value);
   };
 
-  const wide = form2Info.length > 2 && section === 2 && isDesktop;
+  const wide = form2Info.length > 1 && section === 2 && isDesktop;
 
   return (
     <DialogWrapper open={open} setOpen={setOpen} title={title} size={wide ? "5xl" : "xl"}>
@@ -59,11 +59,7 @@ const ServiceForm = ({ open, setOpen }: { open: boolean; setOpen: (open: boolean
 
       {section === 2 && (
         <div className="flex flex-col justify-between gap-6 flex-1">
-          <DynamicFormCreator
-            formInfo={form2Info}
-            onEachSubmit={handleFormSubmit}
-            className={cn({ "grid grid-cols-2 isolate": wide })}
-          />
+          <DynamicFormCreator formInfo={form2Info} onEachSubmit={handleFormSubmit} wide />
           <div className="bg-white flex items-center justify-end gap-4 pt-4 sticky bottom-0">
             <Button color="outline" outline onClick={handleBack}>
               Back

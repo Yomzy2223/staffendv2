@@ -18,6 +18,7 @@ import {
   serviceTableNav,
   useTableInfo,
 } from "./constants";
+import { motion } from "framer-motion";
 
 const Home = () => {
   const { tableHeaders, tableBody } = useTableInfo();
@@ -32,9 +33,9 @@ const Home = () => {
       </div>
 
       <div className="flex flex-col gap-8">
-        <div
-          className="snap snap-mandatory snap-x flex gap-8 max-w-full overflow-auto cursor-grab active:cursor-grabbing"
-          tabIndex={0}
+        <motion.div
+          className="snap snap-mandatory snap-x flex gap-8 max-w-full h-40 overflow-hidden"
+          whileHover={{ overflowX: "auto" }}
         >
           <AnalyticsCard1
             previous={50}
@@ -76,7 +77,7 @@ const Home = () => {
             previous={1000}
             className="snap-start"
           />
-        </div>
+        </motion.div>
 
         <div className="flex flex-col gap-8 lg:flex-row">
           <CardWrapper big className="flex flex-col gap-8 max-w-[634px]">

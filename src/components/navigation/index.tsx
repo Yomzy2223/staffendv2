@@ -12,19 +12,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ReactNode, useState } from "react";
 
 interface propType {
   navRoutes: {
     name: string;
     to: string;
     type?: string;
-    options?: { name: string; to: string }[];
+    options?: { name: string; to: string; icon?: any }[];
   }[];
   className?: string;
   inactiveClassName?: string;
+  others?: ReactNode;
 }
 
-export const Navigation = ({ navRoutes, className, inactiveClassName = "" }: propType) => {
+export const Navigation = ({
+  navRoutes,
+  className,
+  inactiveClassName = "",
+  others,
+}: propType) => {
+  const [open, setOpen] = useState(false);
+
   const router = useRouter();
   const pathname = usePathname();
 
@@ -46,7 +55,7 @@ export const Navigation = ({ navRoutes, className, inactiveClassName = "" }: pro
         return (
           <div key={i}>
             {el?.type === "select" && el?.options ? (
-              <Select>
+              <Select open={open} onOpenChange={() => setOpen(!open)}>
                 <SelectTrigger
                   className={cn(
                     "w-max border-none bg-transparent focus:ring-0 focus:ring-offset-0 px-4 py-2 h-max",
@@ -65,9 +74,11 @@ export const Navigation = ({ navRoutes, className, inactiveClassName = "" }: pro
                       onMouseDown={() => router.push(each.to)}
                       className="border-b border-border py-2"
                     >
+                      {each.icon && each.icon}
                       {each.name}
                     </SelectItem>
                   ))}
+                  <div onClick={() => setOpen(false)}>{others}</div>
                 </SelectContent>
               </Select>
             ) : (
@@ -89,19 +100,3 @@ export const Navigation = ({ navRoutes, className, inactiveClassName = "" }: pro
     </motion.div>
   );
 };
-// <Select
-//                 className={cn(
-//                   "[&_select]:!bg-transparent [&_select]:border-none rounded-lg min-w-max whitespace-nowrap",
-//                   {
-//                     "bg-primary [&_select]:text-primary-foreground": isActive,
-//                     [inactiveClassName]: !isActive,
-//                   }
-//                 )}
-//                 onChange={(el) => router.push("/" + el.target.value.toLowerCase())}
-//               >
-// {el.options.map((each) => (
-//   <option key={each.name} onMouseDown={() => console.log("You clicked")}>
-//     {each.name}
-//   </option>
-// ))}
-//               </Select>

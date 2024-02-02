@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DynamicForm from "../dynamicForm";
 import * as z from "zod";
 import { Button } from "flowbite-react";
@@ -8,11 +8,22 @@ import { useSearchParams } from "next/navigation";
 import DynamicFormCreator from "../dynamicFormCreator";
 import { FieldType } from "@/components/form/dynamicFormCreator/formField/constants";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
+import useServiceApi from "@/hooks/useServiceApi";
+import { Oval } from "react-loading-icons";
 
-const ServiceForm = ({ open, setOpen }: { open: boolean; setOpen: (open: boolean) => void }) => {
+const ServiceForm = ({
+  open,
+  setOpen,
+}: {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+}) => {
   const [section, setSection] = useState(1);
   const { get } = useSearchParams();
   const { isDesktop } = useGlobalFucntions();
+  const { createServiceMutation } = useServiceApi();
+
+  const { mutate, isSuccess, isPending } = createServiceMutation;
 
   const isEdit = get("action") === "edit";
   const title1 = isEdit ? "Update Service" : "Create Service";
@@ -21,8 +32,12 @@ const ServiceForm = ({ open, setOpen }: { open: boolean; setOpen: (open: boolean
 
   const formInfo = section === 1 ? section1FormInfo : section2FormInfo;
 
-  const handleCreateService = () => {
-    setSection(section + 1);
+  useEffect(() => {
+    if (isSuccess) setSection(section + 1);
+  }, [isSuccess]);
+
+  const handleCreateService = async (values: serviceType) => {
+    mutate(values);
   };
 
   const handleBack = () => {
@@ -40,7 +55,12 @@ const ServiceForm = ({ open, setOpen }: { open: boolean; setOpen: (open: boolean
   const wide = form2Info.length > 1 && section === 2 && isDesktop;
 
   return (
-    <DialogWrapper open={open} setOpen={setOpen} title={title} size={wide ? "5xl" : "xl"}>
+    <DialogWrapper
+      open={open}
+      setOpen={setOpen}
+      title={title}
+      size={wide ? "5xl" : "xl"}
+    >
       {section === 1 && (
         <DynamicForm
           formInfo={section1FormInfo}
@@ -50,8 +70,16 @@ const ServiceForm = ({ open, setOpen }: { open: boolean; setOpen: (open: boolean
           className={cn("space-y-4")}
         >
           <div className="bg-white flex items-center justify-end pt-4 sticky bottom-0">
-            <Button type="submit" color="primary">
-              Next
+            <Button
+              type="submit"
+              color="primary"
+              isProcessing={isPending}
+              disabled={isPending}
+              processingSpinner={
+                <Oval color="white" strokeWidth={4} className="h-5 w-5" />
+              }
+            >
+              {!isPending && "Next"}
             </Button>
           </div>
         </DynamicForm>
@@ -59,7 +87,11 @@ const ServiceForm = ({ open, setOpen }: { open: boolean; setOpen: (open: boolean
 
       {section === 2 && (
         <div className="flex flex-col justify-between gap-6 flex-1">
-          <DynamicFormCreator formInfo={form2Info} onEachSubmit={handleFormSubmit} wide />
+          <DynamicFormCreator
+            formInfo={form2Info}
+            onEachSubmit={handleFormSubmit}
+            wide
+          />
           <div className="bg-white flex items-center justify-end gap-4 pt-4 sticky bottom-0">
             <Button color="outline" outline onClick={handleBack}>
               Back
@@ -128,12 +160,16 @@ const section2FormInfo = [
 
 const serviceSchema = z.object({
   name: z.string().min(3, "Service name should be at least 3 characters"),
-  description: z.string().min(20, "Kindly provide more information"),
+  description: z
+    .string({ required_error: "Provide service description" })
+    .min(20, "Kindly provide more information"),
 });
 
+type serviceType = z.infer<typeof serviceSchema>;
+
 const defaultValues = {
-  name: "uiisjdkfl;",
-  description: "a;ofikldj;fsbjadkfndlmd;fsdfjkfk;d",
+  name: "",
+  description: "",
 };
 
 const form2Info = [

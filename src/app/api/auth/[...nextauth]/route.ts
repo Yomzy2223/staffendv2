@@ -22,12 +22,13 @@ const handler = NextAuth({
       },
       async profile(profile) {
         if (profile.name && profile.email && profile.sub) {
-          const { name, email, sub } = profile;
+          const { name, email, sub, picture } = profile;
           try {
             const client = await Client();
             const payload = {
               fullName: name,
               email,
+              picture,
               googleId: sub,
               isPartner: false,
               isStaff: true,

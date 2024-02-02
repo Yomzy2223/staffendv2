@@ -33,7 +33,7 @@ const Service = () => {
       <DoChecks
         items={[]}
         emptyText="You have not added any product"
-        btnText="Add new service"
+        btnText="Add new product"
         btnAction={addNewService}
       >
         <div className="flex flex-col gap-8 pt-4 pb-6 lg:flex-row ">

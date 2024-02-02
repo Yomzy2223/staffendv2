@@ -19,7 +19,7 @@ export const customTheme: ThemeProps = {
             "border border-primary !text-primary bg-transparent enabled:hover:bg-primary-dark",
           magenta: "border border-magenta bg-transparent enabled:hover:bg-magenta-dark",
         },
-        on: "flex justify-center bg-transparent text-foreground transition-all duration-75 ease-in group-enabled:group-hover:bg-opacity-0 group-enabled:group-hover:text-inherit dark:bg-gray-900 dark:text-white w-full",
+        on: "flex justify-center bg-white text-foreground transition-all duration-75 ease-in group-enabled:group-hover:bg-opacity-0 group-enabled:group-hover:text-inherit dark:bg-gray-900 dark:text-white w-full",
       },
       size: {
         fit: "p-0 h-max w-max !p-0",

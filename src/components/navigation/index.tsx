@@ -55,7 +55,7 @@ export const Navigation = ({ navRoutes, className, inactiveClassName = "" }: pro
                     }
                   )}
                 >
-                  <SelectValue placeholder="Theme" />
+                  <SelectValue placeholder={el.options[0].name} />
                 </SelectTrigger>
                 <SelectContent>
                   {el.options.map((each) => (

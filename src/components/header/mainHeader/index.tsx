@@ -3,20 +3,29 @@
 import Image from "next/image";
 import { SidebriefLogo } from "@/assets/images";
 import {
-  ArrowDown,
   BellRing,
   ChevronDown,
   MenuIcon,
   Search,
   Settings,
 } from "lucide-react";
-import { Avatar, Button, FooterDivider } from "flowbite-react";
+import { Avatar, Button } from "flowbite-react";
 import SearchComp from "../../search";
 import Separator from "../../separator";
 import { useRouter } from "next/navigation";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { signOut } from "next-auth/react";
 
 export const Header = () => {
   const { push } = useRouter();
+
+  const handleLogout = async () => {
+    await signOut({ redirect: true });
+  };
 
   return (
     <div className="sticky top-0 bg-background border-b z-20 px-5 md:px-8 ">
@@ -48,10 +57,24 @@ export const Header = () => {
             <Button color="ghost" size="fit" className="p-1">
               <Settings color={iconColor} />
             </Button>
-            <Button color="ghost" size="fit" className="flex items-center">
-              <Avatar placeholderInitials="OG" rounded />
-              <ChevronDown color={iconColor} />
-            </Button>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button color="ghost" size="fit" className="flex items-center">
+                  <Avatar placeholderInitials="OG" rounded />
+                  <ChevronDown color={iconColor} />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-28">
+                <Button
+                  size="fit"
+                  color="ghost"
+                  className="text-destructive-foreground"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </Button>
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
       </div>

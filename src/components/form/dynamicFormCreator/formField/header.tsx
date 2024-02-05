@@ -1,11 +1,12 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
-import { Button } from "flowbite-react";
+import { Button, Checkbox, TextInput } from "flowbite-react";
 import { FieldType } from "./constants";
 import FieldTypePopUp from "./fieldTypePopUp";
 import { MoreHorizontal } from "lucide-react";
 import { FieldError, UseFormSetValue } from "react-hook-form";
 import { cn } from "@/lib/utils";
-import { formFieldType } from ".";
+import { formFieldType } from "./dynamicField";
+import { formType } from ".";
 
 const Header = ({
   title,
@@ -16,6 +17,7 @@ const Header = ({
   checked,
   selectedType,
   setSelectedType,
+  isForm,
 }: propType) => {
   const handleSelect = (selected?: FieldType) => {
     if (!selected) return;
@@ -26,11 +28,25 @@ const Header = ({
   return (
     <div className="flex justify-between items-center gap-6">
       <div className="flex items-center my-[2px]">
-        <h3 className="text-sm text-foreground-9 font-normal">
-          {(title || "Field ") + number}
-        </h3>
+        {isForm ? (
+          <div className="flex items-center gap-2 flex-1">
+            <Checkbox className="accent-primary" />
+            <TextInput
+              placeholder="Enter title"
+              // color={errors["title"] && "failure"}
+              className="[&_input]:h-6 [&_input]:py-0 [&_input]:w-full flex-1 disabled:[&_input]:border-0 disabled:[&_input]:bg-transparent"
+              disabled={!edit}
+            />
+          </div>
+        ) : (
+          <div className="flex items-center my-[2px]">
+            <h3 className="text-sm text-foreground-9 font-normal">
+              {(title || "Field ") + number}
+            </h3>
+          </div>
+        )}
         {checked && !edit && (
-          <span className="ml-2 text-[10px] bg-primary/20 text-foreground-5 rounded-lg px-1">
+          <span className="ml-2 text-[10px] bg-primary-8 text-primary rounded-md px-2.5 py-0.5">
             Compulsory
           </span>
         )}
@@ -71,10 +87,11 @@ export default Header;
 interface propType {
   title?: string;
   number: number;
-  setValue?: UseFormSetValue<formFieldType>;
+  setValue?: UseFormSetValue<formFieldType | formType>;
   error?: FieldError;
   edit: boolean;
   checked: boolean;
   selectedType?: FieldType;
   setSelectedType: Dispatch<SetStateAction<FieldType | undefined>>;
+  isForm?: boolean;
 }

@@ -58,7 +58,7 @@ export const Navigation = ({
               <Select open={open} onOpenChange={() => setOpen(!open)}>
                 <SelectTrigger
                   className={cn(
-                    "w-max border-none bg-transparent focus:ring-0 focus:ring-offset-0 px-4 py-2 h-max",
+                    "w-max border-none bg-transparent focus:ring-0 focus:ring-offset-0 px-4 py-2 h-max capitalize",
                     {
                       "bg-primary text-white": isActive,
                     }
@@ -67,18 +67,25 @@ export const Navigation = ({
                   <SelectValue placeholder={el.options[0].name} />
                 </SelectTrigger>
                 <SelectContent>
-                  {el.options.map((each) => (
-                    <SelectItem
-                      key={each.name}
-                      value={each.name}
-                      onMouseDown={() => router.push(each.to)}
-                      className="border-b border-border py-2"
-                    >
-                      {each.icon && each.icon}
-                      {each.name}
-                    </SelectItem>
-                  ))}
-                  <div onClick={() => setOpen(false)}>{others}</div>
+                  {el.options
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map((each) => (
+                      <SelectItem
+                        key={each.name}
+                        value={each.name}
+                        onMouseDown={() => router.push(each.to)}
+                        className="py-2 capitalize"
+                      >
+                        {each.icon && each.icon}
+                        {each.name}
+                      </SelectItem>
+                    ))}
+                  <div
+                    onClick={() => setOpen(false)}
+                    className="border-t border-border"
+                  >
+                    {others}
+                  </div>
                 </SelectContent>
               </Select>
             ) : (

@@ -10,10 +10,12 @@ import {
   updateServiceForm,
 } from "@/api/serviceApi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useGlobalFucntions } from "./globalFunctions";
 import { useResponse } from "./useResponse";
 
 const useServiceApi = () => {
   const { handleError, handleSuccess } = useResponse();
+  const { setQuery } = useGlobalFucntions();
   const queryClient = useQueryClient();
 
   const createServiceMutation = useMutation({
@@ -23,6 +25,7 @@ const useServiceApi = () => {
     },
     onSuccess(data, variables, context) {
       handleSuccess({ data });
+      setQuery("serviceId", data.data.data.id);
       queryClient.invalidateQueries({ queryKey: ["service"] });
     },
     retry: 3,
@@ -56,6 +59,7 @@ const useServiceApi = () => {
     useQuery({
       queryKey: ["service", id],
       queryFn: ({ queryKey }) => getService(queryKey[1]),
+      enabled: id ? true : false,
     });
 
   const getAllServicesQuery = useQuery({
@@ -103,6 +107,7 @@ const useServiceApi = () => {
     useQuery({
       queryKey: ["serviceForm", id],
       queryFn: ({ queryKey }) => getServiceForm(queryKey[1]),
+      enabled: id ? true : false,
     });
 
   const useGetAllServiceFormQuery = (serviceCategoryId: string) =>

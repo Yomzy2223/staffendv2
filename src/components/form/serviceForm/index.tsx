@@ -6,10 +6,10 @@ import { cn } from "@/lib/utils";
 import DialogWrapper from "@/components/wrappers/dialogWrapper";
 import { useSearchParams } from "next/navigation";
 import DynamicFormCreator from "../dynamicFormCreator";
-import { FieldType } from "@/components/form/dynamicFormCreator/formField/constants";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import useServiceApi from "@/hooks/useServiceApi";
 import { Oval } from "react-loading-icons";
+import { formFieldType } from "../dynamicFormCreator/formField/dynamicField";
 
 const ServiceForm = ({
   open,
@@ -21,23 +21,37 @@ const ServiceForm = ({
   const [section, setSection] = useState(1);
   const { get } = useSearchParams();
   const { isDesktop } = useGlobalFucntions();
-  const { createServiceMutation } = useServiceApi();
+  const { createServiceMutation, updateServiceMutation, useGetServiceQuery } =
+    useServiceApi();
 
-  const { mutate, isSuccess, isPending } = createServiceMutation;
+  const { mutate, isSuccess, isPending, isIdle, isPaused } =
+    createServiceMutation;
 
-  const isEdit = get("action") === "edit";
+  const serviceId = get("serviceId");
+  const isEdit = get("serviceId");
   const title1 = isEdit ? "Update Service" : "Create Service";
   const title2 = isEdit ? "Update Service Form" : "Add Service Form";
   const title = section === 1 ? title1 : title2;
 
+  const service = useGetServiceQuery(serviceId as string);
+  const serviceData = service?.data?.data?.data;
+
   const formInfo = section === 1 ? section1FormInfo : section2FormInfo;
 
-  useEffect(() => {
-    if (isSuccess) setSection(section + 1);
-  }, [isSuccess]);
+  const loading = isPending || updateServiceMutation.isPending;
+  const success = isSuccess || updateServiceMutation.isSuccess;
 
-  const handleCreateService = async (values: serviceType) => {
-    mutate(values);
+  useEffect(() => {
+    if (success) setSection(section + 1);
+  }, [success]);
+
+  const handleForm1Submit = async (values: serviceType) => {
+    serviceId
+      ? updateServiceMutation.mutate({
+          id: serviceId as string,
+          formInfo: values,
+        })
+      : mutate(values);
   };
 
   const handleBack = () => {
@@ -48,11 +62,16 @@ const ServiceForm = ({
     setSection(section - 1);
   };
 
-  const handleFormSubmit = (value: FieldType) => {
+  const handleForm2Submit = (value: formFieldType) => {
     console.log(value);
   };
 
   const wide = form2Info.length > 1 && section === 2 && isDesktop;
+
+  const defaultValues = {
+    name: serviceData?.name || "",
+    description: serviceData?.description || "",
+  };
 
   return (
     <DialogWrapper
@@ -66,20 +85,20 @@ const ServiceForm = ({
           formInfo={section1FormInfo}
           defaultValues={defaultValues}
           formSchema={serviceSchema}
-          onFormSubmit={handleCreateService}
+          onFormSubmit={handleForm1Submit}
           className={cn("space-y-4")}
         >
           <div className="bg-white flex items-center justify-end pt-4 sticky bottom-0">
             <Button
               type="submit"
               color="primary"
-              isProcessing={isPending}
-              disabled={isPending}
+              isProcessing={loading}
+              disabled={loading}
               processingSpinner={
                 <Oval color="white" strokeWidth={4} className="h-5 w-5" />
               }
             >
-              {!isPending && "Next"}
+              {!loading && "Next"}
             </Button>
           </div>
         </DynamicForm>
@@ -89,7 +108,7 @@ const ServiceForm = ({
         <div className="flex flex-col justify-between gap-6 flex-1">
           <DynamicFormCreator
             formInfo={form2Info}
-            onEachSubmit={handleFormSubmit}
+            onEachSubmit={handleForm2Submit}
             wide
           />
           <div className="bg-white flex items-center justify-end gap-4 pt-4 sticky bottom-0">
@@ -166,11 +185,6 @@ const serviceSchema = z.object({
 });
 
 type serviceType = z.infer<typeof serviceSchema>;
-
-const defaultValues = {
-  name: "",
-  description: "",
-};
 
 const form2Info = [
   {

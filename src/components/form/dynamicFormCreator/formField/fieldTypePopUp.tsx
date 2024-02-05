@@ -12,16 +12,17 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { FieldType, fieldTypes } from "./constants";
+import { FieldType, fieldTypes, formFieldTypes } from "./constants";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 
 interface propType {
   children: ReactNode;
   handleSelect: (type?: FieldType) => void;
+  isForm?: boolean;
 }
 
-const FieldTypePopUp = ({ children, handleSelect }: propType) => {
+const FieldTypePopUp = ({ children, handleSelect, isForm }: propType) => {
   const [open, setOpen] = useState(false);
   const { isDesktop } = useGlobalFucntions();
 
@@ -31,7 +32,11 @@ const FieldTypePopUp = ({ children, handleSelect }: propType) => {
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>{children}</PopoverTrigger>
           <PopoverContent className="w-[200px] p-0" align="start">
-            <QuestionList setOpen={setOpen} handleSelect={handleSelect} />
+            <QuestionList
+              setOpen={setOpen}
+              handleSelect={handleSelect}
+              isForm={isForm}
+            />
           </PopoverContent>
         </Popover>
       ) : (
@@ -39,7 +44,11 @@ const FieldTypePopUp = ({ children, handleSelect }: propType) => {
           <DrawerTrigger asChild>{children}</DrawerTrigger>
           <DrawerContent>
             <div className="mt-4 border-t">
-              <QuestionList setOpen={setOpen} handleSelect={handleSelect} />
+              <QuestionList
+                setOpen={setOpen}
+                handleSelect={handleSelect}
+                isForm={isForm}
+              />
             </div>
           </DrawerContent>
         </Drawer>
@@ -53,17 +62,21 @@ export default FieldTypePopUp;
 function QuestionList({
   setOpen,
   handleSelect,
+  isForm,
 }: {
   setOpen: (open: boolean) => void;
   handleSelect: (type?: FieldType) => void;
+  isForm?: boolean;
 }) {
+  const types = isForm ? formFieldTypes : fieldTypes;
+
   return (
     <Command>
-      <CommandInput placeholder="Filter status..." />
+      {!isForm && <CommandInput placeholder="Filter status..." />}
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup>
-          {fieldTypes
+          {types
             .sort((a, b) => a.type.localeCompare(b.type))
             .map((item: FieldType) => (
               <CommandItem

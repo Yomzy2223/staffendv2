@@ -3,6 +3,7 @@
 import AuthFormWrapper from "@/components/features/auth/authFormWrapper";
 import DynamicForm from "@/components/form/dynamicForm";
 import { AuthStepper } from "@/components/stepper/auth";
+import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import { useResponse } from "@/hooks/useResponse";
 import { Button } from "flowbite-react";
 import { ArrowRightCircle } from "lucide-react";
@@ -17,6 +18,7 @@ const SignUp = () => {
   const [isPending, setIsPending] = useState(false);
   const { push } = useRouter();
   const { handleError, handleSuccess } = useResponse();
+  const { isDesktop } = useGlobalFucntions();
 
   const handleSignUp = async (values: signUpType) => {
     setIsPending(true);
@@ -77,7 +79,7 @@ const SignUp = () => {
 
         <div className="flex items-center justify-between gap-14">
           <p className="sb-text-16 text-foreground-3">
-            Have an account?{" "}
+            {isDesktop && <span>Have an account? </span>}
             <Button
               color="plain"
               size="fit"

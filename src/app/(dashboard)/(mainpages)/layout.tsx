@@ -6,9 +6,11 @@ import ServiceForm from "@/components/form/serviceForm";
 import { Navigation } from "@/components/navigation";
 import { Button } from "flowbite-react";
 import Image from "next/image";
+import { useActions } from "./actions";
 
 const layout = ({ children }: { children: ReactNode }) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
+  const { navRoutes } = useActions();
 
   return (
     <>
@@ -35,70 +37,3 @@ const layout = ({ children }: { children: ReactNode }) => {
 };
 
 export default layout;
-
-// Dashboard navigation routes
-const navRoutes = [
-  {
-    name: "Home",
-    to: "/",
-  },
-  {
-    name: "Services",
-    to: "/services",
-    type: "select",
-    options: [
-      {
-        name: "Business Registration",
-        to: "/services/launch",
-      },
-      {
-        name: "Manage",
-        to: "/services/manage",
-      },
-      {
-        name: "Tax",
-        to: "/services/tax",
-      },
-      {
-        name: "Compliance",
-        to: "/services/compliance",
-      },
-    ],
-  },
-  {
-    name: "Countries",
-    to: "/countries",
-  },
-  {
-    name: "Hiring and Payroll",
-    to: "/hiring-and-payroll",
-  },
-  {
-    name: "Bank Accounts",
-    to: "/bank-accounts",
-  },
-  {
-    name: "Rewards",
-    to: "/rewards",
-  },
-  {
-    name: "Promocodes",
-    to: "/promocodes",
-  },
-  {
-    name: "User management",
-    to: "/user-management",
-  },
-  {
-    name: "Payment",
-    to: "/payment",
-  },
-  {
-    name: "Resources",
-    to: "/promocodes",
-  },
-  {
-    name: "Partners",
-    to: "/partners",
-  },
-];

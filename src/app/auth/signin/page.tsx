@@ -10,11 +10,13 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useResponse } from "@/hooks/useResponse";
 import { Oval } from "react-loading-icons";
+import { useGlobalFucntions } from "@/hooks/globalFunctions";
 
 const SignIn = () => {
   const [isPending, setIsPending] = useState(false);
   const { push } = useRouter();
   const { handleError, handleSuccess } = useResponse();
+  const { isDesktop } = useGlobalFucntions();
 
   const handleSignIn = async (values: any) => {
     setIsPending(true);
@@ -56,14 +58,9 @@ const SignIn = () => {
         defaultValues={defaultValues}
         formSchema={signInSchema}
         onFormSubmit={handleSignIn}
+        formClassName="gap-4"
       >
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Checkbox id="remember" />
-            <Label htmlFor="remember" className="flex">
-              Remember me
-            </Label>
-          </div>
+        <div className="flex self-end mb-6">
           <Button
             color="link"
             size="fit"
@@ -75,9 +72,11 @@ const SignIn = () => {
         </div>
         <div className="flex items-center justify-between gap-10">
           <div className="flex items-center flex-wrap gap-1">
-            <p className="sb-text-16 text-foreground-3">
-              Don&#39;t have an account?{" "}
-            </p>
+            {isDesktop && (
+              <p className="sb-text-16 text-foreground-3">
+                Don&#39;t have an account?{" "}
+              </p>
+            )}
             <Button
               color="ghost2"
               size="fit"

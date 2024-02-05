@@ -1,8 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, TextInput } from "flowbite-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import QuestionHeader from "./header";
+import Header from "./header";
 import * as z from "zod";
 import Footer from "./footer";
 import { FieldType, fieldTypes } from "./constants";
@@ -14,7 +14,6 @@ const DynamicField = ({
   title,
   submitHandler,
   isEdit,
-  isPerson,
 }: propType) => {
   const [selectedType, setSelectedType] = useState<FieldType | undefined>({
     ...info,
@@ -43,13 +42,15 @@ const DynamicField = ({
     setEdit(false);
   }
 
-  const personView = isPerson && !isEdit;
-
   const errorMsg = errors["title"]?.message;
+
+  useEffect(() => {
+    if (isEdit === false) setEdit(false);
+  }, [isEdit]);
 
   return (
     <Card className="shadow-none [&>div]:p-4 max-w-[500px]">
-      <QuestionHeader
+      <Header
         title={title}
         number={number}
         setValue={setValue}
@@ -61,7 +62,7 @@ const DynamicField = ({
       />
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className={cn({ "space-y-4": !personView })}
+        className={cn({ "space-y-4": isEdit })}
       >
         <TextInput
           id="title"
@@ -76,7 +77,7 @@ const DynamicField = ({
         />
         {/* Dynamic Types */}
 
-        {!personView && (
+        {isEdit && (
           <Footer
             checked={checked}
             edit={edit}
@@ -99,7 +100,6 @@ interface propType {
   title?: string;
   submitHandler: (values: formFieldType) => void;
   isEdit?: boolean;
-  isPerson?: boolean;
 }
 
 const formSchema = z.object({

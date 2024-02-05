@@ -22,7 +22,13 @@ export const createService = async (formInfo: serviceType) => {
   return await client.post("/services", formInfo);
 };
 
-export const updateService = async ({ id, formInfo }: { id: string; formInfo: serviceType }) => {
+export const updateService = async ({
+  id,
+  formInfo,
+}: {
+  id: string;
+  formInfo: serviceType;
+}) => {
   const client = await Client();
   return await client.put(`/services/${id}`, formInfo);
 };

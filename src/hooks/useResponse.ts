@@ -17,7 +17,8 @@ export const useResponse = () => {
 
   const handleError = ({ error, title, action, hideIcon }: errorType) => {
     let errorMessage;
-    if (error?.response?.data?.error) errorMessage = error?.response?.data?.error;
+    if (error?.response?.data?.error)
+      errorMessage = error?.response?.data?.error;
     if (typeof error === "string") errorMessage = error;
     console.log(error);
     toast({

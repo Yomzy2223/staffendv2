@@ -21,6 +21,7 @@
     --popover-foreground: 222.2 84% 4.9%;
 
     --primary: 194 100% 42%; /* Sidebrief's primary color - Blue */
+    --primary-8: 194 100% 90%; /* Blue-8 */
     --primary-foreground: 0 0% 100%; /* For primary background's foreground */
 
     --secondary: 325 100% 46%; /* Sidebrief's secondary color - Magenta */

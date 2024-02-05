@@ -75,6 +75,41 @@ export const fieldTypes: FieldType[] = [
     icon: FormInput,
   },
   {
+    type: "form",
+    icon: User,
+    options: [],
+  },
+  {
+    type: "person",
+    icon: User,
+    options: [
+      {
+        type: "short answer",
+        title: "Enter your first name",
+      },
+      {
+        type: "short answer",
+        title: "Enter your last name",
+      },
+      {
+        type: "email address",
+        title: "Enter your email address",
+      },
+      {
+        type: "phone number",
+        title: "Enter your phone number",
+      },
+    ],
+  },
+];
+
+export const formFieldTypes: FieldType[] = [
+  {
+    type: "form",
+    icon: User,
+    options: [],
+  },
+  {
     type: "person",
     icon: User,
     options: [

@@ -3,14 +3,21 @@ import { Button } from "flowbite-react";
 import { PlusCircle } from "lucide-react";
 import React, { useState } from "react";
 import Masonry from "react-masonry-css";
-import FormField, { formFieldType } from "./formField";
+import EachForm from "./formField";
 import { FieldType } from "./formField/constants";
+import { formFieldType } from "./formField/dynamicField";
 import FieldTypePopUp from "./formField/fieldTypePopUp";
 
-const DynamicFormCreator = ({ title, onEachSubmit, formInfo, wide }: propType) => {
+const DynamicFormCreator = ({
+  title,
+  onEachSubmit,
+  formInfo,
+  wide,
+}: propType) => {
   const [newlyAdded, setNewlyAdded] = useState<FieldType>();
 
-  const btnText = (formInfo.length > 0 ? "Add another " : "Create a ") + (title || "field");
+  const btnText =
+    (formInfo.length > 0 ? "Add another " : "Create a ") + (title || "field");
 
   const handleSelect = (type?: FieldType) => {
     if (!type) return;
@@ -29,14 +36,13 @@ const DynamicFormCreator = ({ title, onEachSubmit, formInfo, wide }: propType) =
 
   return (
     <div>
-      {/* <div className={cn("flex flex-col flex-wrap gap-4", className)}> */}
       <Masonry
         breakpointCols={breakpointColumnsObj}
         className="my-masonry-grid"
         columnClassName="my-masonry-grid_column"
       >
         {formInfo.map((info, i) => (
-          <FormField
+          <EachForm
             key={info.title}
             number={i + 1}
             info={info}
@@ -45,7 +51,7 @@ const DynamicFormCreator = ({ title, onEachSubmit, formInfo, wide }: propType) =
           />
         ))}
         {newlyAdded && (
-          <FormField
+          <EachForm
             number={formInfo.length + 1}
             info={newlyAdded}
             title={title}
@@ -54,9 +60,8 @@ const DynamicFormCreator = ({ title, onEachSubmit, formInfo, wide }: propType) =
           />
         )}
       </Masonry>
-      {/* </div> */}
 
-      <FieldTypePopUp handleSelect={handleSelect}>
+      <FieldTypePopUp handleSelect={handleSelect} isForm>
         <Button color="ghost" size="fit" className="my-4 text-foreground-5">
           <PlusCircle size={20} />
           {btnText}

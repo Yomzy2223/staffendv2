@@ -18,6 +18,7 @@ const ResetPassword = () => {
   const { push } = useRouter();
 
   const handleReset = async (values: resetPasswordType) => {
+    console.log({ token: token as string, password: values.password });
     mutate({ token: token as string, password: values.password });
   };
 
@@ -42,9 +43,12 @@ const ResetPassword = () => {
           color="secondary"
           isProcessing={isPending}
           disabled={isPending}
-          processingSpinner={<Oval color="white" strokeWidth={4} className="h-6 w-6" />}
+          processingSpinner={
+            <Oval color="white" strokeWidth={4} className="h-6 w-6" />
+          }
         >
-          <span>Reset Password</span> {!isPending && <ArrowRightCircle className="ml-1" />}
+          <span>Reset Password</span>{" "}
+          {!isPending && <ArrowRightCircle className="ml-1" />}
         </Button>
       </DynamicForm>
     </AuthFormWrapper>

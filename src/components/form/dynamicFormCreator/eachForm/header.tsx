@@ -1,19 +1,12 @@
-import React, {
-  ChangeEvent,
-  ChangeEventHandler,
-  Dispatch,
-  SetStateAction,
-  useState,
-} from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { Button, Checkbox, TextInput } from "flowbite-react";
 import { FieldType } from "./constants";
 import FieldTypePopUp from "./fieldTypePopUp";
 import { MoreHorizontal } from "lucide-react";
-import { FieldError, UseFormSetValue } from "react-hook-form";
+import { UseFormSetValue } from "react-hook-form";
 import { cn } from "@/lib/utils";
 import { formFieldType } from "./dynamicField";
 import { formType } from ".";
-import { useFormActions } from "./actions";
 
 const Header = ({
   fieldTitle,
@@ -39,20 +32,28 @@ const Header = ({
       <div className="flex items-center my-[2px]">
         {isForm ? (
           <div className="flex items-center gap-2 flex-1">
-            <Checkbox className="accent-primary" />
+            <Checkbox className="accent-primary" disabled={!edit} />
             <div className="flex gap-2 space-y-0">
-              <TextInput
-                value={formTitle}
-                onChange={(e) => setTitle && setTitle(e.target.value)}
-                placeholder="Enter title"
-                helperText={<span className="text-xs mt-0">{titleError}</span>}
-                color={titleError && "failure"}
-                className={cn(
-                  "[&_input]:h-6 [&_input]:py-0 [&_input]:w-full flex-1 disabled:[&_input]:border-0 disabled:[&_input]:bg-transparent [&_p]:mt-0",
-                  { "focus:[&_input]:outline-none": titleError }
-                )}
-                disabled={!edit}
-              />
+              {edit || !formTitle ? (
+                <TextInput
+                  value={formTitle}
+                  onChange={(e) => setTitle && setTitle(e.target.value)}
+                  placeholder="Enter title"
+                  helperText={
+                    <span className="text-xs mt-0">{titleError}</span>
+                  }
+                  color={titleError && "failure"}
+                  className={cn(
+                    "[&_input]:h-6 [&_input]:py-0 [&_input]:w-full flex-1 disabled:[&_input]:border-0 disabled:[&_input]:bg-transparent [&_p]:mt-0",
+                    { "focus:[&_input]:outline-none": titleError }
+                  )}
+                  disabled={!edit}
+                />
+              ) : (
+                <p className="text-sm font-normal text-foreground-9">
+                  {formTitle}
+                </p>
+              )}
             </div>
           </div>
         ) : (
@@ -74,7 +75,7 @@ const Header = ({
           {selectedType?.type}
         </span>
         {edit && (
-          <FieldTypePopUp handleSelect={handleSelect}>
+          <FieldTypePopUp handleSelect={handleSelect} isForm={isForm}>
             <Button
               size="fit"
               color="primary"
@@ -104,25 +105,3 @@ interface propType {
   titleError?: string;
   isForm?: boolean;
 }
-
-//  <span
-//    className={cn("text-sm text-foreground-5 font-normal capitalize", {
-//      "text-destructive-foreground": error?.message,
-//    })}
-//  >
-//    {selectedType?.type || "Select type"}
-//  </span>;
-//  <FieldTypePopUp handleSelect={handleSelect}>
-//    <Button
-//      size="fit"
-//      color="primary"
-//      className={cn(
-//        "flex items-center rounded-full !border-[3px] border-[#CCF3FF]",
-//        {
-//          "bg-destructive-foreground border-destructive": error?.message,
-//        }
-//      )}
-//    >
-//      <MoreHorizontal color="#ffffff" className="w-4 h-4" />
-//    </Button>
-//  </FieldTypePopUp>;

@@ -15,7 +15,8 @@ export const useFormActions = () => {
     if (description.length === 0) setDescError("Enter description");
     else if (description.length < 15 && description.length > 0)
       setDescError("Description must be at least 15 characters");
-    else if (title.length > 14) setDescError("");
+    else if (description.length > 14) setDescError("");
+    if (title.length > 2 && description.length > 14) return true;
   };
 
   useEffect(() => {

@@ -1,11 +1,12 @@
-import { Card, TextInput } from "flowbite-react";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import { Card, Textarea, TextInput } from "flowbite-react";
+import React, { useState } from "react";
 import Header from "./header";
 import * as z from "zod";
 import Footer from "./footer";
 import { FieldType } from "./constants";
 import DynamicField, { formFieldType } from "./dynamicField";
 import { useFormActions } from "./actions";
+import { cn } from "@/lib/utils";
 
 const EachForm = ({
   info,
@@ -26,19 +27,16 @@ const EachForm = ({
     setTitle,
     description,
     setDescription,
-    isSubmitted,
     setIsSubmitted,
     titleError,
     descError,
+    validateFields,
   } = useFormActions();
 
   const handleSubmit = () => {
-    setEdit(false);
+    setIsSubmitted(true);
+    if (validateFields()) setEdit(false);
   };
-
-  useEffect(() => {
-    if (isSubmitted && !titleError && descError) handleSubmit();
-  }, [isSubmitted]);
 
   const onFieldSubmit = async (values: formFieldType) => {
     await submitHandler(values);
@@ -52,30 +50,35 @@ const EachForm = ({
 
   return (
     <Card className="shadow-none [&>div]:p-4 max-w-[500px] h-max">
-      <Header
-        fieldTitle={fieldTitle}
-        number={number}
-        edit={edit}
-        checked={checked}
-        selectedType={selectedType}
-        setSelectedType={setSelectedType}
-        formTitle={title}
-        setTitle={setTitle}
-        titleError={titleError}
-        isForm
-      />
-      <div>
-        <TextInput
-          type="text"
-          sizing="md"
-          placeholder={`Enter ${title} description`}
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          helperText={<>{descError}</>}
-          color={descError && "failure"}
-          className={descError ? "focus:[&_input]:outline-none" : ""}
-          disabled={!edit}
+      <div className="space-y-2">
+        <Header
+          fieldTitle={fieldTitle}
+          number={number}
+          edit={edit}
+          checked={checked}
+          selectedType={selectedType}
+          setSelectedType={setSelectedType}
+          formTitle={title}
+          setTitle={setTitle}
+          titleError={titleError}
+          isForm
         />
+        {edit ? (
+          <Textarea
+            rows={2}
+            placeholder={`Enter ${title} description`}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            helperText={<>{descError}</>}
+            color={descError && "failure"}
+            className={cn("resize-none px-2 py-1", {
+              "focus:outline-none": descError,
+            })}
+            disabled={!edit}
+          />
+        ) : (
+          <p className="text-sm text-foreground-5">{description}</p>
+        )}
       </div>
       {info.options?.map((field, i) => (
         <DynamicField
@@ -101,7 +104,7 @@ const EachForm = ({
         edit={edit}
         setEdit={setEdit}
         setChecked={setChecked}
-        onDoneClick={() => setIsSubmitted(true)}
+        onDoneClick={handleSubmit}
         setNewlyAdded={setNewlyAdded}
         btnText={btnText}
         isForm

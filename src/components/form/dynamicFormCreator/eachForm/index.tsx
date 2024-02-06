@@ -1,58 +1,88 @@
-import { Button, Card } from "flowbite-react";
-import React, { useState } from "react";
+import { Card, TextInput } from "flowbite-react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import Header from "./header";
 import * as z from "zod";
 import Footer from "./footer";
 import { FieldType } from "./constants";
 import DynamicField, { formFieldType } from "./dynamicField";
-import { PlusCircle } from "lucide-react";
-import FieldTypePopUp from "./fieldTypePopUp";
+import { useFormActions } from "./actions";
 
-const EachForm = ({ info, number, title, submitHandler, isEdit }: propType) => {
-  const [selectedType, setSelectedType] = useState<FieldType | undefined>({
-    ...info,
-  });
+const EachForm = ({
+  info,
+  number,
+  fieldTitle,
+  submitHandler,
+  isEdit,
+}: propType) => {
   const [edit, setEdit] = useState(isEdit || false);
   const [checked, setChecked] = useState(info.compulsory as boolean);
   const [newlyAdded, setNewlyAdded] = useState<FieldType | undefined>();
+  const [selectedType, setSelectedType] = useState<FieldType | undefined>({
+    ...info,
+  });
 
-  const onFormSubmit = async (values: formFieldType) => {
+  const {
+    title,
+    setTitle,
+    description,
+    setDescription,
+    isSubmitted,
+    setIsSubmitted,
+    titleError,
+    descError,
+  } = useFormActions();
+
+  const handleSubmit = () => {
+    setEdit(false);
+  };
+
+  useEffect(() => {
+    if (isSubmitted && !titleError && descError) handleSubmit();
+  }, [isSubmitted]);
+
+  const onFieldSubmit = async (values: formFieldType) => {
     await submitHandler(values);
     setNewlyAdded(undefined);
   };
+
   const btnText = info?.options
     ? (info?.options.length > 0 ? "Add another " : "Create a ") +
-      (title || "field")
+      (fieldTitle || "field")
     : "";
 
   return (
     <Card className="shadow-none [&>div]:p-4 max-w-[500px] h-max">
       <Header
-        title={title}
+        fieldTitle={fieldTitle}
         number={number}
         edit={edit}
         checked={checked}
         selectedType={selectedType}
         setSelectedType={setSelectedType}
+        formTitle={title}
+        setTitle={setTitle}
+        titleError={titleError}
         isForm
       />
-      {/* <TextInput
-          id="title"
+      <div>
+        <TextInput
           type="text"
           sizing="md"
-          placeholder="Enter field title"
-          helperText={<>{errorMsg}</>}
-          color={errors["title"] && "failure"}
-          className={errorMsg ? "focus:[&_input]:outline-none" : ""}
+          placeholder={`Enter ${title} description`}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          helperText={<>{descError}</>}
+          color={descError && "failure"}
+          className={descError ? "focus:[&_input]:outline-none" : ""}
           disabled={!edit}
-          {...register("title")}
-        /> */}
+        />
+      </div>
       {info.options?.map((field, i) => (
         <DynamicField
           key={field.title}
           number={i + 1}
           info={field}
-          title={title}
+          fieldTitle={fieldTitle}
           submitHandler={submitHandler}
           isEdit={edit}
         />
@@ -61,8 +91,8 @@ const EachForm = ({ info, number, title, submitHandler, isEdit }: propType) => {
         <DynamicField
           number={(info.options?.length ?? 0) + 1}
           info={newlyAdded}
-          title={title}
-          submitHandler={onFormSubmit}
+          fieldTitle={fieldTitle}
+          submitHandler={onFieldSubmit}
           isEdit={edit}
         />
       )}
@@ -71,7 +101,7 @@ const EachForm = ({ info, number, title, submitHandler, isEdit }: propType) => {
         edit={edit}
         setEdit={setEdit}
         setChecked={setChecked}
-        onDoneClick={() => setEdit(false)}
+        onDoneClick={() => setIsSubmitted(true)}
         setNewlyAdded={setNewlyAdded}
         btnText={btnText}
         isForm
@@ -85,7 +115,7 @@ export default EachForm;
 interface propType {
   info: FieldType;
   number: number;
-  title?: string;
+  fieldTitle?: string;
   submitHandler: (values: formFieldType) => void;
   isEdit?: boolean;
 }

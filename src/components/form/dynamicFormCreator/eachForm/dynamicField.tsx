@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 const DynamicField = ({
   info,
   number,
-  title,
+  fieldTitle,
   submitHandler,
   isEdit,
 }: propType) => {
@@ -51,10 +51,9 @@ const DynamicField = ({
   return (
     <Card className="shadow-none [&>div]:p-4 max-w-[500px]">
       <Header
-        title={title}
+        fieldTitle={fieldTitle}
         number={number}
         setValue={setValue}
-        error={errors.type}
         edit={edit}
         checked={checked}
         selectedType={selectedType}
@@ -64,17 +63,19 @@ const DynamicField = ({
         onSubmit={handleSubmit(onSubmit)}
         className={cn({ "space-y-4": isEdit })}
       >
-        <TextInput
-          id="title"
-          type="text"
-          sizing="md"
-          placeholder="Enter field title"
-          helperText={<>{errorMsg}</>}
-          color={errors["title"] && "failure"}
-          className={errorMsg ? "focus:[&_input]:outline-none" : ""}
-          disabled={!edit}
-          {...register("title")}
-        />
+        <div>
+          <TextInput
+            id="title"
+            type="text"
+            sizing="md"
+            placeholder="Enter field title"
+            helperText={<>{errorMsg}</>}
+            color={errors["title"] && "failure"}
+            className={errorMsg ? "focus:[&_input]:outline-none" : ""}
+            disabled={!edit}
+            {...register("title")}
+          />
+        </div>
         {/* Dynamic Types */}
 
         {isEdit && (
@@ -97,7 +98,7 @@ export default DynamicField;
 interface propType {
   info: FieldType;
   number: number;
-  title?: string;
+  fieldTitle?: string;
   submitHandler: (values: formFieldType) => void;
   isEdit?: boolean;
 }

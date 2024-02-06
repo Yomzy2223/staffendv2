@@ -3,13 +3,13 @@ import { Button } from "flowbite-react";
 import { PlusCircle } from "lucide-react";
 import React, { useState } from "react";
 import Masonry from "react-masonry-css";
-import EachForm from "./formField";
-import { FieldType } from "./formField/constants";
-import { formFieldType } from "./formField/dynamicField";
-import FieldTypePopUp from "./formField/fieldTypePopUp";
+import EachForm from "./eachForm";
+import { FieldType } from "./eachForm/constants";
+import { formFieldType } from "./eachForm/dynamicField";
+import FieldTypePopUp from "./eachForm/fieldTypePopUp";
 
 const DynamicFormCreator = ({
-  title,
+  fieldTitle,
   onEachSubmit,
   formInfo,
   wide,
@@ -17,7 +17,8 @@ const DynamicFormCreator = ({
   const [newlyAdded, setNewlyAdded] = useState<FieldType>();
 
   const btnText =
-    (formInfo.length > 0 ? "Add another " : "Create a ") + (title || "field");
+    (formInfo.length > 0 ? "Add another " : "Create a ") +
+    (fieldTitle || "field");
 
   const handleSelect = (type?: FieldType) => {
     if (!type) return;
@@ -46,7 +47,7 @@ const DynamicFormCreator = ({
             key={info.title}
             number={i + 1}
             info={info}
-            title={title}
+            fieldTitle={fieldTitle}
             submitHandler={onEachSubmit}
           />
         ))}
@@ -54,7 +55,7 @@ const DynamicFormCreator = ({
           <EachForm
             number={formInfo.length + 1}
             info={newlyAdded}
-            title={title}
+            fieldTitle={fieldTitle}
             submitHandler={handleSubmit}
             isEdit
           />
@@ -74,7 +75,7 @@ const DynamicFormCreator = ({
 export default DynamicFormCreator;
 
 interface propType {
-  title?: string;
+  fieldTitle?: string;
   onEachSubmit: (values: any) => void;
   formInfo: {
     type: string;

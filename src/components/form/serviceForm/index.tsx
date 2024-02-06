@@ -9,7 +9,7 @@ import DynamicFormCreator from "../dynamicFormCreator";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import useServiceApi from "@/hooks/useServiceApi";
 import { Oval } from "react-loading-icons";
-import { formFieldType } from "../dynamicFormCreator/formField/dynamicField";
+import { formFieldType } from "../dynamicFormCreator/eachForm/dynamicField";
 
 const ServiceForm = ({
   open,

@@ -13,7 +13,7 @@ const Header = ({
   number,
   setValue,
   edit,
-  checked,
+  compulsory,
   selectedType,
   setSelectedType,
   formTitle,
@@ -63,7 +63,7 @@ const Header = ({
             </h3>
           </div>
         )}
-        {checked && !edit && (
+        {compulsory && !edit && (
           <span className="ml-2 text-[10px] bg-primary-8 text-primary rounded-md px-2.5 py-0.5">
             Compulsory
           </span>
@@ -97,7 +97,7 @@ interface propType {
   number: number;
   setValue?: UseFormSetValue<formFieldType | formType>;
   edit: boolean;
-  checked: boolean;
+  compulsory: boolean;
   selectedType?: FieldType;
   setSelectedType: Dispatch<SetStateAction<FieldType | undefined>>;
   formTitle?: string;

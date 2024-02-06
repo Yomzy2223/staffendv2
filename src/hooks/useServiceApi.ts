@@ -1,13 +1,19 @@
 import {
   createService,
   createServiceForm,
+  createServiceSubForm,
   deleteService,
   deleteServiceForm,
+  deleteServiceSubForm,
   getAllServices,
   getService,
   getServiceForm,
+  getServiceForms,
+  getServiceSubForm,
+  getServiceSubForms,
   updateService,
   updateServiceForm,
+  updateServiceSubForm,
 } from "@/api/serviceApi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useGlobalFucntions } from "./globalFunctions";
@@ -74,7 +80,7 @@ const useServiceApi = () => {
     },
     onSuccess(data, variables, context) {
       handleSuccess({ data });
-      queryClient.invalidateQueries({ queryKey: ["serviceForm"] });
+      queryClient.invalidateQueries({ queryKey: ["Service Form"] });
     },
     retry: 3,
   });
@@ -86,7 +92,7 @@ const useServiceApi = () => {
     },
     onSuccess(data, variables, context) {
       handleSuccess({ data });
-      queryClient.invalidateQueries({ queryKey: ["serviceForm"] });
+      queryClient.invalidateQueries({ queryKey: ["Service Form"] });
     },
     retry: 3,
   });
@@ -98,22 +104,73 @@ const useServiceApi = () => {
     },
     onSuccess(data, variables, context) {
       handleSuccess({ data });
-      queryClient.invalidateQueries({ queryKey: ["serviceForm"] });
+      queryClient.invalidateQueries({ queryKey: ["Service Form"] });
     },
     retry: 3,
   });
 
   const useGetServiceFormQuery = (id: string) =>
     useQuery({
-      queryKey: ["serviceForm", id],
+      queryKey: ["Service Form", id],
       queryFn: ({ queryKey }) => getServiceForm(queryKey[1]),
       enabled: id ? true : false,
     });
 
-  const useGetAllServiceFormQuery = (serviceCategoryId: string) =>
+  const useGetServiceFormsQuery = (serviceCategoryId: string) =>
     useQuery({
-      queryKey: ["serviceForm", serviceCategoryId],
-      queryFn: ({ queryKey }) => getServiceForm(queryKey[1]),
+      queryKey: ["Service Form", serviceCategoryId],
+      queryFn: ({ queryKey }) => getServiceForms(queryKey[1]),
+      enabled: serviceCategoryId ? true : false,
+    });
+
+  const createServiceSubFormMutation = useMutation({
+    mutationFn: createServiceSubForm,
+    onError(error, variables, context) {
+      handleError({ title: "Failed", error });
+    },
+    onSuccess(data, variables, context) {
+      handleSuccess({ data });
+      queryClient.invalidateQueries({ queryKey: ["Service SubForm"] });
+    },
+    retry: 3,
+  });
+
+  const updateServiceSubFormMutation = useMutation({
+    mutationFn: updateServiceSubForm,
+    onError(error, variables, context) {
+      handleError({ title: "Failed", error });
+    },
+    onSuccess(data, variables, context) {
+      handleSuccess({ data });
+      queryClient.invalidateQueries({ queryKey: ["Service SubForm"] });
+    },
+    retry: 3,
+  });
+
+  const deleteServiceSubFormMutation = useMutation({
+    mutationFn: deleteServiceSubForm,
+    onError(error, variables, context) {
+      handleError({ title: "Failed", error });
+    },
+    onSuccess(data, variables, context) {
+      handleSuccess({ data });
+      queryClient.invalidateQueries({ queryKey: ["Service SubForm"] });
+    },
+    retry: 3,
+  });
+
+  const useGetServiceSubFormQuery = (id: string) =>
+    useQuery({
+      queryKey: ["Service SubForm", id],
+      queryFn: ({ queryKey }) => getServiceSubForm(queryKey[1]),
+      enabled: id ? true : false,
+    });
+
+  const useGetServiceSubFormsQuery = (serviceCategoryId: string) =>
+    useQuery({
+      queryKey: ["Service SubForm", serviceCategoryId],
+      queryFn: ({ queryKey }) => getServiceSubForms(queryKey[1]),
+      enabled: serviceCategoryId ? true : false,
     });
 
   return {
@@ -126,7 +183,12 @@ const useServiceApi = () => {
     updateServiceFormMutation,
     deleteServiceFormMutation,
     useGetServiceFormQuery,
-    useGetAllServiceFormQuery,
+    useGetServiceFormsQuery,
+    createServiceSubFormMutation,
+    updateServiceSubFormMutation,
+    deleteServiceSubFormMutation,
+    useGetServiceSubFormQuery,
+    useGetServiceSubFormsQuery,
   };
 };
 

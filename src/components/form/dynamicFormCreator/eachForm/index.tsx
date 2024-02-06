@@ -9,42 +9,56 @@ import { useFormActions } from "./actions";
 import { cn } from "@/lib/utils";
 
 const EachForm = ({
-  info,
+  formInfo,
+  fieldsInfo,
   number,
   fieldTitle,
-  submitHandler,
+  fieldSubmitHandler,
+  formSubmitHandler,
   isEdit,
 }: propType) => {
   const [edit, setEdit] = useState(isEdit || false);
-  const [checked, setChecked] = useState(info.compulsory as boolean);
   const [newlyAdded, setNewlyAdded] = useState<FieldType | undefined>();
-  const [selectedType, setSelectedType] = useState<FieldType | undefined>({
-    ...info,
-  });
+  // const [selectedType, setSelectedType] = useState<FieldType | undefined>({
+  //   ...fieldsInfo,
+  // });
 
   const {
     title,
     setTitle,
     description,
     setDescription,
+    compulsory,
+    setCompulsory,
     setIsSubmitted,
     titleError,
     descError,
     validateFields,
-  } = useFormActions();
+  } = useFormActions(formInfo);
 
-  const handleSubmit = () => {
+  // Runs when form is submitted
+  const handleFormSubmit = async () => {
     setIsSubmitted(true);
-    if (validateFields()) setEdit(false);
+    if (validateFields()) {
+      const values = {
+        title,
+        description,
+        type: selectedType?.type || "",
+        compulsory: compulsory,
+      };
+      await formSubmitHandler({ formId: formInfo.id || "", values });
+      setEdit(false);
+    }
   };
 
-  const onFieldSubmit = async (values: formFieldType) => {
-    await submitHandler(values);
+  // Runs when each field is submitted
+  const handleFieldSubmit = async (values: formFieldType) => {
+    await fieldSubmitHandler(values);
     setNewlyAdded(undefined);
   };
 
-  const btnText = info?.options
-    ? (info?.options.length > 0 ? "Add another " : "Create a ") +
+  const btnText = selectedType?.options
+    ? (selectedType?.options.length > 0 ? "Add another " : "Create a ") +
       (fieldTitle || "field")
     : "";
 
@@ -55,7 +69,7 @@ const EachForm = ({
           fieldTitle={fieldTitle}
           number={number}
           edit={edit}
-          checked={checked}
+          compulsory={compulsory}
           selectedType={selectedType}
           setSelectedType={setSelectedType}
           formTitle={title}
@@ -80,31 +94,31 @@ const EachForm = ({
           <p className="text-sm text-foreground-5">{description}</p>
         )}
       </div>
-      {info.options?.map((field, i) => (
+      {fieldsInfo?.map((field, i) => (
         <DynamicField
           key={field.title}
           number={i + 1}
-          info={field}
+          fieldInfo={field}
           fieldTitle={fieldTitle}
-          submitHandler={submitHandler}
+          submitHandler={fieldSubmitHandler}
           isEdit={edit}
         />
       ))}
       {newlyAdded && (
         <DynamicField
-          number={(info.options?.length ?? 0) + 1}
-          info={newlyAdded}
+          number={(selectedType?.options?.length ?? 0) + 1}
+          fieldInfo={newlyAdded}
           fieldTitle={fieldTitle}
-          submitHandler={onFieldSubmit}
+          submitHandler={handleFieldSubmit}
           isEdit={edit}
         />
       )}
       <Footer
-        checked={checked}
+        compulsory={compulsory}
         edit={edit}
         setEdit={setEdit}
-        setChecked={setChecked}
-        onDoneClick={handleSubmit}
+        setCompulsory={setCompulsory}
+        onDoneClick={handleFormSubmit}
         setNewlyAdded={setNewlyAdded}
         btnText={btnText}
         isForm
@@ -116,10 +130,18 @@ const EachForm = ({
 export default EachForm;
 
 interface propType {
-  info: FieldType;
+  fieldsInfo: FieldType[];
+  formInfo: formType;
   number: number;
   fieldTitle?: string;
-  submitHandler: (values: formFieldType) => void;
+  fieldSubmitHandler: (values: formFieldType) => void;
+  formSubmitHandler: ({
+    formId,
+    values,
+  }: {
+    formId: string;
+    values: formType;
+  }) => void;
   isEdit?: boolean;
 }
 
@@ -135,4 +157,4 @@ const formSchema = z.object({
     .min(1, { message: "Select type" }),
   compulsory: z.boolean(),
 });
-export type formType = z.infer<typeof formSchema>;
+export type formType = z.infer<typeof formSchema> & { id?: string };

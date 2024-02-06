@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { formType } from ".";
 
-export const useFormActions = () => {
+export const useFormActions = (formInfo: formType) => {
+  const [compulsory, setCompulsory] = useState(formInfo?.compulsory);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [titleError, setTitleError] = useState("");
@@ -25,11 +27,21 @@ export const useFormActions = () => {
     }
   }, [isSubmitted, title, description]);
 
+  useEffect(() => {
+    if (formInfo) {
+      setTitle(formInfo.title);
+      setDescription(formInfo.description);
+      setCompulsory(formInfo.compulsory);
+    }
+  }, [formInfo]);
+
   return {
     title,
     setTitle,
     description,
     setDescription,
+    compulsory,
+    setCompulsory,
     isSubmitted,
     setIsSubmitted,
     titleError,

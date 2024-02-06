@@ -14,10 +14,10 @@ import { formFieldType } from "./dynamicField";
 import FieldTypePopUp from "./fieldTypePopUp";
 
 const Footer = ({
-  checked,
+  compulsory,
   edit,
   setEdit,
-  setChecked,
+  setCompulsory,
   setValue,
   getValues,
   onDoneClick,
@@ -26,8 +26,8 @@ const Footer = ({
   btnText,
 }: propType) => {
   const onCheckToggle = () => {
-    setChecked(!checked);
-    setValue && setValue("compulsory", !checked);
+    setCompulsory(!compulsory);
+    setValue && setValue("compulsory", !compulsory);
   };
 
   const handleSelect = (type?: FieldType) => {
@@ -55,7 +55,7 @@ const Footer = ({
           <Checkbox
             id={"compulsory"}
             className="accent-primary"
-            checked={getValues ? getValues().compulsory : checked}
+            checked={getValues ? getValues().compulsory : compulsory}
             onChange={onCheckToggle}
           />
           <label htmlFor="compulsory">Compulsory</label>
@@ -92,10 +92,10 @@ const Footer = ({
 export default Footer;
 
 interface propType {
-  checked: boolean;
+  compulsory: boolean;
   edit: boolean;
   setEdit: (value: boolean) => void;
-  setChecked: (value: boolean) => void;
+  setCompulsory: (value: boolean) => void;
   setValue?: UseFormSetValue<formFieldType | formType>;
   getValues?: UseFormGetValues<formFieldType | formType>;
   onDoneClick?: MouseEventHandler<HTMLButtonElement>;

@@ -10,6 +10,7 @@ import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import useServiceApi from "@/hooks/useServiceApi";
 import { Oval } from "react-loading-icons";
 import { formFieldType } from "../dynamicFormCreator/eachForm/dynamicField";
+import { formType } from "../dynamicFormCreator/eachForm";
 
 const ServiceForm = ({
   open,
@@ -21,8 +22,13 @@ const ServiceForm = ({
   const [section, setSection] = useState(1);
   const { get } = useSearchParams();
   const { isDesktop } = useGlobalFucntions();
-  const { createServiceMutation, updateServiceMutation, useGetServiceQuery } =
-    useServiceApi();
+  const {
+    createServiceMutation,
+    updateServiceMutation,
+    useGetServiceQuery,
+    createServiceFormMutation,
+    updateServiceFormMutation,
+  } = useServiceApi();
 
   const { mutate, isSuccess, isPending, isIdle, isPaused } =
     createServiceMutation;
@@ -62,7 +68,23 @@ const ServiceForm = ({
     setSection(section - 1);
   };
 
-  const handleForm2Submit = (value: formFieldType) => {
+  const handleForm2Submit = async ({
+    formId,
+    values,
+  }: {
+    formId: string;
+    values: formType;
+  }) => {
+    formId
+      ? updateServiceFormMutation.mutate({ id: formId, formInfo: values })
+      : createServiceFormMutation.mutate({
+          serviceCategoryId: serviceId || "",
+          formInfo: values,
+        });
+    console.log(values);
+  };
+
+  const handleForm2FieldSubmit = (value: formFieldType) => {
     console.log(value);
   };
 
@@ -108,7 +130,8 @@ const ServiceForm = ({
         <div className="flex flex-col justify-between gap-6 flex-1">
           <DynamicFormCreator
             formInfo={form2Info}
-            onEachSubmit={handleForm2Submit}
+            onEachSubmit={handleForm2FieldSubmit}
+            onFormSubmit={handleForm2Submit}
             wide
           />
           <div className="bg-white flex items-center justify-end gap-4 pt-4 sticky bottom-0">
@@ -188,47 +211,36 @@ type serviceType = z.infer<typeof serviceSchema>;
 
 const form2Info = [
   {
-    type: "paragraph",
-    title: "Describe the service please",
-    compulsory: true,
-  },
-  {
-    type: "paragraph",
-    title: "Describe the service ",
-    compulsory: false,
-  },
-  {
-    type: "paragraph",
-    title: "Describe service please",
-    compulsory: true,
-  },
-  {
-    type: "paragraph",
-    title: "Describe the please",
-    compulsory: false,
-  },
-  {
+    id: "984w0urw9riw",
     type: "person",
     title: "Describe the pleases",
+    description: "some description to do here",
     compulsory: false,
-    options: [
+    subform: [
       {
         type: "paragraph",
         title: "Describe the please",
         compulsory: false,
       },
       {
-        type: "paragraph",
-        title: "Describe the service ",
+        question: "Enter your name",
+        type: "short answer",
+        options: [""],
         compulsory: false,
+        fileName: "Some docs",
+        fileDescription: "I have no idea",
+        fileLink: "some random link",
+        fileType: "pdf",
       },
     ],
   },
   {
+    id: "jof0oewajisfo4984wjf",
     type: "person",
     title: "Describe thed pleases",
+    description: "some description to do here",
     compulsory: false,
-    options: [
+    subform: [
       {
         type: "paragraph",
         title: "Describe theds please",

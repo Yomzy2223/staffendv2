@@ -85,7 +85,7 @@ function QuestionList({
                 onSelect={(value) => {
                   handleSelect(
                     fieldTypes.find(
-                      (type: FieldType) => type.type.toLowerCase() === value
+                      (each: FieldType) => each.type.toLowerCase() === value
                     )
                   );
                   setOpen(false);

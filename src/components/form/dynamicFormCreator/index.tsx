@@ -11,14 +11,13 @@ import FieldTypePopUp from "./eachForm/fieldTypePopUp";
 const DynamicFormCreator = ({
   fieldTitle,
   onEachSubmit,
+  onFormSubmit,
   formInfo,
   wide,
 }: propType) => {
   const [newlyAdded, setNewlyAdded] = useState<FieldType>();
 
-  const btnText =
-    (formInfo.length > 0 ? "Add another " : "Create a ") +
-    (fieldTitle || "field");
+  const btnText = formInfo?.length > 0 ? "Add another form" : "Create a form";
 
   const handleSelect = (type?: FieldType) => {
     if (!type) return;
@@ -46,17 +45,26 @@ const DynamicFormCreator = ({
           <EachForm
             key={info.title}
             number={i + 1}
-            info={info}
+            fieldsInfo={info?.subform}
             fieldTitle={fieldTitle}
-            submitHandler={onEachSubmit}
+            fieldSubmitHandler={onEachSubmit}
+            formSubmitHandler={onFormSubmit}
+            formInfo={{
+              id: info.id,
+              type: info.type,
+              title: info?.title,
+              description: info?.description,
+              compulsory: info?.compulsory,
+            }}
           />
         ))}
         {newlyAdded && (
           <EachForm
             number={formInfo.length + 1}
-            info={newlyAdded}
+            fieldsInfo={newlyAdded}
             fieldTitle={fieldTitle}
-            submitHandler={handleSubmit}
+            fieldSubmitHandler={handleSubmit}
+            formSubmitHandler={onFormSubmit}
             isEdit
           />
         )}
@@ -77,11 +85,14 @@ export default DynamicFormCreator;
 interface propType {
   fieldTitle?: string;
   onEachSubmit: (values: any) => void;
+  onFormSubmit: (values: any) => void;
   formInfo: {
+    id: string;
     type: string;
     title: string;
-    options?: FieldType[];
+    description: string;
     compulsory: boolean;
+    subform: FieldType[];
   }[];
   wide?: boolean;
 }

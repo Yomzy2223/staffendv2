@@ -9,19 +9,19 @@ import { FieldType, fieldTypes } from "./constants";
 import { cn } from "@/lib/utils";
 
 const DynamicField = ({
-  info,
+  fieldInfo,
   number,
   fieldTitle,
   submitHandler,
   isEdit,
 }: propType) => {
   const [selectedType, setSelectedType] = useState<FieldType | undefined>({
-    ...info,
+    ...fieldInfo,
   });
   const [edit, setEdit] = useState(isEdit || false);
-  const [checked, setChecked] = useState(info.compulsory as boolean);
+  const [compulsory, setCompulsory] = useState(fieldInfo.compulsory as boolean);
 
-  const defaultValues = { ...info };
+  const defaultValues = { ...fieldInfo };
 
   // Form definition
   const {
@@ -55,7 +55,7 @@ const DynamicField = ({
         number={number}
         setValue={setValue}
         edit={edit}
-        checked={checked}
+        compulsory={compulsory}
         selectedType={selectedType}
         setSelectedType={setSelectedType}
       />
@@ -80,10 +80,10 @@ const DynamicField = ({
 
         {isEdit && (
           <Footer
-            checked={checked}
+            compulsory={compulsory}
             edit={edit}
             setEdit={setEdit}
-            setChecked={setChecked}
+            setCompulsory={setCompulsory}
             setValue={setValue}
             getValues={getValues}
           />
@@ -96,7 +96,7 @@ const DynamicField = ({
 export default DynamicField;
 
 interface propType {
-  info: FieldType;
+  fieldInfo: FieldType;
   number: number;
   fieldTitle?: string;
   submitHandler: (values: formFieldType) => void;

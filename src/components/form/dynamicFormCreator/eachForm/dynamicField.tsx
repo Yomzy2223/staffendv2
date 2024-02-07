@@ -5,8 +5,14 @@ import { useForm } from "react-hook-form";
 import Header from "./header";
 import * as z from "zod";
 import Footer from "./footer";
-import { FieldType, fieldTypes } from "./constants";
+import { FieldType } from "./constants";
 import { cn } from "@/lib/utils";
+import { useFormFieldActions } from "./actions";
+import Checkbox from "./allFieldTypes/checkbox";
+import DocumentTemplate from "./allFieldTypes/documentTemplate";
+import DocumentUpload from "./allFieldTypes/documentUpload";
+import Dropdown from "./allFieldTypes/dropdown";
+import MultipleChoice from "./allFieldTypes/multipleChoice";
 
 const DynamicField = ({
   fieldInfo,
@@ -15,9 +21,7 @@ const DynamicField = ({
   submitHandler,
   isEdit,
 }: propType) => {
-  const [selectedType, setSelectedType] = useState<FieldType | undefined>({
-    ...fieldInfo,
-  });
+  const [info, setInfo] = useState<FieldType | undefined>();
   const [edit, setEdit] = useState(isEdit || false);
   const [compulsory, setCompulsory] = useState(fieldInfo.compulsory as boolean);
 
@@ -36,6 +40,8 @@ const DynamicField = ({
     defaultValues,
   });
 
+  const {} = useFormFieldActions({ fieldInfo, setValue });
+
   // Submit handler
   function onSubmit(values: formFieldType) {
     submitHandler && submitHandler(values);
@@ -48,6 +54,10 @@ const DynamicField = ({
     if (isEdit === false) setEdit(false);
   }, [isEdit]);
 
+  useEffect(() => {
+    // if (fieldInfo) setInfo(fieldInfo);
+  }, [fieldInfo]);
+
   return (
     <Card className="shadow-none [&>div]:p-4 max-w-[500px]">
       <Header
@@ -56,8 +66,7 @@ const DynamicField = ({
         setValue={setValue}
         edit={edit}
         compulsory={compulsory}
-        selectedType={selectedType}
-        setSelectedType={setSelectedType}
+        newlyAdded={info}
       />
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -77,6 +86,11 @@ const DynamicField = ({
           />
         </div>
         {/* Dynamic Types */}
+        {fieldInfo.type === "checkbox" && <Checkbox />}
+        {fieldInfo.type === "document template" && <DocumentTemplate />}
+        {fieldInfo.type === "document upload" && <DocumentUpload />}
+        {fieldInfo.type === "dropdown" && <Dropdown />}
+        {fieldInfo.type === "multiple choice" && <MultipleChoice />}
 
         {isEdit && (
           <Footer

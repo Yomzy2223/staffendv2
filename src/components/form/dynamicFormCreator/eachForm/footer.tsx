@@ -1,15 +1,9 @@
 import { cn } from "@/lib/utils";
 import { Button, Checkbox } from "flowbite-react";
 import { PencilLine, PlusCircle, Trash2 } from "lucide-react";
-import React, {
-  Dispatch,
-  MouseEventHandler,
-  ReactNode,
-  SetStateAction,
-} from "react";
+import React, { Dispatch, MouseEventHandler, SetStateAction } from "react";
 import { UseFormGetValues, UseFormSetValue } from "react-hook-form";
-import { formType } from ".";
-import { FieldType } from "./constants";
+import { FieldType, FormType } from "./constants";
 import { formFieldType } from "./dynamicField";
 import FieldTypePopUp from "./fieldTypePopUp";
 
@@ -30,9 +24,9 @@ const Footer = ({
     setValue && setValue("compulsory", !compulsory);
   };
 
-  const handleSelect = (type?: FieldType) => {
-    if (!type) return;
-    setNewlyAdded && setNewlyAdded(type);
+  const handleSelect = (selected?: FieldType) => {
+    if (!selected) return;
+    setNewlyAdded && setNewlyAdded(selected);
   };
 
   return (
@@ -96,8 +90,8 @@ interface propType {
   edit: boolean;
   setEdit: (value: boolean) => void;
   setCompulsory: (value: boolean) => void;
-  setValue?: UseFormSetValue<formFieldType | formType>;
-  getValues?: UseFormGetValues<formFieldType | formType>;
+  setValue?: UseFormSetValue<formFieldType | FormType>;
+  getValues?: UseFormGetValues<formFieldType | FormType>;
   onDoneClick?: MouseEventHandler<HTMLButtonElement>;
   isForm?: boolean;
   setNewlyAdded?: Dispatch<SetStateAction<FieldType | undefined>>;

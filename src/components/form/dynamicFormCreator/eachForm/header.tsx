@@ -1,12 +1,11 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { Button, Checkbox, TextInput } from "flowbite-react";
-import { FieldType } from "./constants";
+import { FieldType, FormType } from "./constants";
 import FieldTypePopUp from "./fieldTypePopUp";
 import { MoreHorizontal } from "lucide-react";
 import { UseFormSetValue } from "react-hook-form";
 import { cn } from "@/lib/utils";
 import { formFieldType } from "./dynamicField";
-import { formType } from ".";
 
 const Header = ({
   fieldTitle,
@@ -14,8 +13,8 @@ const Header = ({
   setValue,
   edit,
   compulsory,
-  selectedType,
-  setSelectedType,
+  newlyAdded,
+  setNewlyAdded,
   formTitle,
   setTitle,
   titleError,
@@ -23,7 +22,7 @@ const Header = ({
 }: propType) => {
   const handleSelect = (selected?: FieldType) => {
     if (!selected) return;
-    setSelectedType(selected);
+    setNewlyAdded && setNewlyAdded(selected);
     setValue && setValue("type", selected.type, { shouldValidate: true });
   };
 
@@ -72,7 +71,7 @@ const Header = ({
 
       <div className="flex items-center gap-2.5">
         <span className="text-sm text-foreground-5 font-normal capitalize">
-          {selectedType?.type}
+          {newlyAdded?.type}
         </span>
         {edit && (
           <FieldTypePopUp handleSelect={handleSelect} isForm={isForm}>
@@ -95,11 +94,11 @@ export default Header;
 interface propType {
   fieldTitle?: string;
   number: number;
-  setValue?: UseFormSetValue<formFieldType | formType>;
+  setValue?: UseFormSetValue<formFieldType | FormType>;
   edit: boolean;
   compulsory: boolean;
-  selectedType?: FieldType;
-  setSelectedType: Dispatch<SetStateAction<FieldType | undefined>>;
+  newlyAdded?: FieldType;
+  setNewlyAdded?: Dispatch<SetStateAction<FieldType | undefined>>;
   formTitle?: string;
   setTitle?: Dispatch<SetStateAction<string>>;
   titleError?: string;

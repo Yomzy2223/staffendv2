@@ -1,9 +1,8 @@
 import { Card, Textarea, TextInput } from "flowbite-react";
 import React, { useState } from "react";
 import Header from "./header";
-import * as z from "zod";
 import Footer from "./footer";
-import { FieldType } from "./constants";
+import { FieldType, FormType } from "./constants";
 import DynamicField, { formFieldType } from "./dynamicField";
 import { useFormActions } from "./actions";
 import { cn } from "@/lib/utils";
@@ -19,15 +18,14 @@ const EachForm = ({
 }: propType) => {
   const [edit, setEdit] = useState(isEdit || false);
   const [newlyAdded, setNewlyAdded] = useState<FieldType | undefined>();
-  // const [selectedType, setSelectedType] = useState<FieldType | undefined>({
-  //   ...fieldsInfo,
-  // });
 
   const {
     title,
     setTitle,
     description,
     setDescription,
+    type,
+    setType,
     compulsory,
     setCompulsory,
     setIsSubmitted,
@@ -36,31 +34,40 @@ const EachForm = ({
     validateFields,
   } = useFormActions(formInfo);
 
-  // Runs when form is submitted
-  const handleFormSubmit = async () => {
-    setIsSubmitted(true);
+  const submitForm = async () => {
     if (validateFields()) {
       const values = {
         title,
         description,
-        type: selectedType?.type || "",
-        compulsory: compulsory,
+        type,
+        compulsory,
       };
-      await formSubmitHandler({ formId: formInfo.id || "", values });
-      setEdit(false);
+
+      if (formInfo.id)
+        await formSubmitHandler({ formId: formInfo.id || "", values });
+      else await formSubmitHandler({ values });
+      return true;
     }
+    return false;
+  };
+
+  // Runs when form is submitted
+  const handleFormSubmit = async () => {
+    setIsSubmitted(true);
+    const res = await submitForm();
+    if (res) setEdit(false);
   };
 
   // Runs when each field is submitted
   const handleFieldSubmit = async (values: formFieldType) => {
+    await submitForm();
     await fieldSubmitHandler(values);
     setNewlyAdded(undefined);
   };
 
-  const btnText = selectedType?.options
-    ? (selectedType?.options.length > 0 ? "Add another " : "Create a ") +
-      (fieldTitle || "field")
-    : "";
+  const btnText =
+    (fieldsInfo?.length > 0 || newlyAdded ? "Add another " : "Create a ") +
+    (fieldTitle || "field");
 
   return (
     <Card className="shadow-none [&>div]:p-4 max-w-[500px] h-max">
@@ -70,8 +77,8 @@ const EachForm = ({
           number={number}
           edit={edit}
           compulsory={compulsory}
-          selectedType={selectedType}
-          setSelectedType={setSelectedType}
+          newlyAdded={newlyAdded}
+          setNewlyAdded={setNewlyAdded}
           formTitle={title}
           setTitle={setTitle}
           titleError={titleError}
@@ -106,7 +113,7 @@ const EachForm = ({
       ))}
       {newlyAdded && (
         <DynamicField
-          number={(selectedType?.options?.length ?? 0) + 1}
+          number={(fieldsInfo?.length ?? 0) + 1}
           fieldInfo={newlyAdded}
           fieldTitle={fieldTitle}
           submitHandler={handleFieldSubmit}
@@ -131,7 +138,7 @@ export default EachForm;
 
 interface propType {
   fieldsInfo: FieldType[];
-  formInfo: formType;
+  formInfo: FormType;
   number: number;
   fieldTitle?: string;
   fieldSubmitHandler: (values: formFieldType) => void;
@@ -139,22 +146,8 @@ interface propType {
     formId,
     values,
   }: {
-    formId: string;
-    values: formType;
+    formId?: string;
+    values: FormType;
   }) => void;
   isEdit?: boolean;
 }
-
-const formSchema = z.object({
-  title: z
-    .string({ required_error: "Enter title" })
-    .min(3, { message: "Must be at least 3 characters" }),
-  description: z
-    .string({ required_error: "Provide a suitable and precise description" })
-    .min(3, { message: "Must be at least 3 characters" }),
-  type: z
-    .string({ required_error: "Select type" })
-    .min(1, { message: "Select type" }),
-  compulsory: z.boolean(),
-});
-export type formType = z.infer<typeof formSchema> & { id?: string };

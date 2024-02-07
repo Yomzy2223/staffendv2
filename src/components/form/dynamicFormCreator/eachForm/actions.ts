@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import { formType } from ".";
+import { UseFormSetValue } from "react-hook-form";
+import { FieldType, FormType } from "./constants";
 
-export const useFormActions = (formInfo: formType) => {
-  const [compulsory, setCompulsory] = useState(formInfo?.compulsory);
+export const useFormActions = (formInfo: FormType) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [type, setType] = useState("");
+  const [compulsory, setCompulsory] = useState(false);
   const [titleError, setTitleError] = useState("");
   const [descError, setDescError] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -39,13 +41,59 @@ export const useFormActions = (formInfo: formType) => {
     title,
     setTitle,
     description,
-    setDescription,
+    type,
+    setType,
     compulsory,
     setCompulsory,
+    setDescription,
     isSubmitted,
     setIsSubmitted,
     titleError,
     descError,
     validateFields,
+  };
+};
+
+export const useFormFieldActions = ({
+  fieldInfo,
+  setValue,
+}: {
+  fieldInfo: FieldType;
+  setValue: UseFormSetValue<{
+    type: string;
+    title: string;
+    compulsory: boolean;
+  }>;
+}) => {
+  const [question, setQuestion] = useState("");
+  const [type, setType] = useState("");
+  const [options, setOptions] = useState<string[]>();
+  const [compulsory, setCompulsory] = useState(false);
+  const [fileName, setFileName] = useState("");
+  const [fileDescription, setFileDescription] = useState("");
+  const [fileLink, setFileLink] = useState("");
+  const [fileType, setFileType] = useState("");
+
+  useEffect(() => {
+    if (fieldInfo.title) setQuestion(fieldInfo.title);
+    if (fieldInfo.type) setType(fieldInfo.type);
+    if (fieldInfo.options) setOptions(fieldInfo.options);
+    if (fieldInfo.compulsory) setCompulsory(fieldInfo.compulsory);
+    if (fieldInfo.fileName) setFileName(fieldInfo.fileName);
+    if (fieldInfo.fileDescription)
+      setFileDescription(fieldInfo.fileDescription);
+    if (fieldInfo.fileLink) setFileLink(fieldInfo.fileLink);
+    if (fieldInfo.fileType) setFileType(fieldInfo.fileType);
+  }, [fieldInfo]);
+
+  return {
+    question,
+    type,
+    options,
+    fileName,
+    fileDescription,
+    fileLink,
+    compulsory,
+    fileType,
   };
 };

@@ -26,7 +26,7 @@ const DynamicForm = ({
   className,
   formClassName,
 }: DynamicFormProps) => {
-  type formType = z.infer<typeof formSchema>;
+  type FormType = z.infer<typeof formSchema>;
 
   // Form definition
   const {
@@ -36,13 +36,13 @@ const DynamicForm = ({
     formState: { errors },
     getValues,
     setValue,
-  } = useForm<formType>({
+  } = useForm<FormType>({
     resolver: zodResolver(formSchema),
     defaultValues,
   });
 
   // Submit handler
-  function onSubmit(values: formType) {
+  function onSubmit(values: FormType) {
     onFormSubmit && onFormSubmit(values);
   }
 

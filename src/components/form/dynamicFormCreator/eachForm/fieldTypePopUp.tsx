@@ -12,13 +12,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { FieldType, fieldTypes, formFieldTypes } from "./constants";
+import { FieldType, fieldOptions, formOptions, FormType } from "./constants";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 
 interface propType {
   children: ReactNode;
-  handleSelect: (type?: FieldType) => void;
+  handleSelect: (selected?: FieldType | FormType) => void;
   isForm?: boolean;
 }
 
@@ -68,7 +68,7 @@ function QuestionList({
   handleSelect: (type?: FieldType) => void;
   isForm?: boolean;
 }) {
-  const types = isForm ? formFieldTypes : fieldTypes;
+  const options = isForm ? formOptions : fieldOptions;
 
   return (
     <Command>
@@ -76,7 +76,7 @@ function QuestionList({
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup>
-          {types
+          {options
             .sort((a, b) => a.type.localeCompare(b.type))
             .map((item: FieldType) => (
               <CommandItem
@@ -84,7 +84,7 @@ function QuestionList({
                 value={item.type}
                 onSelect={(value) => {
                   handleSelect(
-                    fieldTypes.find(
+                    fieldOptions.find(
                       (each: FieldType) => each.type.toLowerCase() === value
                     )
                   );

@@ -10,7 +10,7 @@ import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import useServiceApi from "@/hooks/useServiceApi";
 import { Oval } from "react-loading-icons";
 import { formFieldType } from "../dynamicFormCreator/eachForm/dynamicField";
-import { formType } from "../dynamicFormCreator/eachForm";
+import { FormType } from "../dynamicFormCreator/eachForm/constants";
 
 const ServiceForm = ({
   open,
@@ -72,8 +72,8 @@ const ServiceForm = ({
     formId,
     values,
   }: {
-    formId: string;
-    values: formType;
+    formId?: string;
+    values: FormType;
   }) => {
     formId
       ? updateServiceFormMutation.mutate({ id: formId, formInfo: values })

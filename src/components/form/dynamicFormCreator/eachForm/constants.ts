@@ -12,6 +12,7 @@ import {
   PhoneOutgoing,
   User,
 } from "lucide-react";
+import * as z from "zod";
 
 export interface FieldType {
   type: string;
@@ -19,9 +20,28 @@ export interface FieldType {
   icon?: LucideIcon;
   compulsory?: boolean;
   options?: any[];
+  fileName?: string;
+  fileDescription?: string;
+  fileLink?: string;
+  fileType?: string;
 }
 
-export const fieldTypes: FieldType[] = [
+const formSchema = z.object({
+  title: z
+    .string({ required_error: "Enter title" })
+    .min(3, { message: "Must be at least 3 characters" }),
+  description: z
+    .string({ required_error: "Provide a suitable and precise description" })
+    .min(3, { message: "Must be at least 3 characters" }),
+  type: z
+    .string({ required_error: "Select type" })
+    .min(1, { message: "Select type" }),
+  compulsory: z.boolean(),
+});
+
+export type FormType = z.infer<typeof formSchema> & { id?: string };
+
+export const fieldOptions: FieldType[] = [
   {
     type: "address",
     icon: MapPin,
@@ -103,32 +123,11 @@ export const fieldTypes: FieldType[] = [
   },
 ];
 
-export const formFieldTypes: FieldType[] = [
+export const formOptions: FormType[] = [
   {
     type: "form",
-    icon: User,
-    options: [],
-  },
-  {
-    type: "person",
-    icon: User,
-    options: [
-      {
-        type: "short answer",
-        title: "Enter your first name",
-      },
-      {
-        type: "short answer",
-        title: "Enter your last name",
-      },
-      {
-        type: "email address",
-        title: "Enter your email address",
-      },
-      {
-        type: "phone number",
-        title: "Enter your phone number",
-      },
-    ],
+    title: "Title",
+    compulsory: true,
+    description: "Description",
   },
 ];

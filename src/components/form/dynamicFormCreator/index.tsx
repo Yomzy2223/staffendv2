@@ -4,7 +4,7 @@ import { PlusCircle } from "lucide-react";
 import React, { useState } from "react";
 import Masonry from "react-masonry-css";
 import EachForm from "./eachForm";
-import { FieldType } from "./eachForm/constants";
+import { FieldType, FormType } from "./eachForm/constants";
 import { formFieldType } from "./eachForm/dynamicField";
 import FieldTypePopUp from "./eachForm/fieldTypePopUp";
 
@@ -15,13 +15,13 @@ const DynamicFormCreator = ({
   formInfo,
   wide,
 }: propType) => {
-  const [newlyAdded, setNewlyAdded] = useState<FieldType>();
+  const [newlyAdded, setNewlyAdded] = useState<FormType>();
 
   const btnText = formInfo?.length > 0 ? "Add another form" : "Create a form";
 
-  const handleSelect = (type?: FieldType) => {
-    if (!type) return;
-    setNewlyAdded(type);
+  const handleSelect = (selected?: FormType) => {
+    if (!selected) return;
+    setNewlyAdded(selected);
   };
 
   const handleSubmit = async (values: formFieldType) => {
@@ -61,11 +61,17 @@ const DynamicFormCreator = ({
         {newlyAdded && (
           <EachForm
             number={formInfo.length + 1}
-            fieldsInfo={newlyAdded}
+            fieldsInfo={[]}
             fieldTitle={fieldTitle}
             fieldSubmitHandler={handleSubmit}
             formSubmitHandler={onFormSubmit}
             isEdit
+            formInfo={{
+              type: newlyAdded.type,
+              title: newlyAdded?.title,
+              description: newlyAdded?.description,
+              compulsory: newlyAdded?.compulsory,
+            }}
           />
         )}
       </Masonry>

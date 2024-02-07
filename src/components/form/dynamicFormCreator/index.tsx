@@ -5,7 +5,6 @@ import React, { useState } from "react";
 import Masonry from "react-masonry-css";
 import EachForm from "./eachForm";
 import { FieldType, FormType } from "./eachForm/constants";
-import { formFieldType } from "./eachForm/dynamicField";
 import FieldTypePopUp from "./eachForm/fieldTypePopUp";
 
 const DynamicFormCreator = ({
@@ -24,7 +23,7 @@ const DynamicFormCreator = ({
     setNewlyAdded(selected);
   };
 
-  const handleSubmit = async (values: formFieldType) => {
+  const handleSubmit = async (values: { [x: string]: any }) => {
     await onEachSubmit(values);
     setNewlyAdded(undefined);
   };

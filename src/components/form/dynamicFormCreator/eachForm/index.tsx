@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Header from "./header";
 import Footer from "./footer";
 import { FieldType, FormType } from "./constants";
-import DynamicField, { formFieldType } from "./dynamicField";
+import DynamicField from "./dynamicField";
 import { useFormActions } from "./actions";
 import { cn } from "@/lib/utils";
 
@@ -59,7 +59,7 @@ const EachForm = ({
   };
 
   // Runs when each field is submitted
-  const handleFieldSubmit = async (values: formFieldType) => {
+  const handleFieldSubmit = async (values: { [x: string]: any }) => {
     await submitForm();
     await fieldSubmitHandler(values);
     setNewlyAdded(undefined);
@@ -141,7 +141,7 @@ interface propType {
   formInfo: FormType;
   number: number;
   fieldTitle?: string;
-  fieldSubmitHandler: (values: formFieldType) => void;
+  fieldSubmitHandler: (values: { [x: string]: any }) => void;
   formSubmitHandler: ({
     formId,
     values,

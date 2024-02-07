@@ -7,7 +7,7 @@ import * as z from "zod";
 import Footer from "./footer";
 import { FieldType } from "./constants";
 import { cn } from "@/lib/utils";
-import { useFormFieldActions } from "./actions";
+import { getDynamicFormSchema, useFormFieldActions } from "./actions";
 import Checkbox from "./allFieldTypes/checkbox";
 import DocumentTemplate from "./allFieldTypes/documentTemplate";
 import DocumentUpload from "./allFieldTypes/documentUpload";
@@ -27,6 +27,9 @@ const DynamicField = ({
 
   const defaultValues = { ...fieldInfo };
 
+  const formSchema = getDynamicFormSchema(info?.type);
+  type formType = z.infer<typeof formSchema>;
+
   // Form definition
   const {
     register,
@@ -35,7 +38,7 @@ const DynamicField = ({
     formState: { errors },
     getValues,
     setValue,
-  } = useForm<formFieldType>({
+  } = useForm<formType>({
     resolver: zodResolver(formSchema),
     defaultValues,
   });
@@ -43,7 +46,7 @@ const DynamicField = ({
   const {} = useFormFieldActions({ fieldInfo, setValue });
 
   // Submit handler
-  function onSubmit(values: formFieldType) {
+  function onSubmit(values: formType) {
     submitHandler && submitHandler(values);
     setEdit(false);
   }
@@ -86,7 +89,9 @@ const DynamicField = ({
           />
         </div>
         {/* Dynamic Types */}
-        {fieldInfo.type === "checkbox" && <Checkbox />}
+        {fieldInfo.type === "checkbox" && fieldInfo.options && (
+          <Checkbox options={fieldInfo.options} />
+        )}
         {fieldInfo.type === "document template" && <DocumentTemplate />}
         {fieldInfo.type === "document upload" && <DocumentUpload />}
         {fieldInfo.type === "dropdown" && <Dropdown />}
@@ -113,17 +118,20 @@ interface propType {
   fieldInfo: FieldType;
   number: number;
   fieldTitle?: string;
-  submitHandler: (values: formFieldType) => void;
+  submitHandler: (values: { [x: string]: any }) => void;
   isEdit?: boolean;
 }
 
-const formSchema = z.object({
-  title: z
-    .string({ required_error: "Enter field / field title" })
-    .min(3, { message: "Must be at least 3 characters" }),
-  type: z
-    .string({ required_error: "Select type" })
-    .min(1, { message: "Select type" }),
-  compulsory: z.boolean(),
-});
-export type formFieldType = z.infer<typeof formSchema>;
+// const formSchema = z.object({
+//   title: z
+//     .string({ required_error: "Enter field title" })
+//     .min(3, { message: "Must be at least 3 characters" }),
+//   type: z
+//     .string({ required_error: "Select type" })
+//     .min(1, { message: "Select type" }),
+//   compulsory: z.boolean(),
+// });
+
+// const formSchema = getDynamicFormSchema()
+
+// export type formFieldType = z.infer<typeof formSchema>;

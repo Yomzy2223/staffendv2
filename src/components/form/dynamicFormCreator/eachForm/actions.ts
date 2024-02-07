@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { UseFormSetValue } from "react-hook-form";
+import { z } from "zod";
 import { FieldType, FormType } from "./constants";
 
 export const useFormActions = (formInfo: FormType) => {
@@ -59,11 +60,7 @@ export const useFormFieldActions = ({
   setValue,
 }: {
   fieldInfo: FieldType;
-  setValue: UseFormSetValue<{
-    type: string;
-    title: string;
-    compulsory: boolean;
-  }>;
+  setValue: UseFormSetValue<{ [x: string]: any }>;
 }) => {
   const [question, setQuestion] = useState("");
   const [type, setType] = useState("");
@@ -96,4 +93,25 @@ export const useFormFieldActions = ({
     compulsory,
     fileType,
   };
+};
+
+export const getDynamicFormSchema = (type?: string) => {
+  let schema: any = {
+    title: z
+      .string({ required_error: "Enter field / field title" })
+      .min(3, { message: "Must be at least 3 characters" }),
+    type: z
+      .string({ required_error: "Select type" })
+      .min(1, { message: "Select type" }),
+    compulsory: z.boolean(),
+  };
+
+  if (type === "checkbox") {
+    schema = {
+      ...schema,
+      checkbox: z.string().array().nonempty({ message: "" }),
+    };
+  }
+
+  return z.object(schema);
 };

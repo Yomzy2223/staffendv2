@@ -9,7 +9,6 @@ import DynamicFormCreator from "../dynamicFormCreator";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import useServiceApi from "@/hooks/useServiceApi";
 import { Oval } from "react-loading-icons";
-import { formFieldType } from "../dynamicFormCreator/eachForm/dynamicField";
 import { FormType } from "../dynamicFormCreator/eachForm/constants";
 
 const ServiceForm = ({
@@ -84,7 +83,7 @@ const ServiceForm = ({
     console.log(values);
   };
 
-  const handleForm2FieldSubmit = (value: formFieldType) => {
+  const handleForm2FieldSubmit = (value: { [x: string]: any }) => {
     console.log(value);
   };
 

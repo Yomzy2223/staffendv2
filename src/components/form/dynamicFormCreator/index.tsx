@@ -1,4 +1,3 @@
-import { cn } from "@/lib/utils";
 import { Button } from "flowbite-react";
 import { PlusCircle } from "lucide-react";
 import React, { useState } from "react";
@@ -18,7 +17,7 @@ const DynamicFormCreator = ({
 
   const btnText = formInfo?.length > 0 ? "Add another form" : "Create a form";
 
-  const handleSelect = (selected?: FormType) => {
+  const handleSelect = (selected?: FormType | any) => {
     if (!selected) return;
     setNewlyAdded(selected);
   };
@@ -43,12 +42,11 @@ const DynamicFormCreator = ({
         {formInfo.map((info, i) => (
           <EachForm
             key={info.title}
-            number={i + 1}
             fieldsInfo={info?.subform}
             fieldTitle={fieldTitle}
             fieldSubmitHandler={onEachSubmit}
             formSubmitHandler={onFormSubmit}
-            formInfo={{
+            info={{
               id: info.id,
               type: info.type,
               title: info?.title,
@@ -59,13 +57,12 @@ const DynamicFormCreator = ({
         ))}
         {newlyAdded && (
           <EachForm
-            number={formInfo.length + 1}
             fieldsInfo={[]}
             fieldTitle={fieldTitle}
             fieldSubmitHandler={handleSubmit}
             formSubmitHandler={onFormSubmit}
             isEdit
-            formInfo={{
+            info={{
               type: newlyAdded.type,
               title: newlyAdded?.title,
               description: newlyAdded?.description,

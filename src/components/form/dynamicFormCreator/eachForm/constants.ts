@@ -16,7 +16,7 @@ import * as z from "zod";
 
 export interface FieldType {
   type: string;
-  title?: string;
+  question?: string;
   icon?: LucideIcon;
   compulsory?: boolean;
   options?: any[];
@@ -45,7 +45,7 @@ export const fieldOptions: FieldType[] = [
   {
     type: "address",
     icon: MapPin,
-    title: "Enter company address",
+    question: "Enter company address",
   },
   {
     type: "checkbox",
@@ -54,7 +54,7 @@ export const fieldOptions: FieldType[] = [
   {
     type: "countries",
     icon: FlagIcon,
-    title: "Select operational country",
+    question: "Select operational country",
   },
   {
     type: "document template",
@@ -79,12 +79,12 @@ export const fieldOptions: FieldType[] = [
   {
     type: "phone number",
     icon: PhoneOutgoing,
-    title: "Enter your business phone number",
+    question: "Enter your business phone number",
   },
   {
     type: "promocode",
     icon: Gem,
-    title: "Enter your promo code",
+    question: "Enter your promo code",
   },
   {
     type: "multiple choice",

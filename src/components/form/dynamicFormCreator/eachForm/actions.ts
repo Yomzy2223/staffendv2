@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
-import { UseFormSetValue } from "react-hook-form";
-import { z } from "zod";
-import { FieldType, FormType } from "./constants";
+import { FormType } from "./constants";
 
-export const useFormActions = (formInfo: FormType) => {
+export const useFormActions = (formInfo?: FormType) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [type, setType] = useState("");
@@ -42,76 +40,18 @@ export const useFormActions = (formInfo: FormType) => {
     title,
     setTitle,
     description,
+    setDescription,
     type,
     setType,
     compulsory,
     setCompulsory,
-    setDescription,
     isSubmitted,
     setIsSubmitted,
     titleError,
+    setTitleError,
     descError,
     validateFields,
   };
 };
 
-export const useFormFieldActions = ({
-  fieldInfo,
-  setValue,
-}: {
-  fieldInfo: FieldType;
-  setValue: UseFormSetValue<{ [x: string]: any }>;
-}) => {
-  const [question, setQuestion] = useState("");
-  const [type, setType] = useState("");
-  const [options, setOptions] = useState<string[]>();
-  const [compulsory, setCompulsory] = useState(false);
-  const [fileName, setFileName] = useState("");
-  const [fileDescription, setFileDescription] = useState("");
-  const [fileLink, setFileLink] = useState("");
-  const [fileType, setFileType] = useState("");
-
-  useEffect(() => {
-    if (fieldInfo.title) setQuestion(fieldInfo.title);
-    if (fieldInfo.type) setType(fieldInfo.type);
-    if (fieldInfo.options) setOptions(fieldInfo.options);
-    if (fieldInfo.compulsory) setCompulsory(fieldInfo.compulsory);
-    if (fieldInfo.fileName) setFileName(fieldInfo.fileName);
-    if (fieldInfo.fileDescription)
-      setFileDescription(fieldInfo.fileDescription);
-    if (fieldInfo.fileLink) setFileLink(fieldInfo.fileLink);
-    if (fieldInfo.fileType) setFileType(fieldInfo.fileType);
-  }, [fieldInfo]);
-
-  return {
-    question,
-    type,
-    options,
-    fileName,
-    fileDescription,
-    fileLink,
-    compulsory,
-    fileType,
-  };
-};
-
-export const getDynamicFormSchema = (type?: string) => {
-  let schema: any = {
-    title: z
-      .string({ required_error: "Enter field / field title" })
-      .min(3, { message: "Must be at least 3 characters" }),
-    type: z
-      .string({ required_error: "Select type" })
-      .min(1, { message: "Select type" }),
-    compulsory: z.boolean(),
-  };
-
-  if (type === "checkbox") {
-    schema = {
-      ...schema,
-      checkbox: z.string().array().nonempty({ message: "" }),
-    };
-  }
-
-  return z.object(schema);
-};
+export type formReturnType = ReturnType<typeof useFormActions>;

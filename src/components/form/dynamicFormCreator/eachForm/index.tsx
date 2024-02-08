@@ -1,16 +1,14 @@
-import { Card, Textarea, TextInput } from "flowbite-react";
+import { Card } from "flowbite-react";
 import React, { useState } from "react";
 import Header from "./header";
 import Footer from "./footer";
 import { FieldType, FormType } from "./constants";
 import DynamicField from "./dynamicField";
 import { useFormActions } from "./actions";
-import { cn } from "@/lib/utils";
 
 const EachForm = ({
-  formInfo,
+  info,
   fieldsInfo,
-  number,
   fieldTitle,
   fieldSubmitHandler,
   formSubmitHandler,
@@ -19,22 +17,18 @@ const EachForm = ({
   const [edit, setEdit] = useState(isEdit || false);
   const [newlyAdded, setNewlyAdded] = useState<FieldType | undefined>();
 
+  const formInfo = useFormActions(info);
   const {
     title,
-    setTitle,
     description,
-    setDescription,
     type,
-    setType,
     compulsory,
-    setCompulsory,
     setIsSubmitted,
-    titleError,
-    descError,
     validateFields,
-  } = useFormActions(formInfo);
+  } = formInfo;
 
-  const submitForm = async () => {
+  // Creates form if not created yet. Updates otherwise (if form submit button).
+  const submitForm = async ({ isForm }: { isForm: boolean }) => {
     if (validateFields()) {
       const values = {
         title,
@@ -43,9 +37,9 @@ const EachForm = ({
         compulsory,
       };
 
-      if (formInfo.id)
-        await formSubmitHandler({ formId: formInfo.id || "", values });
-      else await formSubmitHandler({ values });
+      if (info.id) {
+        isForm && (await formSubmitHandler({ formId: info.id || "", values }));
+      } else await formSubmitHandler({ values });
       return true;
     }
     return false;
@@ -54,13 +48,13 @@ const EachForm = ({
   // Runs when form is submitted
   const handleFormSubmit = async () => {
     setIsSubmitted(true);
-    const res = await submitForm();
+    const res = await submitForm({ isForm: true });
     if (res) setEdit(false);
   };
 
   // Runs when each field is submitted
   const handleFieldSubmit = async (values: { [x: string]: any }) => {
-    await submitForm();
+    await submitForm({ isForm: false });
     await fieldSubmitHandler(values);
     setNewlyAdded(undefined);
   };
@@ -71,41 +65,13 @@ const EachForm = ({
 
   return (
     <Card className="shadow-none [&>div]:p-4 max-w-[500px] h-max">
-      <div className="space-y-2">
-        <Header
-          fieldTitle={fieldTitle}
-          number={number}
-          edit={edit}
-          compulsory={compulsory}
-          newlyAdded={newlyAdded}
-          setNewlyAdded={setNewlyAdded}
-          formTitle={title}
-          setTitle={setTitle}
-          titleError={titleError}
-          isForm
-        />
-        {edit ? (
-          <Textarea
-            rows={2}
-            placeholder={`Enter ${title} description`}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            helperText={<>{descError}</>}
-            color={descError && "failure"}
-            className={cn("resize-none px-2 py-1", {
-              "focus:outline-none": descError,
-            })}
-            disabled={!edit}
-          />
-        ) : (
-          <p className="text-sm text-foreground-5">{description}</p>
-        )}
-      </div>
+      <Header edit={edit} info={formInfo} />
+
       {fieldsInfo?.map((field, i) => (
         <DynamicField
-          key={field.title}
+          key={field.question}
           number={i + 1}
-          fieldInfo={field}
+          info={field}
           fieldTitle={fieldTitle}
           submitHandler={fieldSubmitHandler}
           isEdit={edit}
@@ -114,21 +80,18 @@ const EachForm = ({
       {newlyAdded && (
         <DynamicField
           number={(fieldsInfo?.length ?? 0) + 1}
-          fieldInfo={newlyAdded}
+          info={newlyAdded}
           fieldTitle={fieldTitle}
           submitHandler={handleFieldSubmit}
           isEdit={edit}
         />
       )}
       <Footer
-        compulsory={compulsory}
         edit={edit}
         setEdit={setEdit}
-        setCompulsory={setCompulsory}
         onDoneClick={handleFormSubmit}
         setNewlyAdded={setNewlyAdded}
         btnText={btnText}
-        isForm
       />
     </Card>
   );
@@ -138,8 +101,7 @@ export default EachForm;
 
 interface propType {
   fieldsInfo: FieldType[];
-  formInfo: FormType;
-  number: number;
+  info: FormType;
   fieldTitle?: string;
   fieldSubmitHandler: (values: { [x: string]: any }) => void;
   formSubmitHandler: ({

@@ -5,29 +5,28 @@ import { useForm } from "react-hook-form";
 import Header from "./header";
 import * as z from "zod";
 import Footer from "./footer";
-import { FieldType } from "./constants";
+import { FieldType } from "../constants";
 import { cn } from "@/lib/utils";
-import { getDynamicFormSchema, useFormFieldActions } from "./actions";
 import Checkbox from "./allFieldTypes/checkbox";
 import DocumentTemplate from "./allFieldTypes/documentTemplate";
 import DocumentUpload from "./allFieldTypes/documentUpload";
 import Dropdown from "./allFieldTypes/dropdown";
 import MultipleChoice from "./allFieldTypes/multipleChoice";
+import { getDynamicFieldSchema, useFormFieldActions } from "./actions";
 
 const DynamicField = ({
-  fieldInfo,
+  info,
   number,
   fieldTitle,
   submitHandler,
   isEdit,
 }: propType) => {
-  const [info, setInfo] = useState<FieldType | undefined>();
   const [edit, setEdit] = useState(isEdit || false);
-  const [compulsory, setCompulsory] = useState(fieldInfo.compulsory as boolean);
+  const [compulsory, setCompulsory] = useState(info.compulsory as boolean);
 
-  const defaultValues = { ...fieldInfo };
+  const defaultValues = { ...info };
 
-  const formSchema = getDynamicFormSchema(info?.type);
+  const formSchema = getDynamicFieldSchema(info?.type);
   type formType = z.infer<typeof formSchema>;
 
   // Form definition
@@ -43,7 +42,7 @@ const DynamicField = ({
     defaultValues,
   });
 
-  const {} = useFormFieldActions({ fieldInfo, setValue });
+  const fieldInfo = useFormFieldActions({ fieldInfo: info, setValue });
 
   // Submit handler
   function onSubmit(values: formType) {
@@ -51,25 +50,19 @@ const DynamicField = ({
     setEdit(false);
   }
 
-  const errorMsg = errors["title"]?.message;
+  const errorMsg = errors["question"]?.message;
 
   useEffect(() => {
     if (isEdit === false) setEdit(false);
   }, [isEdit]);
-
-  useEffect(() => {
-    // if (fieldInfo) setInfo(fieldInfo);
-  }, [fieldInfo]);
 
   return (
     <Card className="shadow-none [&>div]:p-4 max-w-[500px]">
       <Header
         fieldTitle={fieldTitle}
         number={number}
-        setValue={setValue}
         edit={edit}
-        compulsory={compulsory}
-        newlyAdded={info}
+        info={fieldInfo}
       />
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -77,34 +70,33 @@ const DynamicField = ({
       >
         <div>
           <TextInput
-            id="title"
+            id="question"
             type="text"
             sizing="md"
-            placeholder="Enter field title"
+            placeholder="Enter field title (name, question, etc.)"
             helperText={<>{errorMsg}</>}
             color={errors["title"] && "failure"}
             className={errorMsg ? "focus:[&_input]:outline-none" : ""}
             disabled={!edit}
-            {...register("title")}
+            {...register("question")}
           />
         </div>
         {/* Dynamic Types */}
-        {fieldInfo.type === "checkbox" && fieldInfo.options && (
-          <Checkbox options={fieldInfo.options} />
+        {info.type === "checkbox" && info.options && (
+          <Checkbox options={info.options} setValue={setValue} />
         )}
-        {fieldInfo.type === "document template" && <DocumentTemplate />}
-        {fieldInfo.type === "document upload" && <DocumentUpload />}
-        {fieldInfo.type === "dropdown" && <Dropdown />}
-        {fieldInfo.type === "multiple choice" && <MultipleChoice />}
+        {info.type === "document template" && <DocumentTemplate />}
+        {info.type === "document upload" && <DocumentUpload />}
+        {info.type === "dropdown" && <Dropdown />}
+        {info.type === "multiple choice" && <MultipleChoice />}
 
         {isEdit && (
           <Footer
-            compulsory={compulsory}
             edit={edit}
             setEdit={setEdit}
-            setCompulsory={setCompulsory}
-            setValue={setValue}
             getValues={getValues}
+            setValue={setValue}
+            info={fieldInfo}
           />
         )}
       </form>
@@ -115,7 +107,7 @@ const DynamicField = ({
 export default DynamicField;
 
 interface propType {
-  fieldInfo: FieldType;
+  info: FieldType;
   number: number;
   fieldTitle?: string;
   submitHandler: (values: { [x: string]: any }) => void;

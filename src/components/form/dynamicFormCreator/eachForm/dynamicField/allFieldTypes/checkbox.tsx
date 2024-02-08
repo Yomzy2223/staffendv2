@@ -1,8 +1,15 @@
 import { Checkbox, TextInput } from "flowbite-react";
 import { X } from "lucide-react";
 import React, { ChangeEvent, useEffect, useState } from "react";
+import { UseFormSetValue } from "react-hook-form";
 
-const CheckboxOption = ({ options }: { options: string[] }) => {
+const CheckboxOption = ({
+  options,
+  setValue,
+}: {
+  options: string[];
+  setValue: UseFormSetValue<{ [x: string]: any }>;
+}) => {
   const [list, setList] = useState<string[]>([]);
 
   useEffect(() => {

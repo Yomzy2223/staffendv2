@@ -18,8 +18,8 @@ import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 
 interface propType {
   children: ReactNode;
-  handleSelect: (selected?: FieldType | FormType) => void;
   isForm?: boolean;
+  handleSelect: (selected?: FieldType | FormType) => void;
 }
 
 const FieldTypePopUp = ({ children, handleSelect, isForm }: propType) => {

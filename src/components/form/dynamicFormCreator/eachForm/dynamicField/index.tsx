@@ -22,7 +22,6 @@ const DynamicField = ({
   isEdit,
 }: propType) => {
   const [edit, setEdit] = useState(isEdit || false);
-  const [compulsory, setCompulsory] = useState(info.compulsory as boolean);
 
   const defaultValues = { ...info };
 
@@ -82,13 +81,13 @@ const DynamicField = ({
           />
         </div>
         {/* Dynamic Types */}
-        {info.type === "checkbox" && info.options && (
-          <Checkbox options={info.options} setValue={setValue} />
+        {fieldInfo.type === "checkbox" && fieldInfo.options && (
+          <Checkbox info={fieldInfo} setValue={setValue} edit={edit} />
         )}
-        {info.type === "document template" && <DocumentTemplate />}
-        {info.type === "document upload" && <DocumentUpload />}
-        {info.type === "dropdown" && <Dropdown />}
-        {info.type === "multiple choice" && <MultipleChoice />}
+        {fieldInfo.type === "document template" && <DocumentTemplate />}
+        {fieldInfo.type === "document upload" && <DocumentUpload />}
+        {fieldInfo.type === "dropdown" && <Dropdown />}
+        {fieldInfo.type === "multiple choice" && <MultipleChoice />}
 
         {isEdit && (
           <Footer

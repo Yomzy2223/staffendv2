@@ -50,6 +50,7 @@ export const fieldOptions: FieldType[] = [
   {
     type: "checkbox",
     icon: CheckSquare,
+    options: [""],
   },
   {
     type: "countries",
@@ -129,5 +130,11 @@ export const formOptions: FormType[] = [
     title: "Title",
     compulsory: true,
     description: "Description",
+  },
+  {
+    type: "person",
+    title: "Person title",
+    compulsory: true,
+    description: "Person description",
   },
 ];

@@ -8,8 +8,9 @@ import { useSearchParams } from "next/navigation";
 import DynamicFormCreator from "../dynamicFormCreator";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import useServiceApi from "@/hooks/useServiceApi";
-import { Oval } from "react-loading-icons";
 import { FormType } from "../dynamicFormCreator/eachForm/constants";
+import { Oval } from "react-loading-icons";
+import { useServiceFormActions, useServiceInfoActions } from "./actions";
 
 const ServiceForm = ({
   open,
@@ -19,45 +20,27 @@ const ServiceForm = ({
   setOpen: (open: boolean) => void;
 }) => {
   const [section, setSection] = useState(1);
-  const { get } = useSearchParams();
   const { isDesktop } = useGlobalFucntions();
+
   const {
-    createServiceMutation,
-    updateServiceMutation,
-    useGetServiceQuery,
-    createServiceFormMutation,
-    updateServiceFormMutation,
-  } = useServiceApi();
+    isEdit,
+    serviceInfo,
+    submitServiceInfo,
+    serviceLoading,
+    serviceSuccess,
+  } = useServiceInfoActions();
 
-  const { mutate, isSuccess, isPending, isIdle, isPaused } =
-    createServiceMutation;
+  const { submitServiceForm, submitServiceFormField } = useServiceFormActions();
 
-  const serviceId = get("serviceId");
-  const isEdit = get("serviceId");
   const title1 = isEdit ? "Update Service" : "Create Service";
   const title2 = isEdit ? "Update Service Form" : "Add Service Form";
   const title = section === 1 ? title1 : title2;
 
-  const service = useGetServiceQuery(serviceId as string);
-  const serviceData = service?.data?.data?.data;
-
-  const formInfo = section === 1 ? section1FormInfo : section2FormInfo;
-
-  const loading = isPending || updateServiceMutation.isPending;
-  const success = isSuccess || updateServiceMutation.isSuccess;
+  const serviceData = serviceInfo?.data?.data?.data;
 
   useEffect(() => {
-    if (success) setSection(section + 1);
-  }, [success]);
-
-  const handleForm1Submit = async (values: serviceType) => {
-    serviceId
-      ? updateServiceMutation.mutate({
-          id: serviceId as string,
-          formInfo: values,
-        })
-      : mutate(values);
-  };
+    if (serviceSuccess) setSection(section + 1);
+  }, [serviceSuccess]);
 
   const handleBack = () => {
     if (section === 1) {
@@ -65,26 +48,6 @@ const ServiceForm = ({
       return;
     }
     setSection(section - 1);
-  };
-
-  const handleForm2Submit = async ({
-    formId,
-    values,
-  }: {
-    formId?: string;
-    values: FormType;
-  }) => {
-    formId
-      ? updateServiceFormMutation.mutate({ id: formId, formInfo: values })
-      : createServiceFormMutation.mutate({
-          serviceCategoryId: serviceId || "",
-          formInfo: values,
-        });
-    console.log(values);
-  };
-
-  const handleForm2FieldSubmit = (value: { [x: string]: any }) => {
-    console.log(value);
   };
 
   const wide = form2Info.length > 1 && section === 2 && isDesktop;
@@ -105,21 +68,21 @@ const ServiceForm = ({
         <DynamicForm
           formInfo={section1FormInfo}
           defaultValues={defaultValues}
-          formSchema={serviceSchema}
-          onFormSubmit={handleForm1Submit}
+          formSchema={serviceInfoSchema}
+          onFormSubmit={submitServiceInfo}
           className={cn("space-y-4")}
         >
           <div className="bg-white flex items-center justify-end pt-4 sticky bottom-0">
             <Button
               type="submit"
               color="primary"
-              isProcessing={loading}
-              disabled={loading}
+              isProcessing={serviceLoading}
+              disabled={serviceLoading}
               processingSpinner={
                 <Oval color="white" strokeWidth={4} className="h-5 w-5" />
               }
             >
-              {!loading && "Next"}
+              {!serviceLoading && "Next"}
             </Button>
           </div>
         </DynamicForm>
@@ -129,8 +92,8 @@ const ServiceForm = ({
         <div className="flex flex-col justify-between gap-6 flex-1">
           <DynamicFormCreator
             formInfo={form2Info}
-            onEachSubmit={handleForm2FieldSubmit}
-            onFormSubmit={handleForm2Submit}
+            onEachSubmit={submitServiceFormField}
+            onFormSubmit={submitServiceForm}
             wide
           />
           <div className="bg-white flex items-center justify-end gap-4 pt-4 sticky bottom-0">
@@ -173,40 +136,14 @@ const section1FormInfo = [
     },
   },
 ];
-
-const section2FormInfo = [
-  {
-    name: "address",
-    label: "Enter service country",
-    type: "textarea",
-    labelProp: {
-      className: "font-normal",
-    },
-    textAreaProp: {
-      placeholder: "Enter service name",
-    },
-  },
-  {
-    name: "description",
-    label: "Enter service description",
-    type: "textarea",
-    labelProp: {
-      className: "font-normal",
-    },
-    textAreaProp: {
-      placeholder: "Enter a brief description of this service",
-    },
-  },
-];
-
-const serviceSchema = z.object({
+const serviceInfoSchema = z.object({
   name: z.string().min(3, "Service name should be at least 3 characters"),
   description: z
     .string({ required_error: "Provide service description" })
     .min(20, "Kindly provide more information"),
 });
 
-type serviceType = z.infer<typeof serviceSchema>;
+export type serviceInfoType = z.infer<typeof serviceInfoSchema>;
 
 const form2Info = [
   {
@@ -218,7 +155,7 @@ const form2Info = [
     subform: [
       {
         type: "paragraph",
-        title: "Describe the please",
+        question: "Describe the please",
         compulsory: false,
       },
       {
@@ -242,22 +179,23 @@ const form2Info = [
     subform: [
       {
         type: "paragraph",
-        title: "Describe theds please",
+        question: "Describe theds please",
         compulsory: true,
       },
       {
         type: "paragraph",
-        title: "Describe the servicesd ",
+        question: "Describe the servicesd ",
         compulsory: true,
       },
       {
-        type: "paragraph",
-        title: "Describe the servicedsd ",
+        type: "checkbox",
+        question: "Describe the servicedsd ",
         compulsory: true,
+        options: ["option1", "option2"],
       },
       {
         type: "paragraph",
-        title: "Describe the serzvicesd ",
+        question: "Describe the serzvicesd ",
         compulsory: true,
       },
     ],

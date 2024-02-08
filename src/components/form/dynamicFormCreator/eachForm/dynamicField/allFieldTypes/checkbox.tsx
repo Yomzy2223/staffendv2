@@ -1,36 +1,85 @@
-import { Checkbox, TextInput } from "flowbite-react";
+import { Button, Checkbox, TextInput } from "flowbite-react";
 import { X } from "lucide-react";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, KeyboardEvent, useEffect } from "react";
 import { UseFormSetValue } from "react-hook-form";
+import { fieldReturnType } from "../actions";
 
 const CheckboxOption = ({
-  options,
+  info,
   setValue,
+  edit,
 }: {
-  options: string[];
+  info: fieldReturnType;
   setValue: UseFormSetValue<{ [x: string]: any }>;
+  edit: boolean;
 }) => {
-  const [list, setList] = useState<string[]>([]);
-
-  useEffect(() => {
-    if (options) setList(options);
-  }, [options]);
+  const { options, setOptions } = info;
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, i: number) => {
-    const value = e.target.value;
-    let listCopy = [...list];
-    listCopy.splice(i, 1, value);
-    setList(listCopy);
+    let optionCopy = [...options];
+    optionCopy[i] = e.target.value.trim();
+    setOptions(optionCopy);
+    setValue("checkbox", optionCopy);
+  };
+
+  const handleKeyDown = (
+    e: KeyboardEvent<HTMLInputElement>,
+    option: string,
+    i: number
+  ) => {
+    if (e.key === "Enter") {
+      if (options.length === i + 1 && !options.some((el) => el === "")) {
+        setOptions([...options, ""]);
+        setValue("checkbox", [...options, ""]);
+      }
+      focusElement("option" + (i + 1));
+    } else if (e.key === "Backspace" && e.target.value.length === 0) {
+      removeOption(option);
+      focusElement("option" + (i - 1));
+    }
+  };
+
+  const removeOption = (option: string) => {
+    let optionCopy = [...options];
+    if (optionCopy.length === 1) {
+      setOptions([""]);
+      setValue("checkbox", [""]);
+    } else {
+      optionCopy = optionCopy.filter((el) => el !== option);
+      if (optionCopy.length === 0) optionCopy = [""];
+      setOptions(optionCopy);
+    }
+  };
+
+  const focusElement = (id: string) => {
+    const element = document.getElementById(id);
+    element?.focus();
   };
 
   return (
-    <div>
+    <div className="space-y-3 mt-4">
       {options.map((option, i) => (
-        <div className="flex">
-          <Checkbox disabled />
-          <div className="flex justify-between">
-            <TextInput value={option} onChange={(e) => handleChange(e, i)} />
-            <X />
+        <div className="flex items-center gap-2">
+          <Checkbox disabled className="w-5 h-5" />
+          <div className="flex justify-between gap-4 w-full">
+            <TextInput
+              id={"option" + i}
+              value={option}
+              placeholder={"Enter option " + (i + 1)}
+              onChange={(e) => handleChange(e, i)}
+              onKeyDown={(e) => handleKeyDown(e, option, i)}
+              className="h-5 [&_input]:p-0 [&_input]:border-0 [&_input]:outline-none [&_input]:bg-transparent [&_input]:rounded-none focus:[&_input]:border-b [&_input]:!border-border w-full"
+              disabled={!edit}
+            />
+            {edit && (
+              <Button type="button" color="ghost" size="fit">
+                <X
+                  size={20}
+                  color="hsl(var(--foreground-5))"
+                  onClick={() => removeOption(option)}
+                />
+              </Button>
+            )}
           </div>
         </div>
       ))}

@@ -11,7 +11,7 @@ export const useFormFieldActions = ({
   setValue: UseFormSetValue<{ [x: string]: any }>;
 }) => {
   const [type, setType] = useState("");
-  const [options, setOptions] = useState<string[]>();
+  const [options, setOptions] = useState<string[]>([]);
   const [compulsory, setCompulsory] = useState(false);
   const [fileName, setFileName] = useState("");
   const [fileDescription, setFileDescription] = useState("");
@@ -60,6 +60,7 @@ export const useFormFieldActions = ({
     type,
     setType,
     options,
+    setOptions,
     fileName,
     fileDescription,
     fileLink,
@@ -86,7 +87,7 @@ export const getDynamicFieldSchema = (type?: string) => {
     schema = {
       ...schema,
       checkbox: z
-        .string()
+        .string({ required_error: "Option cannot be empty" })
         .array()
         .nonempty({ message: "Enter at least 1 option" }),
     };

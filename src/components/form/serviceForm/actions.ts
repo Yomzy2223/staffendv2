@@ -45,8 +45,11 @@ export const useServiceFormActions = () => {
   const {
     createServiceFormMutation,
     updateServiceFormMutation,
-    useGetServiceFormQuery,
+    useGetServiceFormsQuery,
+    createServiceSubFormMutation,
+    updateServiceSubFormMutation,
   } = useServiceApi();
+  const serviceFormInfo = useGetServiceFormsQuery(serviceId as string);
 
   const submitServiceForm = async ({
     formId,
@@ -55,21 +58,45 @@ export const useServiceFormActions = () => {
     formId?: string;
     values: FormType;
   }) => {
-    // formId
-    //   ? updateServiceFormMutation.mutate({ id: formId, formInfo: values })
-    //   : createServiceFormMutation.mutate({
-    //       serviceCategoryId: serviceId || "",
-    //       formInfo: values,
-    //     });
-    console.log("Submit service form", values);
+    console.log("Form created");
+    formId
+      ? updateServiceFormMutation.mutate({ id: formId, formInfo: values })
+      : createServiceFormMutation.mutate({
+          serviceCategoryId: serviceId || "",
+          formInfo: values,
+        });
+  };
+  const submitServiceFormField = ({
+    formId,
+    values,
+  }: {
+    formId?: string;
+    values: { [x: string]: any };
+  }) => {
+    if (!formId) return;
+    createServiceSubFormMutation.mutate({ formId, formInfo: values });
+    console.log("Submit service form field", formId, values);
   };
 
-  const submitServiceFormField = (value: { [x: string]: any }) => {
-    console.log("Submit service form field", value);
+  const serviceFormState = {
+    formLoading:
+      createServiceFormMutation.isPending ||
+      updateServiceFormMutation.isPending,
+    formSuccess:
+      createServiceFormMutation.isSuccess ||
+      updateServiceFormMutation.isSuccess,
+    fieldLoading:
+      createServiceSubFormMutation.isPending ||
+      updateServiceSubFormMutation.isPending,
+    fieldSuccess:
+      createServiceSubFormMutation.isSuccess ||
+      updateServiceSubFormMutation.isSuccess,
   };
 
   return {
+    serviceFormInfo,
     submitServiceForm,
     submitServiceFormField,
+    serviceFormState,
   };
 };

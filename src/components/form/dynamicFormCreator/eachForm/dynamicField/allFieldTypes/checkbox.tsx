@@ -19,7 +19,7 @@ const CheckboxOption = ({
     let optionCopy = [...options];
     optionCopy[i] = e.target.value.trim();
     setOptions(optionCopy);
-    setValue("checkbox", optionCopy);
+    setValue("options", optionCopy);
   };
 
   const handleKeyDown = (
@@ -32,7 +32,7 @@ const CheckboxOption = ({
       e.preventDefault();
       if (options.length === i + 1 && !options.some((el) => el === "")) {
         setOptions([...options, ""]);
-        setValue("checkbox", [...options, ""]);
+        setValue("options", [...options, ""]);
       }
       focusElement("option" + (i + 1));
     } else if (e.key === "Backspace" && e.currentTarget.value.length === 0) {
@@ -45,12 +45,12 @@ const CheckboxOption = ({
     let optionCopy = [...options];
     if (optionCopy.length === 1) {
       setOptions([""]);
-      setValue("checkbox", [""]);
+      setValue("options", [""]);
     } else {
       optionCopy = optionCopy.filter((el) => el !== option);
       if (optionCopy.length === 0) optionCopy = [""];
       setOptions(optionCopy);
-      setValue("checkbox", optionCopy);
+      setValue("options", optionCopy);
     }
   };
 

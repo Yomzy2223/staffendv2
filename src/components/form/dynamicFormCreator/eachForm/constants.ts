@@ -129,12 +129,12 @@ export const formOptions: FormType[] = [
     type: "form",
     title: "Title",
     compulsory: true,
-    description: "Description",
+    description: "Here is the form description",
   },
   {
     type: "person",
     title: "Person title",
     compulsory: true,
-    description: "Person description",
+    description: "Here is the form description",
   },
 ];

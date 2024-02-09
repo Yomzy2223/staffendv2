@@ -17,9 +17,12 @@ import { getDynamicFieldSchema, useFormFieldActions } from "./actions";
 const DynamicField = ({
   info,
   number,
+  formId,
   fieldTitle,
   submitHandler,
   isEdit,
+  loading,
+  success,
 }: propType) => {
   const [edit, setEdit] = useState(isEdit || false);
 
@@ -45,15 +48,16 @@ const DynamicField = ({
 
   // Submit handler
   function onSubmit(values: formType) {
-    submitHandler && submitHandler(values);
-    setEdit(false);
+    submitHandler && submitHandler({ formId, values });
+    // setEdit(false);
   }
 
   const errorMsg = errors["question"]?.message;
 
   useEffect(() => {
     if (isEdit === false) setEdit(false);
-  }, [isEdit]);
+    if (success) setEdit(false);
+  }, [isEdit, success]);
 
   return (
     <Card className="shadow-none [&>div]:p-4 max-w-[500px]">
@@ -62,6 +66,7 @@ const DynamicField = ({
         number={number}
         edit={edit}
         info={fieldInfo}
+        loading={loading}
       />
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -72,7 +77,7 @@ const DynamicField = ({
             id="question"
             type="text"
             sizing="md"
-            placeholder="Enter field title (name, question, etc.)"
+            placeholder="Enter field title (field name, question, etc.)"
             helperText={<>{errorMsg}</>}
             color={errors["title"] && "failure"}
             className={errorMsg ? "focus:[&_input]:outline-none" : ""}
@@ -96,6 +101,7 @@ const DynamicField = ({
             getValues={getValues}
             setValue={setValue}
             info={fieldInfo}
+            loading={loading}
           />
         )}
       </form>
@@ -108,9 +114,12 @@ export default DynamicField;
 interface propType {
   info: FieldType;
   number: number;
+  formId?: string;
   fieldTitle?: string;
   submitHandler: (values: { [x: string]: any }) => void;
   isEdit?: boolean;
+  loading: boolean;
+  success: boolean;
 }
 
 // const formSchema = z.object({

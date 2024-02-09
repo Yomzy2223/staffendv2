@@ -5,7 +5,7 @@ import FieldTypePopUp from "../fieldTypePopUp";
 import { MoreHorizontal } from "lucide-react";
 import { fieldReturnType } from "./actions";
 
-const Header = ({ fieldTitle, number, edit, info }: propType) => {
+const Header = ({ fieldTitle, number, edit, info, loading }: propType) => {
   const { compulsory, type, handleOptionSelect } = info;
 
   return (
@@ -27,7 +27,11 @@ const Header = ({ fieldTitle, number, edit, info }: propType) => {
           {type}
         </span>
         {edit && (
-          <FieldTypePopUp handleSelect={handleOptionSelect} isForm={false}>
+          <FieldTypePopUp
+            handleSelect={handleOptionSelect}
+            isForm={false}
+            disabled={loading}
+          >
             <Button
               size="fit"
               color="primary"
@@ -49,4 +53,5 @@ interface propType {
   number: number;
   edit: boolean;
   info: fieldReturnType;
+  loading: boolean;
 }

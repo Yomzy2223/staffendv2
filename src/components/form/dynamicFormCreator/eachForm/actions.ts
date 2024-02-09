@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FormType } from "./constants";
 
-export const useFormActions = (formInfo?: FormType) => {
+export const useFormActions = (formInfo: FormType) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [type, setType] = useState("");
@@ -31,10 +31,29 @@ export const useFormActions = (formInfo?: FormType) => {
   useEffect(() => {
     if (formInfo) {
       setTitle(formInfo.title);
+      setType(formInfo.type);
       setDescription(formInfo.description);
       setCompulsory(formInfo.compulsory);
     }
   }, [formInfo]);
+
+  const mountInfo = (info: FormType) => {
+    if (!info) return;
+    if (info.type) setType(info.type);
+    if (info.title) setTitle(info.title);
+    if (info.description) setDescription(info.description);
+    if (info.compulsory) setCompulsory(info.compulsory);
+  };
+
+  const handleOptionSelect = (selected?: FormType | any) => {
+    if (!selected) return;
+    if (selected.type === formInfo?.type) {
+      mountInfo(formInfo);
+      return;
+    }
+    console.log("Change type", selected);
+    mountInfo(selected);
+  };
 
   return {
     title,
@@ -51,6 +70,7 @@ export const useFormActions = (formInfo?: FormType) => {
     setTitleError,
     descError,
     validateFields,
+    handleOptionSelect,
   };
 };
 

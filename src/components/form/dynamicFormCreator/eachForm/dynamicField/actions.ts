@@ -104,7 +104,7 @@ export const getDynamicFieldSchema = (type?: string) => {
   if (type === "checkbox") {
     schema = {
       ...schema,
-      checkbox: z
+      options: z
         .string({ required_error: "Option cannot be empty" })
         .array()
         .nonempty({ message: "Enter at least 1 option" })

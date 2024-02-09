@@ -6,7 +6,14 @@ import { UseFormGetValues, UseFormSetValue } from "react-hook-form";
 import { FieldType } from "../constants";
 import { fieldReturnType } from "./actions";
 
-const Footer = ({ edit, setEdit, getValues, setValue, info }: propType) => {
+const Footer = ({
+  edit,
+  setEdit,
+  getValues,
+  setValue,
+  info,
+  loading,
+}: propType) => {
   const { compulsory, setCompulsory, cancelChanges } = info;
 
   const onCheckToggle = () => {
@@ -40,6 +47,7 @@ const Footer = ({ edit, setEdit, getValues, setValue, info }: propType) => {
             size="fit"
             className="text-primary"
             onClick={cancelChanges}
+            disabled={loading}
           >
             Cancel
           </Button>
@@ -48,8 +56,9 @@ const Footer = ({ edit, setEdit, getValues, setValue, info }: propType) => {
             color="ghost"
             size="fit"
             className="underline text-primary"
+            disabled={loading}
           >
-            Done
+            Save
           </Button>
         </div>
       ) : (
@@ -79,4 +88,5 @@ interface propType {
   setValue: UseFormSetValue<{ [x: string]: any }>;
   setNewlyAdded?: Dispatch<SetStateAction<FieldType | undefined>>;
   info: fieldReturnType;
+  loading: boolean;
 }

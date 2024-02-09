@@ -8,7 +8,6 @@ import { formReturnType } from "./actions";
 const Header = ({ edit, info }: propType) => {
   const {
     type,
-    setType,
     title,
     setTitle,
     compulsory,
@@ -17,6 +16,7 @@ const Header = ({ edit, info }: propType) => {
     setDescription,
     titleError,
     descError,
+    handleOptionSelect,
   } = info;
 
   return (
@@ -54,10 +54,7 @@ const Header = ({ edit, info }: propType) => {
             {type}
           </span>
           {edit && (
-            <FieldTypePopUp
-              handleSelect={(selected) => setType(selected?.type || "")}
-              isForm
-            >
+            <FieldTypePopUp handleSelect={handleOptionSelect} isForm>
               <Button
                 size="fit"
                 color="primary"

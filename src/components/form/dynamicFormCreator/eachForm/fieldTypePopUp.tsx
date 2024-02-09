@@ -20,9 +20,15 @@ interface propType {
   children: ReactNode;
   isForm?: boolean;
   handleSelect: (selected?: FieldType | FormType) => void;
+  disabled?: boolean;
 }
 
-const FieldTypePopUp = ({ children, handleSelect, isForm }: propType) => {
+const FieldTypePopUp = ({
+  children,
+  handleSelect,
+  isForm,
+  disabled,
+}: propType) => {
   const [open, setOpen] = useState(false);
   const { isDesktop } = useGlobalFucntions();
 
@@ -30,7 +36,9 @@ const FieldTypePopUp = ({ children, handleSelect, isForm }: propType) => {
     <div>
       {isDesktop ? (
         <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild>{children}</PopoverTrigger>
+          <PopoverTrigger asChild disabled={disabled}>
+            {children}
+          </PopoverTrigger>
           <PopoverContent className="w-[200px] p-0" align="start">
             <QuestionList
               setOpen={setOpen}
@@ -41,7 +49,9 @@ const FieldTypePopUp = ({ children, handleSelect, isForm }: propType) => {
         </Popover>
       ) : (
         <Drawer open={open} onOpenChange={setOpen}>
-          <DrawerTrigger asChild>{children}</DrawerTrigger>
+          <DrawerTrigger asChild disabled={disabled}>
+            {children}
+          </DrawerTrigger>
           <DrawerContent>
             <div className="mt-4 border-t">
               <QuestionList
@@ -84,7 +94,7 @@ function QuestionList({
                 value={item.type}
                 onSelect={(value) => {
                   handleSelect(
-                    fieldOptions.find(
+                    [...options].find(
                       (each: FieldType) =>
                         each.type.toLowerCase() === value.toLowerCase()
                     )

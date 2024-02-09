@@ -11,9 +11,11 @@ const DynamicFormCreator = ({
   onEachSubmit,
   onFormSubmit,
   formInfo,
+  formState,
   wide,
 }: propType) => {
   const [newlyAdded, setNewlyAdded] = useState<FormType>();
+  const [loadingForm, setLoadingForm] = useState<number>();
 
   const btnText = formInfo?.length > 0 ? "Add another form" : "Create a form";
 
@@ -42,10 +44,14 @@ const DynamicFormCreator = ({
         {formInfo.map((info, i) => (
           <EachForm
             key={info.title}
+            number={i + 1}
             fieldsInfo={info?.subform}
             fieldTitle={fieldTitle}
             fieldSubmitHandler={onEachSubmit}
-            formSubmitHandler={onFormSubmit}
+            formSubmitHandler={({ formId, values }) => {
+              setLoadingForm(i + 1);
+              onFormSubmit({ formId, values });
+            }}
             info={{
               id: info.id,
               type: info.type,
@@ -53,14 +59,20 @@ const DynamicFormCreator = ({
               description: info?.description,
               compulsory: info?.compulsory,
             }}
+            formState={formState}
+            loadingForm={loadingForm}
           />
         ))}
         {newlyAdded && (
           <EachForm
+            number={(formInfo?.length ?? 0) + 1}
             fieldsInfo={[]}
             fieldTitle={fieldTitle}
             fieldSubmitHandler={handleSubmit}
-            formSubmitHandler={onFormSubmit}
+            formSubmitHandler={({ formId, values }) => {
+              setLoadingForm((formInfo?.length ?? 0) + 1);
+              onFormSubmit({ formId, values });
+            }}
             isEdit
             info={{
               type: newlyAdded.type,
@@ -68,6 +80,8 @@ const DynamicFormCreator = ({
               description: newlyAdded?.description,
               compulsory: newlyAdded?.compulsory,
             }}
+            formState={formState}
+            loadingForm={loadingForm}
           />
         )}
       </Masonry>
@@ -89,12 +103,18 @@ interface propType {
   onEachSubmit: (values: any) => void;
   onFormSubmit: (values: any) => void;
   formInfo: {
-    id: string;
+    id?: string;
     type: string;
     title: string;
     description: string;
     compulsory: boolean;
     subform: FieldType[];
   }[];
+  formState: {
+    formLoading: boolean;
+    formSuccess: boolean;
+    fieldLoading: boolean;
+    fieldSuccess: boolean;
+  };
   wide?: boolean;
 }

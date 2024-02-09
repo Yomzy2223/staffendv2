@@ -11,6 +11,7 @@ const Footer = ({
   onDoneClick,
   setNewlyAdded,
   btnText,
+  loading,
 }: propType) => {
   const handleSelect = (selected?: FieldType) => {
     if (!selected) return;
@@ -34,15 +35,27 @@ const Footer = ({
       )}
 
       {edit ? (
-        <Button
-          type="submit"
-          color="ghost"
-          size="fit"
-          className="underline text-primary"
-          onClick={onDoneClick}
-        >
-          Done
-        </Button>
+        <div className="flex gap-4">
+          <Button
+            type="button"
+            color="ghost"
+            size="fit"
+            className="text-primary"
+            disabled={loading}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            color="ghost"
+            size="fit"
+            className="underline text-primary"
+            onClick={onDoneClick}
+            disabled={loading}
+          >
+            Done
+          </Button>
+        </div>
       ) : (
         <div className="flex gap-4">
           <Button type="button" color="ghost" size="fit">
@@ -69,4 +82,5 @@ interface propType {
   onDoneClick?: MouseEventHandler<HTMLButtonElement>;
   setNewlyAdded: Dispatch<SetStateAction<FieldType | undefined>>;
   btnText?: string;
+  loading: boolean;
 }

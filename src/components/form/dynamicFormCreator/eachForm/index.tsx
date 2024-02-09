@@ -1,5 +1,5 @@
 import { Card } from "flowbite-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "./header";
 import Footer from "./footer";
 import { FieldType, FormType } from "./constants";
@@ -7,15 +7,19 @@ import DynamicField from "./dynamicField";
 import { useFormActions } from "./actions";
 
 const EachForm = ({
+  number,
   info,
   fieldsInfo,
   fieldTitle,
   fieldSubmitHandler,
   formSubmitHandler,
   isEdit,
+  formState,
+  loadingForm,
 }: propType) => {
   const [edit, setEdit] = useState(isEdit || false);
   const [newlyAdded, setNewlyAdded] = useState<FieldType | undefined>();
+  const [loadingField, setLoadingField] = useState<number>();
 
   const formInfo = useFormActions(info);
   const {
@@ -26,6 +30,7 @@ const EachForm = ({
     setIsSubmitted,
     validateFields,
   } = formInfo;
+  const { formLoading, formSuccess, fieldLoading, fieldSuccess } = formState;
 
   // Creates form if not created yet. Updates otherwise (if form submit button).
   const submitForm = async ({ isForm }: { isForm: boolean }) => {
@@ -49,15 +54,20 @@ const EachForm = ({
   const handleFormSubmit = async () => {
     setIsSubmitted(true);
     const res = await submitForm({ isForm: true });
-    if (res) setEdit(false);
+    // if (res) setEdit(false);
   };
 
   // Runs when each field is submitted
   const handleFieldSubmit = async (values: { [x: string]: any }) => {
+    setLoadingField((fieldsInfo?.length ?? 0) + 1);
     await submitForm({ isForm: false });
-    await fieldSubmitHandler(values);
+    await fieldSubmitHandler({ formId: info.id || "", values });
     setNewlyAdded(undefined);
   };
+
+  useEffect(() => {
+    if (formSuccess && loadingForm === number) setEdit(false);
+  }, [isEdit]);
 
   const btnText =
     (fieldsInfo?.length > 0 || newlyAdded ? "Add another " : "Create a ") +
@@ -71,10 +81,16 @@ const EachForm = ({
         <DynamicField
           key={field.question}
           number={i + 1}
+          formId={info.id}
           info={field}
           fieldTitle={fieldTitle}
-          submitHandler={fieldSubmitHandler}
+          submitHandler={(values) => {
+            setLoadingField(i + 1);
+            fieldSubmitHandler({ formId: info.id, values });
+          }}
           isEdit={edit}
+          loading={fieldLoading && loadingField === i + 1}
+          success={fieldSuccess && loadingField === i + 1}
         />
       ))}
       {newlyAdded && (
@@ -84,6 +100,12 @@ const EachForm = ({
           fieldTitle={fieldTitle}
           submitHandler={handleFieldSubmit}
           isEdit={edit}
+          loading={
+            fieldLoading && loadingField === (fieldsInfo?.length ?? 0) + 1
+          }
+          success={
+            fieldSuccess && loadingField === (fieldsInfo?.length ?? 0) + 1
+          }
         />
       )}
       <Footer
@@ -92,6 +114,7 @@ const EachForm = ({
         onDoneClick={handleFormSubmit}
         setNewlyAdded={setNewlyAdded}
         btnText={btnText}
+        loading={formLoading && loadingForm === number}
       />
     </Card>
   );
@@ -100,6 +123,7 @@ const EachForm = ({
 export default EachForm;
 
 interface propType {
+  number: number;
   fieldsInfo: FieldType[];
   info: FormType;
   fieldTitle?: string;
@@ -112,4 +136,11 @@ interface propType {
     values: FormType;
   }) => void;
   isEdit?: boolean;
+  formState: {
+    formLoading: boolean;
+    formSuccess: boolean;
+    fieldLoading: boolean;
+    fieldSuccess: boolean;
+  };
+  loadingForm?: number;
 }

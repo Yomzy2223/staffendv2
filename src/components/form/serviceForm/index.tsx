@@ -27,13 +27,19 @@ const ServiceForm = ({
     serviceSuccess,
   } = useServiceInfoActions();
 
-  const { submitServiceForm, submitServiceFormField } = useServiceFormActions();
+  const {
+    serviceFormInfo,
+    submitServiceForm,
+    submitServiceFormField,
+    serviceFormState,
+  } = useServiceFormActions();
 
   const title1 = isEdit ? "Update Service" : "Create Service";
   const title2 = isEdit ? "Update Service Form" : "Add Service Form";
   const title = section === 1 ? title1 : title2;
 
   const serviceData = serviceInfo?.data?.data?.data;
+  const serviceFormData = serviceFormInfo?.data?.data?.data;
 
   useEffect(() => {
     if (serviceSuccess) setSection(section + 1);
@@ -47,6 +53,7 @@ const ServiceForm = ({
     setSection(section - 1);
   };
 
+  console.log(serviceFormData);
   const wide = form2Info.length > 1 && section === 2 && isDesktop;
 
   const defaultValues = {
@@ -91,6 +98,7 @@ const ServiceForm = ({
             formInfo={form2Info}
             onEachSubmit={submitServiceFormField}
             onFormSubmit={submitServiceForm}
+            formState={serviceFormState}
             wide
           />
           <div className="bg-white flex items-center justify-end gap-4 pt-4 sticky bottom-0">
@@ -168,7 +176,6 @@ const form2Info = [
     ],
   },
   {
-    id: "jof0oewajisfo4984wjf",
     type: "person",
     title: "Describe thed pleases",
     description: "some description to do here",

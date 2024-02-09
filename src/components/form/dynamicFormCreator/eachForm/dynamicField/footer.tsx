@@ -7,7 +7,7 @@ import { FieldType } from "../constants";
 import { fieldReturnType } from "./actions";
 
 const Footer = ({ edit, setEdit, getValues, setValue, info }: propType) => {
-  const { compulsory, setCompulsory } = info;
+  const { compulsory, setCompulsory, cancelChanges } = info;
 
   const onCheckToggle = () => {
     setCompulsory(!compulsory);
@@ -33,14 +33,25 @@ const Footer = ({ edit, setEdit, getValues, setValue, info }: propType) => {
         </div>
       )}
       {edit ? (
-        <Button
-          type="submit"
-          color="ghost"
-          size="fit"
-          className="underline text-primary"
-        >
-          Done
-        </Button>
+        <div className="flex gap-4">
+          <Button
+            type="button"
+            color="ghost"
+            size="fit"
+            className="text-primary"
+            onClick={cancelChanges}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            color="ghost"
+            size="fit"
+            className="underline text-primary"
+          >
+            Done
+          </Button>
+        </div>
       ) : (
         <div className="flex gap-4">
           <Button type="button" color="ghost" size="fit">

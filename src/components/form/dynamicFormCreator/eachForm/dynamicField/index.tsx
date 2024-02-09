@@ -41,7 +41,7 @@ const DynamicField = ({
     defaultValues,
   });
 
-  const fieldInfo = useFormFieldActions({ fieldInfo: info, setValue });
+  const fieldInfo = useFormFieldActions({ fieldInfo: info, setValue, setEdit });
 
   // Submit handler
   function onSubmit(values: formType) {

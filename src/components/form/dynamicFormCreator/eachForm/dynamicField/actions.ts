@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { UseFormSetValue } from "react-hook-form";
 import { FieldType } from "../constants";
 import { z } from "zod";
@@ -6,9 +6,11 @@ import { z } from "zod";
 export const useFormFieldActions = ({
   fieldInfo,
   setValue,
+  setEdit,
 }: {
   fieldInfo: FieldType;
   setValue: UseFormSetValue<{ [x: string]: any }>;
+  setEdit: Dispatch<SetStateAction<boolean>>;
 }) => {
   const [type, setType] = useState("");
   const [options, setOptions] = useState<string[]>([]);
@@ -56,6 +58,20 @@ export const useFormFieldActions = ({
     mountInfo(fieldInfo);
   }, [fieldInfo]);
 
+  const handleOptionSelect = (selected?: FieldType) => {
+    if (!selected) return;
+    if (selected.type === fieldInfo.type) {
+      mountInfo(fieldInfo);
+      return;
+    }
+    mountInfo(selected);
+  };
+
+  const cancelChanges = () => {
+    mountInfo(fieldInfo);
+    setEdit(false);
+  };
+
   return {
     type,
     setType,
@@ -68,6 +84,8 @@ export const useFormFieldActions = ({
     setCompulsory,
     fileType,
     mountInfo,
+    cancelChanges,
+    handleOptionSelect,
   };
 };
 export type fieldReturnType = ReturnType<typeof useFormFieldActions>;
@@ -89,7 +107,13 @@ export const getDynamicFieldSchema = (type?: string) => {
       checkbox: z
         .string({ required_error: "Option cannot be empty" })
         .array()
-        .nonempty({ message: "Enter at least 1 option" }),
+        .nonempty({ message: "Enter at least 1 option" })
+        .refine(
+          (options) => {
+            return !options.some((el) => el.trim() === "");
+          },
+          { message: "Option cannot be empty" }
+        ),
     };
   }
 

@@ -6,16 +6,7 @@ import { MoreHorizontal } from "lucide-react";
 import { fieldReturnType } from "./actions";
 
 const Header = ({ fieldTitle, number, edit, info }: propType) => {
-  const { compulsory, type, mountInfo } = info;
-
-  const handleSelect = (selected?: FieldType) => {
-    if (!selected) return;
-    if (selected.type === info.type) {
-      mountInfo(info);
-      return;
-    }
-    mountInfo(selected);
-  };
+  const { compulsory, type, handleOptionSelect } = info;
 
   return (
     <div className="flex justify-between items-center gap-6">
@@ -36,7 +27,7 @@ const Header = ({ fieldTitle, number, edit, info }: propType) => {
           {type}
         </span>
         {edit && (
-          <FieldTypePopUp handleSelect={handleSelect} isForm={false}>
+          <FieldTypePopUp handleSelect={handleOptionSelect} isForm={false}>
             <Button
               size="fit"
               color="primary"

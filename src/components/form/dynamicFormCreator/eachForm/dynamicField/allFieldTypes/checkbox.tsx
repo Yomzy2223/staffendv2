@@ -28,12 +28,14 @@ const CheckboxOption = ({
     i: number
   ) => {
     if (e.key === "Enter") {
+      console.log("skljfsad");
+      e.preventDefault();
       if (options.length === i + 1 && !options.some((el) => el === "")) {
         setOptions([...options, ""]);
         setValue("checkbox", [...options, ""]);
       }
       focusElement("option" + (i + 1));
-    } else if (e.key === "Backspace" && e.target.value.length === 0) {
+    } else if (e.key === "Backspace" && e.currentTarget.value.length === 0) {
       removeOption(option);
       focusElement("option" + (i - 1));
     }
@@ -48,6 +50,7 @@ const CheckboxOption = ({
       optionCopy = optionCopy.filter((el) => el !== option);
       if (optionCopy.length === 0) optionCopy = [""];
       setOptions(optionCopy);
+      setValue("checkbox", optionCopy);
     }
   };
 
@@ -57,13 +60,14 @@ const CheckboxOption = ({
   };
 
   return (
-    <div className="space-y-3 mt-4">
+    <div className="space-y-3 mt-4 max-h-52 pb-1 overflow-y-auto">
       {options.map((option, i) => (
-        <div className="flex items-center gap-2">
+        <div key={i} className="flex items-center gap-2">
           <Checkbox disabled className="w-5 h-5" />
           <div className="flex justify-between gap-4 w-full">
             <TextInput
               id={"option" + i}
+              type="text"
               value={option}
               placeholder={"Enter option " + (i + 1)}
               onChange={(e) => handleChange(e, i)}

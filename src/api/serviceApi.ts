@@ -5,14 +5,14 @@ interface serviceType {
   description: string;
 }
 
-interface serviceFormType {
+export interface serviceFormType {
   title: string;
   description: string;
   type: string;
   compulsory: boolean;
 }
 
-interface serviceSubFormType {
+export interface serviceSubFormType {
   question: string;
   type: string;
   options?: string[];

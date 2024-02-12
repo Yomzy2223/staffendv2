@@ -1,6 +1,6 @@
 import { Button } from "flowbite-react";
 import { PlusCircle } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Masonry from "react-masonry-css";
 import EachForm from "./eachForm";
 import { FieldType, FormType } from "./eachForm/constants";
@@ -24,10 +24,14 @@ const DynamicFormCreator = ({
     setNewlyAdded(selected);
   };
 
-  const handleSubmit = async (values: { [x: string]: any }) => {
-    await onEachSubmit(values);
-    setNewlyAdded(undefined);
+  const handleSubmit = (values: { [x: string]: any }) => {
+    onEachSubmit(values);
+    // setNewlyAdded(undefined);
   };
+
+  // useEffect(() => {
+  //   if (formState.formSuccess) setNewlyAdded(undefined);
+  // }, [formState.formSuccess]);
 
   const breakpointColumnsObj = {
     default: wide ? 2 : 1,
@@ -80,7 +84,11 @@ const DynamicFormCreator = ({
         )}
       </Masonry>
 
-      <FieldTypePopUp handleSelect={handleSelect} isForm>
+      <FieldTypePopUp
+        handleSelect={handleSelect}
+        isForm
+        disabled={formState.formLoading}
+      >
         <Button color="ghost" size="fit" className="my-4 text-foreground-5">
           <PlusCircle size={20} />
           {btnText}

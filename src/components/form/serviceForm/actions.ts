@@ -1,3 +1,4 @@
+import { serviceFormType, serviceSubFormType } from "@/api/serviceApi";
 import useServiceApi from "@/hooks/useServiceApi";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
@@ -51,13 +52,7 @@ export const useServiceFormActions = () => {
   } = useServiceApi();
   const serviceFormInfo = useGetServiceFormsQuery(serviceId as string);
 
-  const submitServiceForm = async ({
-    formId,
-    values,
-  }: {
-    formId?: string;
-    values: FormType;
-  }) => {
+  const submitServiceForm = async ({ formId, values }: serviceFormArgType) => {
     console.log("Form created");
     formId
       ? updateServiceFormMutation.mutate({ id: formId, formInfo: values })
@@ -66,19 +61,46 @@ export const useServiceFormActions = () => {
           formInfo: values,
         });
   };
+
   const submitServiceFormField = ({
     formId,
+    formValues,
+    fieldId,
     values,
-  }: {
-    formId?: string;
-    values: any;
-  }) => {
-    console.log(values, formId);
-    if (!formId) return;
-    formId
-      ? updateServiceFormMutation.mutate({ id, formInfo: values })
-      : createServiceSubFormMutation.mutate({ formId, formInfo: values });
-    console.log("Submit service form field", formId, values);
+  }: serviceSubFormArgType) => {
+    // console.log(values, formId);
+    // if (!formId) return;
+    const submitField = (formId: string) => {
+      fieldId
+        ? updateServiceSubFormMutation.mutate({
+            id: fieldId,
+            formInfo: values,
+          })
+        : createServiceSubFormMutation.mutate({ formId, formInfo: values });
+    };
+
+    if (formId) {
+      submitField(formId);
+    } else {
+      createServiceFormMutation.mutate(
+        {
+          serviceCategoryId: serviceId || "",
+          formInfo: formValues,
+        },
+        {
+          onSuccess: (data) => {
+            const formId = data.data.data.data.formId;
+            console.log(formId, data);
+            submitField(formId);
+          },
+        }
+      );
+    }
+
+    // formId
+    //   ? updateServiceFormMutation.mutate({ id, formInfo: values }, {})
+    //   : createServiceSubFormMutation.mutate({ formId, formInfo: values });
+    // console.log("Submit service form field", formId, values);
   };
 
   const serviceFormState = {
@@ -103,3 +125,15 @@ export const useServiceFormActions = () => {
     serviceFormState,
   };
 };
+
+export interface serviceSubFormArgType {
+  formId?: string;
+  formValues: serviceFormType;
+  fieldId?: string;
+  values: { [x: string]: any };
+}
+
+export interface serviceFormArgType {
+  formId?: string;
+  values: FormType;
+}

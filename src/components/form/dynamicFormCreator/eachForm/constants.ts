@@ -15,6 +15,7 @@ import {
 import * as z from "zod";
 
 export interface FieldType {
+  id?: string;
   type: string;
   question?: string;
   icon?: LucideIcon;

@@ -5,6 +5,7 @@ import Footer from "./footer";
 import { FieldType, FormType } from "./constants";
 import DynamicField from "./dynamicField";
 import { useFormActions } from "./actions";
+import { serviceSubFormArgType } from "../../serviceForm/actions";
 
 const EachForm = ({
   number,
@@ -33,41 +34,41 @@ const EachForm = ({
     validateFields,
   } = formInfo;
 
-  // Creates form if not created yet. Updates otherwise (if form submit button).
-  const submitForm = ({ isForm }: { isForm: boolean }) => {
-    if (validateFields()) {
-      const values = {
-        title,
-        description,
-        type,
-        compulsory,
-      };
-
-      if (info.id) {
-        isForm && formSubmitHandler({ formId: info.id || "", values });
-      } else formSubmitHandler({ values });
-      return true;
-    }
-    return false;
+  const formValues = {
+    title,
+    description,
+    type,
+    compulsory,
   };
 
   // Runs when form is submitted
   const handleFormSubmit = () => {
     setIsSubmitted(true);
-    submitForm({ isForm: true });
+    if (validateFields()) {
+      if (info.id) {
+        formSubmitHandler({ formId: info.id || "", values: formValues });
+      } else formSubmitHandler({ values: formValues });
+      return true;
+    }
   };
 
   // Runs when each field is submitted
   const handleFieldSubmit = ({
     number,
     values,
+    id,
   }: {
     number: number;
     values: { [x: string]: any };
+    id?: string;
   }) => {
     setLoadingField(number);
-    submitForm({ isForm: false });
-    fieldSubmitHandler({ formId: info.id || "", values });
+    fieldSubmitHandler({
+      formId: info.id || "",
+      formValues,
+      fieldId: id,
+      values,
+    });
     setNewlyAdded(undefined);
   };
 
@@ -91,7 +92,7 @@ const EachForm = ({
           info={field}
           fieldTitle={fieldTitle}
           submitHandler={(values) =>
-            handleFieldSubmit({ number: i + 1, values })
+            handleFieldSubmit({ number: i + 1, values, id: field.id })
           }
           isEdit={edit}
           loading={fieldLoading && loadingField === i + 1}
@@ -130,7 +131,12 @@ interface propType {
   fieldsInfo: FieldType[];
   info: FormType;
   fieldTitle?: string;
-  fieldSubmitHandler: (values: { [x: string]: any }) => void;
+  fieldSubmitHandler: ({
+    formId,
+    formValues,
+    fieldId,
+    values,
+  }: serviceSubFormArgType) => void;
   formSubmitHandler: ({
     formId,
     values,

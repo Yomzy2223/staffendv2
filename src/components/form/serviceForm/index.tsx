@@ -40,7 +40,7 @@ const ServiceForm = ({
 
   const serviceData = serviceInfo?.data?.data?.data;
   const serviceFormData = serviceFormInfo?.data?.data?.data;
-  console.log(serviceFormData);
+  // console.log(serviceFormData);
 
   useEffect(() => {
     if (serviceSuccess) setSection(section + 1);

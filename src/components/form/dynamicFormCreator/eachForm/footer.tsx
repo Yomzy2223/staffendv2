@@ -12,6 +12,7 @@ const Footer = ({
   setNewlyAdded,
   btnText,
   loading,
+  cancelChanges,
 }: propType) => {
   const handleSelect = (selected?: FieldType) => {
     if (!selected) return;
@@ -42,7 +43,7 @@ const Footer = ({
             size="fit"
             className="text-primary"
             disabled={loading}
-            onClick={() => setEdit(false)}
+            onClick={cancelChanges}
           >
             Cancel
           </Button>
@@ -84,4 +85,5 @@ interface propType {
   setNewlyAdded: Dispatch<SetStateAction<FieldType | undefined>>;
   btnText?: string;
   loading: boolean;
+  cancelChanges: () => void;
 }

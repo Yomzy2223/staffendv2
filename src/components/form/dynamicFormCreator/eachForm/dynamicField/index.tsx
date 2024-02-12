@@ -86,7 +86,12 @@ const DynamicField = ({
         </div>
         {/* Dynamic Types */}
         {fieldInfo.type === "checkbox" && fieldInfo.options && (
-          <Checkbox info={fieldInfo} setValue={setValue} edit={edit} />
+          <Checkbox
+            info={fieldInfo}
+            setValue={setValue}
+            edit={edit}
+            error={errors["options"]}
+          />
         )}
         {fieldInfo.type === "document template" && <DocumentTemplate />}
         {fieldInfo.type === "document upload" && <DocumentUpload />}

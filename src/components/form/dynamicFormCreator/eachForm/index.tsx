@@ -24,7 +24,7 @@ const EachForm = ({
 
   const { formLoading, formSuccess, fieldLoading, fieldSuccess } = formState;
 
-  const formInfo = useFormActions({ formInfo: info, formLoading });
+  const formInfo = useFormActions({ formInfo: info, formLoading, setEdit });
   const {
     title,
     description,
@@ -32,6 +32,7 @@ const EachForm = ({
     compulsory,
     setIsSubmitted,
     validateFields,
+    cancelChanges,
   } = formInfo;
 
   const formValues = {
@@ -119,6 +120,7 @@ const EachForm = ({
         setNewlyAdded={setNewlyAdded}
         btnText={btnText}
         loading={formLoading && loadingForm === number}
+        cancelChanges={cancelChanges}
       />
     </Card>
   );

@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { FormType } from "./constants";
 
 export const useFormActions = ({
   formInfo,
   formLoading,
+  setEdit,
 }: {
   formInfo: FormType;
   formLoading: boolean;
+  setEdit: Dispatch<SetStateAction<boolean>>;
 }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -54,8 +56,12 @@ export const useFormActions = ({
       mountInfo(formInfo);
       return;
     }
-    console.log("Change type", selected);
     mountInfo(selected);
+  };
+
+  const cancelChanges = () => {
+    mountInfo(formInfo);
+    setEdit(false);
   };
 
   return {
@@ -74,6 +80,7 @@ export const useFormActions = ({
     descError,
     validateFields,
     handleOptionSelect,
+    cancelChanges,
   };
 };
 

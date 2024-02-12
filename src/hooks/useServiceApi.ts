@@ -130,7 +130,7 @@ const useServiceApi = () => {
     },
     onSuccess(data, variables, context) {
       handleSuccess({ data });
-      queryClient.invalidateQueries({ queryKey: ["Service SubForm"] });
+      queryClient.invalidateQueries({ queryKey: ["Service Form"] });
     },
     retry: 3,
   });
@@ -142,7 +142,7 @@ const useServiceApi = () => {
     },
     onSuccess(data, variables, context) {
       handleSuccess({ data });
-      queryClient.invalidateQueries({ queryKey: ["Service SubForm"] });
+      queryClient.invalidateQueries({ queryKey: ["Service Form"] });
     },
     retry: 3,
   });
@@ -154,21 +154,21 @@ const useServiceApi = () => {
     },
     onSuccess(data, variables, context) {
       handleSuccess({ data });
-      queryClient.invalidateQueries({ queryKey: ["Service SubForm"] });
+      queryClient.invalidateQueries({ queryKey: ["Service Form"] });
     },
     retry: 3,
   });
 
   const useGetServiceSubFormQuery = (id: string) =>
     useQuery({
-      queryKey: ["Service SubForm", id],
+      queryKey: ["Service Form", id],
       queryFn: ({ queryKey }) => getServiceSubForm(queryKey[1]),
       enabled: id ? true : false,
     });
 
   const useGetServiceSubFormsQuery = (serviceCategoryId: string) =>
     useQuery({
-      queryKey: ["Service SubForm", serviceCategoryId],
+      queryKey: ["Service Form", serviceCategoryId],
       queryFn: ({ queryKey }) => getServiceSubForms(queryKey[1]),
       enabled: serviceCategoryId ? true : false,
     });

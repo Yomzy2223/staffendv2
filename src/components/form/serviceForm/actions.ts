@@ -68,15 +68,16 @@ export const useServiceFormActions = () => {
     fieldId,
     values,
   }: serviceSubFormArgType) => {
-    // console.log(values, formId);
-    // if (!formId) return;
     const submitField = (formId: string) => {
       fieldId
         ? updateServiceSubFormMutation.mutate({
             id: fieldId,
-            formInfo: values,
+            formInfo: values as serviceSubFormType,
           })
-        : createServiceSubFormMutation.mutate({ formId, formInfo: values });
+        : createServiceSubFormMutation.mutate({
+            formId,
+            formInfo: values as serviceSubFormType,
+          });
     };
 
     if (formId) {
@@ -89,18 +90,13 @@ export const useServiceFormActions = () => {
         },
         {
           onSuccess: (data) => {
-            const formId = data.data.data.data.formId;
+            const formId = data.data.data.id;
             console.log(formId, data);
             submitField(formId);
           },
         }
       );
     }
-
-    // formId
-    //   ? updateServiceFormMutation.mutate({ id, formInfo: values }, {})
-    //   : createServiceSubFormMutation.mutate({ formId, formInfo: values });
-    // console.log("Submit service form field", formId, values);
   };
 
   const serviceFormState = {

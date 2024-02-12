@@ -21,7 +21,9 @@ const EachForm = ({
   const [newlyAdded, setNewlyAdded] = useState<FieldType | undefined>();
   const [loadingField, setLoadingField] = useState<number>();
 
-  const formInfo = useFormActions(info);
+  const { formLoading, formSuccess, fieldLoading, fieldSuccess } = formState;
+
+  const formInfo = useFormActions({ formInfo: info, formLoading });
   const {
     title,
     description,
@@ -30,10 +32,9 @@ const EachForm = ({
     setIsSubmitted,
     validateFields,
   } = formInfo;
-  const { formLoading, formSuccess, fieldLoading, fieldSuccess } = formState;
 
   // Creates form if not created yet. Updates otherwise (if form submit button).
-  const submitForm = async ({ isForm }: { isForm: boolean }) => {
+  const submitForm = ({ isForm }: { isForm: boolean }) => {
     if (validateFields()) {
       const values = {
         title,
@@ -43,35 +44,41 @@ const EachForm = ({
       };
 
       if (info.id) {
-        isForm && (await formSubmitHandler({ formId: info.id || "", values }));
-      } else await formSubmitHandler({ values });
+        isForm && formSubmitHandler({ formId: info.id || "", values });
+      } else formSubmitHandler({ values });
       return true;
     }
     return false;
   };
 
   // Runs when form is submitted
-  const handleFormSubmit = async () => {
+  const handleFormSubmit = () => {
     setIsSubmitted(true);
-    const res = await submitForm({ isForm: true });
-    // if (res) setEdit(false);
+    submitForm({ isForm: true });
   };
 
   // Runs when each field is submitted
-  const handleFieldSubmit = async (values: { [x: string]: any }) => {
-    setLoadingField((fieldsInfo?.length ?? 0) + 1);
-    await submitForm({ isForm: false });
-    await fieldSubmitHandler({ formId: info.id || "", values });
+  const handleFieldSubmit = ({
+    number,
+    values,
+  }: {
+    number: number;
+    values: { [x: string]: any };
+  }) => {
+    setLoadingField(number);
+    submitForm({ isForm: false });
+    fieldSubmitHandler({ formId: info.id || "", values });
     setNewlyAdded(undefined);
   };
 
   useEffect(() => {
     if (formSuccess && loadingForm === number) setEdit(false);
-  }, [isEdit]);
+  }, [formSuccess, loadingForm]);
 
   const btnText =
     (fieldsInfo?.length > 0 || newlyAdded ? "Add another " : "Create a ") +
     (fieldTitle || "field");
+  const lastField = (fieldsInfo?.length ?? 0) + 1;
 
   return (
     <Card className="shadow-none [&>div]:p-4 max-w-[500px] h-max">
@@ -79,15 +86,13 @@ const EachForm = ({
 
       {fieldsInfo?.map((field, i) => (
         <DynamicField
-          key={field.question}
+          key={field.question + i.toString()}
           number={i + 1}
-          formId={info.id}
           info={field}
           fieldTitle={fieldTitle}
-          submitHandler={(values) => {
-            setLoadingField(i + 1);
-            fieldSubmitHandler({ formId: info.id, values });
-          }}
+          submitHandler={(values) =>
+            handleFieldSubmit({ number: i + 1, values })
+          }
           isEdit={edit}
           loading={fieldLoading && loadingField === i + 1}
           success={fieldSuccess && loadingField === i + 1}
@@ -98,14 +103,12 @@ const EachForm = ({
           number={(fieldsInfo?.length ?? 0) + 1}
           info={newlyAdded}
           fieldTitle={fieldTitle}
-          submitHandler={handleFieldSubmit}
+          submitHandler={(values) =>
+            handleFieldSubmit({ number: lastField, values })
+          }
           isEdit={edit}
-          loading={
-            fieldLoading && loadingField === (fieldsInfo?.length ?? 0) + 1
-          }
-          success={
-            fieldSuccess && loadingField === (fieldsInfo?.length ?? 0) + 1
-          }
+          loading={fieldLoading && loadingField === lastField}
+          success={fieldSuccess && loadingField === lastField}
         />
       )}
       <Footer

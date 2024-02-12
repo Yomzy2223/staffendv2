@@ -43,22 +43,16 @@ const DynamicFormCreator = ({
       >
         {formInfo.map((info, i) => (
           <EachForm
-            key={info.title}
+            key={info.title + i}
             number={i + 1}
-            fieldsInfo={info?.subform}
+            fieldsInfo={info?.subForm}
             fieldTitle={fieldTitle}
             fieldSubmitHandler={onEachSubmit}
             formSubmitHandler={({ formId, values }) => {
               setLoadingForm(i + 1);
               onFormSubmit({ formId, values });
             }}
-            info={{
-              id: info.id,
-              type: info.type,
-              title: info?.title,
-              description: info?.description,
-              compulsory: info?.compulsory,
-            }}
+            info={info}
             formState={formState}
             loadingForm={loadingForm}
           />
@@ -108,7 +102,7 @@ interface propType {
     title: string;
     description: string;
     compulsory: boolean;
-    subform: FieldType[];
+    subForm: FieldType[];
   }[];
   formState: {
     formLoading: boolean;

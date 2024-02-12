@@ -17,7 +17,6 @@ import { getDynamicFieldSchema, useFormFieldActions } from "./actions";
 const DynamicField = ({
   info,
   number,
-  formId,
   fieldTitle,
   submitHandler,
   isEdit,
@@ -48,7 +47,7 @@ const DynamicField = ({
 
   // Submit handler
   function onSubmit(values: formType) {
-    submitHandler && submitHandler({ formId, values });
+    submitHandler(values);
     // setEdit(false);
   }
 
@@ -114,7 +113,6 @@ export default DynamicField;
 interface propType {
   info: FieldType;
   number: number;
-  formId?: string;
   fieldTitle?: string;
   submitHandler: (values: { [x: string]: any }) => void;
   isEdit?: boolean;

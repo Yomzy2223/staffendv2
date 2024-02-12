@@ -40,6 +40,7 @@ const ServiceForm = ({
 
   const serviceData = serviceInfo?.data?.data?.data;
   const serviceFormData = serviceFormInfo?.data?.data?.data;
+  console.log(serviceFormData);
 
   useEffect(() => {
     if (serviceSuccess) setSection(section + 1);
@@ -53,8 +54,7 @@ const ServiceForm = ({
     setSection(section - 1);
   };
 
-  console.log(serviceFormData);
-  const wide = form2Info.length > 1 && section === 2 && isDesktop;
+  const wide = serviceFormData?.length > 1 && section === 2 && isDesktop;
 
   const defaultValues = {
     name: serviceData?.name || "",
@@ -95,7 +95,7 @@ const ServiceForm = ({
       {section === 2 && (
         <div className="flex flex-col justify-between gap-6 flex-1">
           <DynamicFormCreator
-            formInfo={form2Info}
+            formInfo={serviceFormData}
             onEachSubmit={submitServiceFormField}
             onFormSubmit={submitServiceForm}
             formState={serviceFormState}
@@ -150,58 +150,58 @@ const serviceInfoSchema = z.object({
 
 export type serviceInfoType = z.infer<typeof serviceInfoSchema>;
 
-const form2Info = [
-  {
-    id: "984w0urw9riw",
-    type: "person",
-    title: "Describe the pleases",
-    description: "some description to do here",
-    compulsory: false,
-    subform: [
-      {
-        type: "paragraph",
-        question: "Describe the please",
-        compulsory: false,
-      },
-      {
-        question: "Enter your name",
-        type: "short answer",
-        options: [""],
-        compulsory: false,
-        fileName: "Some docs",
-        fileDescription: "I have no idea",
-        fileLink: "some random link",
-        fileType: "pdf",
-      },
-    ],
-  },
-  {
-    type: "person",
-    title: "Describe thed pleases",
-    description: "some description to do here",
-    compulsory: false,
-    subform: [
-      {
-        type: "paragraph",
-        question: "Describe theds please",
-        compulsory: true,
-      },
-      {
-        type: "paragraph",
-        question: "Describe the servicesd ",
-        compulsory: true,
-      },
-      {
-        type: "checkbox",
-        question: "Describe the servicedsd ",
-        compulsory: true,
-        options: ["option1", "option2"],
-      },
-      {
-        type: "paragraph",
-        question: "Describe the serzvicesd ",
-        compulsory: true,
-      },
-    ],
-  },
-];
+// const form2Info = [
+//   {
+//     id: "984w0urw9riw",
+//     type: "person",
+//     title: "Describe the pleases",
+//     description: "some description to do here",
+//     compulsory: false,
+//     subform: [
+//       {
+//         type: "paragraph",
+//         question: "Describe the please",
+//         compulsory: false,
+//       },
+//       {
+//         question: "Enter your name",
+//         type: "short answer",
+//         options: [""],
+//         compulsory: false,
+//         fileName: "Some docs",
+//         fileDescription: "I have no idea",
+//         fileLink: "some random link",
+//         fileType: "pdf",
+//       },
+//     ],
+//   },
+//   {
+//     type: "person",
+//     title: "Describe thed pleases",
+//     description: "some description to do here",
+//     compulsory: false,
+//     subform: [
+//       {
+//         type: "paragraph",
+//         question: "Describe theds please",
+//         compulsory: true,
+//       },
+//       {
+//         type: "paragraph",
+//         question: "Describe the servicesd ",
+//         compulsory: true,
+//       },
+//       {
+//         type: "checkbox",
+//         question: "Describe the servicedsd ",
+//         compulsory: true,
+//         options: ["option1", "option2"],
+//       },
+//       {
+//         type: "paragraph",
+//         question: "Describe the serzvicesd ",
+//         compulsory: true,
+//       },
+//     ],
+//   },
+// ];

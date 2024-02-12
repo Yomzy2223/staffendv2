@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
 import { FormType } from "./constants";
 
-export const useFormActions = (formInfo: FormType) => {
+export const useFormActions = ({
+  formInfo,
+  formLoading,
+}: {
+  formInfo: FormType;
+  formLoading: boolean;
+}) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [type, setType] = useState("");
@@ -30,15 +36,12 @@ export const useFormActions = (formInfo: FormType) => {
 
   useEffect(() => {
     if (formInfo) {
-      setTitle(formInfo.title);
-      setType(formInfo.type);
-      setDescription(formInfo.description);
-      setCompulsory(formInfo.compulsory);
+      mountInfo(formInfo);
     }
   }, [formInfo]);
 
   const mountInfo = (info: FormType) => {
-    if (!info) return;
+    if (!info || formLoading) return;
     if (info.type) setType(info.type);
     if (info.title) setTitle(info.title);
     if (info.description) setDescription(info.description);

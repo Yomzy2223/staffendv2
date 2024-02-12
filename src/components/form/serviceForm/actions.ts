@@ -71,10 +71,13 @@ export const useServiceFormActions = () => {
     values,
   }: {
     formId?: string;
-    values: { [x: string]: any };
+    values: any;
   }) => {
+    console.log(values, formId);
     if (!formId) return;
-    createServiceSubFormMutation.mutate({ formId, formInfo: values });
+    formId
+      ? updateServiceFormMutation.mutate({ id, formInfo: values })
+      : createServiceSubFormMutation.mutate({ formId, formInfo: values });
     console.log("Submit service form field", formId, values);
   };
 

@@ -42,6 +42,7 @@ const Footer = ({
             size="fit"
             className="text-primary"
             disabled={loading}
+            onClick={() => setEdit(false)}
           >
             Cancel
           </Button>

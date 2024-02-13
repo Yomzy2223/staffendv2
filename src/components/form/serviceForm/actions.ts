@@ -53,7 +53,6 @@ export const useServiceFormActions = () => {
   const serviceFormInfo = useGetServiceFormsQuery(serviceId as string);
 
   const submitServiceForm = async ({ formId, values }: serviceFormArgType) => {
-    console.log("Form created");
     formId
       ? updateServiceFormMutation.mutate({ id: formId, formInfo: values })
       : createServiceFormMutation.mutate({
@@ -91,7 +90,6 @@ export const useServiceFormActions = () => {
         {
           onSuccess: (data) => {
             const formId = data.data.data.id;
-            console.log(formId, data);
             submitField(formId);
           },
         }

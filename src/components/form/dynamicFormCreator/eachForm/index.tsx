@@ -74,8 +74,8 @@ const EachForm = ({
   };
 
   useEffect(() => {
-    if (formSuccess && loadingForm === number) setEdit(false);
-  }, [formSuccess, loadingForm]);
+    if (!formLoading && formSuccess && loadingForm === number) setEdit(false);
+  }, [formLoading, formSuccess, loadingForm]);
 
   const btnText =
     (fieldsInfo?.length > 0 || newlyAdded ? "Add another " : "Create a ") +
@@ -97,7 +97,7 @@ const EachForm = ({
           }
           isEdit={edit}
           loading={fieldLoading && loadingField === i + 1}
-          success={fieldSuccess && loadingField === i + 1}
+          success={!fieldLoading && fieldSuccess && loadingField === i + 1}
         />
       ))}
       {newlyAdded && (
@@ -110,7 +110,7 @@ const EachForm = ({
           }
           isEdit={edit}
           loading={fieldLoading && loadingField === lastField}
-          success={fieldSuccess && loadingField === lastField}
+          success={!fieldLoading && fieldSuccess && loadingField === lastField}
         />
       )}
       <Footer

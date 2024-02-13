@@ -47,81 +47,72 @@ export const fieldOptions: FieldType[] = [
     type: "address",
     icon: MapPin,
     question: "Enter company address",
+    compulsory: true,
   },
   {
     type: "checkbox",
     icon: CheckSquare,
     options: [""],
+    compulsory: true,
   },
   {
     type: "countries",
     icon: FlagIcon,
     question: "Select operational country",
+    compulsory: true,
   },
   {
     type: "document template",
     icon: File,
+    compulsory: true,
   },
   {
     type: "document upload",
     icon: File,
+    compulsory: true,
   },
   {
     type: "dropdown",
     icon: ChevronDown,
+    compulsory: true,
   },
   {
     type: "email address",
     icon: Mail,
+    compulsory: true,
   },
   {
     type: "paragraph",
     icon: FormInput,
+    compulsory: true,
   },
   {
     type: "phone number",
     icon: PhoneOutgoing,
     question: "Enter your business phone number",
+    compulsory: true,
   },
   {
     type: "promocode",
     icon: Gem,
     question: "Enter your promo code",
+    compulsory: true,
   },
   {
     type: "multiple choice",
     icon: CircleDot,
+    compulsory: true,
   },
   {
     type: "short answer",
     icon: FormInput,
+    compulsory: true,
   },
   {
     type: "form",
     icon: User,
     options: [],
-  },
-  {
-    type: "person",
-    icon: User,
-    options: [
-      {
-        type: "short answer",
-        title: "Enter your first name",
-      },
-      {
-        type: "short answer",
-        title: "Enter your last name",
-      },
-      {
-        type: "email address",
-        title: "Enter your email address",
-      },
-      {
-        type: "phone number",
-        title: "Enter your phone number",
-      },
-    ],
+    compulsory: true,
   },
 ];
 

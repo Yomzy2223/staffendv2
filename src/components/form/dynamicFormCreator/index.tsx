@@ -1,3 +1,4 @@
+import { serviceFormType } from "@/api/serviceApi";
 import { Button } from "flowbite-react";
 import { PlusCircle } from "lucide-react";
 import React, { useEffect, useState } from "react";
@@ -24,18 +25,18 @@ const DynamicFormCreator = ({
     setNewlyAdded(selected);
   };
 
-  const handleSubmit = (values: { [x: string]: any }) => {
+  const handleFieldSubmit = (values: { [x: string]: any }) => {
     onEachSubmit(values);
     // setNewlyAdded(undefined);
   };
 
-  // useEffect(() => {
-  //   if (formState.formSuccess) setNewlyAdded(undefined);
-  // }, [formState.formSuccess]);
+  useEffect(() => {
+    if (formState.formSuccess) setNewlyAdded(undefined);
+  }, [formState.formSuccess]);
 
   const breakpointColumnsObj = {
     default: wide ? 2 : 1,
-    700: 1,
+    800: 1,
   };
 
   return (
@@ -66,7 +67,7 @@ const DynamicFormCreator = ({
             number={(formInfo?.length ?? 0) + 1}
             fieldsInfo={[]}
             fieldTitle={fieldTitle}
-            fieldSubmitHandler={handleSubmit}
+            fieldSubmitHandler={handleFieldSubmit}
             formSubmitHandler={({ formId, values }) => {
               setLoadingForm((formInfo?.length ?? 0) + 1);
               onFormSubmit({ formId, values });

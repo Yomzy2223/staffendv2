@@ -40,7 +40,6 @@ const ServiceForm = ({
 
   const serviceData = serviceInfo?.data?.data?.data;
   const serviceFormData = serviceFormInfo?.data?.data?.data;
-  // console.log(serviceFormData);
 
   useEffect(() => {
     if (serviceSuccess) setSection(section + 1);
@@ -99,7 +98,7 @@ const ServiceForm = ({
             onEachSubmit={submitServiceFormField}
             onFormSubmit={submitServiceForm}
             formState={serviceFormState}
-            wide
+            wide={wide}
           />
           <div className="bg-white flex items-center justify-end gap-4 pt-4 sticky bottom-0">
             <Button color="outline" outline onClick={handleBack}>

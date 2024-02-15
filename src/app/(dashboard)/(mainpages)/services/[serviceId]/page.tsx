@@ -6,11 +6,11 @@ import ServiceSummaryCard from "@/components/cards/serviceSummaryCard";
 import DoChecks from "@/components/DoChecks";
 import ServiceForm from "@/components/form/serviceForm";
 import AnalyticsHeader from "@/components/header/analyticsHeader";
-import GeneralTable from "@/components/tables/generalTable";
 import CardWrapper from "@/components/wrappers/cardWrapper";
+import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import Image from "next/image";
+import { useParams } from "next/navigation";
 import React, { useState } from "react";
-import { useTableInfo } from "../../constants";
 import TableSection from "./tableSection";
 
 // export async function generateStaticParams() {
@@ -23,15 +23,18 @@ import TableSection from "./tableSection";
 
 const Service = () => {
   const [open, setOpen] = useState(false);
+  const { setQuery } = useGlobalFucntions();
+  const { serviceId } = useParams();
 
   const addNewService = () => {
     setOpen(true);
+    setQuery("action", "edit");
   };
 
   return (
     <>
       <DoChecks
-        items={[]}
+        items={["dd"]}
         emptyText="You have not added any product"
         btnText="Add new product"
         btnAction={addNewService}

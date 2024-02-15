@@ -50,6 +50,13 @@ export const fieldOptions: FieldType[] = [
     compulsory: true,
   },
   {
+    type: "business name",
+    icon: MapPin,
+    question:
+      "To register your business, you must give your business a unique name. Enter exactly 4 names.",
+    compulsory: true,
+  },
+  {
     type: "checkbox",
     icon: CheckSquare,
     options: [""],
@@ -87,6 +94,13 @@ export const fieldOptions: FieldType[] = [
     compulsory: true,
   },
   {
+    type: "objectives",
+    question:
+      "We'll need your business objectives to successfully register your business (4)",
+    icon: FormInput,
+    compulsory: true,
+  },
+  {
     type: "phone number",
     icon: PhoneOutgoing,
     question: "Enter your business phone number",
@@ -106,12 +120,6 @@ export const fieldOptions: FieldType[] = [
   {
     type: "short answer",
     icon: FormInput,
-    compulsory: true,
-  },
-  {
-    type: "form",
-    icon: User,
-    options: [],
     compulsory: true,
   },
 ];

@@ -18,6 +18,8 @@ const DynamicFormCreator = ({
   const [newlyAdded, setNewlyAdded] = useState<FormType>();
   const [loadingForm, setLoadingForm] = useState<number>();
 
+  const { formLoading, formSuccess } = formState;
+
   const btnText = formInfo?.length > 0 ? "Add another form" : "Create a form";
 
   const handleSelect = (selected?: FormType | any) => {
@@ -27,17 +29,18 @@ const DynamicFormCreator = ({
 
   const handleFieldSubmit = (values: { [x: string]: any }) => {
     onEachSubmit(values);
-    // setNewlyAdded(undefined);
   };
 
   useEffect(() => {
-    if (formState.formSuccess) setNewlyAdded(undefined);
-  }, [formState.formSuccess]);
+    if (!formLoading && formSuccess && loadingForm === lastForm)
+      setNewlyAdded(undefined);
+  }, [formLoading, formSuccess]);
 
   const breakpointColumnsObj = {
     default: wide ? 2 : 1,
     800: 1,
   };
+  const lastForm = (formInfo?.length ?? 0) + 1;
 
   return (
     <div>
@@ -46,7 +49,7 @@ const DynamicFormCreator = ({
         className="my-masonry-grid"
         columnClassName="my-masonry-grid_column"
       >
-        {formInfo.map((info, i) => (
+        {formInfo?.map((info, i) => (
           <EachForm
             key={info.title + i}
             number={i + 1}

@@ -55,7 +55,7 @@ const DynamicField = ({
 
   useEffect(() => {
     if (isEdit === false) setEdit(false);
-    if (success) setEdit(false);
+    // if (success) setEdit(false);
   }, [isEdit, success]);
 
   return (

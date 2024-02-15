@@ -14,18 +14,6 @@ import {
 } from "@/components/ui/select";
 import { ReactNode, useState } from "react";
 
-interface propType {
-  navRoutes: {
-    name: string;
-    to: string;
-    type?: string;
-    options?: { name: string; to: string; icon?: any }[];
-  }[];
-  className?: string;
-  inactiveClassName?: string;
-  others?: ReactNode;
-}
-
 export const Navigation = ({
   navRoutes,
   className,
@@ -64,7 +52,7 @@ export const Navigation = ({
                     }
                   )}
                 >
-                  <SelectValue placeholder={el.options[0].name} />
+                  <SelectValue placeholder={el.defaultValue} />
                 </SelectTrigger>
                 <SelectContent>
                   {el.options
@@ -107,3 +95,16 @@ export const Navigation = ({
     </motion.div>
   );
 };
+
+interface propType {
+  navRoutes: {
+    name: string;
+    to: string;
+    type?: string;
+    options?: { name: string; to: string; icon?: any }[];
+    defaultValue?: string;
+  }[];
+  className?: string;
+  inactiveClassName?: string;
+  others?: ReactNode;
+}

@@ -7,10 +7,21 @@ import { Navigation } from "@/components/navigation";
 import { Button } from "flowbite-react";
 import Image from "next/image";
 import { useActions } from "./actions";
+import { useGlobalFucntions } from "@/hooks/globalFunctions";
+import { useRouter } from "next/navigation";
 
 const layout = ({ children }: { children: ReactNode }) => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const { navRoutes } = useActions();
+  const { setQuery } = useGlobalFucntions();
+
+  const { push } = useRouter();
+
+  const openServiceForm = () => {
+    // push("/services");
+    setQuery("action", "add");
+    setOpen(true);
+  };
 
   return (
     <>
@@ -21,7 +32,7 @@ const layout = ({ children }: { children: ReactNode }) => {
           <Button
             color="ghost"
             className="text-primary"
-            onClick={() => setOpen(true)}
+            onClick={openServiceForm}
           >
             <Image src={GridPlusIcon} alt="" />
             Add new service

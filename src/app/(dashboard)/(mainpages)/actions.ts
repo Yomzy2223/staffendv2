@@ -1,17 +1,20 @@
 import useServiceApi from "@/hooks/useServiceApi";
 import { Service } from "custom-types";
+import { useParams } from "next/navigation";
 import slugify from "slugify";
 
 export const useActions = () => {
   const { getAllServicesQuery } = useServiceApi();
   const { data } = getAllServicesQuery;
+  const services = data?.data?.data;
+
+  const { serviceId } = useParams();
 
   const getServicesRoute = () => {
-    const services = data?.data?.data;
     if (services) {
       return services.map((service: Service) => ({
         name: service.name,
-        to: `/services/${slugify(service.name)}`,
+        to: `/services/${slugify(service.id)}`,
       }));
     }
   };
@@ -27,6 +30,8 @@ export const useActions = () => {
       to: "/services",
       type: "select",
       options: getServicesRoute(),
+      defaultValue:
+        services?.find((el: any) => el.id === serviceId)?.name || "Services",
     },
     {
       name: "Countries",

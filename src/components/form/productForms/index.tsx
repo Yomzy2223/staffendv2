@@ -9,7 +9,7 @@ import { Oval } from "react-loading-icons";
 import { useServiceFormActions, useServiceInfoActions } from "./actions";
 import { section1FormInfo, serviceInfoSchema } from "./constants";
 
-const ServiceForm = ({ open, setOpen }: propsType) => {
+const ProductForm = ({ open, setOpen }: propsType) => {
   const [section, setSection] = useState(1);
   const { isDesktop } = useGlobalFucntions();
 
@@ -28,8 +28,8 @@ const ServiceForm = ({ open, setOpen }: propsType) => {
     serviceFormState,
   } = useServiceFormActions();
 
-  const title1 = isEdit ? "Update Service" : "Create Service";
-  const title2 = isEdit ? "Update Service Form" : "Add Service Form";
+  const title1 = isEdit ? "Update Product" : "Create Product";
+  const title2 = isEdit ? "Update Product Form" : "Add Product Form";
   const title = section === 1 ? title1 : title2;
 
   const serviceData = serviceInfo?.data?.data?.data;
@@ -47,7 +47,7 @@ const ServiceForm = ({ open, setOpen }: propsType) => {
     setSection(section - 1);
   };
 
-  const wide = serviceFormData?.length > 1 && section === 2 && isDesktop;
+  const wide = serviceFormData?.length > 1;
 
   const defaultValues = {
     name: serviceData?.name || "",
@@ -61,7 +61,7 @@ const ServiceForm = ({ open, setOpen }: propsType) => {
         setOpen(open);
       }}
       title={title}
-      size={wide ? "5xl" : "xl"}
+      size="5xl"
     >
       {section === 1 && (
         <DynamicForm
@@ -116,7 +116,7 @@ const ServiceForm = ({ open, setOpen }: propsType) => {
   );
 };
 
-export default ServiceForm;
+export default ProductForm;
 
 interface propsType {
   open: boolean;

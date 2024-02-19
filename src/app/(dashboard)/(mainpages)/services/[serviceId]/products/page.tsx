@@ -6,7 +6,7 @@ import ProductForm from "@/components/form/productForms";
 import ProductsHeader from "@/components/header/productsHeader";
 import SearchComp from "@/components/search";
 import CardWrapper from "@/components/wrappers/cardWrapper";
-import { productType } from "@/hooks/api/productApi";
+import { productFullType } from "@/hooks/api/types";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import useProductApi from "@/hooks/useProductApi";
 import { Button } from "flowbite-react";
@@ -56,8 +56,8 @@ const Products = () => {
           </div>
 
           <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4 pt-4 sm:gap-6">
-            {serviceProducts?.map((product: productType, i: number) => (
-              <ProductCard key={i} info={product} />
+            {serviceProducts?.map((product: productFullType, i: number) => (
+              <ProductCard key={i} info={product} setOpen={setOpen} />
             ))}
           </div>
         </CardWrapper>

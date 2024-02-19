@@ -6,11 +6,21 @@ import {
   MenubarSeparator,
   MenubarTrigger,
 } from "@/components/ui/menubar";
-import { productType } from "@/hooks/api/productApi";
+import { productFullType } from "@/hooks/api/types";
+import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import { Currency, MoreHorizontal, Timer, WholeWord } from "lucide-react";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 
-const ProductCard = ({ info }: propsType) => {
+const ProductCard = ({ info, setOpen }: propsType) => {
+  const { setQuery } = useGlobalFucntions();
+
+  const handleEdit = () => {
+    console.log(info);
+    setOpen(true);
+    setQuery("action", "edit");
+    setQuery("productId", info.id);
+  };
+
   return (
     <div className="flex-1 max-w-[420px] min-w-[300px] p-4 rounded-lg border border-border">
       <div className="border-b border-border pb-4">
@@ -27,7 +37,7 @@ const ProductCard = ({ info }: propsType) => {
                 <MoreHorizontal color="hsl(var(--foreground-5))" />
               </MenubarTrigger>
               <MenubarContent>
-                <MenubarItem>Edit</MenubarItem>
+                <MenubarItem onClick={handleEdit}>Edit</MenubarItem>
                 <MenubarSeparator />
                 <MenubarItem className="text-destructive-foreground hover:!text-destructive-foreground hover:!bg-destructive">
                   Delete
@@ -66,5 +76,6 @@ const ProductCard = ({ info }: propsType) => {
 export default ProductCard;
 
 interface propsType {
-  info: productType;
+  info: productFullType;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 }

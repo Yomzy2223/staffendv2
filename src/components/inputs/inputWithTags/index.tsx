@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import TagIcon from "@/assets/icons/tagIcon";
-import { getRandColor } from "./actions";
+import { useActions } from "./actions";
 import { X } from "lucide-react";
 import { FieldError, FieldErrorsImpl, Merge } from "react-hook-form";
 
@@ -24,53 +24,24 @@ const InputWithTags = ({
   const [errorMsg, setErrorMsg] = useState("");
   const [value, setValue] = useState("");
 
-  const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    const value = e.currentTarget.value;
-    if (e.key === "Enter" || e.key === ",") {
-      e.preventDefault();
-      if (validateTags(value)) {
-        setTags([...tags, value]);
-        setValue("");
-        handleKeyDown([...tags, value]);
-      }
-    }
-  };
-
-  const validateTags = (value: string) => {
-    if (maxTag && tags.length >= maxTag) {
-      setErrorMsg(errors?.length || `Tags cannot be more than ${maxTag}`);
-      return;
-    }
-    if (normalize(value) === "") {
-      setErrorMsg(errors?.empty || "Enter tag");
-      return;
-    }
-    if (value.length < minTagChars) {
-      setErrorMsg(
-        errors?.minTagChars ||
-          `Tags cannot be less than ${minTagChars} characters`
-      );
-      return;
-    }
-    if (tags.some((tag) => normalize(tag) === normalize(value))) {
-      setErrorMsg(errors?.exists || "Tag already exists");
-      return;
-    }
-    setErrorMsg("");
-    return true;
-  };
-
-  const normalize = (text: string) => text.trim().toLowerCase();
-
-  const removeTag = (tag: string) => {
-    const newTags = [...tags].filter((el) => el !== tag);
-    handleKeyDown(newTags);
-    setTags(newTags);
-  };
+  const { onKeyDown, validateTags, removeTag, getRandColor } = useActions({
+    setValue,
+    tags,
+    setTags,
+    setErrorMsg,
+    handleKeyDown,
+    minTagChars,
+    maxTag,
+    errors,
+  });
 
   useEffect(() => {
     if (submitErr) setErrorMsg(submitErr.toString());
   }, [submitErr]);
+
+  useEffect(() => {
+    if (defaultTags) setTags(defaultTags);
+  }, [defaultTags]);
 
   return (
     <div>

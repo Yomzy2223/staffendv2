@@ -1,30 +1,84 @@
-const tagColors = [
-  {
-    text: "hsl(300,100%,41%)",
-    bg: "bg-[hsl(300,100%,91%)]",
-  },
-  {
-    text: "hsl(250, 100%, 41%)",
-    bg: "bg-[hsl(250,100%,91%)]",
-  },
-  {
-    text: "hsl(200, 100%, 41%)",
-    bg: "bg-[hsl(200,100%,91%)]",
-  },
-  {
-    text: "hsl(150, 100%, 41%)",
-    bg: "bg-[hsl(150,100%,91%)]",
-  },
-  {
-    text: "hsl(100, 100%, 41%)",
-    bg: "bg-[hsl(100,100%,91%)]",
-  },
-  {
-    text: "hsl(50, 100%, 41%)",
-    bg: "bg-[hsl(50,100%,91%)]",
-  },
-];
+import { Dispatch, KeyboardEvent, SetStateAction } from "react";
+import { tagColors } from "./constants";
 
-export const getRandColor = (i: number) => {
-  return tagColors[i % 5];
+export const useActions = ({
+  setValue,
+  tags,
+  setTags,
+  setErrorMsg,
+  handleKeyDown,
+  minTagChars,
+  maxTag,
+  errors,
+}: actionsProp) => {
+  const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.value;
+    if (e.key === "Enter" || e.key === ",") {
+      e.preventDefault();
+      if (validateTags(value)) {
+        setTags([...tags, value]);
+        setValue("");
+        handleKeyDown([...tags, value]);
+      }
+    }
+  };
+
+  const validateTags = (value: string) => {
+    if (maxTag && tags.length >= maxTag) {
+      setErrorMsg(errors?.length || `Tags cannot be more than ${maxTag}`);
+      return;
+    }
+    if (normalize(value) === "") {
+      setErrorMsg(errors?.empty || "Enter tag");
+      return;
+    }
+    if (value.length < minTagChars) {
+      setErrorMsg(
+        errors?.minTagChars ||
+          `Tags cannot be less than ${minTagChars} characters`
+      );
+      return;
+    }
+    if (tags.some((tag) => normalize(tag) === normalize(value))) {
+      setErrorMsg(errors?.exists || "Tag already exists");
+      return;
+    }
+    setErrorMsg("");
+    return true;
+  };
+
+  const normalize = (text: string) => text.trim().toLowerCase();
+
+  const removeTag = (tag: string) => {
+    const newTags = [...tags].filter((el) => el !== tag);
+    handleKeyDown(newTags);
+    setTags(newTags);
+  };
+
+  const getRandColor = (i: number) => {
+    return tagColors[i % 5];
+  };
+
+  return {
+    onKeyDown,
+    validateTags,
+    removeTag,
+    getRandColor,
+  };
 };
+
+interface actionsProp {
+  setValue: Dispatch<SetStateAction<string>>;
+  tags: string[];
+  setTags: Dispatch<SetStateAction<string[]>>;
+  setErrorMsg: Dispatch<SetStateAction<string>>;
+  handleKeyDown: (tags: string[]) => void;
+  minTagChars: number;
+  maxTag?: number;
+  errors?: {
+    empty?: string;
+    length?: string;
+    exists?: string;
+    minTagChars?: string;
+  };
+}

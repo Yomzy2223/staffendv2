@@ -10,7 +10,7 @@ import {
   TextInput,
   ToggleSwitch,
 } from "flowbite-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -41,6 +41,12 @@ const DynamicForm = ({
     resolver: zodResolver(formSchema),
     defaultValues,
   });
+
+  useEffect(() => {
+    if (defaultValues) {
+      formInfo.map((el) => setValue(el.name, defaultValues[el.name]));
+    }
+  }, [defaultValues]);
 
   // Submit handler
   function onSubmit(values: FormType) {

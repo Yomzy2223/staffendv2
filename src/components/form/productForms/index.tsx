@@ -11,7 +11,7 @@ import { section1FormInfo, productInfoSchema } from "./constants";
 
 const ProductForm = ({ open, setOpen }: propsType) => {
   const [section, setSection] = useState(1);
-  const { isDesktop } = useGlobalFucntions();
+  const { isDesktop, deleteQueryString } = useGlobalFucntions();
 
   const {
     isEdit,
@@ -49,6 +49,13 @@ const ProductForm = ({ open, setOpen }: propsType) => {
     setSection(section - 1);
   };
 
+  const resetDialog = () => {
+    setOpen(false);
+    setSection(1);
+    deleteQueryString("action");
+    deleteQueryString("productId");
+  };
+
   const wide = productFormData?.length > 1;
 
   const defaultValues = {
@@ -63,7 +70,7 @@ const ProductForm = ({ open, setOpen }: propsType) => {
     <DialogWrapper
       open={open}
       setOpen={(open) => {
-        setOpen(open);
+        open ? setOpen(open) : resetDialog();
       }}
       title={title}
       size="5xl"
@@ -107,13 +114,7 @@ const ProductForm = ({ open, setOpen }: propsType) => {
             <Button color="outline" outline onClick={handleBack}>
               Back
             </Button>
-            <Button
-              color="primary"
-              onClick={() => {
-                setOpen(false);
-                setSection(1);
-              }}
-            >
+            <Button color="primary" onClick={resetDialog}>
               Done
             </Button>
           </div>

@@ -72,11 +72,11 @@ const EachForm = ({
     });
   };
 
-  useEffect(() => {
-    // if (!formLoading && formSuccess && loadingForm === number) setEdit(false);
-    if (!fieldLoading && fieldSuccess && loadingField === lastField)
-      setNewlyAdded(undefined);
-  }, [formLoading, formSuccess, loadingForm]);
+  // useEffect(() => {
+  //   // if (!formLoading && formSuccess && loadingForm === number) setEdit(false);
+  //   if (!fieldLoading && fieldSuccess && loadingField === lastField)
+  //     setNewlyAdded(undefined);
+  // }, [formLoading, formSuccess, loadingForm]);
 
   const btnText =
     (fieldsInfo?.length > 0 || newlyAdded ? "Add another " : "Create a ") +
@@ -85,7 +85,11 @@ const EachForm = ({
 
   return (
     <Card className="shadow-none [&>div]:p-4 max-w-[500px] h-max">
-      <Header edit={edit} info={formInfo} />
+      <Header
+        edit={edit}
+        info={formInfo}
+        loading={formLoading && loadingForm === number}
+      />
 
       {fieldsInfo?.map((field, i) => (
         <DynamicField

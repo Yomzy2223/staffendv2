@@ -5,7 +5,7 @@ import { MoreHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formReturnType } from "./actions";
 
-const Header = ({ edit, info }: propType) => {
+const Header = ({ edit, info, loading }: propType) => {
   const {
     type,
     title,
@@ -27,7 +27,7 @@ const Header = ({ edit, info }: propType) => {
             className="accent-primary"
             checked={compulsory}
             onChange={(e) => setCompulsory(e.target.checked)}
-            disabled={!edit}
+            disabled={!edit || loading}
           />
           <div className="flex gap-2 space-y-0">
             {edit || !title ? (
@@ -90,6 +90,7 @@ const Header = ({ edit, info }: propType) => {
 export default Header;
 
 interface propType {
+  loading: boolean;
   edit: boolean;
   info: formReturnType;
 }

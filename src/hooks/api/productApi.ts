@@ -1,33 +1,5 @@
 import { Client } from "@/lib/axios";
-
-export interface productType {
-  name: string;
-  description: string;
-  country: string;
-  currency: string;
-  amount: number;
-  timeline: string;
-  feature: string[];
-}
-
-export interface productFormType {
-  title: string;
-  description: string;
-  type: string;
-  compulsory: boolean;
-}
-
-export interface productSubFormType {
-  question: string;
-  type: string;
-  options?: (string | number)[];
-  compulsory: boolean;
-  fileName?: string;
-  allowOther?: boolean;
-  dependsOn?: string;
-  fileLink?: string;
-  fileType?: string;
-}
+import { productFormType, productSubFormType, productType } from "./types";
 
 // Product endpoints
 export const createProduct = async ({

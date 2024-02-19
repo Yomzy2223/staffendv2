@@ -1,4 +1,4 @@
-import { productFormType, productSubFormType } from "@/hooks/api/productApi";
+import { productFormType, productSubFormType } from "@/hooks/api/types";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import useProductApi from "@/hooks/useProductApi";
 import { useParams, useSearchParams } from "next/navigation";
@@ -52,7 +52,6 @@ export const useProductInfoActions = () => {
 export const useProductFormActions = () => {
   const { get } = useSearchParams();
   const productId = get("productId") as string;
-  console.log(productId);
 
   const {
     createProductFormMutation,

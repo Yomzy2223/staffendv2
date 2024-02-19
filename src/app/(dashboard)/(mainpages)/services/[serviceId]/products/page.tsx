@@ -9,6 +9,7 @@ import CardWrapper from "@/components/wrappers/cardWrapper";
 import { productFullType } from "@/hooks/api/types";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import useProductApi from "@/hooks/useProductApi";
+import useServiceApi from "@/hooks/useServiceApi";
 import { Button } from "flowbite-react";
 import { useParams } from "next/navigation";
 import React, { Dispatch, SetStateAction, useState } from "react";
@@ -18,8 +19,11 @@ const Products = () => {
   const { setQuery } = useGlobalFucntions();
 
   const { serviceId } = useParams();
+  const { useGetServiceQuery } = useServiceApi();
   const { useGetServiceProductsQuery, deleteProductMutation } = useProductApi();
   const { data } = useGetServiceProductsQuery(serviceId.toString());
+  const product = useGetServiceQuery(serviceId.toString());
+  const productInfo = product.data?.data?.data;
 
   const serviceProducts = data?.data?.data;
 
@@ -42,7 +46,7 @@ const Products = () => {
 
   return (
     <div className="-mx-5 md:-mx-8 space-y-4 lg:space-y-6">
-      <ProductsHeader title="Business Registration" />
+      <ProductsHeader title={productInfo.name} />
 
       <DoChecks
         items={serviceProducts}

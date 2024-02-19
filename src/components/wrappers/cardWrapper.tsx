@@ -1,14 +1,16 @@
 import { cn } from "@/lib/utils";
-import React, { ReactNode } from "react";
+import React, { HTMLAttributes, MouseEventHandler, ReactNode } from "react";
 
 const CardWrapper = ({
   children,
   big,
   className,
+  onClick,
 }: {
   children: ReactNode;
   big?: boolean;
   className?: string;
+  onClick?: MouseEventHandler<HTMLDivElement>;
 }) => {
   return (
     <div
@@ -19,6 +21,7 @@ const CardWrapper = ({
         },
         className
       )}
+      onClick={onClick}
     >
       {children}
     </div>

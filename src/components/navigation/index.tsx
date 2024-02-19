@@ -2,34 +2,36 @@
 
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Button, Select } from "flowbite-react";
+import { Button } from "flowbite-react";
 import { usePathname, useRouter } from "next/navigation";
-
-interface propTypes {
-  navRoutes: {
-    name: string;
-    to: string;
-    type?: string;
-    options?: { name: string; to: string }[];
-  }[];
-  className?: string;
-  inactiveClassName?: string;
-}
+import { motion } from "framer-motion";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { ReactNode, useState } from "react";
 
 export const Navigation = ({
   navRoutes,
   className,
   inactiveClassName = "",
-}: propTypes) => {
+  others,
+}: propType) => {
+  const [open, setOpen] = useState(false);
+
   const router = useRouter();
   const pathname = usePathname();
 
   return (
-    <div
+    <motion.div
       className={cn(
-        "flex gap-2 max-w-full overflow-auto p-1 md:gap-4",
+        "flex items-start gap-2 max-w-full p-1 px-5 md:px-8 md:gap-4 overflow-hidden h-20",
         className
       )}
+      whileHover={{ overflowX: "auto" }}
     >
       {navRoutes.map((el, i) => {
         let isActive = i === 0 ? el.to === pathname : pathname.includes(el.to);
@@ -41,19 +43,38 @@ export const Navigation = ({
         return (
           <div key={i}>
             {el?.type === "select" && el?.options ? (
-              <Select
-                className={cn(
-                  "[&_select]:!bg-transparent [&_select]:border-none rounded-lg min-w-max whitespace-nowrap",
-                  {
-                    "bg-primary [&_select]:text-primary-foreground": isActive,
-                    [inactiveClassName]: !isActive,
-                  }
-                )}
-                onChange={(el) => router.push(el.target.value.toLowerCase())}
-              >
-                {el.options.map((each) => (
-                  <option key={each.name}>{each.name}</option>
-                ))}
+              <Select open={open} onOpenChange={() => setOpen(!open)}>
+                <SelectTrigger
+                  className={cn(
+                    "w-max border-none bg-transparent focus:ring-0 focus:ring-offset-0 px-4 py-2 h-max capitalize",
+                    {
+                      "bg-primary text-white": isActive,
+                    }
+                  )}
+                >
+                  <SelectValue placeholder={el.defaultValue} />
+                </SelectTrigger>
+                <SelectContent>
+                  {el.options
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map((each) => (
+                      <SelectItem
+                        key={each.name}
+                        value={each.name}
+                        onMouseDown={() => router.push(each.to)}
+                        className="py-2 capitalize"
+                      >
+                        {each.icon && each.icon}
+                        {each.name}
+                      </SelectItem>
+                    ))}
+                  <div
+                    onClick={() => setOpen(false)}
+                    className="border-t border-border"
+                  >
+                    {others}
+                  </div>
+                </SelectContent>
               </Select>
             ) : (
               <Link href={el.to}>
@@ -71,6 +92,19 @@ export const Navigation = ({
           </div>
         );
       })}
-    </div>
+    </motion.div>
   );
 };
+
+interface propType {
+  navRoutes: {
+    name: string;
+    to: string;
+    type?: string;
+    options?: { name: string; to: string; icon?: any }[];
+    defaultValue?: string;
+  }[];
+  className?: string;
+  inactiveClassName?: string;
+  others?: ReactNode;
+}

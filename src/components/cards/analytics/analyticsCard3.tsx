@@ -22,12 +22,13 @@ const AnalyticsCard3 = ({
 }) => {
   const difference = current - previous;
   let perc = ((100 * difference) / previous).toFixed(2) || 0;
+  perc = parseInt(perc.toString());
   const decreased = perc < 0;
 
   return (
     <CardWrapper
       className={cn(
-        "flex flex-col justify-between w-full min-w-[280px] max-w-[280px]",
+        "flex flex-col justify-between w-full min-w-[200px] max-w-[300px] h-[150px]",
         className
       )}
     >

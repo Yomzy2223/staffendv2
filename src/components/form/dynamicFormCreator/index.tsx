@@ -36,11 +36,12 @@ const DynamicFormCreator = ({
       setNewlyAdded(undefined);
   }, [formLoading, formSuccess]);
 
+  const lastForm = (formInfo?.length ?? 0) + 1;
+
   const breakpointColumnsObj = {
     default: wide ? 2 : 1,
     800: 1,
   };
-  const lastForm = (formInfo?.length ?? 0) + 1;
 
   return (
     <div>

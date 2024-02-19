@@ -1,5 +1,5 @@
-import { productSubFormType } from "@/hooks/api/productApi";
-import { serviceFormType, serviceSubFormType } from "@/hooks/api/serviceApi";
+import { productFormType, productSubFormType } from "@/hooks/api/productApi";
+import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import useProductApi from "@/hooks/useProductApi";
 import { useParams, useSearchParams } from "next/navigation";
 import { FormType } from "../dynamicFormCreator/eachForm/constants";
@@ -8,7 +8,9 @@ import { productInfoType } from "./constants";
 // Actions for service info section
 export const useProductInfoActions = () => {
   const { get } = useSearchParams();
-  const { serviceId, productId } = useParams();
+  const { serviceId } = useParams();
+  const { setQuery } = useGlobalFucntions();
+  const productId = get("productId");
   const isEdit = productId && get("action") == "edit";
 
   const { createProductMutation, updateProductMutation, useGetProductQuery } =
@@ -21,10 +23,15 @@ export const useProductInfoActions = () => {
           id: productId as string,
           formInfo: values,
         })
-      : createProductMutation.mutate({
-          serviceCategoryId: serviceId.toString(),
-          formInfo: values,
-        });
+      : createProductMutation.mutate(
+          {
+            serviceCategoryId: serviceId.toString(),
+            formInfo: values,
+          },
+          {
+            onSuccess: (data) => setQuery("productId", data.data.data.id),
+          }
+        );
   };
 
   const productLoading =
@@ -42,9 +49,10 @@ export const useProductInfoActions = () => {
 };
 
 // Actions for service form section
-export const useServiceFormActions = () => {
+export const useProductFormActions = () => {
   const { get } = useSearchParams();
-  const { serviceId, productId } = useParams();
+  const productId = get("productId") as string;
+  console.log(productId);
 
   const {
     createProductFormMutation,
@@ -53,23 +61,23 @@ export const useServiceFormActions = () => {
     createProductSubFormMutation,
     updateProductSubFormMutation,
   } = useProductApi();
-  const serviceFormInfo = useGetProductFormsQuery(productId as string);
+  const productFormInfo = useGetProductFormsQuery(productId);
 
-  const submitServiceForm = async ({ formId, values }: serviceFormArgType) => {
+  const submitProductForm = async ({ formId, values }: productFormArgType) => {
     formId
       ? updateProductFormMutation.mutate({ id: formId, formInfo: values })
       : createProductFormMutation.mutate({
-          serviceId: serviceId.toString(),
+          serviceId: productId,
           formInfo: values,
         });
   };
 
-  const submitServiceFormField = ({
+  const submitProductFormField = ({
     formId,
     formValues,
     fieldId,
     values,
-  }: serviceSubFormArgType) => {
+  }: productSubFormArgType) => {
     const submitField = (formId: string) => {
       fieldId
         ? updateProductSubFormMutation.mutate({
@@ -87,7 +95,7 @@ export const useServiceFormActions = () => {
     } else {
       createProductFormMutation.mutate(
         {
-          serviceId: serviceId.toString(),
+          serviceId: productId,
           formInfo: formValues,
         },
         {
@@ -100,7 +108,7 @@ export const useServiceFormActions = () => {
     }
   };
 
-  const serviceFormState = {
+  const productFormState = {
     formLoading:
       createProductFormMutation.isPending ||
       updateProductFormMutation.isPending,
@@ -116,21 +124,21 @@ export const useServiceFormActions = () => {
   };
 
   return {
-    serviceFormInfo,
-    submitServiceForm,
-    submitServiceFormField,
-    serviceFormState,
+    productFormInfo,
+    submitProductForm,
+    submitProductFormField,
+    productFormState,
   };
 };
 
-export interface serviceSubFormArgType {
+export interface productSubFormArgType {
   formId?: string;
-  formValues: serviceFormType;
+  formValues: productFormType;
   fieldId?: string;
   values: { [x: string]: any };
 }
 
-export interface serviceFormArgType {
+export interface productFormArgType {
   formId?: string;
   values: FormType;
 }

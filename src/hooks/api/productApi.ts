@@ -1,6 +1,6 @@
 import { Client } from "@/lib/axios";
 
-interface productType {
+export interface productType {
   name: string;
   description: string;
   country: string;
@@ -10,7 +10,7 @@ interface productType {
   feature: string[];
 }
 
-interface productFormType {
+export interface productFormType {
   title: string;
   description: string;
   type: string;
@@ -62,6 +62,13 @@ export const getProduct = async (id: string) => {
   return await client.get(`/service/product/${id}`);
 };
 
+export const getServiceProducts = async (serviceCategoryId: string) => {
+  const client = await Client();
+  return await client.get(
+    `/service/product/allByServiceCategory/${serviceCategoryId}`
+  );
+};
+
 export const getAllProducts = async () => {
   const client = await Client();
   return await client.get(`/service/product`);
@@ -95,9 +102,9 @@ export const deleteProductForm = async (id: string) => {
   return await client.delete(`/service/product/form/${id}`);
 };
 
-export const getProductForm = async (id: string) => {
+export const getProductForm = async (productId: string) => {
   const client = await Client();
-  return await client.get(`/service/product/form/${id}`);
+  return await client.get(`/service/product/formByService/${productId}`);
 };
 
 export const getServiceProductForms = async (serviceId: string) => {

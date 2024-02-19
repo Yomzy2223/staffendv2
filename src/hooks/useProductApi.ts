@@ -11,6 +11,7 @@ import {
   getProductForm,
   getProductSubForm,
   getServiceProductForms,
+  getServiceProducts,
   updateProduct,
   updateProductForm,
   updateProductSubForm,
@@ -62,6 +63,14 @@ const useProductApi = () => {
     useQuery({
       queryKey: ["product", id],
       queryFn: ({ queryKey }) => getProduct(queryKey[1]),
+      enabled: id ? true : false,
+    });
+
+  const useGetServiceProductsQuery = (serviceCategoryId: string) =>
+    useQuery({
+      queryKey: ["product", serviceCategoryId],
+      queryFn: ({ queryKey }) => getServiceProducts(queryKey[1]),
+      enabled: serviceCategoryId ? true : false,
     });
 
   const getAllProductsQuery = useQuery({
@@ -105,16 +114,18 @@ const useProductApi = () => {
     retry: 3,
   });
 
-  const useGetProductFormsQuery = (id: string) =>
+  const useGetProductFormsQuery = (productId: string) =>
     useQuery({
-      queryKey: ["productForm", id],
+      queryKey: ["productForm", productId],
       queryFn: ({ queryKey }) => getProductForm(queryKey[1]),
+      enabled: productId ? true : false,
     });
 
   const useGetServiceProductFormsQuery = (serviceId: string) =>
     useQuery({
       queryKey: ["productForm", serviceId],
       queryFn: ({ queryKey }) => getServiceProductForms(queryKey[1]),
+      enabled: serviceId ? true : false,
     });
 
   const getAllServicesProductsFormQuery = useQuery({
@@ -162,12 +173,14 @@ const useProductApi = () => {
     useQuery({
       queryKey: ["productForm", id],
       queryFn: ({ queryKey }) => getProductSubForm(queryKey[1]),
+      enabled: id ? true : false,
     });
 
   const useGetProductFormSubFormsQuery = (serviceFormId: string) =>
     useQuery({
       queryKey: ["productForm", serviceFormId],
       queryFn: ({ queryKey }) => getProductSubForm(queryKey[1]),
+      enabled: serviceFormId ? true : false,
     });
 
   return {
@@ -175,6 +188,7 @@ const useProductApi = () => {
     updateProductMutation,
     deleteProductMutation,
     useGetProductQuery,
+    useGetServiceProductsQuery,
     getAllProductsQuery,
 
     createProductFormMutation,

@@ -74,7 +74,6 @@ export const section1FormInfo = [
     label: "Enter product features",
     type: "tagInput",
     minTagChars: 3,
-    maxTag: 4,
     errors: {
       empty: "Enter feature",
       exists: "Feature already exists",

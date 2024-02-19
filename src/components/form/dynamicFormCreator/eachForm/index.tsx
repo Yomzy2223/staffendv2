@@ -73,7 +73,7 @@ const EachForm = ({
   };
 
   useEffect(() => {
-    if (!formLoading && formSuccess && loadingForm === number) setEdit(false);
+    // if (!formLoading && formSuccess && loadingForm === number) setEdit(false);
     if (!fieldLoading && fieldSuccess && loadingField === lastField)
       setNewlyAdded(undefined);
   }, [formLoading, formSuccess, loadingForm]);

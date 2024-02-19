@@ -6,7 +6,7 @@ import DialogWrapper from "@/components/wrappers/dialogWrapper";
 import DynamicFormCreator from "../dynamicFormCreator";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import { Oval } from "react-loading-icons";
-import { useServiceFormActions, useProductInfoActions } from "./actions";
+import { useProductFormActions, useProductInfoActions } from "./actions";
 import { section1FormInfo, productInfoSchema } from "./constants";
 
 const ProductForm = ({ open, setOpen }: propsType) => {
@@ -22,21 +22,23 @@ const ProductForm = ({ open, setOpen }: propsType) => {
   } = useProductInfoActions();
 
   const {
-    serviceFormInfo,
-    submitServiceForm,
-    submitServiceFormField,
-    serviceFormState,
-  } = useServiceFormActions();
+    productFormInfo,
+    submitProductForm,
+    submitProductFormField,
+    productFormState,
+  } = useProductFormActions();
 
   const title1 = isEdit ? "Update Product" : "Create Product";
   const title2 = isEdit ? "Update Product Form" : "Add Product Form";
   const title = section === 1 ? title1 : title2;
 
-  const serviceData = productInfo?.data?.data?.data;
-  const serviceFormData = serviceFormInfo?.data?.data?.data;
+  const productData = productInfo?.data?.data?.data;
+  const productFormData = productFormInfo?.data?.data?.data;
 
   useEffect(() => {
-    if (productSuccess) setSection(section + 1);
+    if (productSuccess) {
+      setSection(section + 1);
+    }
   }, [productSuccess]);
 
   const handleBack = () => {
@@ -47,11 +49,14 @@ const ProductForm = ({ open, setOpen }: propsType) => {
     setSection(section - 1);
   };
 
-  const wide = serviceFormData?.length > 1;
+  const wide = productFormData?.length > 1;
 
   const defaultValues = {
-    name: serviceData?.name || "",
-    description: serviceData?.description || "",
+    name: productData?.name || "",
+    description: productData?.description || "",
+    amount: productData?.amount || "",
+    timeline: productData?.timeline || "",
+    feature: productData?.feature || [],
   };
 
   return (
@@ -92,10 +97,10 @@ const ProductForm = ({ open, setOpen }: propsType) => {
       {section === 2 && (
         <div className="flex flex-col justify-between gap-6 flex-1">
           <DynamicFormCreator
-            formInfo={serviceFormData}
-            onEachSubmit={submitServiceFormField}
-            onFormSubmit={submitServiceForm}
-            formState={serviceFormState}
+            formInfo={productFormData}
+            onEachSubmit={submitProductFormField}
+            onFormSubmit={submitProductForm}
+            formState={productFormState}
             wide={wide}
           />
           <div className="bg-white flex items-center justify-end gap-4 pt-4 sticky bottom-0">

@@ -18,8 +18,9 @@ const InputWithTags = ({
   errors,
   submitErr,
   handleKeyDown,
+  defaultTags,
 }: propsType) => {
-  const [tags, setTags] = useState<string[]>(["dlkf", "lkdfj"]);
+  const [tags, setTags] = useState<string[]>(defaultTags || []);
   const [errorMsg, setErrorMsg] = useState("");
   const [value, setValue] = useState("");
 
@@ -124,4 +125,5 @@ interface propsType {
     minTagChars?: string;
   };
   submitErr?: string | FieldError | Merge<FieldError, FieldErrorsImpl<any>>;
+  defaultTags?: string[];
 }

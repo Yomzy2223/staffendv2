@@ -6,13 +6,22 @@ import ProductForm from "@/components/form/productForms";
 import ProductsHeader from "@/components/header/productsHeader";
 import SearchComp from "@/components/search";
 import CardWrapper from "@/components/wrappers/cardWrapper";
+import { productType } from "@/hooks/api/productApi";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
+import useProductApi from "@/hooks/useProductApi";
 import { Button } from "flowbite-react";
+import { useParams } from "next/navigation";
 import React, { useState } from "react";
 
 const Products = () => {
   const [open, setOpen] = useState(false);
   const { setQuery } = useGlobalFucntions();
+
+  const { serviceId } = useParams();
+  const { useGetServiceProductsQuery } = useProductApi();
+  const { data } = useGetServiceProductsQuery(serviceId.toString());
+
+  const serviceProducts = data?.data?.data;
 
   const addNewProduct = () => {
     setOpen(true);
@@ -24,7 +33,7 @@ const Products = () => {
       <ProductsHeader title="Business Registration" />
 
       <DoChecks
-        items={[]}
+        items={serviceProducts}
         emptyText="You have not added any product"
         btnText="Add new product"
         btnAction={addNewProduct}
@@ -35,7 +44,7 @@ const Products = () => {
               <span>Products (0)</span>
               <div className="flex items-center gap-6 flex-1 justify-end">
                 <SearchComp onSubmit={() => console.log("searching text...")} />
-                <Button color="primary" size="lg">
+                <Button color="primary" size="lg" onClick={addNewProduct}>
                   Add Product
                 </Button>
               </div>
@@ -46,15 +55,11 @@ const Products = () => {
             />
           </div>
 
-          <DoChecks items={[""]} emptyText="You have not added any product">
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4 pt-4 sm:gap-6">
-              {Array(10)
-                .fill("")
-                .map((product, i) => (
-                  <ProductCard key={i} />
-                ))}
-            </div>
-          </DoChecks>
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4 pt-4 sm:gap-6">
+            {serviceProducts?.map((product: productType, i: number) => (
+              <ProductCard key={i} info={product} />
+            ))}
+          </div>
         </CardWrapper>
       </DoChecks>
 

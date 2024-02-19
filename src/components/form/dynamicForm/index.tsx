@@ -47,7 +47,6 @@ const DynamicForm = ({
     onFormSubmit && onFormSubmit(values);
   }
 
-  console.log(errors);
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -121,6 +120,7 @@ const DynamicForm = ({
                   maxTag={el.maxTag}
                   minTagChars={el.minTagChars || 0}
                   handleKeyDown={(tags) => setValue(el.name, tags)}
+                  defaultTags={defaultValues[el.name]}
                 />
               )}
 

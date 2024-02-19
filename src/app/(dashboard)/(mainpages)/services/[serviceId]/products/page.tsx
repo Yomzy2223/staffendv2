@@ -11,14 +11,14 @@ import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import useProductApi from "@/hooks/useProductApi";
 import { Button } from "flowbite-react";
 import { useParams } from "next/navigation";
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 
 const Products = () => {
   const [open, setOpen] = useState(false);
   const { setQuery } = useGlobalFucntions();
 
   const { serviceId } = useParams();
-  const { useGetServiceProductsQuery } = useProductApi();
+  const { useGetServiceProductsQuery, deleteProductMutation } = useProductApi();
   const { data } = useGetServiceProductsQuery(serviceId.toString());
 
   const serviceProducts = data?.data?.data;
@@ -26,6 +26,18 @@ const Products = () => {
   const addNewProduct = () => {
     setOpen(true);
     setQuery("action", "add");
+  };
+
+  const deleteProduct = ({
+    info,
+    setOpenConfirm,
+  }: {
+    info: productFullType;
+    setOpenConfirm: Dispatch<SetStateAction<boolean>>;
+  }) => {
+    deleteProductMutation.mutate(info.id, {
+      onSuccess: () => setOpenConfirm(false),
+    });
   };
 
   return (
@@ -57,7 +69,13 @@ const Products = () => {
 
           <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4 pt-4 sm:gap-6">
             {serviceProducts?.map((product: productFullType, i: number) => (
-              <ProductCard key={i} info={product} setOpen={setOpen} />
+              <ProductCard
+                key={i}
+                info={product}
+                setOpen={setOpen}
+                handleDelete={deleteProduct}
+                isLoading={deleteProductMutation.isPending}
+              />
             ))}
           </div>
         </CardWrapper>

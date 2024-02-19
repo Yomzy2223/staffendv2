@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Reference, RefObject } from "react";
 import {
   Drawer,
   DrawerContent,
@@ -18,6 +18,7 @@ const DialogWrapper = ({
   setOpen,
   fit,
   size,
+  classNames,
 }: propsType) => {
   const { isDesktop } = useGlobalFucntions();
 
@@ -30,15 +31,19 @@ const DialogWrapper = ({
           onClose={() => setOpen(false)}
           dismissible
         >
-          <Modal.Header>
+          <Modal.Header className={classNames?.header}>
             <span className="text-lg font-semibold text-foreground">
               {title}
             </span>
           </Modal.Header>
           <Modal.Body
-            className={cn("flex flex-col p-5 pt-4 pb-0 mb-5", {
-              "min-h-[70vh]": !fit,
-            })}
+            className={cn(
+              "flex flex-col p-5 pt-4 pb-0 mb-5",
+              {
+                "min-h-[70vh]": !fit,
+              },
+              classNames?.body
+            )}
           >
             {children}
           </Modal.Body>
@@ -75,4 +80,8 @@ interface propsType {
   setOpen: (open: boolean) => void;
   fit?: boolean;
   size?: string;
+  classNames?: {
+    header?: string;
+    body?: string;
+  };
 }

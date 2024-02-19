@@ -54,6 +54,7 @@ const useProductApi = () => {
     },
     onSuccess(data, variables, context) {
       handleSuccess({ data });
+      console.log(data);
       queryClient.invalidateQueries({ queryKey: ["product"] });
     },
     retry: 3,

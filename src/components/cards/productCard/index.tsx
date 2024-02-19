@@ -1,3 +1,4 @@
+import ConfirmAction from "@/components/confirmAction";
 import {
   Menubar,
   MenubarContent,
@@ -9,13 +10,13 @@ import {
 import { productFullType } from "@/hooks/api/types";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import { Currency, MoreHorizontal, Timer, WholeWord } from "lucide-react";
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 
-const ProductCard = ({ info, setOpen }: propsType) => {
+const ProductCard = ({ info, setOpen, handleDelete, isLoading }: propsType) => {
+  const [openConfirm, setOpenConfirm] = useState(false);
   const { setQuery } = useGlobalFucntions();
 
   const handleEdit = () => {
-    console.log(info);
     setOpen(true);
     setQuery("action", "edit");
     setQuery("productId", info.id);
@@ -39,12 +40,26 @@ const ProductCard = ({ info, setOpen }: propsType) => {
               <MenubarContent>
                 <MenubarItem onClick={handleEdit}>Edit</MenubarItem>
                 <MenubarSeparator />
-                <MenubarItem className="text-destructive-foreground hover:!text-destructive-foreground hover:!bg-destructive">
+                <MenubarItem
+                  className="text-destructive-foreground hover:!text-destructive-foreground hover:!bg-destructive"
+                  onClick={() => setOpenConfirm(true)}
+                >
                   Delete
                 </MenubarItem>
               </MenubarContent>
             </MenubarMenu>
           </Menubar>
+          {openConfirm && (
+            <ConfirmAction
+              open={openConfirm}
+              setOpen={setOpenConfirm}
+              confirmAction={() => handleDelete({ info, setOpenConfirm })}
+              title="Delete Product"
+              description="Are you sure you want to delete this product?"
+              isLoading={isLoading}
+              isDelete
+            />
+          )}
         </div>
         <p className="text-sm font-normal text-foreground-5">
           {info?.description}
@@ -78,4 +93,12 @@ export default ProductCard;
 interface propsType {
   info: productFullType;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  handleDelete: ({
+    info,
+    setOpenConfirm,
+  }: {
+    info: productFullType;
+    setOpenConfirm: Dispatch<SetStateAction<boolean>>;
+  }) => void;
+  isLoading: boolean;
 }

@@ -31,4 +31,5 @@ export interface DynamicFormProps {
   onFormSubmit: (values: any) => void;
   className?: string;
   formClassName?: string;
+  disableAll?: boolean;
 }

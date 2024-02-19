@@ -94,8 +94,12 @@ export const productInfoSchema = z.object({
   description: z
     .string({ required_error: "Provide product description" })
     .min(20, "Product description should be at least 20 characters"),
-  country: z.string().min(1, "Select country"),
-  currency: z.string().min(1, "Select currency"),
+  country: z
+    .string({ required_error: "Select country" })
+    .min(1, "Select country"),
+  currency: z
+    .string({ required_error: "Select currency" })
+    .min(1, "Select currency"),
   amount: z.coerce.number().min(1, "Enter product amount"),
   timeline: z.string().min(1, "Enter product processing timeline"),
   feature: z

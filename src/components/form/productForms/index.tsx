@@ -84,6 +84,7 @@ const ProductForm = ({ open, setOpen }: propsType) => {
           className={cn("gap-4", {
             "grid grid-cols-2 gap-x-5": isDesktop,
           })}
+          disableAll={productInfo.isLoading}
         >
           <div className="bg-white flex items-center justify-end pt-4 sticky bottom-0">
             <Button

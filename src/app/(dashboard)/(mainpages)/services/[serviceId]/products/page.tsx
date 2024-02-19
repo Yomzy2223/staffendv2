@@ -41,7 +41,7 @@ const Products = () => {
         <CardWrapper className="border border-border shadow-sm mx-5 my-4 lg:mx-8 lg:my-6">
           <div className="border-b border-border pb-4">
             <div className="flex items-center gap-6">
-              <span>Products (0)</span>
+              <span>Products ({serviceProducts?.length || 0})</span>
               <div className="flex items-center gap-6 flex-1 justify-end">
                 <SearchComp onSubmit={() => console.log("searching text...")} />
                 <Button color="primary" size="lg" onClick={addNewProduct}>

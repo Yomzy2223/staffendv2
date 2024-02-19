@@ -26,6 +26,7 @@ const DynamicForm = ({
   onFormSubmit,
   className,
   formClassName,
+  disableAll,
 }: DynamicFormProps) => {
   type FormType = z.infer<typeof formSchema>;
 
@@ -86,6 +87,7 @@ const DynamicForm = ({
                   helperText={<>{errorMsg}</>}
                   color={errors[el.name] && "failure"}
                   className={errorMsg ? "focus:[&_input]:outline-none" : ""}
+                  disabled={disableAll}
                   {...el.textInputProp}
                   {...register(el.name)}
                 />
@@ -100,6 +102,7 @@ const DynamicForm = ({
                   className={cn("p-2.5 resize-none", {
                     "focus:outline-none": errorMsg,
                   })}
+                  disabled={disableAll}
                   {...el.textAreaProp}
                   {...register(el.name)}
                 />
@@ -110,6 +113,8 @@ const DynamicForm = ({
                   id={el.name}
                   helperText={<>{errorMsg}</>}
                   color={errors[el.name] && "failure"}
+                  disabled={disableAll}
+                  defaultValue={defaultValues[el.name]}
                   {...el.selectProp}
                   {...register(el.name)}
                 >
@@ -127,21 +132,32 @@ const DynamicForm = ({
                   minTagChars={el.minTagChars || 0}
                   handleKeyDown={(tags) => setValue(el.name, tags)}
                   defaultTags={defaultValues[el.name]}
+                  disabled={disableAll}
                 />
               )}
 
               {el.type === "checkbox" && (
-                <Checkbox id={el.name} defaultChecked {...register(el.name)} />
+                <Checkbox
+                  id={el.name}
+                  defaultChecked
+                  disabled={disableAll}
+                  {...register(el.name)}
+                />
               )}
 
               {el.type === "radio" && (
-                <Radio id={el.name} {...register(el.name)} />
+                <Radio
+                  id={el.name}
+                  disabled={disableAll}
+                  {...register(el.name)}
+                />
               )}
 
               {el.type === "file" && (
                 <FileInput
                   id={el.name}
                   helperText="A profile picture is useful to confirm your are logged into your account"
+                  disabled={disableAll}
                   {...register(el.name)}
                 />
               )}

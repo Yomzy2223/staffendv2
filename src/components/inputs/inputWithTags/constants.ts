@@ -1,3 +1,23 @@
+import { HTMLAttributes } from "react";
+import { FieldError, FieldErrorsImpl, Merge } from "react-hook-form";
+
+export interface propsType {
+  size?: string;
+  textInputProp?: HTMLAttributes<HTMLInputElement>;
+  maxTag?: number;
+  minTagChars: number;
+  handleKeyDown: (tags: string[]) => void;
+  errors?: {
+    empty?: string;
+    length?: string;
+    exists?: string;
+    minTagChars?: string;
+  };
+  submitErr?: string | FieldError | Merge<FieldError, FieldErrorsImpl<any>>;
+  defaultTags?: string[];
+  disabled?: boolean;
+}
+
 export const tagColors = [
   {
     text: "hsl(300,100%,41%)",

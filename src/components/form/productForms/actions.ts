@@ -61,6 +61,7 @@ export const useProductFormActions = () => {
     updateProductSubFormMutation,
   } = useProductApi();
   const productFormInfo = useGetProductFormsQuery(productId);
+  console.log(productFormInfo);
 
   const submitProductForm = async ({ formId, values }: productFormArgType) => {
     formId

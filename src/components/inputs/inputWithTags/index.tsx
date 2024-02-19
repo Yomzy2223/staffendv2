@@ -1,14 +1,9 @@
 import { Button, TextInput } from "flowbite-react";
-import React, {
-  HTMLAttributes,
-  KeyboardEvent,
-  useEffect,
-  useState,
-} from "react";
+import React, { useEffect, useState } from "react";
 import TagIcon from "@/assets/icons/tagIcon";
 import { useActions } from "./actions";
 import { X } from "lucide-react";
-import { FieldError, FieldErrorsImpl, Merge } from "react-hook-form";
+import { propsType } from "./constants";
 
 const InputWithTags = ({
   size,
@@ -19,6 +14,7 @@ const InputWithTags = ({
   submitErr,
   handleKeyDown,
   defaultTags,
+  disabled,
 }: propsType) => {
   const [tags, setTags] = useState<string[]>(defaultTags || []);
   const [errorMsg, setErrorMsg] = useState("");
@@ -57,6 +53,7 @@ const InputWithTags = ({
           errorMsg && validateTags(e.target.value);
           setValue(e.target.value);
         }}
+        disabled={disabled}
         {...textInputProp}
       />
       <div className="flex gap-2 flex-wrap">
@@ -82,19 +79,3 @@ const InputWithTags = ({
 };
 
 export default InputWithTags;
-
-interface propsType {
-  size?: string;
-  textInputProp?: HTMLAttributes<HTMLInputElement>;
-  maxTag?: number;
-  minTagChars: number;
-  handleKeyDown: (tags: string[]) => void;
-  errors?: {
-    empty?: string;
-    length?: string;
-    exists?: string;
-    minTagChars?: string;
-  };
-  submitErr?: string | FieldError | Merge<FieldError, FieldErrorsImpl<any>>;
-  defaultTags?: string[];
-}

@@ -1,4 +1,4 @@
-import { serviceFormType } from "@/api/serviceApi";
+import { serviceFormType } from "@/hooks/api/serviceApi";
 import { Button } from "flowbite-react";
 import { PlusCircle } from "lucide-react";
 import React, { useEffect, useState } from "react";

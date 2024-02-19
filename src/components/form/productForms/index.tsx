@@ -6,8 +6,8 @@ import DialogWrapper from "@/components/wrappers/dialogWrapper";
 import DynamicFormCreator from "../dynamicFormCreator";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import { Oval } from "react-loading-icons";
-import { useServiceFormActions, useServiceInfoActions } from "./actions";
-import { section1FormInfo, serviceInfoSchema } from "./constants";
+import { useServiceFormActions, useProductInfoActions } from "./actions";
+import { section1FormInfo, productInfoSchema } from "./constants";
 
 const ProductForm = ({ open, setOpen }: propsType) => {
   const [section, setSection] = useState(1);
@@ -15,11 +15,11 @@ const ProductForm = ({ open, setOpen }: propsType) => {
 
   const {
     isEdit,
-    serviceInfo,
-    submitServiceInfo,
-    serviceLoading,
-    serviceSuccess,
-  } = useServiceInfoActions();
+    productInfo,
+    submitProductInfo,
+    productLoading,
+    productSuccess,
+  } = useProductInfoActions();
 
   const {
     serviceFormInfo,
@@ -32,12 +32,12 @@ const ProductForm = ({ open, setOpen }: propsType) => {
   const title2 = isEdit ? "Update Product Form" : "Add Product Form";
   const title = section === 1 ? title1 : title2;
 
-  const serviceData = serviceInfo?.data?.data?.data;
+  const serviceData = productInfo?.data?.data?.data;
   const serviceFormData = serviceFormInfo?.data?.data?.data;
 
   useEffect(() => {
-    if (serviceSuccess) setSection(section + 1);
-  }, [serviceSuccess]);
+    if (productSuccess) setSection(section + 1);
+  }, [productSuccess]);
 
   const handleBack = () => {
     if (section === 1) {
@@ -67,21 +67,23 @@ const ProductForm = ({ open, setOpen }: propsType) => {
         <DynamicForm
           formInfo={section1FormInfo}
           defaultValues={defaultValues}
-          formSchema={serviceInfoSchema}
-          onFormSubmit={submitServiceInfo}
-          className={cn("space-y-4")}
+          formSchema={productInfoSchema}
+          onFormSubmit={submitProductInfo}
+          className={cn("gap-4", {
+            "grid grid-cols-2 gap-x-5": isDesktop,
+          })}
         >
           <div className="bg-white flex items-center justify-end pt-4 sticky bottom-0">
             <Button
               type="submit"
               color="primary"
-              isProcessing={serviceLoading}
-              disabled={serviceLoading}
+              isProcessing={productLoading}
+              disabled={productLoading}
               processingSpinner={
                 <Oval color="white" strokeWidth={4} className="h-5 w-5" />
               }
             >
-              {!serviceLoading && "Next"}
+              {!productLoading && "Next"}
             </Button>
           </div>
         </DynamicForm>

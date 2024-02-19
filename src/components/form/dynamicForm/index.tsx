@@ -16,6 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { DynamicFormProps } from "./constants";
 import { cn } from "@/lib/utils";
+import InputWithTags from "@/components/inputs/inputWithTags";
 
 const DynamicForm = ({
   children,
@@ -46,6 +47,7 @@ const DynamicForm = ({
     onFormSubmit && onFormSubmit(values);
   }
 
+  console.log(errors);
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -54,10 +56,13 @@ const DynamicForm = ({
         formClassName
       )}
     >
-      <div className={cn("space-y-8", className)}>
+      <div className={cn("flex flex-col justify-start gap-8", className)}>
         {formInfo.map((el, i: number) => {
           const isTextInput =
-            el.type === "text" || el.type === "password" || el.type === "email";
+            el.type === "text" ||
+            el.type === "password" ||
+            el.type === "email" ||
+            el.type === "number";
           const errorMsg = errors[el.name]?.message;
 
           return (
@@ -98,8 +103,8 @@ const DynamicForm = ({
               {el.type === "select" && el.selectOptions && (
                 <Select
                   id={el.name}
+                  helperText={<>{errorMsg}</>}
                   color={errors[el.name] && "failure"}
-                  helperText={<>{errors[el.name]?.message}</>}
                   {...el.selectProp}
                   {...register(el.name)}
                 >
@@ -107,6 +112,16 @@ const DynamicForm = ({
                     <option key={option}>{option}</option>
                   ))}
                 </Select>
+              )}
+
+              {el.type === "tagInput" && (
+                <InputWithTags
+                  errors={el.errors}
+                  submitErr={errorMsg}
+                  maxTag={el.maxTag}
+                  minTagChars={el.minTagChars || 0}
+                  handleKeyDown={(tags) => setValue(el.name, tags)}
+                />
               )}
 
               {el.type === "checkbox" && (

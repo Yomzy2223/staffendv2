@@ -13,6 +13,14 @@ export interface FormInput {
   selectProp?: Record<string, string | number>;
   fileProp?: Record<string, any>;
   selectOptions?: string[];
+  errors?: {
+    empty: string;
+    length?: string;
+    exists: string;
+    minTagChars: string;
+  };
+  maxTag?: number;
+  minTagChars?: number;
 }
 
 export interface DynamicFormProps {

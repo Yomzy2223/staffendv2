@@ -1,61 +1,65 @@
-import { serviceFormType, serviceSubFormType } from "@/api/serviceApi";
-import useServiceApi from "@/hooks/useServiceApi";
+import { productSubFormType } from "@/hooks/api/productApi";
+import { serviceFormType, serviceSubFormType } from "@/hooks/api/serviceApi";
+import useProductApi from "@/hooks/useProductApi";
 import { useParams, useSearchParams } from "next/navigation";
 import { FormType } from "../dynamicFormCreator/eachForm/constants";
-import { serviceInfoType } from "./constants";
+import { productInfoType } from "./constants";
 
 // Actions for service info section
-export const useServiceInfoActions = () => {
+export const useProductInfoActions = () => {
   const { get } = useSearchParams();
-  const { serviceId } = useParams();
-  const isEdit = serviceId && get("action") == "edit";
+  const { serviceId, productId } = useParams();
+  const isEdit = productId && get("action") == "edit";
 
-  const { createServiceMutation, updateServiceMutation, useGetServiceQuery } =
-    useServiceApi();
-  const serviceInfo = useGetServiceQuery(serviceId as string);
+  const { createProductMutation, updateProductMutation, useGetProductQuery } =
+    useProductApi();
+  const productInfo = useGetProductQuery(productId as string);
 
-  const submitServiceInfo = async (values: serviceInfoType) => {
-    serviceId
-      ? updateServiceMutation.mutate({
-          id: serviceId as string,
+  const submitProductInfo = async (values: productInfoType) => {
+    productId
+      ? updateProductMutation.mutate({
+          id: productId as string,
           formInfo: values,
         })
-      : createServiceMutation.mutate(values);
+      : createProductMutation.mutate({
+          serviceCategoryId: serviceId.toString(),
+          formInfo: values,
+        });
   };
 
-  const serviceLoading =
-    createServiceMutation.isPending || updateServiceMutation.isPending;
-  const serviceSuccess =
-    createServiceMutation.isSuccess || updateServiceMutation.isSuccess;
+  const productLoading =
+    createProductMutation.isPending || updateProductMutation.isPending;
+  const productSuccess =
+    createProductMutation.isSuccess || updateProductMutation.isSuccess;
 
   return {
     isEdit,
-    serviceLoading,
-    serviceSuccess,
-    serviceInfo,
-    submitServiceInfo,
+    productLoading,
+    productSuccess,
+    productInfo,
+    submitProductInfo,
   };
 };
 
 // Actions for service form section
 export const useServiceFormActions = () => {
   const { get } = useSearchParams();
-  const { serviceId } = useParams();
+  const { serviceId, productId } = useParams();
 
   const {
-    createServiceFormMutation,
-    updateServiceFormMutation,
-    useGetServiceFormsQuery,
-    createServiceSubFormMutation,
-    updateServiceSubFormMutation,
-  } = useServiceApi();
-  const serviceFormInfo = useGetServiceFormsQuery(serviceId as string);
+    createProductFormMutation,
+    updateProductFormMutation,
+    useGetProductFormsQuery,
+    createProductSubFormMutation,
+    updateProductSubFormMutation,
+  } = useProductApi();
+  const serviceFormInfo = useGetProductFormsQuery(productId as string);
 
   const submitServiceForm = async ({ formId, values }: serviceFormArgType) => {
     formId
-      ? updateServiceFormMutation.mutate({ id: formId, formInfo: values })
-      : createServiceFormMutation.mutate({
-          serviceCategoryId: (serviceId as string) || "",
+      ? updateProductFormMutation.mutate({ id: formId, formInfo: values })
+      : createProductFormMutation.mutate({
+          serviceId: serviceId.toString(),
           formInfo: values,
         });
   };
@@ -68,22 +72,22 @@ export const useServiceFormActions = () => {
   }: serviceSubFormArgType) => {
     const submitField = (formId: string) => {
       fieldId
-        ? updateServiceSubFormMutation.mutate({
+        ? updateProductSubFormMutation.mutate({
             id: fieldId,
-            formInfo: values as serviceSubFormType,
+            formInfo: values as productSubFormType,
           })
-        : createServiceSubFormMutation.mutate({
-            formId,
-            formInfo: values as serviceSubFormType,
+        : createProductSubFormMutation.mutate({
+            serviceFormId: formId,
+            formInfo: values as productSubFormType,
           });
     };
 
     if (formId) {
       submitField(formId);
     } else {
-      createServiceFormMutation.mutate(
+      createProductFormMutation.mutate(
         {
-          serviceCategoryId: (serviceId as string) || "",
+          serviceId: serviceId.toString(),
           formInfo: formValues,
         },
         {
@@ -98,17 +102,17 @@ export const useServiceFormActions = () => {
 
   const serviceFormState = {
     formLoading:
-      createServiceFormMutation.isPending ||
-      updateServiceFormMutation.isPending,
+      createProductFormMutation.isPending ||
+      updateProductFormMutation.isPending,
     formSuccess:
-      createServiceFormMutation.isSuccess ||
-      updateServiceFormMutation.isSuccess,
+      createProductFormMutation.isSuccess ||
+      updateProductFormMutation.isSuccess,
     fieldLoading:
-      createServiceSubFormMutation.isPending ||
-      updateServiceSubFormMutation.isPending,
+      createProductSubFormMutation.isPending ||
+      updateProductSubFormMutation.isPending,
     fieldSuccess:
-      createServiceSubFormMutation.isSuccess ||
-      updateServiceSubFormMutation.isSuccess,
+      createProductSubFormMutation.isSuccess ||
+      updateProductSubFormMutation.isSuccess,
   };
 
   return {

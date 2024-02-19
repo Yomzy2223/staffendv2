@@ -19,6 +19,17 @@ export const useGlobalFucntions = () => {
     [searchParams]
   );
 
+  const deleteQueryString = useCallback(
+    (name: string) => {
+      const newQuery = new URLSearchParams(searchParams.toString());
+      newQuery.delete(name);
+      router.push(pathname + "?" + newQuery.toString());
+
+      return newQuery.toString();
+    },
+    [searchParams]
+  );
+
   const setQuery = (name: string, value: string | number) => {
     router.push(pathname + "?" + createQueryString(name, value), {
       scroll: false,
@@ -27,6 +38,7 @@ export const useGlobalFucntions = () => {
 
   return {
     createQueryString,
+    deleteQueryString,
     setQuery,
     isDesktop,
   };

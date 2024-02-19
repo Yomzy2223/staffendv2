@@ -24,7 +24,7 @@ export const section1FormInfo = [
     },
   },
   {
-    name: "name",
+    name: "country",
     label: "Select operational country",
     selectOptions: ["NGA", "US"],
     type: "select",
@@ -36,7 +36,7 @@ export const section1FormInfo = [
     },
   },
   {
-    name: "name",
+    name: "currency",
     label: "Select currency",
     selectOptions: ["NGN", "USD"],
     type: "select",
@@ -48,9 +48,9 @@ export const section1FormInfo = [
     },
   },
   {
-    name: "name",
+    name: "amount",
     label: "Enter product amount",
-    type: "text",
+    type: "number",
     labelProp: {
       className: "font-normal",
     },
@@ -59,7 +59,7 @@ export const section1FormInfo = [
     },
   },
   {
-    name: "name",
+    name: "timeline",
     label: "Enter processing timeline",
     type: "text",
     labelProp: {
@@ -69,13 +69,45 @@ export const section1FormInfo = [
       placeholder: "Enter processing timeline",
     },
   },
+  {
+    name: "feature",
+    label: "Enter product features",
+    type: "tagInput",
+    minTagChars: 3,
+    maxTag: 4,
+    errors: {
+      empty: "Enter feature",
+      exists: "Feature already exists",
+      minTagChars: "Feature must be at least three characters",
+      length: "Features cannot be more than 4",
+    },
+    labelProp: {
+      className: "font-normal",
+    },
+    textInputProp: {
+      placeholder: "Enter product features",
+    },
+  },
 ];
 
-export const serviceInfoSchema = z.object({
-  name: z.string().min(3, "Service name should be at least 3 characters"),
+export const productInfoSchema = z.object({
+  name: z.string().min(3, "Product name should be at least 3 characters"),
   description: z
-    .string({ required_error: "Provide service description" })
-    .min(20, "Kindly provide more information"),
+    .string({ required_error: "Provide product description" })
+    .min(20, "Product description should be at least 20 characters"),
+  country: z.string().min(1, "Select country"),
+  currency: z.string().min(1, "Select currency"),
+  amount: z.coerce.number().min(1, "Enter product amount"),
+  timeline: z.string().min(1, "Enter product processing timeline"),
+  feature: z
+    .string({ required_error: "Enter at least one feature" })
+    .array()
+    .refine(
+      (feature) => {
+        return feature.length >= 4;
+      },
+      { message: "Enter at least 4 feature" }
+    ),
 });
 
-export type serviceInfoType = z.infer<typeof serviceInfoSchema>;
+export type productInfoType = z.infer<typeof productInfoSchema>;

@@ -1,16 +1,20 @@
 import {
   createProduct,
   createProductForm,
+  createProductSubForm,
   deleteProduct,
   deleteProductForm,
+  deleteProductSubForm,
   getAllProducts,
   getAllServicesProductsForm,
   getProduct,
   getProductForm,
+  getProductSubForm,
   getServiceProductForms,
   updateProduct,
   updateProductForm,
-} from "@/api/productApi";
+  updateProductSubForm,
+} from "@/hooks/api/productApi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useResponse } from "./useResponse";
 
@@ -65,7 +69,7 @@ const useProductApi = () => {
     queryFn: getAllProducts,
   });
 
-  const createProducFormtMutation = useMutation({
+  const createProductFormMutation = useMutation({
     mutationFn: createProductForm,
     onError(error, variables, context) {
       handleError({ title: "Failed", error });
@@ -101,7 +105,7 @@ const useProductApi = () => {
     retry: 3,
   });
 
-  const useGetProductFormQuery = (id: string) =>
+  const useGetProductFormsQuery = (id: string) =>
     useQuery({
       queryKey: ["productForm", id],
       queryFn: ({ queryKey }) => getProductForm(queryKey[1]),
@@ -118,18 +122,73 @@ const useProductApi = () => {
     queryFn: getAllServicesProductsForm,
   });
 
+  const createProductSubFormMutation = useMutation({
+    mutationFn: createProductSubForm,
+    onError(error, variables, context) {
+      handleError({ title: "Failed", error });
+    },
+    onSuccess(data, variables, context) {
+      handleSuccess({ data });
+      queryClient.invalidateQueries({ queryKey: ["productForm"] });
+    },
+    retry: 3,
+  });
+
+  const updateProductSubFormMutation = useMutation({
+    mutationFn: updateProductSubForm,
+    onError(error, variables, context) {
+      handleError({ title: "Failed", error });
+    },
+    onSuccess(data, variables, context) {
+      handleSuccess({ data });
+      queryClient.invalidateQueries({ queryKey: ["productForm"] });
+    },
+    retry: 3,
+  });
+
+  const deleteProductSubFormMutation = useMutation({
+    mutationFn: deleteProductSubForm,
+    onError(error, variables, context) {
+      handleError({ title: "Failed", error });
+    },
+    onSuccess(data, variables, context) {
+      handleSuccess({ data });
+      queryClient.invalidateQueries({ queryKey: ["productForm"] });
+    },
+    retry: 3,
+  });
+
+  const useGetProductSubFormQuery = (id: string) =>
+    useQuery({
+      queryKey: ["productForm", id],
+      queryFn: ({ queryKey }) => getProductSubForm(queryKey[1]),
+    });
+
+  const useGetProductFormSubFormsQuery = (serviceFormId: string) =>
+    useQuery({
+      queryKey: ["productForm", serviceFormId],
+      queryFn: ({ queryKey }) => getProductSubForm(queryKey[1]),
+    });
+
   return {
     createProductMutation,
     updateProductMutation,
     deleteProductMutation,
     useGetProductQuery,
     getAllProductsQuery,
-    createProducFormtMutation,
+
+    createProductFormMutation,
     updateProductFormMutation,
     deleteProductFormMutation,
-    useGetProductFormQuery,
+    useGetProductFormsQuery,
     useGetServiceProductFormsQuery,
     getAllServicesProductsFormQuery,
+
+    createProductSubFormMutation,
+    updateProductSubFormMutation,
+    deleteProductSubFormMutation,
+    useGetProductSubFormQuery,
+    useGetProductFormSubFormsQuery,
   };
 };
 

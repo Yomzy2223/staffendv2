@@ -6,7 +6,7 @@ import {
   resetPassword,
   updateUser,
   verifyUserEmail,
-} from "@/api/usersApi";
+} from "@/hooks/api/usersApi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useResponse } from "./useResponse";
 

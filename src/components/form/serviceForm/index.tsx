@@ -11,7 +11,7 @@ import { section1FormInfo, serviceInfoSchema } from "./constants";
 
 const ServiceForm = ({ open, setOpen }: propsType) => {
   const [section, setSection] = useState(1);
-  const { isDesktop } = useGlobalFucntions();
+  const { isDesktop, deleteQueryString } = useGlobalFucntions();
 
   const {
     isEdit,
@@ -54,11 +54,17 @@ const ServiceForm = ({ open, setOpen }: propsType) => {
     description: serviceData?.description || "",
   };
 
+  const resetDialog = () => {
+    setOpen(false);
+    setSection(1);
+    deleteQueryString("action");
+  };
+
   return (
     <DialogWrapper
       open={open}
       setOpen={(open) => {
-        setOpen(open);
+        open ? setOpen(open) : resetDialog();
       }}
       title={title}
       size={wide ? "5xl" : "xl"}
@@ -69,7 +75,7 @@ const ServiceForm = ({ open, setOpen }: propsType) => {
           defaultValues={defaultValues}
           formSchema={serviceInfoSchema}
           onFormSubmit={submitServiceInfo}
-          className={cn("space-y-4")}
+          className={cn("gap-4")}
         >
           <div className="bg-white flex items-center justify-end pt-4 sticky bottom-0">
             <Button
@@ -100,13 +106,7 @@ const ServiceForm = ({ open, setOpen }: propsType) => {
             <Button color="outline" outline onClick={handleBack}>
               Back
             </Button>
-            <Button
-              color="primary"
-              onClick={() => {
-                setOpen(false);
-                setSection(1);
-              }}
-            >
+            <Button color="primary" onClick={resetDialog}>
               Done
             </Button>
           </div>

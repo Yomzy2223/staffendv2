@@ -1,4 +1,4 @@
-import { serviceFormType, serviceSubFormType } from "@/api/serviceApi";
+import { serviceFormType, serviceSubFormType } from "@/hooks/api/serviceApi";
 import useServiceApi from "@/hooks/useServiceApi";
 import { useParams, useSearchParams } from "next/navigation";
 import { FormType } from "../dynamicFormCreator/eachForm/constants";

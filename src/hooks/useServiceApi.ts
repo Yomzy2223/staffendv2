@@ -14,7 +14,7 @@ import {
   updateService,
   updateServiceForm,
   updateServiceSubForm,
-} from "@/api/serviceApi";
+} from "@/hooks/api/serviceApi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useGlobalFucntions } from "./globalFunctions";
 import { useResponse } from "./useResponse";

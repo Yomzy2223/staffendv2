@@ -22,6 +22,7 @@ const DynamicField = ({
   isEdit,
   loading,
   success,
+  deleteField,
 }: propType) => {
   const [edit, setEdit] = useState(isEdit || false);
 
@@ -106,6 +107,7 @@ const DynamicField = ({
             setValue={setValue}
             info={fieldInfo}
             loading={loading}
+            deleteField={deleteField}
           />
         )}
       </form>
@@ -123,6 +125,7 @@ interface propType {
   isEdit?: boolean;
   loading: boolean;
   success: boolean;
+  deleteField: () => void;
 }
 
 // const formSchema = z.object({

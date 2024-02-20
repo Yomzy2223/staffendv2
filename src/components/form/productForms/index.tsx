@@ -66,6 +66,7 @@ const ProductForm = ({ open, setOpen }: propsType) => {
     feature: productData?.feature || [],
   };
 
+  console.log(productFormData);
   return (
     <DialogWrapper
       open={open}
@@ -107,7 +108,9 @@ const ProductForm = ({ open, setOpen }: propsType) => {
           <DynamicFormCreator
             formInfo={productFormData}
             onEachSubmit={submitProductFormField}
+            onEachDelete={(id) => console.log(id)}
             onFormSubmit={submitProductForm}
+            onFormDelete={(id) => console.log(id)}
             formState={productFormState}
             wide={wide}
           />

@@ -98,7 +98,9 @@ const ServiceForm = ({ open, setOpen }: propsType) => {
           <DynamicFormCreator
             formInfo={serviceFormData}
             onEachSubmit={submitServiceFormField}
+            onEachDelete={(id) => console.log(id)}
             onFormSubmit={submitServiceForm}
+            onFormDelete={(id) => console.log(id)}
             formState={serviceFormState}
             wide={wide}
           />

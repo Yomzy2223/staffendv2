@@ -1,3 +1,4 @@
+import EditDelete from "@/components/features/editDelete";
 import { cn } from "@/lib/utils";
 import { Button, Checkbox } from "flowbite-react";
 import { PencilLine, Trash2 } from "lucide-react";
@@ -13,6 +14,7 @@ const Footer = ({
   setValue,
   info,
   loading,
+  deleteField,
 }: propType) => {
   const { compulsory, setCompulsory, cancelChanges } = info;
 
@@ -62,18 +64,10 @@ const Footer = ({
           </Button>
         </div>
       ) : (
-        <div className="flex gap-4">
-          <Button type="button" color="ghost" size="fit">
-            <PencilLine
-              size={16}
-              color="hsl(var(--primary))"
-              onClick={() => setEdit(true)}
-            />
-          </Button>
-          <Button type="button" color="ghost" size="fit">
-            <Trash2 size={16} color="hsl(var(--destructive-foreground))" />
-          </Button>
-        </div>
+        <EditDelete
+          onEdit={() => setEdit(true)}
+          deleteAction={() => deleteField(info)}
+        />
       )}
     </div>
   );
@@ -89,4 +83,5 @@ interface propType {
   setNewlyAdded?: Dispatch<SetStateAction<FieldType | undefined>>;
   info: fieldReturnType;
   loading: boolean;
+  deleteField: (info: fieldReturnType) => void;
 }

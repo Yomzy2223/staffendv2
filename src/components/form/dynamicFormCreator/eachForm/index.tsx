@@ -13,7 +13,9 @@ const EachForm = ({
   fieldsInfo,
   fieldTitle,
   fieldSubmitHandler,
+  fieldDeleteHandler,
   formSubmitHandler,
+  formDeleteHandler,
   isEdit,
   formState,
   loadingForm,
@@ -103,6 +105,7 @@ const EachForm = ({
           isEdit={edit}
           loading={fieldLoading && loadingField === i + 1}
           success={!fieldLoading && fieldSuccess && loadingField === i + 1}
+          deleteField={() => fieldDeleteHandler(field.id)}
         />
       ))}
       {newlyAdded && (
@@ -116,6 +119,7 @@ const EachForm = ({
           isEdit={edit}
           loading={fieldLoading && loadingField === lastField}
           success={!fieldLoading && fieldSuccess && loadingField === lastField}
+          deleteField={() => setNewlyAdded(undefined)}
         />
       )}
       <Footer
@@ -126,6 +130,8 @@ const EachForm = ({
         btnText={btnText}
         loading={formLoading && loadingForm === number}
         cancelChanges={cancelChanges}
+        disableAddNew={newlyAdded ? true : false}
+        deleteForm={formDeleteHandler}
       />
     </Card>
   );
@@ -151,6 +157,8 @@ interface propType {
     formId?: string;
     values: FormType;
   }) => void;
+  fieldDeleteHandler: (id: string) => void;
+  formDeleteHandler: () => void;
   isEdit?: boolean;
   formState: {
     formLoading: boolean;

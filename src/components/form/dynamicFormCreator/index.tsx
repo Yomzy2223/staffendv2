@@ -1,4 +1,3 @@
-import { serviceFormType } from "@/hooks/api/serviceApi";
 import { Button } from "flowbite-react";
 import { PlusCircle } from "lucide-react";
 import React, { useEffect, useState } from "react";
@@ -10,7 +9,9 @@ import FieldTypePopUp from "./eachForm/fieldTypePopUp";
 const DynamicFormCreator = ({
   fieldTitle,
   onEachSubmit,
+  onEachDelete,
   onFormSubmit,
+  onFormDelete,
   formInfo,
   formState,
   wide,
@@ -54,13 +55,15 @@ const DynamicFormCreator = ({
           <EachForm
             key={info.title + i}
             number={i + 1}
-            fieldsInfo={info?.subForm}
+            fieldsInfo={info?.subForm || info?.serviceSubForm}
             fieldTitle={fieldTitle}
             fieldSubmitHandler={onEachSubmit}
             formSubmitHandler={({ formId, values }) => {
               setLoadingForm(i + 1);
               onFormSubmit({ formId, values });
             }}
+            fieldDeleteHandler={onEachDelete}
+            formDeleteHandler={() => onFormDelete(info.id)}
             info={info}
             formState={formState}
             loadingForm={loadingForm}
@@ -76,6 +79,8 @@ const DynamicFormCreator = ({
               setLoadingForm((formInfo?.length ?? 0) + 1);
               onFormSubmit({ formId, values });
             }}
+            fieldDeleteHandler={onEachDelete}
+            formDeleteHandler={() => setNewlyAdded(undefined)}
             isEdit
             info={{
               type: newlyAdded.type,
@@ -92,7 +97,7 @@ const DynamicFormCreator = ({
       <FieldTypePopUp
         handleSelect={handleSelect}
         isForm
-        disabled={formState.formLoading}
+        disabled={formState.formLoading || newlyAdded ? true : false}
       >
         <Button color="ghost" size="fit" className="my-4 text-foreground-5">
           <PlusCircle size={20} />
@@ -108,14 +113,17 @@ export default DynamicFormCreator;
 interface propType {
   fieldTitle?: string;
   onEachSubmit: (values: any) => void;
+  onEachDelete: (id: string) => void;
   onFormSubmit: (values: any) => void;
+  onFormDelete: (id: string) => void;
   formInfo: {
-    id?: string;
+    id: string;
     type: string;
     title: string;
     description: string;
     compulsory: boolean;
     subForm: FieldType[];
+    serviceSubForm: FieldType[];
   }[];
   formState: {
     formLoading: boolean;

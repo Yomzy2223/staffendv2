@@ -56,9 +56,11 @@ export const useProductFormActions = () => {
   const {
     createProductFormMutation,
     updateProductFormMutation,
+    deleteProductFormMutation,
     useGetProductFormsQuery,
     createProductSubFormMutation,
     updateProductSubFormMutation,
+    deleteProductSubFormMutation,
   } = useProductApi();
   const productFormInfo = useGetProductFormsQuery(productId);
 
@@ -107,6 +109,15 @@ export const useProductFormActions = () => {
     }
   };
 
+  const handleFormDelete = (id: string) => {
+    console.log("Hey, I'll delete this form ");
+    // deleteProductFormMutation.mutate(id);
+  };
+
+  const handleFieldDelete = (id: string) => {
+    deleteProductSubFormMutation.mutate(id);
+  };
+
   const productFormState = {
     formLoading:
       createProductFormMutation.isPending ||
@@ -114,12 +125,14 @@ export const useProductFormActions = () => {
     formSuccess:
       createProductFormMutation.isSuccess ||
       updateProductFormMutation.isSuccess,
+    formDeleteLoading: deleteProductFormMutation.isPending,
     fieldLoading:
       createProductSubFormMutation.isPending ||
       updateProductSubFormMutation.isPending,
     fieldSuccess:
       createProductSubFormMutation.isSuccess ||
       updateProductSubFormMutation.isSuccess,
+    fieldDeleteLoading: deleteProductSubFormMutation.isPending,
   };
 
   return {
@@ -127,6 +140,8 @@ export const useProductFormActions = () => {
     submitProductForm,
     submitProductFormField,
     productFormState,
+    handleFieldDelete,
+    handleFormDelete,
   };
 };
 

@@ -45,9 +45,11 @@ export const useServiceFormActions = () => {
   const {
     createServiceFormMutation,
     updateServiceFormMutation,
+    deleteServiceFormMutation,
     useGetServiceFormsQuery,
     createServiceSubFormMutation,
     updateServiceSubFormMutation,
+    deleteServiceSubFormMutation,
   } = useServiceApi();
   const serviceFormInfo = useGetServiceFormsQuery(serviceId as string);
 
@@ -96,6 +98,14 @@ export const useServiceFormActions = () => {
     }
   };
 
+  const handleFormDelete = (id: string) => {
+    deleteServiceFormMutation.mutate(id);
+  };
+
+  const handleFieldDelete = (id: string) => {
+    deleteServiceSubFormMutation.mutate(id);
+  };
+
   const serviceFormState = {
     formLoading:
       createServiceFormMutation.isPending ||
@@ -109,6 +119,8 @@ export const useServiceFormActions = () => {
     fieldSuccess:
       createServiceSubFormMutation.isSuccess ||
       updateServiceSubFormMutation.isSuccess,
+    fieldDeleteLoading: deleteServiceSubFormMutation.isPending,
+    formDeleteLoading: deleteServiceFormMutation.isPending,
   };
 
   return {

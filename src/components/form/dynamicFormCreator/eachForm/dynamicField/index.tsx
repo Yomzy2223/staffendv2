@@ -21,6 +21,7 @@ const DynamicField = ({
   submitHandler,
   isEdit,
   loading,
+  deleteLoading,
   success,
   deleteField,
 }: propType) => {
@@ -108,6 +109,7 @@ const DynamicField = ({
             info={fieldInfo}
             loading={loading}
             deleteField={deleteField}
+            deleteLoading={deleteLoading}
           />
         )}
       </form>
@@ -124,6 +126,7 @@ interface propType {
   submitHandler: (values: { [x: string]: any }) => void;
   isEdit?: boolean;
   loading: boolean;
+  deleteLoading: boolean;
   success: boolean;
   deleteField: () => void;
 }

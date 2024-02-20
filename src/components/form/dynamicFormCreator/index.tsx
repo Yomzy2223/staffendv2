@@ -130,6 +130,8 @@ interface propType {
     formSuccess: boolean;
     fieldLoading: boolean;
     fieldSuccess: boolean;
+    fieldDeleteLoading: boolean;
+    formDeleteLoading: boolean;
   };
   wide?: boolean;
 }

@@ -26,6 +26,8 @@ const ProductForm = ({ open, setOpen }: propsType) => {
     submitProductForm,
     submitProductFormField,
     productFormState,
+    handleFieldDelete,
+    handleFormDelete,
   } = useProductFormActions();
 
   const title1 = isEdit ? "Update Product" : "Create Product";
@@ -66,7 +68,6 @@ const ProductForm = ({ open, setOpen }: propsType) => {
     feature: productData?.feature || [],
   };
 
-  console.log(productFormData);
   return (
     <DialogWrapper
       open={open}
@@ -108,9 +109,9 @@ const ProductForm = ({ open, setOpen }: propsType) => {
           <DynamicFormCreator
             formInfo={productFormData}
             onEachSubmit={submitProductFormField}
-            onEachDelete={(id) => console.log(id)}
-            onFormSubmit={submitProductForm}
-            onFormDelete={(id) => console.log(id)}
+            onEachDelete={handleFieldDelete}
+            onFormSubmit={handleFormDelete}
+            onFormDelete={(id) => console.log("Delete form", id)}
             formState={productFormState}
             wide={wide}
           />

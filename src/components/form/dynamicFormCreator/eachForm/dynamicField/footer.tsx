@@ -14,6 +14,7 @@ const Footer = ({
   setValue,
   info,
   loading,
+  deleteLoading,
   deleteField,
 }: propType) => {
   const { compulsory, setCompulsory, cancelChanges } = info;
@@ -67,6 +68,7 @@ const Footer = ({
         <EditDelete
           onEdit={() => setEdit(true)}
           deleteAction={() => deleteField(info)}
+          loading={deleteLoading}
         />
       )}
     </div>
@@ -83,5 +85,6 @@ interface propType {
   setNewlyAdded?: Dispatch<SetStateAction<FieldType | undefined>>;
   info: fieldReturnType;
   loading: boolean;
+  deleteLoading: boolean;
   deleteField: (info: fieldReturnType) => void;
 }

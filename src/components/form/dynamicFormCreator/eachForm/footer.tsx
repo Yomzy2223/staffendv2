@@ -13,6 +13,7 @@ const Footer = ({
   setNewlyAdded,
   btnText,
   loading,
+  deleteLoading,
   cancelChanges,
   disableAddNew,
   deleteForm,
@@ -67,7 +68,11 @@ const Footer = ({
           </Button>
         </div>
       ) : (
-        <EditDelete onEdit={() => setEdit(true)} deleteAction={deleteForm} />
+        <EditDelete
+          onEdit={() => setEdit(true)}
+          deleteAction={deleteForm}
+          loading={deleteLoading}
+        />
       )}
     </div>
   );
@@ -82,6 +87,7 @@ interface propType {
   setNewlyAdded: Dispatch<SetStateAction<FieldType | undefined>>;
   btnText?: string;
   loading: boolean;
+  deleteLoading: boolean;
   cancelChanges: () => void;
   disableAddNew?: boolean;
   deleteForm: () => void;

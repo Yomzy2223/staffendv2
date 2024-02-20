@@ -24,7 +24,14 @@ const EachForm = ({
   const [newlyAdded, setNewlyAdded] = useState<FieldType | undefined>();
   const [loadingField, setLoadingField] = useState<number>();
 
-  const { formLoading, formSuccess, fieldLoading, fieldSuccess } = formState;
+  const {
+    formLoading,
+    formSuccess,
+    fieldLoading,
+    fieldSuccess,
+    fieldDeleteLoading,
+    formDeleteLoading,
+  } = formState;
 
   const formInfo = useFormActions({ formInfo: info, formLoading, setEdit });
   const {
@@ -104,8 +111,12 @@ const EachForm = ({
           }
           isEdit={edit}
           loading={fieldLoading && loadingField === i + 1}
+          deleteLoading={fieldDeleteLoading}
           success={!fieldLoading && fieldSuccess && loadingField === i + 1}
-          deleteField={() => fieldDeleteHandler(field.id)}
+          deleteField={() => {
+            setLoadingField(i + 1);
+            field.id && fieldDeleteHandler(field.id);
+          }}
         />
       ))}
       {newlyAdded && (
@@ -118,6 +129,7 @@ const EachForm = ({
           }
           isEdit={edit}
           loading={fieldLoading && loadingField === lastField}
+          deleteLoading={fieldDeleteLoading}
           success={!fieldLoading && fieldSuccess && loadingField === lastField}
           deleteField={() => setNewlyAdded(undefined)}
         />
@@ -129,6 +141,7 @@ const EachForm = ({
         setNewlyAdded={setNewlyAdded}
         btnText={btnText}
         loading={formLoading && loadingForm === number}
+        deleteLoading={formDeleteLoading && loadingForm === number}
         cancelChanges={cancelChanges}
         disableAddNew={newlyAdded ? true : false}
         deleteForm={formDeleteHandler}
@@ -165,6 +178,8 @@ interface propType {
     formSuccess: boolean;
     fieldLoading: boolean;
     fieldSuccess: boolean;
+    fieldDeleteLoading: boolean;
+    formDeleteLoading: boolean;
   };
   loadingForm?: number;
 }

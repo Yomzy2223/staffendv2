@@ -72,11 +72,11 @@ const EachForm = ({
     });
   };
 
-  // useEffect(() => {
-  //   // if (!formLoading && formSuccess && loadingForm === number) setEdit(false);
-  //   if (!fieldLoading && fieldSuccess && loadingField === lastField)
-  //     setNewlyAdded(undefined);
-  // }, [formLoading, formSuccess, loadingForm]);
+  useEffect(() => {
+    if (!formLoading && formSuccess && loadingForm === number) setEdit(false);
+    if (!fieldLoading && fieldSuccess && loadingField === lastField)
+      setNewlyAdded(undefined);
+  }, [formLoading, formSuccess, loadingForm]);
 
   const btnText =
     (fieldsInfo?.length > 0 || newlyAdded ? "Add another " : "Create a ") +

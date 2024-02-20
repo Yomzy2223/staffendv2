@@ -7,7 +7,7 @@ import { ArrowLeft, ExternalLink } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import React, { useState } from "react";
 
-const ProductsHeader = ({ title }: { title: string }) => {
+const ProoductsHeader = ({ title }: { title: string }) => {
   const [open, setOpen] = useState(false);
 
   const { setQuery } = useGlobalFucntions();
@@ -47,4 +47,4 @@ const ProductsHeader = ({ title }: { title: string }) => {
   );
 };
 
-export default ProductsHeader;
+export default ProoductsHeader;

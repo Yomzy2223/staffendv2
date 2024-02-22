@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import TagIcon from "@/assets/icons/tagIcon";
 import { useActions } from "./actions";
 import { X } from "lucide-react";
-import { propsType } from "./constants";
+import { IProps } from "./constants";
 
 const InputWithTags = ({
   size,
@@ -15,7 +15,7 @@ const InputWithTags = ({
   handleKeyDown,
   defaultTags,
   disabled,
-}: propsType) => {
+}: IProps) => {
   const [tags, setTags] = useState<string[]>(defaultTags || []);
   const [errorMsg, setErrorMsg] = useState("");
   const [value, setValue] = useState("");

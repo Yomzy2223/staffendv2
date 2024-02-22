@@ -19,7 +19,7 @@ const DialogWrapper = ({
   fit,
   size,
   classNames,
-}: propsType) => {
+}: IProps) => {
   const { isDesktop } = useGlobalFucntions();
 
   return (
@@ -73,7 +73,7 @@ const DialogWrapper = ({
 
 export default DialogWrapper;
 
-interface propsType {
+interface IProps {
   title: string;
   children: React.ReactNode;
   open: boolean;

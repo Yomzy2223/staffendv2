@@ -17,6 +17,7 @@ import * as z from "zod";
 import { DynamicFormProps } from "./constants";
 import { cn } from "@/lib/utils";
 import InputWithTags from "@/components/inputs/inputWithTags";
+import ComboBoxComp from "./comboBoxComp";
 
 const DynamicForm = ({
   children,
@@ -75,7 +76,12 @@ const DynamicForm = ({
             <div key={i}>
               {el.label && (
                 <div className="mb-2 block">
-                  <Label htmlFor={el.name} value={el.label} {...el.labelProp} />
+                  <Label
+                    htmlFor={el.name}
+                    value={el.label}
+                    {...el.labelProp}
+                    className={cn("font-normal", el.labelProp?.className)}
+                  />
                 </div>
               )}
 
@@ -105,6 +111,16 @@ const DynamicForm = ({
                   disabled={disableAll}
                   {...el.textAreaProp}
                   {...register(el.name)}
+                />
+              )}
+
+              {el.type === "combobox" && el.selectOptions && (
+                <ComboBoxComp
+                  name={el.name}
+                  options={el.selectOptions}
+                  setValue={setValue}
+                  selectProp={el.selectProp}
+                  fieldName={el.fieldName}
                 />
               )}
 

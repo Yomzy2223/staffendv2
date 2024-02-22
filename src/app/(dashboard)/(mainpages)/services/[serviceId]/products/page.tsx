@@ -60,8 +60,8 @@ const Products = () => {
             isLoading={deleteProductMutation.isPending}
           />
         ))}
-        {open && <ProductForm open={open} setOpen={setOpen} />}
       </ItemsWrapper>
+      {open && <ProductForm open={open} setOpen={setOpen} />}
     </div>
   );
 };

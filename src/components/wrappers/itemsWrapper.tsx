@@ -13,7 +13,7 @@ const ItemsWrapper = ({
   emptyText,
   onSearchChange,
   onSearchSubmit,
-}: propsType) => {
+}: IProps) => {
   return (
     <DoChecks
       items={items}
@@ -51,7 +51,7 @@ const ItemsWrapper = ({
 
 export default ItemsWrapper;
 
-interface propsType {
+interface IProps {
   children: ReactNode;
   items: any[];
   btnAction: () => void;

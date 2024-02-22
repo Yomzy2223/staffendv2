@@ -2,7 +2,7 @@
 
 import AuthFormWrapper from "@/components/features/auth/authFormWrapper";
 import DynamicForm from "@/components/form/dynamicForm";
-import { Button, Checkbox, Label } from "flowbite-react";
+import { Button } from "flowbite-react";
 import { ArrowRightCircle } from "lucide-react";
 import React, { useState } from "react";
 import * as z from "zod";

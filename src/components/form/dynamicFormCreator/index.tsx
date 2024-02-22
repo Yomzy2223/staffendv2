@@ -33,8 +33,13 @@ const DynamicFormCreator = ({
   };
 
   useEffect(() => {
-    if (!formLoading && formSuccess && loadingForm === lastForm)
+    if (
+      !formLoading &&
+      formSuccess &&
+      (loadingForm === lastForm || loadingForm === undefined)
+    ) {
       setNewlyAdded(undefined);
+    }
   }, [formLoading, formSuccess]);
 
   const lastForm = (formInfo?.length ?? 0) + 1;

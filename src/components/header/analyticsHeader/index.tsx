@@ -1,13 +1,13 @@
 import QueryNav from "@/components/navigation/queryNav";
 import React from "react";
 
-interface propsType {
+interface IProps {
   title: string;
   description: string;
   queryNav: { name: string; value: string }[];
 }
 
-const AnalyticsHeader = ({ title, description, queryNav }: propsType) => {
+const AnalyticsHeader = ({ title, description, queryNav }: IProps) => {
   return (
     <div className="flex flex-col justify-between gap-2 lg:flex-row lg:items-start lg:gap-6">
       <div>

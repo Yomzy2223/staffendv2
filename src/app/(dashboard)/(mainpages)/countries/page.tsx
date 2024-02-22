@@ -1,19 +1,18 @@
 "use client";
 
+import CountryForm from "@/components/form/countryForm";
 import ItemsWrapper from "@/components/wrappers/itemsWrapper";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
+import { useCountryApi } from "@/hooks/useCountryApi";
 import React, { useState } from "react";
 
 const Countries = () => {
   const [open, setOpen] = useState(false);
 
-  // const { useGetServiceQuery } = useServiceApi();
-  // const { useGetServiceProductsQuery, deleteProductMutation } = useProductApi();
-  // const { data } = useGetServiceProductsQuery(serviceId.toString());
-  // const product = useGetServiceQuery(serviceId.toString());
-  // const productInfo = product.data?.data?.data;
+  const { getAllCountriesQuery, deleteCountryMutation } = useCountryApi();
+  const { data } = getAllCountriesQuery;
 
-  // const serviceProducts = data?.data?.data;
+  const serviceProducts = data?.data?.data;
 
   const addNewCountry = () => {
     setOpen(true);
@@ -32,14 +31,15 @@ const Countries = () => {
   };
 
   return (
-    <ItemsWrapper
-      title="Countries"
-      btnAction={addNewCountry}
-      // items={serviceProducts}
-      emptyText="You have not added any product"
-      btnText="Add product"
-    >
-      {/* {serviceProducts?.map((product: productFullType, i: number) => (
+    <div>
+      <ItemsWrapper
+        title="Countries"
+        btnAction={addNewCountry}
+        items={serviceProducts}
+        emptyText="You have not added any country"
+        btnText="Add country"
+      >
+        {/* {serviceProducts?.map((product: productFullType, i: number) => (
         <ProductCard
           key={i}
           info={product}
@@ -47,9 +47,10 @@ const Countries = () => {
           handleDelete={deleteProduct}
           isLoading={deleteProductMutation.isPending}
         />
-      ))}
-      {open && <CountryForm open={open} setOpen={setOpen} />} */}
-    </ItemsWrapper>
+      ))}*/}
+      </ItemsWrapper>
+      {open && <CountryForm open={open} setOpen={setOpen} />}
+    </div>
   );
 };
 

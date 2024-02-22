@@ -13,7 +13,7 @@ const ConfirmAction = ({
   cancelAction,
   isLoading,
   isDelete,
-}: propsType) => {
+}: IProps) => {
   return (
     <DialogWrapper
       open={open}
@@ -62,7 +62,7 @@ const ConfirmAction = ({
 
 export default ConfirmAction;
 
-interface propsType {
+interface IProps {
   title?: string;
   description?: string;
   children?: ReactNode;

@@ -3,13 +3,13 @@ import { Label, Radio } from "flowbite-react";
 import { useSearchParams } from "next/navigation";
 import React from "react";
 
-interface propsType {
+interface IProps {
   queryNav: { name: string; value: string }[];
   defaultActive?: number;
   variant?: number;
 }
 
-const QueryNav2 = ({ queryNav, defaultActive = 0, variant }: propsType) => {
+const QueryNav2 = ({ queryNav, defaultActive = 0, variant }: IProps) => {
   const { setQuery } = useGlobalFucntions();
 
   const searchParams = useSearchParams();

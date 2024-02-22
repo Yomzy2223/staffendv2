@@ -3,33 +3,49 @@ import { Button } from "flowbite-react";
 import React from "react";
 import { Oval } from "react-loading-icons";
 import DynamicForm from "../dynamicForm";
+import { useCountryActions } from "./actions";
+import { countrySchema } from "./constants";
 
-const CountryForm = ({ open, setOpen }) => {
+const CountryForm = ({ open, setOpen }: IProps) => {
+  const {
+    formInfo,
+    isEdit,
+    countryInfo,
+    submitCountry,
+    countryLoading,
+    countrySuccess,
+    defaultValues,
+  } = useCountryActions();
+
+  const title = (isEdit ? "Update " : "Add ") + "Country";
+
+  // const defaultValues = {
+  //   name: "",
+  //   code: "",
+  //   iso: "",
+  //   country: "",
+  // };
+
   return (
-    <DialogWrapper
-      open={open}
-      setOpen={(open) => setOpen(open)}
-      title={title}
-      size={wide ? "5xl" : "xl"}
-    >
+    <DialogWrapper open={open} setOpen={setOpen} title={title} size="3xl">
       <DynamicForm
-        formInfo={section1FormInfo}
+        formInfo={formInfo}
         defaultValues={defaultValues}
-        formSchema={serviceInfoSchema}
-        onFormSubmit={submitServiceInfo}
-        className={cn("gap-4")}
+        formSchema={countrySchema}
+        onFormSubmit={submitCountry}
+        className={"gap-4"}
       >
         <div className="bg-white flex items-center justify-end pt-4 sticky bottom-0">
           <Button
             type="submit"
             color="primary"
-            isProcessing={serviceLoading}
-            disabled={serviceLoading}
+            isProcessing={countryLoading}
+            disabled={countryLoading}
             processingSpinner={
               <Oval color="white" strokeWidth={4} className="h-5 w-5" />
             }
           >
-            {!serviceLoading && "Next"}
+            {!countryLoading && "Done"}
           </Button>
         </div>
       </DynamicForm>
@@ -38,3 +54,8 @@ const CountryForm = ({ open, setOpen }) => {
 };
 
 export default CountryForm;
+
+interface IProps {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+}

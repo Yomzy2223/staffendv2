@@ -8,9 +8,9 @@ export interface FormInput {
   type: string;
   size?: string;
   labelProp?: Record<string, string | number>;
-  textInputProp?: Record<string, string | number>;
+  textInputProp?: Record<any, any>;
   textAreaProp?: Record<string, string | number>;
-  selectProp?: Record<string, string | number>;
+  selectProp?: Record<any, any>;
   fileProp?: Record<string, any>;
   selectOptions?: string[];
   errors?: {
@@ -21,6 +21,7 @@ export interface FormInput {
   };
   maxTag?: number;
   minTagChars?: number;
+  fieldName?: string;
 }
 
 export interface DynamicFormProps {

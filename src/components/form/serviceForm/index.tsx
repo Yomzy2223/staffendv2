@@ -9,7 +9,7 @@ import { Oval } from "react-loading-icons";
 import { useServiceFormActions, useServiceInfoActions } from "./actions";
 import { section1FormInfo, serviceInfoSchema } from "./constants";
 
-const ServiceForm = ({ open, setOpen }: propsType) => {
+const ServiceForm = ({ open, setOpen }: IProps) => {
   const [section, setSection] = useState(1);
   const { isDesktop, deleteQueryString } = useGlobalFucntions();
 
@@ -120,7 +120,7 @@ const ServiceForm = ({ open, setOpen }: propsType) => {
 
 export default ServiceForm;
 
-interface propsType {
+interface IProps {
   open: boolean;
   setOpen: (open: boolean) => void;
 }

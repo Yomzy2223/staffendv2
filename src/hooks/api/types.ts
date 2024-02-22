@@ -30,3 +30,10 @@ export interface productSubFormType {
   fileLink?: string;
   fileType?: string;
 }
+
+export interface ICountry {
+  name: string;
+  code: string;
+  iso: string;
+  currency: string;
+}

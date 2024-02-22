@@ -110,8 +110,7 @@ export const useProductFormActions = () => {
   };
 
   const handleFormDelete = (id: string) => {
-    console.log("Hey, I'll delete this form ");
-    // deleteProductFormMutation.mutate(id);
+    deleteProductFormMutation.mutate(id);
   };
 
   const handleFieldDelete = (id: string) => {

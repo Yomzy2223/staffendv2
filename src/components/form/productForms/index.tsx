@@ -9,7 +9,7 @@ import { Oval } from "react-loading-icons";
 import { useProductFormActions, useProductInfoActions } from "./actions";
 import { section1FormInfo, productInfoSchema } from "./constants";
 
-const ProductForm = ({ open, setOpen }: propsType) => {
+const ProductForm = ({ open, setOpen }: IProps) => {
   const [section, setSection] = useState(1);
   const { isDesktop, deleteQueryString } = useGlobalFucntions();
 
@@ -110,8 +110,8 @@ const ProductForm = ({ open, setOpen }: propsType) => {
             formInfo={productFormData}
             onEachSubmit={submitProductFormField}
             onEachDelete={handleFieldDelete}
-            onFormSubmit={handleFormDelete}
-            onFormDelete={(id) => console.log("Delete form", id)}
+            onFormSubmit={submitProductForm}
+            onFormDelete={handleFormDelete}
             formState={productFormState}
             wide={wide}
           />
@@ -131,7 +131,7 @@ const ProductForm = ({ open, setOpen }: propsType) => {
 
 export default ProductForm;
 
-interface propsType {
+interface IProps {
   open: boolean;
   setOpen: (open: boolean) => void;
 }

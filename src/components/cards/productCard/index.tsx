@@ -12,7 +12,7 @@ import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import { Currency, MoreHorizontal, Timer, WholeWord } from "lucide-react";
 import React, { Dispatch, SetStateAction, useState } from "react";
 
-const ProductCard = ({ info, setOpen, handleDelete, isLoading }: propsType) => {
+const ProductCard = ({ info, setOpen, handleDelete, isLoading }: IProps) => {
   const [openConfirm, setOpenConfirm] = useState(false);
   const { setQuery } = useGlobalFucntions();
 
@@ -90,7 +90,7 @@ const ProductCard = ({ info, setOpen, handleDelete, isLoading }: propsType) => {
 
 export default ProductCard;
 
-interface propsType {
+interface IProps {
   info: productFullType;
   setOpen: Dispatch<SetStateAction<boolean>>;
   handleDelete: ({

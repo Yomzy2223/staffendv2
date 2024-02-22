@@ -5,9 +5,6 @@ export const section1FormInfo = [
     name: "name",
     label: "Enter service name",
     type: "text",
-    labelProp: {
-      className: "font-normal",
-    },
     textInputProp: {
       placeholder: "Enter service name",
     },
@@ -16,9 +13,6 @@ export const section1FormInfo = [
     name: "description",
     label: "Enter service description",
     type: "textarea",
-    labelProp: {
-      className: "font-normal",
-    },
     textAreaProp: {
       placeholder: "Enter a brief description of this service",
     },

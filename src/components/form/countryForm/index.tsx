@@ -19,13 +19,6 @@ const CountryForm = ({ open, setOpen }: IProps) => {
 
   const title = (isEdit ? "Update " : "Add ") + "Country";
 
-  // const defaultValues = {
-  //   name: "",
-  //   code: "",
-  //   iso: "",
-  //   country: "",
-  // };
-
   return (
     <DialogWrapper open={open} setOpen={setOpen} title={title} size="3xl">
       <DynamicForm

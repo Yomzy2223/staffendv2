@@ -1,4 +1,4 @@
-import React, { HTMLAttributes, useState } from "react";
+import React, { HTMLAttributes, ReactNode, useState } from "react";
 import {
   Command,
   CommandEmpty,
@@ -22,6 +22,7 @@ const ComboBoxComp = ({
   selectProp,
   setValue,
   fieldName,
+  leftContent,
 }: IProps) => {
   const [openSelect, setOpenSelect] = useState(false);
   const [selectValue, setSelectValue] = useState("");
@@ -37,9 +38,14 @@ const ComboBoxComp = ({
           role="combobox"
           className="w-full [&_span]:justify-between"
         >
-          {selectValue
-            ? findOriginalValue(selectValue)
-            : selectProp?.placeholder || "Select " + fieldName}
+          {selectValue ? (
+            <div className="flex gap-1">
+              {leftContent && leftContent}
+              <span>{findOriginalValue(selectValue)}</span>
+            </div>
+          ) : (
+            selectProp?.placeholder || "Select " + fieldName
+          )}
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -88,4 +94,5 @@ interface IProps {
   selectProp?: Record<any, any>;
   setValue: UseFormSetValue<any>;
   fieldName?: string;
+  leftContent?: string | ReactNode;
 }

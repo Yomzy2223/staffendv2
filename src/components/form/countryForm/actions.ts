@@ -5,6 +5,7 @@ import {
   getCountryCode,
   getCountryData,
   getCountryDataList,
+  getEmojiFlag,
   TCountryCode,
 } from "countries-list";
 import { useSearchParams } from "next/navigation";
@@ -14,8 +15,7 @@ import { useState } from "react";
 export const useCountryActions = () => {
   const [defaultValues, setDefaultValues] = useState({
     name: "",
-    capital: "",
-    language: "",
+    iso: "",
     code: "",
     currency: "",
   });
@@ -28,6 +28,7 @@ export const useCountryActions = () => {
     useCountryApi();
   const countryInfo = useGetCountryQuery(countryId);
 
+  //   Create and update country
   const submitCountry = async (values: ICountry) => {
     countryId
       ? updateCountryMutation.mutate({
@@ -42,14 +43,14 @@ export const useCountryActions = () => {
   const countrySuccess =
     createCountryMutation.isSuccess || updateCountryMutation.isSuccess;
 
+  // Updates other fields when a country is selected
   const handleCountrySelect = (selected: string) => {
     const code = getCountryCode(selected);
     const countryInfo = countries[code as TCountryCode];
     setDefaultValues({
       name: countryInfo.name,
-      capital: countryInfo.capital,
+      iso: code.toString(),
       code: "+" + countryInfo.phone[0].toString(),
-      language: countryInfo.languages[0],
       currency: countryInfo.currency[0],
     });
   };
@@ -68,22 +69,14 @@ export const useCountryActions = () => {
         placeholder: "Select country",
         onSelect: handleCountrySelect,
       },
+      leftContent: getEmojiFlag(defaultValues.iso as TCountryCode),
     },
     {
-      name: "capital",
-      label: "Country capital",
+      name: "iso",
+      label: "Country ISO",
       type: "text",
       textInputProp: {
-        placeholder: "Country capital",
-        disabled: true,
-      },
-    },
-    {
-      name: "language",
-      label: "Country language",
-      type: "text",
-      textInputProp: {
-        placeholder: "Country language",
+        placeholder: "Country ISO",
         disabled: true,
       },
     },
@@ -117,6 +110,3 @@ export const useCountryActions = () => {
     defaultValues,
   };
 };
-//   const country = selected.replace(/\b[a-z](?!and|of)/g, (match) =>
-//     match.toUpperCase()
-//   );

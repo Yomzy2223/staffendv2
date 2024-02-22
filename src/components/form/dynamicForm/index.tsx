@@ -121,6 +121,7 @@ const DynamicForm = ({
                   setValue={setValue}
                   selectProp={el.selectProp}
                   fieldName={el.fieldName}
+                  leftContent={el.leftContent}
                 />
               )}
 

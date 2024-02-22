@@ -13,6 +13,7 @@ export interface FormInput {
   selectProp?: Record<any, any>;
   fileProp?: Record<string, any>;
   selectOptions?: string[];
+  leftContent?: string | ReactNode;
   errors?: {
     empty: string;
     length?: string;

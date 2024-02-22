@@ -1,10 +1,12 @@
 "use client";
 
+import CountryCard from "@/components/cards/countryCard";
 import CountryForm from "@/components/form/countryForm";
 import ItemsWrapper from "@/components/wrappers/itemsWrapper";
+import { ICountry, ICountryFull } from "@/hooks/api/types";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import { useCountryApi } from "@/hooks/useCountryApi";
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 
 const Countries = () => {
   const [open, setOpen] = useState(false);
@@ -16,18 +18,18 @@ const Countries = () => {
 
   const addNewCountry = () => {
     setOpen(true);
-    // setQuery("action", "add");
   };
 
-  const deleteProduct = ({}: // info,
-  // setOpenConfirm,
-  {
-    // info: productFullType;
-    // setOpenConfirm: Dispatch<SetStateAction<boolean>>;
+  const deleteProduct = ({
+    info,
+    setOpenConfirm,
+  }: {
+    info: ICountryFull;
+    setOpenConfirm: Dispatch<SetStateAction<boolean>>;
   }) => {
-    // deleteProductMutation.mutate(info.id, {
-    //   onSuccess: () => setOpenConfirm(false),
-    // });
+    deleteCountryMutation.mutate(info.id, {
+      onSuccess: () => setOpenConfirm(false),
+    });
   };
 
   return (
@@ -39,15 +41,15 @@ const Countries = () => {
         emptyText="You have not added any country"
         btnText="Add country"
       >
-        {/* {serviceProducts?.map((product: productFullType, i: number) => (
-        <ProductCard
-          key={i}
-          info={product}
-          setOpen={setOpen}
-          handleDelete={deleteProduct}
-          isLoading={deleteProductMutation.isPending}
-        />
-      ))}*/}
+        {serviceProducts?.map((country: ICountryFull, i: number) => (
+          <CountryCard
+            key={i}
+            info={country}
+            setOpen={setOpen}
+            handleDelete={deleteProduct}
+            isLoading={deleteCountryMutation.isPending}
+          />
+        ))}
       </ItemsWrapper>
       {open && <CountryForm open={open} setOpen={setOpen} />}
     </div>

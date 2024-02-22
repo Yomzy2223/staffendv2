@@ -56,7 +56,7 @@ export const useCountryApi = () => {
     });
 
   const getAllCountriesQuery = useQuery({
-    queryKey: ["product"],
+    queryKey: ["country"],
     queryFn: getCountries,
   });
 

@@ -37,3 +37,11 @@ export interface ICountry {
   iso: string;
   currency: string;
 }
+
+export interface ICountryFull {
+  id: string;
+  name: string;
+  code: string;
+  iso: string;
+  currency: string;
+}

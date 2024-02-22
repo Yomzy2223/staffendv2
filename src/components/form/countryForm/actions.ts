@@ -9,10 +9,14 @@ import {
   TCountryCode,
 } from "countries-list";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 // Actions for country info
-export const useCountryActions = () => {
+export const useCountryActions = ({
+  setOpen,
+}: {
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}) => {
   const [defaultValues, setDefaultValues] = useState({
     name: "",
     iso: "",
@@ -31,11 +35,17 @@ export const useCountryActions = () => {
   //   Create and update country
   const submitCountry = async (values: ICountry) => {
     countryId
-      ? updateCountryMutation.mutate({
-          id: countryId,
-          formInfo: values,
-        })
-      : createCountryMutation.mutate({ formInfo: values });
+      ? updateCountryMutation.mutate(
+          {
+            id: countryId,
+            formInfo: values,
+          },
+          { onSuccess: () => setOpen(false) }
+        )
+      : createCountryMutation.mutate(
+          { formInfo: values },
+          { onSuccess: () => setOpen(false) }
+        );
   };
 
   const countryLoading =

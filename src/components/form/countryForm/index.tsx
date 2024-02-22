@@ -1,6 +1,6 @@
 import DialogWrapper from "@/components/wrappers/dialogWrapper";
 import { Button } from "flowbite-react";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { Oval } from "react-loading-icons";
 import DynamicForm from "../dynamicForm";
 import { useCountryActions } from "./actions";
@@ -15,7 +15,7 @@ const CountryForm = ({ open, setOpen }: IProps) => {
     countryLoading,
     countrySuccess,
     defaultValues,
-  } = useCountryActions();
+  } = useCountryActions({ setOpen });
 
   const title = (isEdit ? "Update " : "Add ") + "Country";
 
@@ -50,5 +50,5 @@ export default CountryForm;
 
 interface IProps {
   open: boolean;
-  setOpen: (open: boolean) => void;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 }

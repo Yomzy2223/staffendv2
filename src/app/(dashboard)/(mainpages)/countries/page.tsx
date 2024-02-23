@@ -1,6 +1,7 @@
 "use client";
 
 import CountryCard from "@/components/cards/countryCard";
+import CountryCardSkeleton from "@/components/cards/countryCard/countryCardSkeleton";
 import CountryForm from "@/components/form/countryForm";
 import ItemsWrapper from "@/components/wrappers/itemsWrapper";
 import { ICountryFull } from "@/hooks/api/types";
@@ -11,7 +12,7 @@ const Countries = () => {
   const [open, setOpen] = useState(false);
 
   const { getAllCountriesQuery } = useCountryApi();
-  const { data } = getAllCountriesQuery;
+  const { data, isLoading } = getAllCountriesQuery;
 
   const serviceProducts = data?.data?.data;
 
@@ -28,6 +29,10 @@ const Countries = () => {
         emptyText="You have not added any country"
         btnText="Add country"
       >
+        {isLoading &&
+          Array(4)
+            .fill("")
+            .map((el, i) => <CountryCardSkeleton key={i} />)}
         {serviceProducts?.map((country: ICountryFull, i: number) => (
           <CountryCard key={i} info={country} setOpen={setOpen} />
         ))}

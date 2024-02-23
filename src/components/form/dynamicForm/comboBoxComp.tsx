@@ -1,4 +1,4 @@
-import React, { HTMLAttributes, ReactNode, useState } from "react";
+import React, { HTMLAttributes, ReactNode, useEffect, useState } from "react";
 import {
   Command,
   CommandEmpty,
@@ -23,12 +23,17 @@ const ComboBoxComp = ({
   setValue,
   fieldName,
   leftContent,
+  defaultValue,
 }: IProps) => {
   const [openSelect, setOpenSelect] = useState(false);
-  const [selectValue, setSelectValue] = useState("");
+  const [selectValue, setSelectValue] = useState(defaultValue);
 
   const findOriginalValue = (value: string) =>
     options.find((el) => el.toLowerCase() === value.toLowerCase());
+
+  useEffect(() => {
+    if (defaultValue) setSelectValue(defaultValue);
+  }, [defaultValue]);
 
   return (
     <Popover open={openSelect} onOpenChange={setOpenSelect}>
@@ -37,6 +42,7 @@ const ComboBoxComp = ({
           outline
           role="combobox"
           className="w-full [&_span]:justify-between"
+          {...selectProp}
         >
           {selectValue ? (
             <div className="flex gap-1">
@@ -58,7 +64,6 @@ const ComboBoxComp = ({
               <CommandItem
                 key={option}
                 value={option}
-                {...selectProp}
                 onSelect={(currentValue) => {
                   const selected =
                     currentValue === selectValue ? "" : currentValue;
@@ -95,4 +100,5 @@ interface IProps {
   setValue: UseFormSetValue<any>;
   fieldName?: string;
   leftContent?: string | ReactNode;
+  defaultValue?: string;
 }

@@ -13,6 +13,7 @@ const ConfirmAction = ({
   cancelAction,
   isLoading,
   isDelete,
+  dismissible,
 }: IProps) => {
   return (
     <DialogWrapper
@@ -26,6 +27,7 @@ const ConfirmAction = ({
         header: "[&_h3]:flex [&_h3]:flex-1 [&_h3]:justify-center",
         body: "min-h-max",
       }}
+      dismissible={dismissible}
     >
       <div className="flex flex-col gap-4">
         <p className="sb-text-16 text-foreground-5 text-center">
@@ -72,4 +74,5 @@ interface IProps {
   cancelAction?: () => void;
   isLoading?: boolean;
   isDelete?: boolean;
+  dismissible?: boolean;
 }

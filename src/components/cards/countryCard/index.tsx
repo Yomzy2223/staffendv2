@@ -7,17 +7,19 @@ import {
   MenubarSeparator,
   MenubarTrigger,
 } from "@/components/ui/menubar";
-import { Card } from "flowbite-react";
 import CardWrapper from "@/components/wrappers/cardWrapper";
 import { countries, getEmojiFlag, TCountryCode } from "countries-list";
 import { Currency, MoreHorizontal, Phone, WholeWord } from "lucide-react";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
-import { ICountry, ICountryFull } from "@/hooks/api/types";
+import { ICountryFull } from "@/hooks/api/types";
 import ConfirmAction from "@/components/confirmAction";
+import { useCountryApi } from "@/hooks/useCountryApi";
 
-const CountryCard = ({ info, setOpen, handleDelete, isLoading }: IProps) => {
+const CountryCard = ({ info, setOpen }: IProps) => {
   const [openConfirm, setOpenConfirm] = useState(false);
 
+  const { deleteCountryMutation } = useCountryApi();
+  const { mutate, isPending } = deleteCountryMutation;
   const { setQuery } = useGlobalFucntions();
 
   const countryName = countries[info?.iso as TCountryCode].name;
@@ -26,6 +28,13 @@ const CountryCard = ({ info, setOpen, handleDelete, isLoading }: IProps) => {
     setOpen(true);
     setQuery("countryId", info?.id);
   };
+
+  const deleteProduct = ({ info }: { info: ICountryFull }) => {
+    mutate(info.id, {
+      onSuccess: () => setOpenConfirm(false),
+    });
+  };
+
   return (
     <CardWrapper className="border border-border max-w-[432px]">
       <div className="flex justify-between gap-6 border-b border-border pb-4 mb-4">
@@ -54,10 +63,11 @@ const CountryCard = ({ info, setOpen, handleDelete, isLoading }: IProps) => {
           <ConfirmAction
             open={openConfirm}
             setOpen={setOpenConfirm}
-            confirmAction={() => handleDelete({ info, setOpenConfirm })}
+            confirmAction={() => deleteProduct({ info })}
             title="Delete Country"
             description="Are you sure you want to delete this country?"
-            isLoading={isLoading}
+            isLoading={isPending}
+            dismissible={!isPending}
             isDelete
           />
         )}
@@ -85,12 +95,4 @@ export default CountryCard;
 interface IProps {
   info: ICountryFull;
   setOpen: Dispatch<SetStateAction<boolean>>;
-  handleDelete: ({
-    info,
-    setOpenConfirm,
-  }: {
-    info: ICountryFull;
-    setOpenConfirm: Dispatch<SetStateAction<boolean>>;
-  }) => void;
-  isLoading: boolean;
 }

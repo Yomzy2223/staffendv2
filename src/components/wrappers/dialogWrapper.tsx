@@ -19,7 +19,8 @@ const DialogWrapper = ({
   fit,
   size,
   classNames,
-}: IProps) => {
+  dismissible,
+}: propsType) => {
   const { isDesktop } = useGlobalFucntions();
 
   return (
@@ -29,7 +30,7 @@ const DialogWrapper = ({
           size={size || "xl"}
           show={open}
           onClose={() => setOpen(false)}
-          dismissible
+          dismissible={dismissible}
         >
           <Modal.Header className={classNames?.header}>
             <span className="text-lg font-semibold text-foreground">
@@ -73,7 +74,7 @@ const DialogWrapper = ({
 
 export default DialogWrapper;
 
-interface IProps {
+interface propsType {
   title: string;
   children: React.ReactNode;
   open: boolean;
@@ -84,4 +85,5 @@ interface IProps {
     header?: string;
     body?: string;
   };
+  dismissible?: boolean;
 }

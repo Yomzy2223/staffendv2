@@ -3,13 +3,11 @@ import { useCountryApi } from "@/hooks/useCountryApi";
 import {
   countries,
   getCountryCode,
-  getCountryData,
-  getCountryDataList,
   getEmojiFlag,
   TCountryCode,
 } from "countries-list";
 import { useSearchParams } from "next/navigation";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 // Actions for country info
 export const useCountryActions = ({
@@ -30,7 +28,9 @@ export const useCountryActions = ({
 
   const { createCountryMutation, updateCountryMutation, useGetCountryQuery } =
     useCountryApi();
+
   const countryInfo = useGetCountryQuery(countryId);
+  const contryData = countryInfo.data?.data?.data;
 
   //   Create and update country
   const submitCountry = async (values: ICountry) => {
@@ -65,6 +65,16 @@ export const useCountryActions = ({
     });
   };
 
+  //   Update country information
+  useEffect(() => {
+    if (contryData) {
+      const originalCountry = Object.keys(countries)
+        .map((el: string) => countries[el as TCountryCode].name)
+        .find((el) => el.toLowerCase() === contryData.name);
+      originalCountry && handleCountrySelect(originalCountry);
+    }
+  }, [contryData]);
+
   // Country form
   const formInfo = [
     {
@@ -78,6 +88,7 @@ export const useCountryActions = ({
       selectProp: {
         placeholder: "Select country",
         onSelect: handleCountrySelect,
+        disabled: countryInfo.isLoading,
       },
       leftContent: getEmojiFlag(defaultValues.iso as TCountryCode),
     },
@@ -104,7 +115,7 @@ export const useCountryActions = ({
       label: "Country currency",
       type: "text",
       textInputProp: {
-        placeholder: "Country ",
+        placeholder: "Country currency",
         disabled: true,
       },
     },

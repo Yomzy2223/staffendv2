@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, TextInput } from "flowbite-react";
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 import Header from "./header";
 import * as z from "zod";
@@ -22,10 +22,10 @@ const DynamicField = ({
   isEdit,
   loading,
   deleteLoading,
-  success,
   deleteField,
-}: propType) => {
-  const [edit, setEdit] = useState(isEdit || false);
+  isNew,
+}: IProps) => {
+  const [edit, setEdit] = useState(isNew || false);
   const [type, setType] = useState(info?.type);
 
   const defaultValues = { ...info };
@@ -55,15 +55,14 @@ const DynamicField = ({
 
   // Submit handler
   function onSubmit(values: formType) {
-    submitHandler(values);
+    submitHandler({ values, setEdit });
   }
 
   const errorMsg = errors["question"]?.message;
 
-  useEffect(() => {
-    if (isEdit === false) setEdit(false);
-    if (success) setEdit(false);
-  }, [isEdit, success]);
+  // useEffect(() => {
+  //   if (isEdit === false) setEdit(false);
+  // }, [isEdit]);
 
   return (
     <Card className="shadow-none [&>div]:p-4 max-w-[500px]">
@@ -93,7 +92,9 @@ const DynamicField = ({
           />
         </div>
         {/* Dynamic Types */}
-        {(type === "checkbox" || type === "objectives") &&
+        {(type === "checkbox" ||
+          type === "objectives" ||
+          type === "multiple choice") &&
           fieldInfo.options && (
             <Checkbox
               info={fieldInfo}
@@ -106,7 +107,6 @@ const DynamicField = ({
         {type === "document template" && <DocumentTemplate />}
         {type === "document upload" && <DocumentUpload />}
         {type === "dropdown" && <Dropdown />}
-        {type === "multiple choice" && <MultipleChoice />}
 
         {isEdit && (
           <Footer
@@ -127,14 +127,20 @@ const DynamicField = ({
 
 export default DynamicField;
 
-interface propType {
+interface IProps {
   info: FieldType;
   number: number;
   fieldTitle?: string;
-  submitHandler: (values: { [x: string]: any }) => void;
+  submitHandler: ({
+    values,
+    setEdit,
+  }: {
+    values: { [x: string]: any };
+    setEdit: Dispatch<SetStateAction<boolean>>;
+  }) => void;
   isEdit?: boolean;
   loading: boolean;
-  deleteLoading: boolean;
-  success: boolean;
+  deleteLoading?: boolean;
   deleteField: () => void;
+  isNew?: boolean;
 }

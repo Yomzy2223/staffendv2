@@ -1,7 +1,11 @@
-import { serviceFormType, serviceSubFormType } from "@/hooks/api/serviceApi";
+import { IServiceSubForm } from "@/hooks/api/types";
 import useServiceApi from "@/hooks/useServiceApi";
 import { useParams, useSearchParams } from "next/navigation";
 import { FormType } from "../dynamicFormCreator/eachForm/constants";
+import {
+  IFieldSubmitHandlerArg,
+  IFormSubmitHandlerArg,
+} from "../dynamicFormCreator/eachForm/types";
 import { serviceInfoType } from "./constants";
 
 // Actions for service info section
@@ -53,7 +57,10 @@ export const useServiceFormActions = () => {
   } = useServiceApi();
   const serviceFormInfo = useGetServiceFormsQuery(serviceId as string);
 
-  const submitServiceForm = async ({ formId, values }: serviceFormArgType) => {
+  const submitServiceForm = async ({
+    formId,
+    values,
+  }: IFormSubmitHandlerArg) => {
     formId
       ? updateServiceFormMutation.mutate({ id: formId, formInfo: values })
       : createServiceFormMutation.mutate({
@@ -67,16 +74,16 @@ export const useServiceFormActions = () => {
     formValues,
     fieldId,
     values,
-  }: serviceSubFormArgType) => {
+  }: IFieldSubmitHandlerArg) => {
     const submitField = (formId: string) => {
       fieldId
         ? updateServiceSubFormMutation.mutate({
             id: fieldId,
-            formInfo: values as serviceSubFormType,
+            formInfo: values as IServiceSubForm,
           })
         : createServiceSubFormMutation.mutate({
             formId,
-            formInfo: values as serviceSubFormType,
+            formInfo: values as IServiceSubForm,
           });
     };
 
@@ -130,15 +137,3 @@ export const useServiceFormActions = () => {
     serviceFormState,
   };
 };
-
-export interface serviceSubFormArgType {
-  formId?: string;
-  formValues: serviceFormType;
-  fieldId?: string;
-  values: { [x: string]: any };
-}
-
-export interface serviceFormArgType {
-  formId?: string;
-  values: FormType;
-}

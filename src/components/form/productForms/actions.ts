@@ -5,6 +5,10 @@ import useProductApi from "@/hooks/useProductApi";
 import { useParams, useSearchParams } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 import { FormType } from "../dynamicFormCreator/eachForm/constants";
+import {
+  IFieldSubmitHandlerArg,
+  IFormSubmitHandlerArg,
+} from "../dynamicFormCreator/eachForm/types";
 import { productInfoType, section1FormInfo } from "./constants";
 
 // Actions for service info section
@@ -72,7 +76,7 @@ export const useProductFormActions = () => {
     values,
     setEdit,
     setNewlyAdded,
-  }: productFormArgType) => {
+  }: IFormSubmitHandlerArg) => {
     formId
       ? updateProductFormMutation.mutate(
           { id: formId, formInfo: values },
@@ -97,17 +101,30 @@ export const useProductFormActions = () => {
     formValues,
     fieldId,
     values,
-  }: productSubFormArgType) => {
+    setEdit,
+    setNewlyAdded,
+  }: IFieldSubmitHandlerArg) => {
     const submitField = (formId: string) => {
       fieldId
-        ? updateProductSubFormMutation.mutate({
-            id: fieldId,
-            formInfo: values as productSubFormType,
-          })
-        : createProductSubFormMutation.mutate({
-            serviceFormId: formId,
-            formInfo: values as productSubFormType,
-          });
+        ? updateProductSubFormMutation.mutate(
+            {
+              id: fieldId,
+              formInfo: values as productSubFormType,
+            },
+            { onSuccess: () => setEdit(false) }
+          )
+        : createProductSubFormMutation.mutate(
+            {
+              serviceFormId: formId,
+              formInfo: values as productSubFormType,
+            },
+            {
+              onSuccess: () => {
+                setEdit(false);
+                setNewlyAdded && setNewlyAdded(undefined);
+              },
+            }
+          );
     };
 
     if (formId) {
@@ -163,16 +180,16 @@ export const useProductFormActions = () => {
   };
 };
 
-export interface productSubFormArgType {
-  formId?: string;
-  formValues: productFormType;
-  fieldId?: string;
-  values: { [x: string]: any };
-}
+// export interface productSubFormArgType {
+//   formId?: string;
+//   formValues: productFormType;
+//   fieldId?: string;
+//   values: { [x: string]: any };
+// }
 
-export interface productFormArgType {
-  formId?: string;
-  values: FormType;
-  setEdit: Dispatch<SetStateAction<boolean>>;
-  setNewlyAdded: Dispatch<SetStateAction<FormType | undefined>>;
-}
+// export interface productFormArgType {
+//   formId?: string;
+//   values: FormType;
+//   setEdit: Dispatch<SetStateAction<boolean>>;
+//   setNewlyAdded: Dispatch<SetStateAction<FormType | undefined>>;
+// }

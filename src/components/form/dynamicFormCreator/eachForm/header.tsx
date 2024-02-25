@@ -5,7 +5,7 @@ import { MoreHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formReturnType } from "./actions";
 
-const Header = ({ edit, info, loading }: propType) => {
+const Header = ({ edit, info, loading }: IProps) => {
   const {
     type,
     title,
@@ -93,7 +93,7 @@ const Header = ({ edit, info, loading }: propType) => {
 
 export default Header;
 
-interface propType {
+interface IProps {
   loading: boolean;
   edit: boolean;
   info: formReturnType;

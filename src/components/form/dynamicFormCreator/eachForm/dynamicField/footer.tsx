@@ -16,7 +16,7 @@ const Footer = ({
   loading,
   deleteLoading,
   deleteField,
-}: propType) => {
+}: IProps) => {
   const { compulsory, setCompulsory, cancelChanges } = info;
 
   const onCheckToggle = () => {
@@ -77,7 +77,7 @@ const Footer = ({
 
 export default Footer;
 
-interface propType {
+interface IProps {
   edit: boolean;
   setEdit: (value: boolean) => void;
   getValues: UseFormGetValues<{ [x: string]: any }>;
@@ -85,6 +85,6 @@ interface propType {
   setNewlyAdded?: Dispatch<SetStateAction<FieldType | undefined>>;
   info: fieldReturnType;
   loading: boolean;
-  deleteLoading: boolean;
+  deleteLoading?: boolean;
   deleteField: (info: fieldReturnType) => void;
 }

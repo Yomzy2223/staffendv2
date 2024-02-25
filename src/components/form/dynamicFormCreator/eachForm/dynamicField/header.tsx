@@ -5,14 +5,7 @@ import FieldTypePopUp from "../fieldTypePopUp";
 import { MoreHorizontal } from "lucide-react";
 import { fieldReturnType } from "./actions";
 
-const Header = ({
-  fieldTitle,
-  number,
-  edit,
-  info,
-  loading,
-  type,
-}: propType) => {
+const Header = ({ fieldTitle, number, edit, info, loading, type }: IProps) => {
   const { compulsory, handleOptionSelect } = info;
 
   return (
@@ -55,7 +48,7 @@ const Header = ({
 
 export default Header;
 
-interface propType {
+interface IProps {
   fieldTitle?: string;
   number: number;
   edit: boolean;

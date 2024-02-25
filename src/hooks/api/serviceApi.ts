@@ -1,30 +1,8 @@
 import { Client } from "@/lib/axios";
-
-interface serviceType {
-  name: string;
-  description: string;
-}
-
-export interface serviceFormType {
-  title: string;
-  description: string;
-  type: string;
-  compulsory: boolean;
-}
-
-export interface serviceSubFormType {
-  question: string;
-  type: string;
-  options?: string[];
-  compulsory: boolean;
-  fileName?: string;
-  fileDescription?: string;
-  fileLink?: string;
-  fileType?: string;
-}
+import { IService, IServiceForm, IServiceSubForm } from "./types";
 
 // Service endpoints
-export const createService = async (formInfo: serviceType) => {
+export const createService = async (formInfo: IService) => {
   const client = await Client();
   return await client.post("/services", formInfo);
 };
@@ -34,7 +12,7 @@ export const updateService = async ({
   formInfo,
 }: {
   id: string;
-  formInfo: serviceType;
+  formInfo: IService;
 }) => {
   const client = await Client();
   return await client.put(`/services/${id}`, formInfo);
@@ -60,7 +38,7 @@ export const createServiceForm = async ({
   formInfo,
 }: {
   serviceCategoryId: string;
-  formInfo: serviceFormType;
+  formInfo: IServiceForm;
 }) => {
   const client = await Client();
   return await client.post(`/services/form/${serviceCategoryId}`, formInfo);
@@ -72,7 +50,7 @@ export const updateServiceForm = async ({
   formInfo,
 }: {
   id: string;
-  formInfo: serviceFormType;
+  formInfo: IServiceForm;
 }) => {
   const client = await Client();
   return await client.put(`/services/form/${id}`, formInfo);
@@ -98,7 +76,7 @@ export const createServiceSubForm = async ({
   formInfo,
 }: {
   formId: string;
-  formInfo: serviceSubFormType;
+  formInfo: IServiceSubForm;
 }) => {
   const client = await Client();
   return await client.post(`/services/subform/${formId}`, formInfo);
@@ -109,7 +87,7 @@ export const updateServiceSubForm = async ({
   formInfo,
 }: {
   id: string;
-  formInfo: serviceSubFormType;
+  formInfo: IServiceSubForm;
 }) => {
   const client = await Client();
   return await client.put(`/services/subform/${id}`, formInfo);

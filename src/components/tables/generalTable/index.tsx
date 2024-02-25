@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { Table } from "flowbite-react";
 import React, { HTMLAttributes } from "react";
 
-interface propType {
+interface IProps {
   tableHeaders: string[];
   tableBody: {
     rowInfo: { text: string; cellProps?: HTMLAttributes<HTMLSpanElement> }[];
@@ -15,11 +15,7 @@ interface propType {
   serviceTableNav: { name: string; value: string }[];
 }
 
-const GeneralTable = ({
-  tableHeaders,
-  tableBody,
-  serviceTableNav,
-}: propType) => {
+const GeneralTable = ({ tableHeaders, tableBody, serviceTableNav }: IProps) => {
   return (
     <div className="max-w-full overflow-auto">
       <div className="flex justify-between gap-6 sticky left-0">

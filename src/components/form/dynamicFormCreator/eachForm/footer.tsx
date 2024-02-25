@@ -17,7 +17,7 @@ const Footer = ({
   cancelChanges,
   disableAddNew,
   deleteForm,
-}: propType) => {
+}: IProps) => {
   const handleSelect = (selected?: FieldType) => {
     if (!selected) return;
     setNewlyAdded(selected);
@@ -80,7 +80,7 @@ const Footer = ({
 
 export default Footer;
 
-interface propType {
+interface IProps {
   edit: boolean;
   setEdit: (value: boolean) => void;
   onDoneClick?: MouseEventHandler<HTMLButtonElement>;

@@ -1,11 +1,11 @@
 import { Card } from "flowbite-react";
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { useState } from "react";
 import Header from "./header";
 import Footer from "./footer";
 import { FieldType, FormType } from "./constants";
 import DynamicField from "./dynamicField";
 import { useFormActions } from "./actions";
-import { serviceSubFormArgType } from "../../serviceForm/actions";
+import { IFieldSubmitHandlerArg, IFormSubmitHandlerArg } from "./types";
 
 const EachForm = ({
   number,
@@ -19,19 +19,13 @@ const EachForm = ({
   isEdit,
   formState,
   loadingForm,
-}: propType) => {
+}: IProps) => {
   const [edit, setEdit] = useState(isEdit || false);
   const [newlyAdded, setNewlyAdded] = useState<FieldType | undefined>();
   const [loadingField, setLoadingField] = useState<number>();
 
-  const {
-    formLoading,
-    formSuccess,
-    fieldLoading,
-    fieldSuccess,
-    fieldDeleteLoading,
-    formDeleteLoading,
-  } = formState;
+  const { formLoading, fieldLoading, fieldDeleteLoading, formDeleteLoading } =
+    formState;
 
   const formInfo = useFormActions({ formInfo: info, formLoading, setEdit });
   const {
@@ -70,29 +64,26 @@ const EachForm = ({
   const handleFieldSubmit = ({
     number,
     values,
-    id,
-  }: {
-    number: number;
-    values: { [x: string]: any };
-    id?: string;
-  }) => {
+    fieldId,
+    setEdit,
+    setNewlyAdded,
+    formValues,
+  }: IFieldSubmitHandlerArg) => {
     setLoadingField(number);
     fieldSubmitHandler({
       formId: info.id || "",
       formValues,
-      fieldId: id,
+      fieldId,
       values,
+      setEdit,
+      setNewlyAdded,
     });
   };
-
-  useEffect(() => {
-    if (!fieldLoading && fieldSuccess && loadingField === lastField)
-      setNewlyAdded(undefined);
-  }, [formLoading, formSuccess, loadingForm]);
 
   const btnText =
     (fieldsInfo?.length > 0 || newlyAdded ? "Add another " : "Create a ") +
     (fieldTitle || "field");
+
   const lastField = (fieldsInfo?.length ?? 0) + 1;
 
   return (
@@ -108,13 +99,18 @@ const EachForm = ({
           number={i + 1}
           info={field}
           fieldTitle={fieldTitle}
-          submitHandler={(values) =>
-            handleFieldSubmit({ number: i + 1, values, id: field.id })
+          submitHandler={({ values, setEdit }) =>
+            handleFieldSubmit({
+              number: i + 1,
+              values,
+              fieldId: field.id,
+              setEdit,
+              formValues,
+            })
           }
           isEdit={edit}
           loading={fieldLoading && loadingField === i + 1}
-          deleteLoading={fieldDeleteLoading}
-          success={!fieldLoading && fieldSuccess && loadingField === i + 1}
+          deleteLoading={fieldDeleteLoading && loadingField === i + 1}
           deleteField={() => {
             setLoadingField(i + 1);
             field.id && fieldDeleteHandler(field.id);
@@ -123,17 +119,21 @@ const EachForm = ({
       ))}
       {newlyAdded && (
         <DynamicField
-          number={(fieldsInfo?.length ?? 0) + 1}
+          number={lastField}
           info={newlyAdded}
           fieldTitle={fieldTitle}
-          submitHandler={(values) =>
-            handleFieldSubmit({ number: lastField, values })
+          submitHandler={({ values, setEdit }) =>
+            handleFieldSubmit({
+              number: lastField,
+              values,
+              setEdit,
+              formValues,
+            })
           }
           isEdit={edit}
           loading={fieldLoading && loadingField === lastField}
-          deleteLoading={fieldDeleteLoading}
-          success={!fieldLoading && fieldSuccess && loadingField === lastField}
           deleteField={() => setNewlyAdded(undefined)}
+          isNew
         />
       )}
 
@@ -155,7 +155,7 @@ const EachForm = ({
 
 export default EachForm;
 
-interface propType {
+interface IProps {
   number: number;
   fieldsInfo: FieldType[];
   info: FormType;
@@ -165,16 +165,13 @@ interface propType {
     formValues,
     fieldId,
     values,
-  }: serviceSubFormArgType) => void;
+    setEdit,
+  }: IFieldSubmitHandlerArg) => void;
   formSubmitHandler: ({
     formId,
     values,
     setEdit,
-  }: {
-    formId?: string;
-    values: FormType;
-    setEdit: Dispatch<SetStateAction<boolean>>;
-  }) => void;
+  }: IFormSubmitHandlerArg) => void;
   fieldDeleteHandler: (id: string) => void;
   formDeleteHandler: () => void;
   isEdit?: boolean;

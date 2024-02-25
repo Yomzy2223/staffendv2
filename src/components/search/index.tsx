@@ -18,7 +18,7 @@ const SearchComp = ({
   onSubmit,
   buttonProps,
   wrapperClassName,
-}: propType) => {
+}: IProps) => {
   const [value, setValue] = useState("");
 
   const handleSearchSubmit = () => {
@@ -65,7 +65,7 @@ const SearchComp = ({
 
 export default SearchComp;
 
-interface propType {
+interface IProps {
   type?: string;
   icon?: FunctionComponent<SVGProps<SVGSVGElement>>;
   placeholder?: string;

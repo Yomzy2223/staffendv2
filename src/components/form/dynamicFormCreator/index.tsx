@@ -19,8 +19,6 @@ const DynamicFormCreator = ({
   const [newlyAdded, setNewlyAdded] = useState<FormType>();
   const [loadingForm, setLoadingForm] = useState<number>();
 
-  const { formLoading, formSuccess } = formState;
-
   const btnText = formInfo?.length > 0 ? "Add another form" : "Create a form";
 
   const handleSelect = (selected?: FormType | any) => {
@@ -31,16 +29,6 @@ const DynamicFormCreator = ({
   const handleFieldSubmit = (values: { [x: string]: any }) => {
     onEachSubmit(values);
   };
-
-  useEffect(() => {
-    if (
-      !formLoading &&
-      formSuccess &&
-      (loadingForm === lastForm || loadingForm === undefined)
-    ) {
-      setNewlyAdded(undefined);
-    }
-  }, [formLoading, formSuccess]);
 
   const lastForm = (formInfo?.length ?? 0) + 1;
 
@@ -63,12 +51,15 @@ const DynamicFormCreator = ({
             fieldsInfo={info?.subForm || info?.productSubForm}
             fieldTitle={fieldTitle}
             fieldSubmitHandler={onEachSubmit}
-            formSubmitHandler={({ formId, values }) => {
+            formSubmitHandler={({ formId, values, setEdit }) => {
               setLoadingForm(i + 1);
-              onFormSubmit({ formId, values });
+              onFormSubmit({ formId, values, setEdit });
             }}
             fieldDeleteHandler={onEachDelete}
-            formDeleteHandler={() => onFormDelete(info.id)}
+            formDeleteHandler={() => {
+              setLoadingForm(i + 1);
+              onFormDelete(info.id);
+            }}
             info={info}
             formState={formState}
             loadingForm={loadingForm}
@@ -76,25 +67,20 @@ const DynamicFormCreator = ({
         ))}
         {newlyAdded && (
           <EachForm
-            number={(formInfo?.length ?? 0) + 1}
+            number={lastForm}
             fieldsInfo={[]}
             fieldTitle={fieldTitle}
             fieldSubmitHandler={handleFieldSubmit}
-            formSubmitHandler={({ formId, values }) => {
-              setLoadingForm((formInfo?.length ?? 0) + 1);
-              onFormSubmit({ formId, values });
+            formSubmitHandler={({ formId, values, setEdit }) => {
+              setLoadingForm(lastForm);
+              onFormSubmit({ formId, values, setEdit, setNewlyAdded });
             }}
             fieldDeleteHandler={onEachDelete}
             formDeleteHandler={() => setNewlyAdded(undefined)}
-            isEdit
-            info={{
-              type: newlyAdded.type,
-              title: newlyAdded?.title,
-              description: newlyAdded?.description,
-              compulsory: newlyAdded?.compulsory,
-            }}
+            info={{ ...newlyAdded }}
             formState={formState}
             loadingForm={loadingForm}
+            isEdit
           />
         )}
       </Masonry>

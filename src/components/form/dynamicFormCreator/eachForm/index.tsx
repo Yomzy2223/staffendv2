@@ -1,5 +1,5 @@
 import { Card } from "flowbite-react";
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Header from "./header";
 import Footer from "./footer";
 import { FieldType, FormType } from "./constants";
@@ -56,8 +56,12 @@ const EachForm = ({
     setIsSubmitted(true);
     if (validateFields()) {
       if (info.id) {
-        formSubmitHandler({ formId: info.id || "", values: formValues });
-      } else formSubmitHandler({ values: formValues });
+        formSubmitHandler({
+          formId: info.id || "",
+          values: formValues,
+          setEdit,
+        });
+      } else formSubmitHandler({ values: formValues, setEdit });
       return true;
     }
   };
@@ -82,7 +86,6 @@ const EachForm = ({
   };
 
   useEffect(() => {
-    if (!formLoading && formSuccess && loadingForm === number) setEdit(false);
     if (!fieldLoading && fieldSuccess && loadingField === lastField)
       setNewlyAdded(undefined);
   }, [formLoading, formSuccess, loadingForm]);
@@ -99,7 +102,6 @@ const EachForm = ({
         info={formInfo}
         loading={formLoading && loadingForm === number}
       />
-
       {fieldsInfo?.map((field, i) => (
         <DynamicField
           key={field.question + i.toString()}
@@ -167,9 +169,11 @@ interface propType {
   formSubmitHandler: ({
     formId,
     values,
+    setEdit,
   }: {
     formId?: string;
     values: FormType;
+    setEdit: Dispatch<SetStateAction<boolean>>;
   }) => void;
   fieldDeleteHandler: (id: string) => void;
   formDeleteHandler: () => void;

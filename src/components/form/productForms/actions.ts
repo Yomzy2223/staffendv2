@@ -3,6 +3,7 @@ import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import { useCountryApi } from "@/hooks/useCountryApi";
 import useProductApi from "@/hooks/useProductApi";
 import { useParams, useSearchParams } from "next/navigation";
+import { Dispatch, SetStateAction } from "react";
 import { FormType } from "../dynamicFormCreator/eachForm/constants";
 import { productInfoType, section1FormInfo } from "./constants";
 
@@ -66,13 +67,29 @@ export const useProductFormActions = () => {
   } = useProductApi();
   const productFormInfo = useGetProductFormsQuery(productId);
 
-  const submitProductForm = async ({ formId, values }: productFormArgType) => {
+  const submitProductForm = async ({
+    formId,
+    values,
+    setEdit,
+    setNewlyAdded,
+  }: productFormArgType) => {
     formId
-      ? updateProductFormMutation.mutate({ id: formId, formInfo: values })
-      : createProductFormMutation.mutate({
-          serviceId: productId,
-          formInfo: values,
-        });
+      ? updateProductFormMutation.mutate(
+          { id: formId, formInfo: values },
+          { onSuccess: () => setEdit(false) }
+        )
+      : createProductFormMutation.mutate(
+          {
+            serviceId: productId,
+            formInfo: values,
+          },
+          {
+            onSuccess: () => {
+              setEdit(false);
+              setNewlyAdded && setNewlyAdded(undefined);
+            },
+          }
+        );
   };
 
   const submitProductFormField = ({
@@ -156,4 +173,6 @@ export interface productSubFormArgType {
 export interface productFormArgType {
   formId?: string;
   values: FormType;
+  setEdit: Dispatch<SetStateAction<boolean>>;
+  setNewlyAdded: Dispatch<SetStateAction<FormType | undefined>>;
 }

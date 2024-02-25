@@ -114,7 +114,7 @@ const DynamicForm = ({
                 />
               )}
 
-              {el.type === "combobox" && el.selectOptions && (
+              {el.type === "select" && el.selectOptions && (
                 <ComboBoxComp
                   name={el.name}
                   options={el.selectOptions}
@@ -123,23 +123,8 @@ const DynamicForm = ({
                   fieldName={el.fieldName}
                   leftContent={el.leftContent}
                   defaultValue={defaultValues[el.name]}
-                />
-              )}
-
-              {el.type === "select" && el.selectOptions && (
-                <Select
-                  id={el.name}
-                  helperText={<>{errorMsg}</>}
-                  color={errors[el.name] && "failure"}
                   disabled={disableAll}
-                  defaultValue={defaultValues[el.name]}
-                  {...el.selectProp}
-                  {...register(el.name)}
-                >
-                  {el.selectOptions.map((option) => (
-                    <option key={option}>{option}</option>
-                  ))}
-                </Select>
+                />
               )}
 
               {el.type === "tagInput" && (
@@ -201,3 +186,21 @@ export default DynamicForm;
 //      />
 //    );
 //  }
+
+// {
+//   el.type === "select" && el.selectOptions && (
+//     <Select
+//       id={el.name}
+//       helperText={<>{errorMsg}</>}
+//       color={errors[el.name] && "failure"}
+//       disabled={disableAll}
+//       defaultValue={defaultValues[el.name]}
+//       {...el.selectProp}
+//       {...register(el.name)}
+//     >
+//       {el.selectOptions.map((option) => (
+//         <option key={option}>{option}</option>
+//       ))}
+//     </Select>
+//   );
+// }

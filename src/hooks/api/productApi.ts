@@ -34,11 +34,9 @@ export const getProduct = async (id: string) => {
   return await client.get(`/products/${id}`);
 };
 
-export const getServiceProducts = async (serviceCategoryId: string) => {
+export const getServiceProducts = async (serviceId: string) => {
   const client = await Client();
-  return await client.get(
-    `/products/allByServiceCategory/${serviceCategoryId}`
-  );
+  return await client.get(`/products/service/${serviceId}`);
 };
 
 export const getAllProducts = async () => {
@@ -76,7 +74,7 @@ export const deleteProductForm = async (id: string) => {
 
 export const getProductForm = async (productId: string) => {
   const client = await Client();
-  return await client.get(`/products/formByService/${productId}`);
+  return await client.get(`/products/formByProduct/${productId}`);
 };
 
 export const getServiceProductForms = async (serviceId: string) => {

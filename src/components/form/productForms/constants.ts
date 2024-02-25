@@ -20,7 +20,7 @@ export const section1FormInfo = [
   {
     name: "country",
     label: "Select operational country",
-    selectOptions: ["NGA", "US"],
+    selectOptions: ["Nigeria", "USA"],
     type: "select",
     selectProp: {
       placeholder: "Select operational country",

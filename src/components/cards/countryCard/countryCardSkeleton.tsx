@@ -7,9 +7,9 @@ const CountryCardSkeleton = () => (
       <Skeleton className="w-10 max-w-full" />
     </div>
     <div className="flex flex-col gap-4">
-      <Skeleton className="w-[248px] h-4 max-w-full" />
-      <Skeleton className="w-[280px] h-4 max-w-full" />
-      <Skeleton className="w-[200px] h-4 max-w-full" />
+      <Skeleton className="w-16 h-4 max-w-full" />
+      <Skeleton className="w-20 h-4 max-w-full" />
+      <Skeleton className="w-16 h-4 max-w-full" />
     </div>
   </div>
 );

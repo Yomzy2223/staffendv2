@@ -60,7 +60,7 @@ const DynamicFormCreator = ({
           <EachForm
             key={info.title + i}
             number={i + 1}
-            fieldsInfo={info?.subForm || info?.serviceSubForm}
+            fieldsInfo={info?.subForm || info?.productSubForm}
             fieldTitle={fieldTitle}
             fieldSubmitHandler={onEachSubmit}
             formSubmitHandler={({ formId, values }) => {
@@ -128,7 +128,7 @@ interface propType {
     description: string;
     compulsory: boolean;
     subForm: FieldType[];
-    serviceSubForm: FieldType[];
+    productSubForm: FieldType[];
   }[];
   formState: {
     formLoading: boolean;

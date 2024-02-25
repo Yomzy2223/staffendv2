@@ -24,6 +24,7 @@ const ComboBoxComp = ({
   fieldName,
   leftContent,
   defaultValue,
+  disabled,
 }: IProps) => {
   const [openSelect, setOpenSelect] = useState(false);
   const [selectValue, setSelectValue] = useState(defaultValue);
@@ -42,6 +43,7 @@ const ComboBoxComp = ({
           outline
           role="combobox"
           className="w-full [&_span]:justify-between"
+          disabled={disabled}
           {...selectProp}
         >
           {selectValue ? (
@@ -56,8 +58,10 @@ const ComboBoxComp = ({
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0 max-h-96 overflow-y-auto">
-        <Command>
-          <CommandInput placeholder={`Search ${fieldName}...`} />
+        <Command className="min-w-40">
+          {options.length > 5 && (
+            <CommandInput placeholder={`Search ${fieldName}...`} />
+          )}
           <CommandEmpty>{`No ${fieldName} found`}</CommandEmpty>
           <CommandGroup>
             {options.map((option) => (
@@ -101,4 +105,5 @@ interface IProps {
   fieldName?: string;
   leftContent?: string | ReactNode;
   defaultValue?: string;
+  disabled?: boolean;
 }

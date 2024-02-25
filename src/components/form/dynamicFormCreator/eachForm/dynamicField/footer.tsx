@@ -36,7 +36,7 @@ const Footer = ({
           <Checkbox
             id="compulsory"
             className="accent-primary"
-            // checked={getValues("compulsory")}
+            checked={getValues("compulsory")}
             onChange={onCheckToggle}
           />
           <label htmlFor="compulsory">Compulsory</label>

@@ -54,7 +54,11 @@ const Header = ({ edit, info, loading }: propType) => {
             {type}
           </span>
           {edit && (
-            <FieldTypePopUp handleSelect={handleOptionSelect} isForm>
+            <FieldTypePopUp
+              handleSelect={handleOptionSelect}
+              disabled={loading}
+              isForm
+            >
               <Button
                 size="fit"
                 color="primary"

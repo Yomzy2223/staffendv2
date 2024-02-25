@@ -1,9 +1,10 @@
 import { productFormType, productSubFormType } from "@/hooks/api/types";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
+import { useCountryApi } from "@/hooks/useCountryApi";
 import useProductApi from "@/hooks/useProductApi";
 import { useParams, useSearchParams } from "next/navigation";
 import { FormType } from "../dynamicFormCreator/eachForm/constants";
-import { productInfoType } from "./constants";
+import { productInfoType, section1FormInfo } from "./constants";
 
 // Actions for service info section
 export const useProductInfoActions = () => {
@@ -11,7 +12,8 @@ export const useProductInfoActions = () => {
   const { serviceId } = useParams();
   const { setQuery } = useGlobalFucntions();
   const productId = get("productId");
-  const isEdit = productId && get("action") == "edit";
+
+  const title1 = productId ? "Update Product" : "Create Product";
 
   const { createProductMutation, updateProductMutation, useGetProductQuery } =
     useProductApi();
@@ -40,7 +42,7 @@ export const useProductInfoActions = () => {
     createProductMutation.isSuccess || updateProductMutation.isSuccess;
 
   return {
-    isEdit,
+    title1,
     productLoading,
     productSuccess,
     productInfo,

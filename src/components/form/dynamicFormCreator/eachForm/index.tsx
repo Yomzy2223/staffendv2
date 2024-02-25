@@ -134,6 +134,7 @@ const EachForm = ({
           deleteField={() => setNewlyAdded(undefined)}
         />
       )}
+
       <Footer
         edit={edit}
         setEdit={setEdit}

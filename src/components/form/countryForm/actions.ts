@@ -80,7 +80,7 @@ export const useCountryActions = ({
     {
       name: "name",
       label: "Country name",
-      type: "combobox",
+      type: "select",
       fieldName: "country",
       selectOptions: Object.keys(countries).map(
         (el: string) => countries[el as TCountryCode].name

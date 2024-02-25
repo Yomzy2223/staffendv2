@@ -1,21 +1,12 @@
-import { Button, Checkbox, TextInput } from "flowbite-react";
+import { Button, Checkbox, Radio, TextInput } from "flowbite-react";
 import { X } from "lucide-react";
 import React, { ChangeEvent, KeyboardEvent, useEffect } from "react";
 import { UseFormSetValue } from "react-hook-form";
 import { fieldReturnType } from "../actions";
 import { v4 as uuidv4 } from "uuid";
+import { cn } from "@/lib/utils";
 
-const CheckboxOption = ({
-  info,
-  setValue,
-  edit,
-  error,
-}: {
-  info: fieldReturnType;
-  setValue: UseFormSetValue<{ [x: string]: any }>;
-  edit: boolean;
-  error: any;
-}) => {
+const CheckboxOption = ({ info, setValue, edit, error, type }: IProp) => {
   const { options, setOptions } = info;
 
   const id = uuidv4();
@@ -65,10 +56,15 @@ const CheckboxOption = ({
 
   return (
     <div>
-      <div className="space-y-3 mt-4 max-h-52 pb-1 overflow-y-auto">
+      <div
+        className={cn("space-y-3 mt-4 max-h-52 pb-1 overflow-hidden", {
+          "overflow-y-auto": edit,
+        })}
+      >
         {options.map((option, i) => (
           <div key={i} className="flex items-center gap-2">
-            <Checkbox disabled className="w-5 h-5" />
+            {type === "checkbox" && <Checkbox disabled className="w-5 h-5" />}
+            {type === "radio" && <Radio disabled className="w-5 h-5" />}
             <div className="flex justify-between gap-4 w-full">
               <TextInput
                 id={"option" + id + i}
@@ -103,3 +99,11 @@ const CheckboxOption = ({
 };
 
 export default CheckboxOption;
+
+interface IProp {
+  info: fieldReturnType;
+  setValue: UseFormSetValue<{ [x: string]: any }>;
+  edit: boolean;
+  error: any;
+  type: string;
+}

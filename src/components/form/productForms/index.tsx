@@ -14,7 +14,7 @@ const ProductForm = ({ open, setOpen }: IProps) => {
   const { isDesktop, deleteQueryString } = useGlobalFucntions();
 
   const {
-    isEdit,
+    title1,
     productInfo,
     submitProductInfo,
     productLoading,
@@ -30,12 +30,12 @@ const ProductForm = ({ open, setOpen }: IProps) => {
     handleFormDelete,
   } = useProductFormActions();
 
-  const title1 = isEdit ? "Update Product" : "Create Product";
-  const title2 = isEdit ? "Update Product Form" : "Add Product Form";
-  const title = section === 1 ? title1 : title2;
-
   const productData = productInfo?.data?.data?.data;
   const productFormData = productFormInfo?.data?.data?.data;
+
+  const title2 =
+    productFormData?.length > 0 ? "Update Product Form" : "Add Product Form";
+  const title = section === 1 ? title1 : title2;
 
   useEffect(() => {
     if (productSuccess) {
@@ -63,6 +63,8 @@ const ProductForm = ({ open, setOpen }: IProps) => {
   const defaultValues = {
     name: productData?.name || "",
     description: productData?.description || "",
+    country: productData?.country || "",
+    currency: productData?.currency || "",
     amount: productData?.amount || "",
     timeline: productData?.timeline || "",
     feature: productData?.feature || [],
@@ -75,7 +77,7 @@ const ProductForm = ({ open, setOpen }: IProps) => {
         open ? setOpen(open) : resetDialog();
       }}
       title={title}
-      size="5xl"
+      size={section === 1 || wide ? "5xl" : ""}
     >
       {section === 1 && (
         <DynamicForm

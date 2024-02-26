@@ -115,6 +115,7 @@ const EachForm = ({
               ...arg,
               number: lastField,
               formValues,
+              setNewlyAdded,
             })
           }
           isEdit={edit}

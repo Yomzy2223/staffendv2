@@ -1,6 +1,6 @@
 import { Button } from "flowbite-react";
 import { PlusCircle } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Masonry from "react-masonry-css";
 import EachForm from "./eachForm";
 import { FieldType, FormType } from "./eachForm/constants";
@@ -20,13 +20,12 @@ const DynamicFormCreator = ({
   const [newlyAdded, setNewlyAdded] = useState<FormType>();
   const [loadingForm, setLoadingForm] = useState<number>();
 
-  const btnText = formInfo?.length > 0 ? "Add another form" : "Create a form";
-
   const handleSelect = (selected?: FormType | any) => {
     if (!selected) return;
     setNewlyAdded(selected);
   };
 
+  const btnText = formInfo?.length > 0 ? "Add another form" : "Create a form";
   const lastForm = (formInfo?.length ?? 0) + 1;
 
   const breakpointColumnsObj = {
@@ -47,12 +46,10 @@ const DynamicFormCreator = ({
             number={i + 1}
             fieldsInfo={info?.subForm || info?.productSubForm}
             fieldTitle={fieldTitle}
-            fieldSubmitHandler={(arg) =>
-              onEachSubmit({ ...arg, setNewlyAddedForm: setNewlyAdded })
-            }
-            formSubmitHandler={({ formId, values, setEdit }) => {
+            fieldSubmitHandler={onEachSubmit}
+            formSubmitHandler={(arg) => {
               setLoadingForm(i + 1);
-              onFormSubmit({ formId, values, setEdit });
+              onFormSubmit(arg);
             }}
             fieldDeleteHandler={onEachDelete}
             formDeleteHandler={() => {
@@ -72,9 +69,9 @@ const DynamicFormCreator = ({
             fieldSubmitHandler={(arg) =>
               onEachSubmit({ ...arg, setNewlyAddedForm: setNewlyAdded })
             }
-            formSubmitHandler={({ formId, values, setEdit }) => {
+            formSubmitHandler={(arg) => {
               setLoadingForm(lastForm);
-              onFormSubmit({ formId, values, setEdit, setNewlyAdded });
+              onFormSubmit({ ...arg, setNewlyAdded });
             }}
             fieldDeleteHandler={onEachDelete}
             formDeleteHandler={() => setNewlyAdded(undefined)}

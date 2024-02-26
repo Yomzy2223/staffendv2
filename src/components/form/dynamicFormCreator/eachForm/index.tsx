@@ -61,22 +61,11 @@ const EachForm = ({
   };
 
   // Runs when each field is submitted
-  const handleFieldSubmit = ({
-    number,
-    values,
-    fieldId,
-    setEdit,
-    setNewlyAdded,
-    formValues,
-  }: IFieldSubmitHandlerArg) => {
-    setLoadingField(number);
+  const handleFieldSubmit = (arg: IFieldSubmitHandlerArg) => {
+    setLoadingField(arg.number);
     fieldSubmitHandler({
+      ...arg,
       formId: info.id || "",
-      formValues,
-      fieldId,
-      values,
-      setEdit,
-      setNewlyAdded,
     });
   };
 
@@ -99,12 +88,11 @@ const EachForm = ({
           number={i + 1}
           info={field}
           fieldTitle={fieldTitle}
-          submitHandler={({ values, setEdit }) =>
+          submitHandler={(arg) =>
             handleFieldSubmit({
+              ...arg,
               number: i + 1,
-              values,
               fieldId: field.id,
-              setEdit,
               formValues,
             })
           }
@@ -122,11 +110,10 @@ const EachForm = ({
           number={lastField}
           info={newlyAdded}
           fieldTitle={fieldTitle}
-          submitHandler={({ values, setEdit }) =>
+          submitHandler={(arg) =>
             handleFieldSubmit({
+              ...arg,
               number: lastField,
-              values,
-              setEdit,
               formValues,
             })
           }

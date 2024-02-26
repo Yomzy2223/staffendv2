@@ -103,6 +103,7 @@ export const useProductFormActions = () => {
     values,
     setEdit,
     setNewlyAdded,
+    setNewlyAddedForm,
   }: IFieldSubmitHandlerArg) => {
     const submitField = (formId: string) => {
       fieldId
@@ -122,6 +123,7 @@ export const useProductFormActions = () => {
               onSuccess: () => {
                 setEdit(false);
                 setNewlyAdded && setNewlyAdded(undefined);
+                setNewlyAddedForm && setNewlyAddedForm(undefined);
               },
             }
           );

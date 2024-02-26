@@ -47,7 +47,9 @@ const DynamicFormCreator = ({
             number={i + 1}
             fieldsInfo={info?.subForm || info?.productSubForm}
             fieldTitle={fieldTitle}
-            fieldSubmitHandler={onEachSubmit}
+            fieldSubmitHandler={(arg) =>
+              onEachSubmit({ ...arg, setNewlyAddedForm: setNewlyAdded })
+            }
             formSubmitHandler={({ formId, values, setEdit }) => {
               setLoadingForm(i + 1);
               onFormSubmit({ formId, values, setEdit });
@@ -67,7 +69,9 @@ const DynamicFormCreator = ({
             number={lastForm}
             fieldsInfo={[]}
             fieldTitle={fieldTitle}
-            fieldSubmitHandler={onEachSubmit}
+            fieldSubmitHandler={(arg) =>
+              onEachSubmit({ ...arg, setNewlyAddedForm: setNewlyAdded })
+            }
             formSubmitHandler={({ formId, values, setEdit }) => {
               setLoadingForm(lastForm);
               onFormSubmit({ formId, values, setEdit, setNewlyAdded });

@@ -10,6 +10,7 @@ export interface IFieldSubmitHandlerArg {
   values: { [x: string]: any };
   setEdit: Dispatch<SetStateAction<boolean>>;
   setNewlyAdded?: Dispatch<SetStateAction<FieldType | undefined>>;
+  setNewlyAddedForm?: Dispatch<SetStateAction<FormType | undefined>>;
 }
 
 export interface IFormSubmitHandlerArg {

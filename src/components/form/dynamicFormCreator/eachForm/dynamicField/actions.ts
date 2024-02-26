@@ -120,19 +120,33 @@ export const getDynamicFieldSchema = (type?: string) => {
   if (type === "document template") {
     schema = {
       ...schema,
-      documentTemp: z.custom((data) => {
-        if (!(data instanceof File)) {
-          throw new Error("Invalid file type");
-        }
-        // Additional checks (optional)
-        if (data.size > 1000000) {
-          // 1 MB limit (optional)
-          throw new Error("File size exceeds limit");
-        }
-        return data;
-      }),
+      documentTemp: z
+        .instanceof(File, { message: "Kindly upload a valid file" })
+        .refine((file) => file, { message: "Kindly upload a file" })
+        .refine((file) => file.size <= 1024 * 1024, {
+          message: "File size must be less than 1MB",
+        }),
     };
   }
 
   return z.object(schema);
 };
+//  z.custom(
+//         (data) => {
+//           console.log(data, data instanceof File);
+//           if (!(data instanceof File)) {
+//             // throw new Error("Invalid file type");
+//             return false;
+//           }
+//           // Additional checks (optional)
+//           if (data.size > 1000000) {
+//             // 1 MB limit (optional)
+//             // throw new Error("File size exceeds limit");
+//             return false;
+//           }
+//           return data;
+//         },
+//         {
+//           message: "Kindly upload a file",
+//         }
+//       ),

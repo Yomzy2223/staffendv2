@@ -6,15 +6,17 @@ import { Upload } from "@/assets/icons";
 import { cn } from "@/lib/utils";
 import { FileIcon, defaultStyles, DefaultExtensionType } from "react-file-icon";
 import { Button } from "flowbite-react";
-import { DownloadIcon, PenIcon } from "lucide-react";
+import { DownloadIcon, PenIcon, PenLineIcon } from "lucide-react";
 import fileDownload from "js-file-download";
 
 export const FileInput = ({
   name,
   onFileChange,
+  editMode = true,
 }: {
   name?: string;
   onFileChange: (file: File) => void;
+  editMode?: boolean;
 }) => {
   const [file, setFile] = useState<File>();
 
@@ -33,6 +35,7 @@ export const FileInput = ({
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
         [],
     },
+    disabled: !editMode,
   });
 
   const fileExtension = file?.name.split(".").pop();
@@ -55,26 +58,36 @@ export const FileInput = ({
       >
         <input {...getInputProps({})} />
         {!file ? (
-          <>
-            <Upload />
-            {isDragActive ? (
-              <p className="text-gray-500 text-sm leading-normal">
-                Drop the files here ...
-              </p>
-            ) : (
-              <div className="flex flex-col items-center">
+          editMode ? (
+            <>
+              <Upload />
+              {isDragActive ? (
                 <p className="text-gray-500 text-sm leading-normal">
-                  Drag files here to upload
+                  Drop the files here ...
                 </p>
-                <p className="underline text-xs leading-normal text-primary">
-                  or browse for files
-                </p>
-              </div>
-            )}
-          </>
+              ) : (
+                <div className="flex flex-col items-center">
+                  <p className="text-gray-500 text-sm leading-normal">
+                    Drag files here to upload
+                  </p>
+                  <p className="underline text-xs leading-normal text-primary">
+                    or browse for files
+                  </p>
+                </div>
+              )}
+            </>
+          ) : (
+            <p className="flex items-center gap-1 text-gray-500 text-sm leading-normal">
+              Click edit {<PenLineIcon size={15} />} button to upload a file
+            </p>
+          )
         ) : (
           <div className="flex w-full justify-between">
-            <div className="flex items-center space-x-3">
+            <div
+              className={cn("flex items-center space-x-3", {
+                "text-foreground-5": !editMode,
+              })}
+            >
               <div className="w-4 h-4">
                 <FileIcon
                   extension={fileExtension}
@@ -88,9 +101,11 @@ export const FileInput = ({
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <Button color="link" size="fit" onClick={open}>
-                <PenIcon size={18} />
-              </Button>
+              {editMode && (
+                <Button color="link" size="fit" onClick={open}>
+                  <PenIcon size={18} />
+                </Button>
+              )}
               <Button
                 color="link"
                 size="fit"

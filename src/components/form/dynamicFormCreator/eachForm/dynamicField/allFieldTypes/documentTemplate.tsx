@@ -1,17 +1,26 @@
 import { FileInput } from "@/components/file/fileInput";
-import { Label } from "flowbite-react";
 import React from "react";
+import { UseFormSetValue } from "react-hook-form";
 
-const DocumentTemplate = () => {
+const DocumentTemplate = ({ setValue, edit, error }: IProps) => {
   const handleFile = (file: File) => {
-    console.log(file);
+    setValue("documentTemp", file);
   };
 
   return (
     <div id="fileUpload" className="max-w-md">
-      <FileInput onFileChange={handleFile} />
+      <FileInput onFileChange={handleFile} editMode={edit} />
+      <p className="text-sm text-destructive-foreground mt-1">
+        {error?.message}
+      </p>
     </div>
   );
 };
 
 export default DocumentTemplate;
+
+interface IProps {
+  setValue: UseFormSetValue<{ [x: string]: any }>;
+  edit: boolean;
+  error: any;
+}

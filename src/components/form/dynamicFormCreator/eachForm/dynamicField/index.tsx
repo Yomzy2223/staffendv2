@@ -13,6 +13,7 @@ import DocumentUpload from "./allFieldTypes/documentUpload";
 import Dropdown from "./allFieldTypes/dropdown";
 import MultipleChoice from "./allFieldTypes/multipleChoice";
 import { getDynamicFieldSchema, useFormFieldActions } from "./actions";
+import { uploadFileToCloudinary } from "@/lib/helpers/helperFunctions";
 
 const DynamicField = ({
   info,
@@ -54,7 +55,11 @@ const DynamicField = ({
   });
 
   // Submit handler
-  function onSubmit(values: formType) {
+  async function onSubmit(values: formType) {
+    if (values?.documentTemp) {
+      const fileUploadRes = await uploadFileToCloudinary(values.documentTemp);
+    }
+
     submitHandler({ values, setEdit });
   }
 
@@ -104,7 +109,13 @@ const DynamicField = ({
               type={type}
             />
           )}
-        {type === "document template" && <DocumentTemplate />}
+        {type === "document template" && (
+          <DocumentTemplate
+            setValue={setValue}
+            error={errors["documentTemp"]}
+            edit={edit}
+          />
+        )}
         {type === "document upload" && <DocumentUpload />}
         {type === "dropdown" && <Dropdown />}
 

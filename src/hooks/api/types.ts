@@ -21,7 +21,7 @@ export interface IServiceSubForm {
   fileType?: string;
 }
 
-export interface productType {
+export interface IProduct {
   name: string;
   description: string;
   country: string;
@@ -31,18 +31,18 @@ export interface productType {
   feature: string[];
 }
 
-export interface productFullType extends productType {
+export interface IProductFull extends IProduct {
   id: string;
 }
 
-export interface productFormType {
+export interface IProductForm {
   title: string;
   description: string;
   type: string;
   compulsory: boolean;
 }
 
-export interface productSubFormType {
+export interface IProductSubForm {
   question: string;
   type: string;
   options?: (string | number)[];

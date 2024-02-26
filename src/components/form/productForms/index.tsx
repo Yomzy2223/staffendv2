@@ -84,7 +84,7 @@ const ProductForm = ({ open, setOpen }: IProps) => {
               type="submit"
               color="primary"
               isProcessing={productLoading}
-              disabled={productLoading}
+              disabled={productLoading || productInfo.isLoading}
               processingSpinner={
                 <Oval color="white" strokeWidth={4} className="h-5 w-5" />
               }

@@ -1,5 +1,5 @@
 import { Client } from "@/lib/axios";
-import { productFormType, productSubFormType, productType } from "./types";
+import { IProductForm, IProductSubForm, IProduct } from "./types";
 
 // Product endpoints
 export const createProduct = async ({
@@ -7,7 +7,7 @@ export const createProduct = async ({
   formInfo,
 }: {
   serviceId: string;
-  formInfo: productType;
+  formInfo: IProduct;
 }) => {
   const client = await Client();
   return await client.post(`/products/${serviceId}`, formInfo);
@@ -18,7 +18,7 @@ export const updateProduct = async ({
   formInfo,
 }: {
   id: string;
-  formInfo: productType;
+  formInfo: IProduct;
 }) => {
   const client = await Client();
   return await client.put(`/products/${id}`, formInfo);
@@ -50,7 +50,7 @@ export const createProductForm = async ({
   formInfo,
 }: {
   productId: string;
-  formInfo: productFormType;
+  formInfo: IProductForm;
 }) => {
   const client = await Client();
   return await client.post(`/products/form/${productId}`, formInfo);
@@ -61,7 +61,7 @@ export const updateProductForm = async ({
   formInfo,
 }: {
   id: string;
-  formInfo: productFormType;
+  formInfo: IProductForm;
 }) => {
   const client = await Client();
   return await client.put(`/products/form/${id}`, formInfo);
@@ -93,7 +93,7 @@ export const createProductSubForm = async ({
   formInfo,
 }: {
   formId: string;
-  formInfo: productSubFormType;
+  formInfo: IProductSubForm;
 }) => {
   const client = await Client();
   return await client.post(`/products/subform/${formId}`, formInfo);
@@ -104,7 +104,7 @@ export const updateProductSubForm = async ({
   formInfo,
 }: {
   id: string;
-  formInfo: productSubFormType;
+  formInfo: IProductSubForm;
 }) => {
   const client = await Client();
   return await client.put(`/products/subform/${id}`, formInfo);

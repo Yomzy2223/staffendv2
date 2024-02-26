@@ -7,7 +7,7 @@ import {
   MenubarSeparator,
   MenubarTrigger,
 } from "@/components/ui/menubar";
-import { productFullType } from "@/hooks/api/types";
+import { IProductFull } from "@/hooks/api/types";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import { Currency, MoreHorizontal, Timer, WholeWord } from "lucide-react";
 import React, { Dispatch, SetStateAction, useState } from "react";
@@ -90,13 +90,13 @@ const ProductCard = ({ info, setOpen, handleDelete, isLoading }: IProps) => {
 export default ProductCard;
 
 interface IProps {
-  info: productFullType;
+  info: IProductFull;
   setOpen: Dispatch<SetStateAction<boolean>>;
   handleDelete: ({
     info,
     setOpenConfirm,
   }: {
-    info: productFullType;
+    info: IProductFull;
     setOpenConfirm: Dispatch<SetStateAction<boolean>>;
   }) => void;
   isLoading: boolean;

@@ -18,7 +18,6 @@ const ProductCard = ({ info, setOpen, handleDelete, isLoading }: IProps) => {
 
   const handleEdit = () => {
     setOpen(true);
-    setQuery("action", "edit");
     setQuery("productId", info.id);
   };
 

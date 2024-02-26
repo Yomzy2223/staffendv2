@@ -66,11 +66,11 @@ const useProductApi = () => {
       enabled: id ? true : false,
     });
 
-  const useGetServiceProductsQuery = (serviceCategoryId: string) =>
+  const useGetServiceProductsQuery = (serviceId: string) =>
     useQuery({
-      queryKey: ["product", serviceCategoryId],
+      queryKey: ["product", serviceId],
       queryFn: ({ queryKey }) => getServiceProducts(queryKey[1]),
-      enabled: serviceCategoryId ? true : false,
+      enabled: serviceId ? true : false,
     });
 
   const getAllProductsQuery = useQuery({

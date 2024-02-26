@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import DynamicForm from "../dynamicForm";
 import { Button } from "flowbite-react";
 import { cn } from "@/lib/utils";
@@ -13,13 +13,8 @@ const ProductForm = ({ open, setOpen }: IProps) => {
   const [section, setSection] = useState(1);
   const { isDesktop, deleteQueryString } = useGlobalFucntions();
 
-  const {
-    title1,
-    productInfo,
-    submitProductInfo,
-    productLoading,
-    productSuccess,
-  } = useProductInfoActions();
+  const { title1, productInfo, submitProductInfo, productLoading } =
+    useProductInfoActions({ setSection, section });
 
   const {
     productFormInfo,
@@ -36,12 +31,6 @@ const ProductForm = ({ open, setOpen }: IProps) => {
   const title2 =
     productFormData?.length > 0 ? "Update Product Form" : "Add Product Form";
   const title = section === 1 ? title1 : title2;
-
-  useEffect(() => {
-    if (productSuccess) {
-      setSection(section + 1);
-    }
-  }, [productSuccess]);
 
   const handleBack = () => {
     if (section === 1) {

@@ -26,7 +26,6 @@ const Products = () => {
 
   const addNewProduct = () => {
     setOpen(true);
-    setQuery("action", "add");
   };
 
   const deleteProduct = ({

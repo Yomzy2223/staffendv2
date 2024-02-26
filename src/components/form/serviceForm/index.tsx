@@ -13,31 +13,25 @@ const ServiceForm = ({ open, setOpen }: IProps) => {
   const [section, setSection] = useState(1);
   const { isDesktop, deleteQueryString } = useGlobalFucntions();
 
-  const {
-    isEdit,
-    serviceInfo,
-    submitServiceInfo,
-    serviceLoading,
-    serviceSuccess,
-  } = useServiceInfoActions();
+  const { isEdit, serviceInfo, submitServiceInfo, serviceLoading } =
+    useServiceInfoActions({ section, setSection });
 
   const {
     serviceFormInfo,
     submitServiceForm,
     submitServiceFormField,
     serviceFormState,
+    handleFieldDelete,
+    handleFormDelete,
   } = useServiceFormActions();
-
-  const title1 = isEdit ? "Update Service" : "Create Service";
-  const title2 = isEdit ? "Update Service Form" : "Add Service Form";
-  const title = section === 1 ? title1 : title2;
 
   const serviceData = serviceInfo?.data?.data?.data;
   const serviceFormData = serviceFormInfo?.data?.data?.data;
 
-  useEffect(() => {
-    if (serviceSuccess) setSection(section + 1);
-  }, [serviceSuccess]);
+  const title1 = isEdit ? "Update Service" : "Create Service";
+  const title2 =
+    serviceFormData?.length > 0 ? "Update Service Form" : "Add Service Form";
+  const title = section === 1 ? title1 : title2;
 
   const handleBack = () => {
     if (section === 1) {
@@ -47,17 +41,17 @@ const ServiceForm = ({ open, setOpen }: IProps) => {
     setSection(section - 1);
   };
 
-  const wide = serviceFormData?.length > 1 && section === 2 && isDesktop;
-
-  const defaultValues = {
-    name: serviceData?.name || "",
-    description: serviceData?.description || "",
-  };
-
   const resetDialog = () => {
     setOpen(false);
     setSection(1);
     deleteQueryString("action");
+  };
+
+  const wide = serviceFormData?.length > 1 && section !== 1;
+
+  const defaultValues = {
+    name: isEdit ? serviceData?.name : "",
+    description: isEdit ? serviceData?.description : "",
   };
 
   return (
@@ -67,7 +61,7 @@ const ServiceForm = ({ open, setOpen }: IProps) => {
         open ? setOpen(open) : resetDialog();
       }}
       title={title}
-      size={wide ? "5xl" : "xl"}
+      size={wide ? "5xl" : ""}
     >
       {section === 1 && (
         <DynamicForm
@@ -76,6 +70,7 @@ const ServiceForm = ({ open, setOpen }: IProps) => {
           formSchema={serviceInfoSchema}
           onFormSubmit={submitServiceInfo}
           className={cn("gap-4")}
+          disableAll={serviceInfo.isLoading}
         >
           <div className="bg-white flex items-center justify-end pt-4 sticky bottom-0">
             <Button
@@ -98,9 +93,9 @@ const ServiceForm = ({ open, setOpen }: IProps) => {
           <DynamicFormCreator
             formInfo={serviceFormData}
             onEachSubmit={submitServiceFormField}
-            onEachDelete={(id) => console.log(id)}
+            onEachDelete={handleFieldDelete}
             onFormSubmit={submitServiceForm}
-            onFormDelete={(id) => console.log(id)}
+            onFormDelete={handleFormDelete}
             formState={serviceFormState}
             wide={wide}
           />

@@ -3,14 +3,14 @@ import { productFormType, productSubFormType, productType } from "./types";
 
 // Product endpoints
 export const createProduct = async ({
-  serviceCategoryId,
+  serviceId,
   formInfo,
 }: {
-  serviceCategoryId: string;
+  serviceId: string;
   formInfo: productType;
 }) => {
   const client = await Client();
-  return await client.post(`/products/${serviceCategoryId}`, formInfo);
+  return await client.post(`/products/${serviceId}`, formInfo);
 };
 
 export const updateProduct = async ({

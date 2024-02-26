@@ -34,14 +34,14 @@ export const getAllServices = async () => {
 };
 
 export const createServiceForm = async ({
-  serviceCategoryId,
+  serviceId,
   formInfo,
 }: {
-  serviceCategoryId: string;
+  serviceId: string;
   formInfo: IServiceForm;
 }) => {
   const client = await Client();
-  return await client.post(`/services/form/${serviceCategoryId}`, formInfo);
+  return await client.post(`/services/form/${serviceId}`, formInfo);
 };
 
 // Service form endpoints
@@ -66,9 +66,9 @@ export const getServiceForm = async (id: string) => {
   return await client.get(`/services/form/${id}`);
 };
 
-export const getServiceForms = async (serviceCategoryId: string) => {
+export const getServiceForms = async (serviceId: string) => {
   const client = await Client();
-  return await client.get(`/services/forms/${serviceCategoryId}`);
+  return await client.get(`/services/forms/${serviceId}`);
 };
 
 export const createServiceSubForm = async ({

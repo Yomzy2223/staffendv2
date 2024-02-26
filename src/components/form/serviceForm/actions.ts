@@ -1,7 +1,7 @@
 import { IServiceSubForm } from "@/hooks/api/types";
 import useServiceApi from "@/hooks/useServiceApi";
-import { useParams, useSearchParams } from "next/navigation";
-import { FormType } from "../dynamicFormCreator/eachForm/constants";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { Dispatch, SetStateAction } from "react";
 import {
   IFieldSubmitHandlerArg,
   IFormSubmitHandlerArg,
@@ -9,7 +9,14 @@ import {
 import { serviceInfoType } from "./constants";
 
 // Actions for service info section
-export const useServiceInfoActions = () => {
+export const useServiceInfoActions = ({
+  section,
+  setSection,
+}: {
+  section: number;
+  setSection: Dispatch<SetStateAction<number>>;
+}) => {
+  const router = useRouter();
   const { get } = useSearchParams();
   const { serviceId } = useParams();
   const isEdit = serviceId && get("action") == "edit";
@@ -19,12 +26,22 @@ export const useServiceInfoActions = () => {
   const serviceInfo = useGetServiceQuery(serviceId as string);
 
   const submitServiceInfo = async (values: serviceInfoType) => {
-    serviceId
-      ? updateServiceMutation.mutate({
-          id: serviceId as string,
-          formInfo: values,
-        })
-      : createServiceMutation.mutate(values);
+    isEdit
+      ? updateServiceMutation.mutate(
+          {
+            id: serviceId as string,
+            formInfo: values,
+          },
+          {
+            onSuccess: () => setSection(section + 1),
+          }
+        )
+      : createServiceMutation.mutate(values, {
+          onSuccess: (data) => {
+            setSection(section + 1);
+            router.push(`/services/${data.data.data.id}?action=add`);
+          },
+        });
   };
 
   const serviceLoading =
@@ -60,13 +77,26 @@ export const useServiceFormActions = () => {
   const submitServiceForm = async ({
     formId,
     values,
+    setEdit,
+    setNewlyAdded,
   }: IFormSubmitHandlerArg) => {
     formId
-      ? updateServiceFormMutation.mutate({ id: formId, formInfo: values })
-      : createServiceFormMutation.mutate({
-          serviceCategoryId: (serviceId as string) || "",
-          formInfo: values,
-        });
+      ? updateServiceFormMutation.mutate(
+          { id: formId, formInfo: values },
+          { onSuccess: () => setEdit(false) }
+        )
+      : createServiceFormMutation.mutate(
+          {
+            serviceId: (serviceId as string) || "",
+            formInfo: values,
+          },
+          {
+            onSuccess: () => {
+              setEdit(false);
+              setNewlyAdded && setNewlyAdded(undefined);
+            },
+          }
+        );
   };
 
   const submitServiceFormField = ({
@@ -74,17 +104,32 @@ export const useServiceFormActions = () => {
     formValues,
     fieldId,
     values,
+    setEdit,
+    setNewlyAdded,
+    setNewlyAddedForm,
   }: IFieldSubmitHandlerArg) => {
     const submitField = (formId: string) => {
       fieldId
-        ? updateServiceSubFormMutation.mutate({
-            id: fieldId,
-            formInfo: values as IServiceSubForm,
-          })
-        : createServiceSubFormMutation.mutate({
-            formId,
-            formInfo: values as IServiceSubForm,
-          });
+        ? updateServiceSubFormMutation.mutate(
+            {
+              id: fieldId,
+              formInfo: values as IServiceSubForm,
+            },
+            { onSuccess: () => setEdit(false) }
+          )
+        : createServiceSubFormMutation.mutate(
+            {
+              formId,
+              formInfo: values as IServiceSubForm,
+            },
+            {
+              onSuccess: () => {
+                setEdit(false);
+                setNewlyAdded && setNewlyAdded(undefined);
+                setNewlyAddedForm && setNewlyAddedForm(undefined);
+              },
+            }
+          );
     };
 
     if (formId) {
@@ -92,7 +137,7 @@ export const useServiceFormActions = () => {
     } else {
       createServiceFormMutation.mutate(
         {
-          serviceCategoryId: (serviceId as string) || "",
+          serviceId: (serviceId as string) || "",
           formInfo: formValues,
         },
         {
@@ -120,6 +165,7 @@ export const useServiceFormActions = () => {
     formSuccess:
       createServiceFormMutation.isSuccess ||
       updateServiceFormMutation.isSuccess,
+    formDeleteLoading: deleteServiceFormMutation.isPending,
     fieldLoading:
       createServiceSubFormMutation.isPending ||
       updateServiceSubFormMutation.isPending,
@@ -127,7 +173,6 @@ export const useServiceFormActions = () => {
       createServiceSubFormMutation.isSuccess ||
       updateServiceSubFormMutation.isSuccess,
     fieldDeleteLoading: deleteServiceSubFormMutation.isPending,
-    formDeleteLoading: deleteServiceFormMutation.isPending,
   };
 
   return {
@@ -135,5 +180,7 @@ export const useServiceFormActions = () => {
     submitServiceForm,
     submitServiceFormField,
     serviceFormState,
+    handleFieldDelete,
+    handleFormDelete,
   };
 };

@@ -96,7 +96,7 @@ export const useProductFormActions = () => {
         )
       : createProductFormMutation.mutate(
           {
-            serviceId: productId,
+            productId,
             formInfo: values,
           },
           {
@@ -128,7 +128,7 @@ export const useProductFormActions = () => {
           )
         : createProductSubFormMutation.mutate(
             {
-              serviceFormId: formId,
+              formId: formId,
               formInfo: values as productSubFormType,
             },
             {
@@ -146,7 +146,7 @@ export const useProductFormActions = () => {
     } else {
       createProductFormMutation.mutate(
         {
-          serviceId: productId,
+          productId,
           formInfo: formValues,
         },
         {

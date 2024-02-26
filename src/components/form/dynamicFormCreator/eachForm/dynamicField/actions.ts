@@ -117,5 +117,22 @@ export const getDynamicFieldSchema = (type?: string) => {
     };
   }
 
+  if (type === "document template") {
+    schema = {
+      ...schema,
+      documentTemp: z.custom((data) => {
+        if (!(data instanceof File)) {
+          throw new Error("Invalid file type");
+        }
+        // Additional checks (optional)
+        if (data.size > 1000000) {
+          // 1 MB limit (optional)
+          throw new Error("File size exceeds limit");
+        }
+        return data;
+      }),
+    };
+  }
+
   return z.object(schema);
 };

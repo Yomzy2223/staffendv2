@@ -40,7 +40,10 @@ const formSchema = z.object({
   compulsory: z.boolean(),
 });
 
-export type FormType = z.infer<typeof formSchema> & { id?: string };
+export type FormType = z.infer<typeof formSchema> & {
+  id?: string;
+  subForm?: FieldType[];
+};
 
 export const BusinessObjectives = [
   "Accommodation, hotels and hospitality",
@@ -118,18 +121,19 @@ export const fieldOptions: FieldType[] = [
   {
     type: "address",
     icon: MapPin,
-    question: "Enter company address",
+    question: "Enter your organization's address",
     compulsory: true,
   },
   {
     type: "business name",
     icon: MapPin,
     question:
-      "To register your business, you must give your business a unique name. Enter exactly 4 names.",
+      "To register your business, you must give your business a unique name. Enter exactly 4 names (in preference orders).",
     compulsory: true,
   },
   {
     type: "checkbox",
+    question: "Select the options that apply",
     icon: CheckSquare,
     options: [""],
     compulsory: true,
@@ -142,41 +146,45 @@ export const fieldOptions: FieldType[] = [
   },
   {
     type: "document template",
+    question: "Kindly download, fill, and upload back",
     icon: File,
     compulsory: true,
   },
   {
     type: "document upload",
+    question: "Upload your document",
     icon: File,
     compulsory: true,
   },
   {
     type: "dropdown",
+    question: "Select an option",
     icon: ChevronDown,
     compulsory: true,
   },
   {
     type: "email address",
+    question: "Enter your email address",
     icon: Mail,
     compulsory: true,
   },
   {
     type: "paragraph",
+    question: "Describe",
     icon: FormInput,
     compulsory: true,
   },
   {
     type: "objectives",
-    question:
-      "We'll need your business objectives to successfully register your business (4)",
+    question: "Kindly select your business objectives (maximum of 4)",
     icon: FormInput,
     compulsory: true,
     options: BusinessObjectives,
   },
   {
     type: "phone number",
-    icon: PhoneOutgoing,
     question: "Enter your business phone number",
+    icon: PhoneOutgoing,
     compulsory: true,
   },
   {
@@ -187,6 +195,7 @@ export const fieldOptions: FieldType[] = [
   },
   {
     type: "multiple choice",
+    question: "Select an option that applies",
     icon: CircleDot,
     compulsory: true,
   },

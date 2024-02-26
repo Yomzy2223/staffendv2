@@ -46,14 +46,14 @@ export const getAllProducts = async () => {
 
 // Product form endpoints
 export const createProductForm = async ({
-  serviceId,
+  productId,
   formInfo,
 }: {
-  serviceId: string;
+  productId: string;
   formInfo: productFormType;
 }) => {
   const client = await Client();
-  return await client.post(`/products/form/${serviceId}`, formInfo);
+  return await client.post(`/products/form/${productId}`, formInfo);
 };
 
 export const updateProductForm = async ({
@@ -89,14 +89,14 @@ export const getAllServicesProductsForm = async () => {
 
 // Product sub-form endpoints
 export const createProductSubForm = async ({
-  serviceFormId,
+  formId,
   formInfo,
 }: {
-  serviceFormId: string;
+  formId: string;
   formInfo: productSubFormType;
 }) => {
   const client = await Client();
-  return await client.post(`/products/subform/${serviceFormId}`, formInfo);
+  return await client.post(`/products/subform/${formId}`, formInfo);
 };
 
 export const updateProductSubForm = async ({
@@ -120,7 +120,7 @@ export const getProductSubForm = async (id: string) => {
   return await client.get(`/products/subform/${id}`);
 };
 
-export const getProductSubForms = async (serviceFormId: string) => {
+export const getProductSubForms = async (formId: string) => {
   const client = await Client();
-  return await client.get(`/products/subforms/${serviceFormId}`);
+  return await client.get(`/products/subforms/${formId}`);
 };

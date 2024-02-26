@@ -1,3 +1,26 @@
+export interface IService {
+  name: string;
+  description: string;
+}
+
+export interface IServiceForm {
+  title: string;
+  description: string;
+  type: string;
+  compulsory: boolean;
+}
+
+export interface IServiceSubForm {
+  question: string;
+  type: string;
+  options?: string[];
+  compulsory: boolean;
+  fileName?: string;
+  fileDescription?: string;
+  fileLink?: string;
+  fileType?: string;
+}
+
 export interface productType {
   name: string;
   description: string;
@@ -29,4 +52,19 @@ export interface productSubFormType {
   dependsOn?: string;
   fileLink?: string;
   fileType?: string;
+}
+
+export interface ICountry {
+  name: string;
+  code: string;
+  iso: string;
+  currency: string;
+}
+
+export interface ICountryFull {
+  id: string;
+  name: string;
+  code: string;
+  iso: string;
+  currency: string;
 }

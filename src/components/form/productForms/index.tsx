@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import DynamicForm from "../dynamicForm";
 import { Button } from "flowbite-react";
 import { cn } from "@/lib/utils";
@@ -9,37 +9,28 @@ import { Oval } from "react-loading-icons";
 import { useProductFormActions, useProductInfoActions } from "./actions";
 import { section1FormInfo, productInfoSchema } from "./constants";
 
-const ProductForm = ({ open, setOpen }: propsType) => {
+const ProductForm = ({ open, setOpen }: IProps) => {
   const [section, setSection] = useState(1);
   const { isDesktop, deleteQueryString } = useGlobalFucntions();
 
-  const {
-    isEdit,
-    productInfo,
-    submitProductInfo,
-    productLoading,
-    productSuccess,
-  } = useProductInfoActions();
+  const { title1, productInfo, submitProductInfo, productLoading } =
+    useProductInfoActions({ setSection, section });
 
   const {
     productFormInfo,
     submitProductForm,
     submitProductFormField,
     productFormState,
+    handleFieldDelete,
+    handleFormDelete,
   } = useProductFormActions();
-
-  const title1 = isEdit ? "Update Product" : "Create Product";
-  const title2 = isEdit ? "Update Product Form" : "Add Product Form";
-  const title = section === 1 ? title1 : title2;
 
   const productData = productInfo?.data?.data?.data;
   const productFormData = productFormInfo?.data?.data?.data;
 
-  useEffect(() => {
-    if (productSuccess) {
-      setSection(section + 1);
-    }
-  }, [productSuccess]);
+  const title2 =
+    productFormData?.length > 0 ? "Update Product Form" : "Add Product Form";
+  const title = section === 1 ? title1 : title2;
 
   const handleBack = () => {
     if (section === 1) {
@@ -61,6 +52,8 @@ const ProductForm = ({ open, setOpen }: propsType) => {
   const defaultValues = {
     name: productData?.name || "",
     description: productData?.description || "",
+    country: productData?.country || "",
+    currency: productData?.currency || "",
     amount: productData?.amount || "",
     timeline: productData?.timeline || "",
     feature: productData?.feature || [],
@@ -73,7 +66,7 @@ const ProductForm = ({ open, setOpen }: propsType) => {
         open ? setOpen(open) : resetDialog();
       }}
       title={title}
-      size="5xl"
+      size={section === 1 || wide ? "5xl" : ""}
     >
       {section === 1 && (
         <DynamicForm
@@ -107,7 +100,9 @@ const ProductForm = ({ open, setOpen }: propsType) => {
           <DynamicFormCreator
             formInfo={productFormData}
             onEachSubmit={submitProductFormField}
+            onEachDelete={handleFieldDelete}
             onFormSubmit={submitProductForm}
+            onFormDelete={handleFormDelete}
             formState={productFormState}
             wide={wide}
           />
@@ -127,7 +122,7 @@ const ProductForm = ({ open, setOpen }: propsType) => {
 
 export default ProductForm;
 
-interface propsType {
+interface IProps {
   open: boolean;
   setOpen: (open: boolean) => void;
 }

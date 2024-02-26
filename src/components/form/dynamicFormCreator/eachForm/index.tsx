@@ -1,11 +1,11 @@
 import { Card } from "flowbite-react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Header from "./header";
 import Footer from "./footer";
 import { FieldType, FormType } from "./constants";
 import DynamicField from "./dynamicField";
 import { useFormActions } from "./actions";
-import { serviceSubFormArgType } from "../../serviceForm/actions";
+import { IFieldSubmitHandlerArg, IFormSubmitHandlerArg } from "./types";
 
 const EachForm = ({
   number,
@@ -13,16 +13,19 @@ const EachForm = ({
   fieldsInfo,
   fieldTitle,
   fieldSubmitHandler,
+  fieldDeleteHandler,
   formSubmitHandler,
+  formDeleteHandler,
   isEdit,
   formState,
   loadingForm,
-}: propType) => {
+}: IProps) => {
   const [edit, setEdit] = useState(isEdit || false);
   const [newlyAdded, setNewlyAdded] = useState<FieldType | undefined>();
   const [loadingField, setLoadingField] = useState<number>();
 
-  const { formLoading, formSuccess, fieldLoading, fieldSuccess } = formState;
+  const { formLoading, fieldLoading, fieldDeleteLoading, formDeleteLoading } =
+    formState;
 
   const formInfo = useFormActions({ formInfo: info, formLoading, setEdit });
   const {
@@ -47,40 +50,29 @@ const EachForm = ({
     setIsSubmitted(true);
     if (validateFields()) {
       if (info.id) {
-        formSubmitHandler({ formId: info.id || "", values: formValues });
-      } else formSubmitHandler({ values: formValues });
+        formSubmitHandler({
+          formId: info.id || "",
+          values: formValues,
+          setEdit,
+        });
+      } else formSubmitHandler({ values: formValues, setEdit });
       return true;
     }
   };
 
   // Runs when each field is submitted
-  const handleFieldSubmit = ({
-    number,
-    values,
-    id,
-  }: {
-    number: number;
-    values: { [x: string]: any };
-    id?: string;
-  }) => {
-    setLoadingField(number);
+  const handleFieldSubmit = (arg: IFieldSubmitHandlerArg) => {
+    setLoadingField(arg.number);
     fieldSubmitHandler({
+      ...arg,
       formId: info.id || "",
-      formValues,
-      fieldId: id,
-      values,
     });
   };
-
-  // useEffect(() => {
-  //   // if (!formLoading && formSuccess && loadingForm === number) setEdit(false);
-  //   if (!fieldLoading && fieldSuccess && loadingField === lastField)
-  //     setNewlyAdded(undefined);
-  // }, [formLoading, formSuccess, loadingForm]);
 
   const btnText =
     (fieldsInfo?.length > 0 || newlyAdded ? "Add another " : "Create a ") +
     (fieldTitle || "field");
+
   const lastField = (fieldsInfo?.length ?? 0) + 1;
 
   return (
@@ -90,34 +82,49 @@ const EachForm = ({
         info={formInfo}
         loading={formLoading && loadingForm === number}
       />
-
       {fieldsInfo?.map((field, i) => (
         <DynamicField
           key={field.question + i.toString()}
           number={i + 1}
           info={field}
           fieldTitle={fieldTitle}
-          submitHandler={(values) =>
-            handleFieldSubmit({ number: i + 1, values, id: field.id })
+          submitHandler={(arg) =>
+            handleFieldSubmit({
+              ...arg,
+              number: i + 1,
+              fieldId: field.id,
+              formValues,
+            })
           }
           isEdit={edit}
           loading={fieldLoading && loadingField === i + 1}
-          success={!fieldLoading && fieldSuccess && loadingField === i + 1}
+          deleteLoading={fieldDeleteLoading && loadingField === i + 1}
+          deleteField={() => {
+            setLoadingField(i + 1);
+            field.id && fieldDeleteHandler(field.id);
+          }}
         />
       ))}
       {newlyAdded && (
         <DynamicField
-          number={(fieldsInfo?.length ?? 0) + 1}
+          number={lastField}
           info={newlyAdded}
           fieldTitle={fieldTitle}
-          submitHandler={(values) =>
-            handleFieldSubmit({ number: lastField, values })
+          submitHandler={(arg) =>
+            handleFieldSubmit({
+              ...arg,
+              number: lastField,
+              formValues,
+              setNewlyAdded,
+            })
           }
           isEdit={edit}
           loading={fieldLoading && loadingField === lastField}
-          success={!fieldLoading && fieldSuccess && loadingField === lastField}
+          deleteField={() => setNewlyAdded(undefined)}
+          isNew
         />
       )}
+
       <Footer
         edit={edit}
         setEdit={setEdit}
@@ -125,7 +132,10 @@ const EachForm = ({
         setNewlyAdded={setNewlyAdded}
         btnText={btnText}
         loading={formLoading && loadingForm === number}
+        deleteLoading={formDeleteLoading && loadingForm === number}
         cancelChanges={cancelChanges}
+        disableAddNew={newlyAdded ? true : false}
+        deleteForm={formDeleteHandler}
       />
     </Card>
   );
@@ -133,7 +143,7 @@ const EachForm = ({
 
 export default EachForm;
 
-interface propType {
+interface IProps {
   number: number;
   fieldsInfo: FieldType[];
   info: FormType;
@@ -143,20 +153,23 @@ interface propType {
     formValues,
     fieldId,
     values,
-  }: serviceSubFormArgType) => void;
+    setEdit,
+  }: IFieldSubmitHandlerArg) => void;
   formSubmitHandler: ({
     formId,
     values,
-  }: {
-    formId?: string;
-    values: FormType;
-  }) => void;
+    setEdit,
+  }: IFormSubmitHandlerArg) => void;
+  fieldDeleteHandler: (id: string) => void;
+  formDeleteHandler: () => void;
   isEdit?: boolean;
   formState: {
     formLoading: boolean;
     formSuccess: boolean;
     fieldLoading: boolean;
     fieldSuccess: boolean;
+    fieldDeleteLoading: boolean;
+    formDeleteLoading: boolean;
   };
   loadingForm?: number;
 }

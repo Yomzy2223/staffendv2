@@ -29,7 +29,7 @@ const SignUp = () => {
       password: values.password,
       referral: values.referral,
       isPartner: false,
-      isStaff: false,
+      isStaff: true,
     });
     setIsPending(false);
 

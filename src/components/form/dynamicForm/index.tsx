@@ -17,6 +17,7 @@ import * as z from "zod";
 import { DynamicFormProps } from "./constants";
 import { cn } from "@/lib/utils";
 import InputWithTags from "@/components/inputs/inputWithTags";
+import ComboBoxComp from "./comboBoxComp";
 
 const DynamicForm = ({
   children,
@@ -75,7 +76,12 @@ const DynamicForm = ({
             <div key={i}>
               {el.label && (
                 <div className="mb-2 block">
-                  <Label htmlFor={el.name} value={el.label} {...el.labelProp} />
+                  <Label
+                    htmlFor={el.name}
+                    value={el.label}
+                    {...el.labelProp}
+                    className={cn("font-normal", el.labelProp?.className)}
+                  />
                 </div>
               )}
 
@@ -109,19 +115,16 @@ const DynamicForm = ({
               )}
 
               {el.type === "select" && el.selectOptions && (
-                <Select
-                  id={el.name}
-                  helperText={<>{errorMsg}</>}
-                  color={errors[el.name] && "failure"}
-                  disabled={disableAll}
+                <ComboBoxComp
+                  name={el.name}
+                  options={el.selectOptions}
+                  setValue={setValue}
+                  selectProp={el.selectProp}
+                  fieldName={el.fieldName}
+                  leftContent={el.leftContent}
                   defaultValue={defaultValues[el.name]}
-                  {...el.selectProp}
-                  {...register(el.name)}
-                >
-                  {el.selectOptions.map((option) => (
-                    <option key={option}>{option}</option>
-                  ))}
-                </Select>
+                  disabled={disableAll}
+                />
               )}
 
               {el.type === "tagInput" && (
@@ -183,3 +186,21 @@ export default DynamicForm;
 //      />
 //    );
 //  }
+
+// {
+//   el.type === "select" && el.selectOptions && (
+//     <Select
+//       id={el.name}
+//       helperText={<>{errorMsg}</>}
+//       color={errors[el.name] && "failure"}
+//       disabled={disableAll}
+//       defaultValue={defaultValues[el.name]}
+//       {...el.selectProp}
+//       {...register(el.name)}
+//     >
+//       {el.selectOptions.map((option) => (
+//         <option key={option}>{option}</option>
+//       ))}
+//     </Select>
+//   );
+// }

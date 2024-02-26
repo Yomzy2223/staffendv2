@@ -1,17 +1,28 @@
-import { productFormType, productSubFormType } from "@/hooks/api/types";
+import { productSubFormType } from "@/hooks/api/types";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import useProductApi from "@/hooks/useProductApi";
 import { useParams, useSearchParams } from "next/navigation";
-import { FormType } from "../dynamicFormCreator/eachForm/constants";
+import { Dispatch, SetStateAction } from "react";
+import {
+  IFieldSubmitHandlerArg,
+  IFormSubmitHandlerArg,
+} from "../dynamicFormCreator/eachForm/types";
 import { productInfoType } from "./constants";
 
 // Actions for service info section
-export const useProductInfoActions = () => {
+export const useProductInfoActions = ({
+  section,
+  setSection,
+}: {
+  section: number;
+  setSection: Dispatch<SetStateAction<number>>;
+}) => {
   const { get } = useSearchParams();
   const { serviceId } = useParams();
   const { setQuery } = useGlobalFucntions();
   const productId = get("productId");
-  const isEdit = productId && get("action") == "edit";
+
+  const title1 = productId ? "Update Product" : "Create Product";
 
   const { createProductMutation, updateProductMutation, useGetProductQuery } =
     useProductApi();
@@ -19,17 +30,25 @@ export const useProductInfoActions = () => {
 
   const submitProductInfo = async (values: productInfoType) => {
     productId
-      ? updateProductMutation.mutate({
-          id: productId as string,
-          formInfo: values,
-        })
-      : createProductMutation.mutate(
+      ? updateProductMutation.mutate(
           {
-            serviceCategoryId: serviceId.toString(),
+            id: productId as string,
             formInfo: values,
           },
           {
-            onSuccess: (data) => setQuery("productId", data.data.data.id),
+            onSuccess: () => setSection(section + 1),
+          }
+        )
+      : createProductMutation.mutate(
+          {
+            serviceId: serviceId.toString(),
+            formInfo: values,
+          },
+          {
+            onSuccess: (data) => {
+              setSection(section + 1);
+              setQuery("productId", data.data.data.id);
+            },
           }
         );
   };
@@ -40,7 +59,7 @@ export const useProductInfoActions = () => {
     createProductMutation.isSuccess || updateProductMutation.isSuccess;
 
   return {
-    isEdit,
+    title1,
     productLoading,
     productSuccess,
     productInfo,
@@ -56,20 +75,37 @@ export const useProductFormActions = () => {
   const {
     createProductFormMutation,
     updateProductFormMutation,
+    deleteProductFormMutation,
     useGetProductFormsQuery,
     createProductSubFormMutation,
     updateProductSubFormMutation,
+    deleteProductSubFormMutation,
   } = useProductApi();
   const productFormInfo = useGetProductFormsQuery(productId);
-  console.log(productFormInfo);
 
-  const submitProductForm = async ({ formId, values }: productFormArgType) => {
+  const submitProductForm = async ({
+    formId,
+    values,
+    setEdit,
+    setNewlyAdded,
+  }: IFormSubmitHandlerArg) => {
     formId
-      ? updateProductFormMutation.mutate({ id: formId, formInfo: values })
-      : createProductFormMutation.mutate({
-          serviceId: productId,
-          formInfo: values,
-        });
+      ? updateProductFormMutation.mutate(
+          { id: formId, formInfo: values },
+          { onSuccess: () => setEdit(false) }
+        )
+      : createProductFormMutation.mutate(
+          {
+            serviceId: productId,
+            formInfo: values,
+          },
+          {
+            onSuccess: () => {
+              setEdit(false);
+              setNewlyAdded && setNewlyAdded(undefined);
+            },
+          }
+        );
   };
 
   const submitProductFormField = ({
@@ -77,17 +113,32 @@ export const useProductFormActions = () => {
     formValues,
     fieldId,
     values,
-  }: productSubFormArgType) => {
+    setEdit,
+    setNewlyAdded,
+    setNewlyAddedForm,
+  }: IFieldSubmitHandlerArg) => {
     const submitField = (formId: string) => {
       fieldId
-        ? updateProductSubFormMutation.mutate({
-            id: fieldId,
-            formInfo: values as productSubFormType,
-          })
-        : createProductSubFormMutation.mutate({
-            serviceFormId: formId,
-            formInfo: values as productSubFormType,
-          });
+        ? updateProductSubFormMutation.mutate(
+            {
+              id: fieldId,
+              formInfo: values as productSubFormType,
+            },
+            { onSuccess: () => setEdit(false) }
+          )
+        : createProductSubFormMutation.mutate(
+            {
+              serviceFormId: formId,
+              formInfo: values as productSubFormType,
+            },
+            {
+              onSuccess: () => {
+                setEdit(false);
+                setNewlyAdded && setNewlyAdded(undefined);
+                setNewlyAddedForm && setNewlyAddedForm(undefined);
+              },
+            }
+          );
     };
 
     if (formId) {
@@ -108,6 +159,14 @@ export const useProductFormActions = () => {
     }
   };
 
+  const handleFormDelete = (id: string) => {
+    deleteProductFormMutation.mutate(id);
+  };
+
+  const handleFieldDelete = (id: string) => {
+    deleteProductSubFormMutation.mutate(id);
+  };
+
   const productFormState = {
     formLoading:
       createProductFormMutation.isPending ||
@@ -115,12 +174,14 @@ export const useProductFormActions = () => {
     formSuccess:
       createProductFormMutation.isSuccess ||
       updateProductFormMutation.isSuccess,
+    formDeleteLoading: deleteProductFormMutation.isPending,
     fieldLoading:
       createProductSubFormMutation.isPending ||
       updateProductSubFormMutation.isPending,
     fieldSuccess:
       createProductSubFormMutation.isSuccess ||
       updateProductSubFormMutation.isSuccess,
+    fieldDeleteLoading: deleteProductSubFormMutation.isPending,
   };
 
   return {
@@ -128,17 +189,7 @@ export const useProductFormActions = () => {
     submitProductForm,
     submitProductFormField,
     productFormState,
+    handleFieldDelete,
+    handleFormDelete,
   };
 };
-
-export interface productSubFormArgType {
-  formId?: string;
-  formValues: productFormType;
-  fieldId?: string;
-  values: { [x: string]: any };
-}
-
-export interface productFormArgType {
-  formId?: string;
-  values: FormType;
-}

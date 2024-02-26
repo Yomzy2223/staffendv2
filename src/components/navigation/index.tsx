@@ -19,7 +19,7 @@ export const Navigation = ({
   className,
   inactiveClassName = "",
   others,
-}: propType) => {
+}: IProps) => {
   const [open, setOpen] = useState(false);
 
   const router = useRouter();
@@ -96,7 +96,7 @@ export const Navigation = ({
   );
 };
 
-interface propType {
+interface IProps {
   navRoutes: {
     name: string;
     to: string;

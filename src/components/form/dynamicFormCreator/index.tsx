@@ -1,41 +1,31 @@
-import { serviceFormType } from "@/hooks/api/serviceApi";
 import { Button } from "flowbite-react";
 import { PlusCircle } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Masonry from "react-masonry-css";
 import EachForm from "./eachForm";
 import { FieldType, FormType } from "./eachForm/constants";
 import FieldTypePopUp from "./eachForm/fieldTypePopUp";
+import { IFieldSubmitHandlerArg } from "./eachForm/types";
 
 const DynamicFormCreator = ({
   fieldTitle,
   onEachSubmit,
+  onEachDelete,
   onFormSubmit,
+  onFormDelete,
   formInfo,
   formState,
   wide,
-}: propType) => {
+}: IProps) => {
   const [newlyAdded, setNewlyAdded] = useState<FormType>();
   const [loadingForm, setLoadingForm] = useState<number>();
-
-  const { formLoading, formSuccess } = formState;
-
-  const btnText = formInfo?.length > 0 ? "Add another form" : "Create a form";
 
   const handleSelect = (selected?: FormType | any) => {
     if (!selected) return;
     setNewlyAdded(selected);
   };
 
-  const handleFieldSubmit = (values: { [x: string]: any }) => {
-    onEachSubmit(values);
-  };
-
-  useEffect(() => {
-    if (!formLoading && formSuccess && loadingForm === lastForm)
-      setNewlyAdded(undefined);
-  }, [formLoading, formSuccess]);
-
+  const btnText = formInfo?.length > 0 ? "Add another form" : "Create a form";
   const lastForm = (formInfo?.length ?? 0) + 1;
 
   const breakpointColumnsObj = {
@@ -54,12 +44,17 @@ const DynamicFormCreator = ({
           <EachForm
             key={info.title + i}
             number={i + 1}
-            fieldsInfo={info?.subForm}
+            fieldsInfo={info?.subForm || info?.productSubForm}
             fieldTitle={fieldTitle}
             fieldSubmitHandler={onEachSubmit}
-            formSubmitHandler={({ formId, values }) => {
+            formSubmitHandler={(arg) => {
               setLoadingForm(i + 1);
-              onFormSubmit({ formId, values });
+              onFormSubmit(arg);
+            }}
+            fieldDeleteHandler={onEachDelete}
+            formDeleteHandler={() => {
+              setLoadingForm(i + 1);
+              onFormDelete(info.id);
             }}
             info={info}
             formState={formState}
@@ -68,23 +63,22 @@ const DynamicFormCreator = ({
         ))}
         {newlyAdded && (
           <EachForm
-            number={(formInfo?.length ?? 0) + 1}
+            number={lastForm}
             fieldsInfo={[]}
             fieldTitle={fieldTitle}
-            fieldSubmitHandler={handleFieldSubmit}
-            formSubmitHandler={({ formId, values }) => {
-              setLoadingForm((formInfo?.length ?? 0) + 1);
-              onFormSubmit({ formId, values });
+            fieldSubmitHandler={(arg) =>
+              onEachSubmit({ ...arg, setNewlyAddedForm: setNewlyAdded })
+            }
+            formSubmitHandler={(arg) => {
+              setLoadingForm(lastForm);
+              onFormSubmit({ ...arg, setNewlyAdded });
             }}
-            isEdit
-            info={{
-              type: newlyAdded.type,
-              title: newlyAdded?.title,
-              description: newlyAdded?.description,
-              compulsory: newlyAdded?.compulsory,
-            }}
+            fieldDeleteHandler={onEachDelete}
+            formDeleteHandler={() => setNewlyAdded(undefined)}
+            info={{ ...newlyAdded }}
             formState={formState}
             loadingForm={loadingForm}
+            isEdit
           />
         )}
       </Masonry>
@@ -92,7 +86,7 @@ const DynamicFormCreator = ({
       <FieldTypePopUp
         handleSelect={handleSelect}
         isForm
-        disabled={formState.formLoading}
+        disabled={formState.formLoading || newlyAdded ? true : false}
       >
         <Button color="ghost" size="fit" className="my-4 text-foreground-5">
           <PlusCircle size={20} />
@@ -105,23 +99,28 @@ const DynamicFormCreator = ({
 
 export default DynamicFormCreator;
 
-interface propType {
+interface IProps {
   fieldTitle?: string;
-  onEachSubmit: (values: any) => void;
+  onEachSubmit: (arg: IFieldSubmitHandlerArg) => void;
+  onEachDelete: (id: string) => void;
   onFormSubmit: (values: any) => void;
+  onFormDelete: (id: string) => void;
   formInfo: {
-    id?: string;
+    id: string;
     type: string;
     title: string;
     description: string;
     compulsory: boolean;
     subForm: FieldType[];
+    productSubForm: FieldType[];
   }[];
   formState: {
     formLoading: boolean;
     formSuccess: boolean;
     fieldLoading: boolean;
     fieldSuccess: boolean;
+    fieldDeleteLoading: boolean;
+    formDeleteLoading: boolean;
   };
   wide?: boolean;
 }

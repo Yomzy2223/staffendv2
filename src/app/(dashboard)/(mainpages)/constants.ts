@@ -60,7 +60,13 @@ export const useTableInfo = () => {
   const onClick = () => router.push(pathname + "/reg1");
 
   // Services table header
-  const tableHeaders = ["S/N", "BUSINESS NAME", "STATUS", "SERVICE TYPE", "DATE"];
+  const tableHeaders = [
+    "S/N",
+    "BUSINESS NAME",
+    "STATUS",
+    "SERVICE TYPE",
+    "DATE",
+  ];
 
   // Services table body
   const tableBody = [
@@ -72,7 +78,10 @@ export const useTableInfo = () => {
         {
           text: "Submitted",
           cellProps: {
-            className: cn(cellClassName, "[&_span]:bg-success [&_span]:text-success-foreground"),
+            className: cn(
+              cellClassName,
+              "[&_span]:bg-success [&_span]:text-success-foreground"
+            ),
           },
         },
         { text: "Manage" },
@@ -87,7 +96,10 @@ export const useTableInfo = () => {
         {
           text: "Submitted",
           cellProps: {
-            className: cn(cellClassName, "[&_span]:bg-success [&_span]:text-success-foreground"),
+            className: cn(
+              cellClassName,
+              "[&_span]:bg-success [&_span]:text-success-foreground"
+            ),
           },
         },
         { text: "Manage" },
@@ -102,7 +114,10 @@ export const useTableInfo = () => {
         {
           text: "Done",
           cellProps: {
-            className: cn(cellClassName, "[&_span]:bg-primary/20 [&_span]:text-primary"),
+            className: cn(
+              cellClassName,
+              "[&_span]:bg-primary/20 [&_span]:text-primary"
+            ),
           },
         },
         { text: "Manage" },
@@ -117,7 +132,10 @@ export const useTableInfo = () => {
         {
           text: "In progress",
           cellProps: {
-            className: cn(cellClassName, "[&_span]:bg-secondary/20 [&_span]:text-secondary"),
+            className: cn(
+              cellClassName,
+              "[&_span]:bg-secondary/20 [&_span]:text-secondary"
+            ),
           },
         },
         { text: "Manage" },
@@ -132,7 +150,10 @@ export const useTableInfo = () => {
         {
           text: "Submitted",
           cellProps: {
-            className: cn(cellClassName, "[&_span]:bg-primary/20 [&_span]:text-primary"),
+            className: cn(
+              cellClassName,
+              "[&_span]:bg-primary/20 [&_span]:text-primary"
+            ),
           },
         },
         { text: "Manage" },
@@ -147,7 +168,10 @@ export const useTableInfo = () => {
         {
           text: "Submitted",
           cellProps: {
-            className: cn(cellClassName, "[&_span]:bg-primary/20 [&_span]:text-primary"),
+            className: cn(
+              cellClassName,
+              "[&_span]:bg-primary/20 [&_span]:text-primary"
+            ),
           },
         },
         { text: "Manage" },

@@ -55,7 +55,8 @@ const handler = NextAuth({
             credentials?.isStaff
           ) {
             const client = await Client();
-            const { fullName, email, password, referral, isStaff, isPartner } = credentials;
+            const { fullName, email, password, referral, isStaff, isPartner } =
+              credentials;
             const payload = {
               fullName,
               email,
@@ -113,10 +114,8 @@ const handler = NextAuth({
       return token as Awaitable<JWT>;
     },
     async session({ session, token }) {
-      console.log("Tokkkken: ", token);
       session.user = token.user.data;
       session.message = token.user.message;
-      // console.log("Returning session", session);
       return session as Awaitable<Session>;
     },
   },

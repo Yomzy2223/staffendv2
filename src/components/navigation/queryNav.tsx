@@ -6,13 +6,13 @@ import { Button } from "flowbite-react";
 import { usePathname, useSearchParams } from "next/navigation";
 import React from "react";
 
-interface propsType {
+interface IProps {
   queryNav: { name: string; value: string }[];
   defaultActive?: number;
   variant?: number;
 }
 
-const QueryNav = ({ queryNav, defaultActive = 0, variant }: propsType) => {
+const QueryNav = ({ queryNav, defaultActive = 0, variant }: IProps) => {
   const { setQuery } = useGlobalFucntions();
 
   const searchParams = useSearchParams();

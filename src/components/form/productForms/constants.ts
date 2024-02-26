@@ -5,9 +5,6 @@ export const section1FormInfo = [
     name: "name",
     label: "Enter product name",
     type: "text",
-    labelProp: {
-      className: "font-normal",
-    },
     textInputProp: {
       placeholder: "Enter product name",
     },
@@ -16,9 +13,6 @@ export const section1FormInfo = [
     name: "description",
     label: "Enter product description",
     type: "text",
-    labelProp: {
-      className: "font-normal",
-    },
     textInputProp: {
       placeholder: "Enter product description",
     },
@@ -26,11 +20,8 @@ export const section1FormInfo = [
   {
     name: "country",
     label: "Select operational country",
-    selectOptions: ["NGA", "US"],
+    selectOptions: ["Nigeria", "USA"],
     type: "select",
-    labelProp: {
-      className: "font-normal",
-    },
     selectProp: {
       placeholder: "Select operational country",
     },
@@ -40,9 +31,6 @@ export const section1FormInfo = [
     label: "Select currency",
     selectOptions: ["NGN", "USD"],
     type: "select",
-    labelProp: {
-      className: "font-normal",
-    },
     selectProp: {
       placeholder: "Select currency",
     },
@@ -51,9 +39,6 @@ export const section1FormInfo = [
     name: "amount",
     label: "Enter product amount",
     type: "number",
-    labelProp: {
-      className: "font-normal",
-    },
     textInputProp: {
       placeholder: "Enter product amount",
     },
@@ -62,9 +47,6 @@ export const section1FormInfo = [
     name: "timeline",
     label: "Enter processing timeline",
     type: "text",
-    labelProp: {
-      className: "font-normal",
-    },
     textInputProp: {
       placeholder: "Enter processing timeline",
     },
@@ -79,9 +61,6 @@ export const section1FormInfo = [
       exists: "Feature already exists",
       minTagChars: "Feature must be at least three characters",
       length: "Features cannot be more than 4",
-    },
-    labelProp: {
-      className: "font-normal",
     },
     textInputProp: {
       placeholder: "Enter product features",

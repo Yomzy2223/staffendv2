@@ -16,7 +16,7 @@ import { FieldType, fieldOptions, formOptions, FormType } from "./constants";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 
-interface propType {
+interface IProps {
   children: ReactNode;
   isForm?: boolean;
   handleSelect: (selected?: FieldType | FormType) => void;
@@ -28,7 +28,7 @@ const FieldTypePopUp = ({
   handleSelect,
   isForm,
   disabled,
-}: propType) => {
+}: IProps) => {
   const [open, setOpen] = useState(false);
   const { isDesktop } = useGlobalFucntions();
 

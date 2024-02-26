@@ -1,7 +1,7 @@
 import { HTMLAttributes } from "react";
 import { FieldError, FieldErrorsImpl, Merge } from "react-hook-form";
 
-export interface propsType {
+export interface IProps {
   size?: string;
   textInputProp?: HTMLAttributes<HTMLInputElement>;
   maxTag?: number;

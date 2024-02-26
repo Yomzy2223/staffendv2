@@ -7,12 +7,13 @@ export const useFormFieldActions = ({
   fieldInfo,
   setValue,
   setEdit,
+  setType,
 }: {
   fieldInfo: FieldType;
   setValue: UseFormSetValue<{ [x: string]: any }>;
   setEdit: Dispatch<SetStateAction<boolean>>;
+  setType: Dispatch<SetStateAction<string>>;
 }) => {
-  const [type, setType] = useState("");
   const [options, setOptions] = useState<string[]>([]);
   const [compulsory, setCompulsory] = useState(false);
   const [fileName, setFileName] = useState("");
@@ -73,7 +74,6 @@ export const useFormFieldActions = ({
   };
 
   return {
-    type,
     setType,
     options,
     setOptions,
@@ -101,7 +101,7 @@ export const getDynamicFieldSchema = (type?: string) => {
     compulsory: z.boolean(),
   };
 
-  if (type === "checkbox") {
+  if (type === "checkbox" || type === "objectives") {
     schema = {
       ...schema,
       options: z

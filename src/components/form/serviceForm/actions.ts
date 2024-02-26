@@ -1,11 +1,22 @@
-import { serviceFormType, serviceSubFormType } from "@/hooks/api/serviceApi";
+import { IServiceSubForm } from "@/hooks/api/types";
 import useServiceApi from "@/hooks/useServiceApi";
-import { useParams, useSearchParams } from "next/navigation";
-import { FormType } from "../dynamicFormCreator/eachForm/constants";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { Dispatch, SetStateAction } from "react";
+import {
+  IFieldSubmitHandlerArg,
+  IFormSubmitHandlerArg,
+} from "../dynamicFormCreator/eachForm/types";
 import { serviceInfoType } from "./constants";
 
 // Actions for service info section
-export const useServiceInfoActions = () => {
+export const useServiceInfoActions = ({
+  section,
+  setSection,
+}: {
+  section: number;
+  setSection: Dispatch<SetStateAction<number>>;
+}) => {
+  const router = useRouter();
   const { get } = useSearchParams();
   const { serviceId } = useParams();
   const isEdit = serviceId && get("action") == "edit";
@@ -15,12 +26,22 @@ export const useServiceInfoActions = () => {
   const serviceInfo = useGetServiceQuery(serviceId as string);
 
   const submitServiceInfo = async (values: serviceInfoType) => {
-    serviceId
-      ? updateServiceMutation.mutate({
-          id: serviceId as string,
-          formInfo: values,
-        })
-      : createServiceMutation.mutate(values);
+    isEdit
+      ? updateServiceMutation.mutate(
+          {
+            id: serviceId as string,
+            formInfo: values,
+          },
+          {
+            onSuccess: () => setSection(section + 1),
+          }
+        )
+      : createServiceMutation.mutate(values, {
+          onSuccess: (data) => {
+            setSection(section + 1);
+            router.push(`/services/${data.data.data.id}?action=add`);
+          },
+        });
   };
 
   const serviceLoading =
@@ -45,19 +66,37 @@ export const useServiceFormActions = () => {
   const {
     createServiceFormMutation,
     updateServiceFormMutation,
+    deleteServiceFormMutation,
     useGetServiceFormsQuery,
     createServiceSubFormMutation,
     updateServiceSubFormMutation,
+    deleteServiceSubFormMutation,
   } = useServiceApi();
   const serviceFormInfo = useGetServiceFormsQuery(serviceId as string);
 
-  const submitServiceForm = async ({ formId, values }: serviceFormArgType) => {
+  const submitServiceForm = async ({
+    formId,
+    values,
+    setEdit,
+    setNewlyAdded,
+  }: IFormSubmitHandlerArg) => {
     formId
-      ? updateServiceFormMutation.mutate({ id: formId, formInfo: values })
-      : createServiceFormMutation.mutate({
-          serviceCategoryId: (serviceId as string) || "",
-          formInfo: values,
-        });
+      ? updateServiceFormMutation.mutate(
+          { id: formId, formInfo: values },
+          { onSuccess: () => setEdit(false) }
+        )
+      : createServiceFormMutation.mutate(
+          {
+            serviceId: (serviceId as string) || "",
+            formInfo: values,
+          },
+          {
+            onSuccess: () => {
+              setEdit(false);
+              setNewlyAdded && setNewlyAdded(undefined);
+            },
+          }
+        );
   };
 
   const submitServiceFormField = ({
@@ -65,17 +104,32 @@ export const useServiceFormActions = () => {
     formValues,
     fieldId,
     values,
-  }: serviceSubFormArgType) => {
+    setEdit,
+    setNewlyAdded,
+    setNewlyAddedForm,
+  }: IFieldSubmitHandlerArg) => {
     const submitField = (formId: string) => {
       fieldId
-        ? updateServiceSubFormMutation.mutate({
-            id: fieldId,
-            formInfo: values as serviceSubFormType,
-          })
-        : createServiceSubFormMutation.mutate({
-            formId,
-            formInfo: values as serviceSubFormType,
-          });
+        ? updateServiceSubFormMutation.mutate(
+            {
+              id: fieldId,
+              formInfo: values as IServiceSubForm,
+            },
+            { onSuccess: () => setEdit(false) }
+          )
+        : createServiceSubFormMutation.mutate(
+            {
+              formId,
+              formInfo: values as IServiceSubForm,
+            },
+            {
+              onSuccess: () => {
+                setEdit(false);
+                setNewlyAdded && setNewlyAdded(undefined);
+                setNewlyAddedForm && setNewlyAddedForm(undefined);
+              },
+            }
+          );
     };
 
     if (formId) {
@@ -83,7 +137,7 @@ export const useServiceFormActions = () => {
     } else {
       createServiceFormMutation.mutate(
         {
-          serviceCategoryId: (serviceId as string) || "",
+          serviceId: (serviceId as string) || "",
           formInfo: formValues,
         },
         {
@@ -96,6 +150,14 @@ export const useServiceFormActions = () => {
     }
   };
 
+  const handleFormDelete = (id: string) => {
+    deleteServiceFormMutation.mutate(id);
+  };
+
+  const handleFieldDelete = (id: string) => {
+    deleteServiceSubFormMutation.mutate(id);
+  };
+
   const serviceFormState = {
     formLoading:
       createServiceFormMutation.isPending ||
@@ -103,12 +165,14 @@ export const useServiceFormActions = () => {
     formSuccess:
       createServiceFormMutation.isSuccess ||
       updateServiceFormMutation.isSuccess,
+    formDeleteLoading: deleteServiceFormMutation.isPending,
     fieldLoading:
       createServiceSubFormMutation.isPending ||
       updateServiceSubFormMutation.isPending,
     fieldSuccess:
       createServiceSubFormMutation.isSuccess ||
       updateServiceSubFormMutation.isSuccess,
+    fieldDeleteLoading: deleteServiceSubFormMutation.isPending,
   };
 
   return {
@@ -116,17 +180,7 @@ export const useServiceFormActions = () => {
     submitServiceForm,
     submitServiceFormField,
     serviceFormState,
+    handleFieldDelete,
+    handleFormDelete,
   };
 };
-
-export interface serviceSubFormArgType {
-  formId?: string;
-  formValues: serviceFormType;
-  fieldId?: string;
-  values: { [x: string]: any };
-}
-
-export interface serviceFormArgType {
-  formId?: string;
-  values: FormType;
-}

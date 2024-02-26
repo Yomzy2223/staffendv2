@@ -2,23 +2,12 @@ import { cn } from "@/lib/utils";
 import { Button, TextInput } from "flowbite-react";
 import { Search } from "lucide-react";
 import React, {
-  ChangeEventHandler,
+  ChangeEvent,
   FunctionComponent,
   HTMLAttributes,
-  MouseEventHandler,
   SVGProps,
+  useState,
 } from "react";
-
-interface propType {
-  type?: string;
-  icon?: FunctionComponent<SVGProps<SVGSVGElement>>;
-  placeholder?: string;
-  onChange?: ChangeEventHandler<HTMLInputElement>;
-  searchText?: string;
-  onSubmit?: MouseEventHandler<HTMLButtonElement>;
-  buttonProps?: HTMLAttributes<HTMLButtonElement>;
-  wrapperClassName?: string;
-}
 
 const SearchComp = ({
   type,
@@ -29,7 +18,18 @@ const SearchComp = ({
   onSubmit,
   buttonProps,
   wrapperClassName,
-}: propType) => {
+}: IProps) => {
+  const [value, setValue] = useState("");
+
+  const handleSearchSubmit = () => {
+    onSubmit && onSubmit(value);
+  };
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+    onChange && onChange(e.target.value);
+  };
+
   return (
     <div
       className={cn(
@@ -41,7 +41,7 @@ const SearchComp = ({
         type={type || "text"}
         icon={icon ? icon : () => <Search color="#727474" />}
         placeholder={"Search..." || placeholder}
-        onChange={onChange}
+        onChange={handleChange}
         className={cn("w-full", {
           "[&_input]:rounded-r-none": onSubmit,
         })}
@@ -50,7 +50,7 @@ const SearchComp = ({
       {onSubmit && (
         <Button
           size="md"
-          onClick={onSubmit}
+          onClick={handleSearchSubmit}
           className={cn("text-sm font-medium bg-primary h-max", {
             "rounded-l-none": onSubmit,
           })}
@@ -64,3 +64,14 @@ const SearchComp = ({
 };
 
 export default SearchComp;
+
+interface IProps {
+  type?: string;
+  icon?: FunctionComponent<SVGProps<SVGSVGElement>>;
+  placeholder?: string;
+  onChange?: (value: string) => void;
+  searchText?: string;
+  onSubmit?: (value: string) => void;
+  buttonProps?: HTMLAttributes<HTMLButtonElement>;
+  wrapperClassName?: string;
+}

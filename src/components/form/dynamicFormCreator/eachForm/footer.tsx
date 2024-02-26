@@ -1,3 +1,4 @@
+import EditDelete from "@/components/features/editDelete";
 import { cn } from "@/lib/utils";
 import { Button } from "flowbite-react";
 import { PencilLine, PlusCircle, Trash2 } from "lucide-react";
@@ -12,8 +13,11 @@ const Footer = ({
   setNewlyAdded,
   btnText,
   loading,
+  deleteLoading,
   cancelChanges,
-}: propType) => {
+  disableAddNew,
+  deleteForm,
+}: IProps) => {
   const handleSelect = (selected?: FieldType) => {
     if (!selected) return;
     setNewlyAdded(selected);
@@ -28,7 +32,12 @@ const Footer = ({
     >
       {edit && (
         <FieldTypePopUp handleSelect={handleSelect}>
-          <Button color="ghost" size="fit" className="text-foreground-5">
+          <Button
+            color="ghost"
+            size="fit"
+            className="text-foreground-5"
+            disabled={disableAddNew}
+          >
             <PlusCircle size={20} />
             {btnText}
           </Button>
@@ -59,18 +68,11 @@ const Footer = ({
           </Button>
         </div>
       ) : (
-        <div className="flex gap-4">
-          <Button type="button" color="ghost" size="fit">
-            <PencilLine
-              size={16}
-              color="hsl(var(--primary))"
-              onClick={() => setEdit(true)}
-            />
-          </Button>
-          <Button type="button" color="ghost" size="fit">
-            <Trash2 size={16} color="hsl(var(--destructive-foreground))" />
-          </Button>
-        </div>
+        <EditDelete
+          onEdit={() => setEdit(true)}
+          deleteAction={deleteForm}
+          loading={deleteLoading}
+        />
       )}
     </div>
   );
@@ -78,12 +80,15 @@ const Footer = ({
 
 export default Footer;
 
-interface propType {
+interface IProps {
   edit: boolean;
   setEdit: (value: boolean) => void;
   onDoneClick?: MouseEventHandler<HTMLButtonElement>;
   setNewlyAdded: Dispatch<SetStateAction<FieldType | undefined>>;
   btnText?: string;
   loading: boolean;
+  deleteLoading: boolean;
   cancelChanges: () => void;
+  disableAddNew?: boolean;
+  deleteForm: () => void;
 }

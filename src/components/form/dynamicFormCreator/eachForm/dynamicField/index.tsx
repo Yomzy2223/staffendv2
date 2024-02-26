@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, TextInput } from "flowbite-react";
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 import Header from "./header";
 import * as z from "zod";
@@ -21,13 +21,16 @@ const DynamicField = ({
   submitHandler,
   isEdit,
   loading,
-  success,
-}: propType) => {
-  const [edit, setEdit] = useState(isEdit || false);
+  deleteLoading,
+  deleteField,
+  isNew,
+}: IProps) => {
+  const [edit, setEdit] = useState(isNew || false);
+  const [type, setType] = useState(info?.type);
 
   const defaultValues = { ...info };
 
-  const formSchema = getDynamicFieldSchema(info?.type);
+  const formSchema = getDynamicFieldSchema(type);
   type formType = z.infer<typeof formSchema>;
 
   // Form definition
@@ -43,20 +46,23 @@ const DynamicField = ({
     defaultValues,
   });
 
-  const fieldInfo = useFormFieldActions({ fieldInfo: info, setValue, setEdit });
+  const fieldInfo = useFormFieldActions({
+    fieldInfo: info,
+    setValue,
+    setEdit,
+    setType,
+  });
 
   // Submit handler
   function onSubmit(values: formType) {
-    submitHandler(values);
-    // setEdit(false);
+    submitHandler({ values, setEdit });
   }
 
   const errorMsg = errors["question"]?.message;
 
-  useEffect(() => {
-    if (isEdit === false) setEdit(false);
-    // if (success) setEdit(false);
-  }, [isEdit, success]);
+  // useEffect(() => {
+  //   if (isEdit === false) setEdit(false);
+  // }, [isEdit]);
 
   return (
     <Card className="shadow-none [&>div]:p-4 max-w-[500px]">
@@ -66,6 +72,7 @@ const DynamicField = ({
         edit={edit}
         info={fieldInfo}
         loading={loading}
+        type={type}
       />
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -85,18 +92,21 @@ const DynamicField = ({
           />
         </div>
         {/* Dynamic Types */}
-        {fieldInfo.type === "checkbox" && fieldInfo.options && (
-          <Checkbox
-            info={fieldInfo}
-            setValue={setValue}
-            edit={edit}
-            error={errors["options"]}
-          />
-        )}
-        {fieldInfo.type === "document template" && <DocumentTemplate />}
-        {fieldInfo.type === "document upload" && <DocumentUpload />}
-        {fieldInfo.type === "dropdown" && <Dropdown />}
-        {fieldInfo.type === "multiple choice" && <MultipleChoice />}
+        {(type === "checkbox" ||
+          type === "objectives" ||
+          type === "multiple choice") &&
+          fieldInfo.options && (
+            <Checkbox
+              info={fieldInfo}
+              setValue={setValue}
+              edit={edit}
+              error={errors["options"]}
+              type={type}
+            />
+          )}
+        {type === "document template" && <DocumentTemplate />}
+        {type === "document upload" && <DocumentUpload />}
+        {type === "dropdown" && <Dropdown />}
 
         {isEdit && (
           <Footer
@@ -106,6 +116,8 @@ const DynamicField = ({
             setValue={setValue}
             info={fieldInfo}
             loading={loading}
+            deleteField={deleteField}
+            deleteLoading={deleteLoading}
           />
         )}
       </form>
@@ -115,26 +127,20 @@ const DynamicField = ({
 
 export default DynamicField;
 
-interface propType {
+interface IProps {
   info: FieldType;
   number: number;
   fieldTitle?: string;
-  submitHandler: (values: { [x: string]: any }) => void;
+  submitHandler: ({
+    values,
+    setEdit,
+  }: {
+    values: { [x: string]: any };
+    setEdit: Dispatch<SetStateAction<boolean>>;
+  }) => void;
   isEdit?: boolean;
   loading: boolean;
-  success: boolean;
+  deleteLoading?: boolean;
+  deleteField: () => void;
+  isNew?: boolean;
 }
-
-// const formSchema = z.object({
-//   title: z
-//     .string({ required_error: "Enter field title" })
-//     .min(3, { message: "Must be at least 3 characters" }),
-//   type: z
-//     .string({ required_error: "Select type" })
-//     .min(1, { message: "Select type" }),
-//   compulsory: z.boolean(),
-// });
-
-// const formSchema = getDynamicFormSchema()
-
-// export type formFieldType = z.infer<typeof formSchema>;

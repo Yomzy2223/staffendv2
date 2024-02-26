@@ -5,8 +5,8 @@ import FieldTypePopUp from "../fieldTypePopUp";
 import { MoreHorizontal } from "lucide-react";
 import { fieldReturnType } from "./actions";
 
-const Header = ({ fieldTitle, number, edit, info, loading }: propType) => {
-  const { compulsory, type, handleOptionSelect } = info;
+const Header = ({ fieldTitle, number, edit, info, loading, type }: IProps) => {
+  const { compulsory, handleOptionSelect } = info;
 
   return (
     <div className="flex justify-between items-center gap-6">
@@ -48,10 +48,11 @@ const Header = ({ fieldTitle, number, edit, info, loading }: propType) => {
 
 export default Header;
 
-interface propType {
+interface IProps {
   fieldTitle?: string;
   number: number;
   edit: boolean;
   info: fieldReturnType;
   loading: boolean;
+  type: string;
 }

@@ -1,3 +1,4 @@
+import EditDelete from "@/components/features/editDelete";
 import { cn } from "@/lib/utils";
 import { Button, Checkbox } from "flowbite-react";
 import { PencilLine, Trash2 } from "lucide-react";
@@ -13,7 +14,9 @@ const Footer = ({
   setValue,
   info,
   loading,
-}: propType) => {
+  deleteLoading,
+  deleteField,
+}: IProps) => {
   const { compulsory, setCompulsory, cancelChanges } = info;
 
   const onCheckToggle = () => {
@@ -33,7 +36,7 @@ const Footer = ({
           <Checkbox
             id="compulsory"
             className="accent-primary"
-            // checked={getValues("compulsory")}
+            checked={getValues("compulsory")}
             onChange={onCheckToggle}
           />
           <label htmlFor="compulsory">Compulsory</label>
@@ -62,18 +65,11 @@ const Footer = ({
           </Button>
         </div>
       ) : (
-        <div className="flex gap-4">
-          <Button type="button" color="ghost" size="fit">
-            <PencilLine
-              size={16}
-              color="hsl(var(--primary))"
-              onClick={() => setEdit(true)}
-            />
-          </Button>
-          <Button type="button" color="ghost" size="fit">
-            <Trash2 size={16} color="hsl(var(--destructive-foreground))" />
-          </Button>
-        </div>
+        <EditDelete
+          onEdit={() => setEdit(true)}
+          deleteAction={() => deleteField(info)}
+          loading={deleteLoading}
+        />
       )}
     </div>
   );
@@ -81,7 +77,7 @@ const Footer = ({
 
 export default Footer;
 
-interface propType {
+interface IProps {
   edit: boolean;
   setEdit: (value: boolean) => void;
   getValues: UseFormGetValues<{ [x: string]: any }>;
@@ -89,4 +85,6 @@ interface propType {
   setNewlyAdded?: Dispatch<SetStateAction<FieldType | undefined>>;
   info: fieldReturnType;
   loading: boolean;
+  deleteLoading?: boolean;
+  deleteField: (info: fieldReturnType) => void;
 }

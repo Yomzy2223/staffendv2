@@ -1,15 +1,48 @@
 import { FileInput } from "@/components/file/fileInput";
-import React from "react";
+import { Progress } from "flowbite-react";
+import React, { Dispatch, SetStateAction } from "react";
 import { UseFormSetValue } from "react-hook-form";
+import { fieldReturnType } from "../actions";
 
-const DocumentTemplate = ({ setValue, edit, error }: IProps) => {
-  const handleFile = (file: File) => {
+const DocumentTemplate = ({
+  info,
+  setValue,
+  edit,
+  error,
+  uploadProgress,
+  loading,
+  setHasSelectedFile,
+}: IProps) => {
+  const handleFileChange = (file: File) => {
+    setHasSelectedFile(true);
     setValue("documentTemp", file);
   };
 
+  const editMode =
+    edit && !loading && (!uploadProgress || uploadProgress === 100);
+
   return (
     <div id="fileUpload" className="max-w-md">
-      <FileInput onFileChange={handleFile} editMode={edit} />
+      <FileInput
+        onFileChange={handleFileChange}
+        editMode={editMode}
+        fileName={info?.fileName + "." + info?.fileType}
+        fileLink={info?.fileLink}
+        fileType={info?.fileType}
+      />
+      {uploadProgress && uploadProgress !== 100 ? (
+        <Progress
+          progress={uploadProgress}
+          textLabel="uploading..."
+          color="primary"
+          size="md"
+          labelProgress
+          labelText
+          className="text-[10px] mt-1"
+        />
+      ) : (
+        ""
+      )}
       <p className="text-sm text-destructive-foreground mt-1">
         {error?.message}
       </p>
@@ -23,4 +56,8 @@ interface IProps {
   setValue: UseFormSetValue<{ [x: string]: any }>;
   edit: boolean;
   error: any;
+  uploadProgress: number;
+  loading: boolean;
+  info: fieldReturnType;
+  setHasSelectedFile: Dispatch<SetStateAction<boolean>>;
 }

@@ -47,5 +47,10 @@ export const customTheme: ThemeProps = {
         base: "h-4 w-4 rounded focus:ring-0",
       },
     },
+    progress: {
+      color: {
+        primary: "bg-primary",
+      },
+    },
   },
 };

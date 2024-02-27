@@ -90,7 +90,13 @@ export const useFormFieldActions = ({
 };
 export type fieldReturnType = ReturnType<typeof useFormFieldActions>;
 
-export const getDynamicFieldSchema = (type?: string) => {
+export const getDynamicFieldSchema = ({
+  type,
+  hasSelectedFile,
+}: {
+  type?: string;
+  hasSelectedFile: boolean;
+}) => {
   let schema: any = {
     question: z
       .string({ required_error: "Enter field / field title" })
@@ -118,35 +124,23 @@ export const getDynamicFieldSchema = (type?: string) => {
   }
 
   if (type === "document template") {
-    schema = {
-      ...schema,
-      documentTemp: z
-        .instanceof(File, { message: "Kindly upload a valid file" })
-        .refine((file) => file, { message: "Kindly upload a file" })
-        .refine((file) => file.size <= 1024 * 1024, {
-          message: "File size must be less than 1MB",
-        }),
-    };
+    hasSelectedFile
+      ? (schema = {
+          ...schema,
+          documentTemp: z
+            .instanceof(File, { message: "Kindly upload a valid file" })
+            .refine((file) => file, { message: "Kindly upload a file" })
+            .refine((file) => file.size <= 1024 * 1024, {
+              message: "File size must be less than 1MB",
+            }),
+        })
+      : (schema = {
+          ...schema,
+          fileName: z.string(),
+          fileLink: z.string(),
+          fileType: z.string(),
+        });
   }
 
   return z.object(schema);
 };
-//  z.custom(
-//         (data) => {
-//           console.log(data, data instanceof File);
-//           if (!(data instanceof File)) {
-//             // throw new Error("Invalid file type");
-//             return false;
-//           }
-//           // Additional checks (optional)
-//           if (data.size > 1000000) {
-//             // 1 MB limit (optional)
-//             // throw new Error("File size exceeds limit");
-//             return false;
-//           }
-//           return data;
-//         },
-//         {
-//           message: "Kindly upload a file",
-//         }
-//       ),

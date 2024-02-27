@@ -20,13 +20,14 @@ const DocumentTemplate = ({
 
   const editMode =
     edit && !loading && (!uploadProgress || uploadProgress === 100);
+  const fileName = info?.fileName ? info?.fileName + "." + info?.fileType : "";
 
   return (
     <div id="fileUpload" className="max-w-md">
       <FileInput
         onFileChange={handleFileChange}
         editMode={editMode}
-        fileName={info?.fileName + "." + info?.fileType}
+        fileName={fileName}
         fileLink={info?.fileLink}
         fileType={info?.fileType}
       />

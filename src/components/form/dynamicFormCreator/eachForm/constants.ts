@@ -139,7 +139,13 @@ export const fieldOptions: FieldType[] = [
     compulsory: true,
   },
   {
-    type: "countries",
+    type: "countries-operation",
+    icon: FlagIcon,
+    question: "Select operational country",
+    compulsory: true,
+  },
+  {
+    type: "countries-all",
     icon: FlagIcon,
     question: "Select operational country",
     compulsory: true,
@@ -160,6 +166,7 @@ export const fieldOptions: FieldType[] = [
     type: "dropdown",
     question: "Select an option",
     icon: ChevronDown,
+    options: [""],
     compulsory: true,
   },
   {
@@ -197,6 +204,7 @@ export const fieldOptions: FieldType[] = [
     type: "multiple choice",
     question: "Select an option that applies",
     icon: CircleDot,
+    options: [""],
     compulsory: true,
   },
   {

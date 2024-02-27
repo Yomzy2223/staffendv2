@@ -102,20 +102,22 @@ export const FileInput = ({
               <p className="text-xs">{fileSize || fileLink}</p>
             </div>
           </div>
-          <div className="flex items-center gap-4">
-            {editMode && (
-              <Button color="link" size="fit" onClick={open}>
-                <PenIcon size={18} />
+          {(file || fileLink) && (
+            <div className="flex items-center gap-4">
+              {editMode && (
+                <Button color="link" size="fit" onClick={open}>
+                  <PenIcon size={18} />
+                </Button>
+              )}
+              <Button
+                color="link"
+                size="fit"
+                onClick={() => saveAs(file || fileLink, file?.name || fileName)}
+              >
+                <DownloadIcon size={18} />
               </Button>
-            )}
-            <Button
-              color="link"
-              size="fit"
-              onClick={() => saveAs(file || fileLink, file?.name || fileName)}
-            >
-              <DownloadIcon size={18} />
-            </Button>
-          </div>
+            </div>
+          )}
         </div>
       )}
     </div>

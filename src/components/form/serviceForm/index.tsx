@@ -77,7 +77,7 @@ const ServiceForm = ({ open, setOpen }: IProps) => {
               type="submit"
               color="primary"
               isProcessing={serviceLoading}
-              disabled={serviceLoading}
+              disabled={serviceLoading || serviceInfo.isLoading}
               processingSpinner={
                 <Oval color="white" strokeWidth={4} className="h-5 w-5" />
               }

@@ -4,7 +4,7 @@ import ProductCard from "@/components/cards/productCard";
 import ProductForm from "@/components/form/productForms";
 import ProoductsHeader from "@/components/header/productsHeader";
 import ItemsWrapper from "@/components/wrappers/itemsWrapper";
-import { productFullType } from "@/hooks/api/types";
+import { IProductFull } from "@/hooks/api/types";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import useProductApi from "@/hooks/useProductApi";
 import useServiceApi from "@/hooks/useServiceApi";
@@ -32,7 +32,7 @@ const Products = () => {
     info,
     setOpenConfirm,
   }: {
-    info: productFullType;
+    info: IProductFull;
     setOpenConfirm: Dispatch<SetStateAction<boolean>>;
   }) => {
     deleteProductMutation.mutate(info.id, {
@@ -50,7 +50,7 @@ const Products = () => {
         emptyText="You have not added any product"
         btnText="Add product"
       >
-        {serviceProducts?.map((product: productFullType, i: number) => (
+        {serviceProducts?.map((product: IProductFull, i: number) => (
           <ProductCard
             key={i}
             info={product}

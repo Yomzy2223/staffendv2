@@ -1,5 +1,5 @@
 import { Client } from "@/lib/axios";
-import { productFormType, productSubFormType, productType } from "./types";
+import { IProductForm, IProductSubForm, IProduct } from "./types";
 
 // Product endpoints
 export const createProduct = async ({
@@ -7,7 +7,7 @@ export const createProduct = async ({
   formInfo,
 }: {
   serviceId: string;
-  formInfo: productType;
+  formInfo: IProduct;
 }) => {
   const client = await Client();
   return await client.post(`/products/${serviceId}`, formInfo);
@@ -18,7 +18,7 @@ export const updateProduct = async ({
   formInfo,
 }: {
   id: string;
-  formInfo: productType;
+  formInfo: IProduct;
 }) => {
   const client = await Client();
   return await client.put(`/products/${id}`, formInfo);
@@ -46,14 +46,14 @@ export const getAllProducts = async () => {
 
 // Product form endpoints
 export const createProductForm = async ({
-  serviceId,
+  productId,
   formInfo,
 }: {
-  serviceId: string;
-  formInfo: productFormType;
+  productId: string;
+  formInfo: IProductForm;
 }) => {
   const client = await Client();
-  return await client.post(`/products/form/${serviceId}`, formInfo);
+  return await client.post(`/products/form/${productId}`, formInfo);
 };
 
 export const updateProductForm = async ({
@@ -61,7 +61,7 @@ export const updateProductForm = async ({
   formInfo,
 }: {
   id: string;
-  formInfo: productFormType;
+  formInfo: IProductForm;
 }) => {
   const client = await Client();
   return await client.put(`/products/form/${id}`, formInfo);
@@ -89,14 +89,14 @@ export const getAllServicesProductsForm = async () => {
 
 // Product sub-form endpoints
 export const createProductSubForm = async ({
-  serviceFormId,
+  formId,
   formInfo,
 }: {
-  serviceFormId: string;
-  formInfo: productSubFormType;
+  formId: string;
+  formInfo: IProductSubForm;
 }) => {
   const client = await Client();
-  return await client.post(`/products/subform/${serviceFormId}`, formInfo);
+  return await client.post(`/products/subform/${formId}`, formInfo);
 };
 
 export const updateProductSubForm = async ({
@@ -104,7 +104,7 @@ export const updateProductSubForm = async ({
   formInfo,
 }: {
   id: string;
-  formInfo: productSubFormType;
+  formInfo: IProductSubForm;
 }) => {
   const client = await Client();
   return await client.put(`/products/subform/${id}`, formInfo);
@@ -120,7 +120,7 @@ export const getProductSubForm = async (id: string) => {
   return await client.get(`/products/subform/${id}`);
 };
 
-export const getProductSubForms = async (serviceFormId: string) => {
+export const getProductSubForms = async (formId: string) => {
   const client = await Client();
-  return await client.get(`/products/subforms/${serviceFormId}`);
+  return await client.get(`/products/subforms/${formId}`);
 };

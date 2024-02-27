@@ -1,4 +1,4 @@
-import { productSubFormType } from "@/hooks/api/types";
+import { IProductSubForm } from "@/hooks/api/types";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import useProductApi from "@/hooks/useProductApi";
 import { useParams, useSearchParams } from "next/navigation";
@@ -96,7 +96,7 @@ export const useProductFormActions = () => {
         )
       : createProductFormMutation.mutate(
           {
-            serviceId: productId,
+            productId,
             formInfo: values,
           },
           {
@@ -122,14 +122,14 @@ export const useProductFormActions = () => {
         ? updateProductSubFormMutation.mutate(
             {
               id: fieldId,
-              formInfo: values as productSubFormType,
+              formInfo: values as IProductSubForm,
             },
             { onSuccess: () => setEdit(false) }
           )
         : createProductSubFormMutation.mutate(
             {
-              serviceFormId: formId,
-              formInfo: values as productSubFormType,
+              formId: formId,
+              formInfo: values as IProductSubForm,
             },
             {
               onSuccess: () => {
@@ -146,7 +146,7 @@ export const useProductFormActions = () => {
     } else {
       createProductFormMutation.mutate(
         {
-          serviceId: productId,
+          productId,
           formInfo: formValues,
         },
         {

@@ -7,12 +7,10 @@ import * as z from "zod";
 import Footer from "./footer";
 import { FieldType } from "../constants";
 import { cn } from "@/lib/utils";
-import Checkbox from "./allFieldTypes/checkbox";
+import Options from "./allFieldTypes/options";
 import DocumentTemplate from "./allFieldTypes/documentTemplate";
-import DocumentUpload from "./allFieldTypes/documentUpload";
-import Dropdown from "./allFieldTypes/dropdown";
-import MultipleChoice from "./allFieldTypes/multipleChoice";
 import { getDynamicFieldSchema, useFormFieldActions } from "./actions";
+import { uploadFileToCloudinary } from "@/hooks/globalFunctions";
 
 const DynamicField = ({
   info,
@@ -27,10 +25,15 @@ const DynamicField = ({
 }: IProps) => {
   const [edit, setEdit] = useState(isNew || false);
   const [type, setType] = useState(info?.type);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [hasSelectedFile, setHasSelectedFile] = useState(false);
 
   const defaultValues = { ...info };
 
-  const formSchema = getDynamicFieldSchema(type);
+  const formSchema = getDynamicFieldSchema({
+    type,
+    hasSelectedFile,
+  });
   type formType = z.infer<typeof formSchema>;
 
   // Form definition
@@ -54,7 +57,38 @@ const DynamicField = ({
   });
 
   // Submit handler
-  function onSubmit(values: formType) {
+  async function onSubmit(values: formType) {
+    const file = values?.documentTemp;
+    if (file) {
+      const response = await uploadFileToCloudinary({
+        file,
+        getProgress: (progress) => {
+          setUploadProgress(progress);
+        },
+      });
+      const data = response?.data;
+      if (data) {
+        const newValues = {
+          ...values,
+          fileName: data.original_filename,
+          fileLink: data.secure_url,
+          fileType: data.secure_url.split(".").pop(),
+        };
+        submitHandler({ values: newValues, setEdit });
+      }
+      return;
+    }
+    if (values?.fileName && values?.fileLink && values?.fileType) {
+      const newValues = {
+        ...values,
+        fileName: values.fileName,
+        fileLink: values.fileLink,
+        fileType: values.fileType,
+      };
+      submitHandler({ values: newValues, setEdit });
+      return;
+    }
+
     submitHandler({ values, setEdit });
   }
 
@@ -94,9 +128,10 @@ const DynamicField = ({
         {/* Dynamic Types */}
         {(type === "checkbox" ||
           type === "objectives" ||
+          type === "dropdown" ||
           type === "multiple choice") &&
           fieldInfo.options && (
-            <Checkbox
+            <Options
               info={fieldInfo}
               setValue={setValue}
               edit={edit}
@@ -104,9 +139,17 @@ const DynamicField = ({
               type={type}
             />
           )}
-        {type === "document template" && <DocumentTemplate />}
-        {type === "document upload" && <DocumentUpload />}
-        {type === "dropdown" && <Dropdown />}
+        {type === "document template" && (
+          <DocumentTemplate
+            info={fieldInfo}
+            setValue={setValue}
+            error={errors["documentTemp"]}
+            edit={edit}
+            uploadProgress={uploadProgress}
+            loading={loading}
+            setHasSelectedFile={setHasSelectedFile}
+          />
+        )}
 
         {isEdit && (
           <Footer

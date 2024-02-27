@@ -6,7 +6,7 @@ import { fieldReturnType } from "../actions";
 import { v4 as uuidv4 } from "uuid";
 import { cn } from "@/lib/utils";
 
-const CheckboxOption = ({ info, setValue, edit, error, type }: IProps) => {
+const Options = ({ info, setValue, edit, error, type }: IProps) => {
   const { options, setOptions } = info;
 
   const id = uuidv4();
@@ -100,7 +100,7 @@ const CheckboxOption = ({ info, setValue, edit, error, type }: IProps) => {
   );
 };
 
-export default CheckboxOption;
+export default Options;
 
 interface IProps {
   info: fieldReturnType;

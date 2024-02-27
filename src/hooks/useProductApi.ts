@@ -176,11 +176,11 @@ const useProductApi = () => {
       enabled: id ? true : false,
     });
 
-  const useGetProductFormSubFormsQuery = (serviceFormId: string) =>
+  const useGetProductFormSubFormsQuery = (formId: string) =>
     useQuery({
-      queryKey: ["productForm", serviceFormId],
+      queryKey: ["productForm", formId],
       queryFn: ({ queryKey }) => getProductSubForm(queryKey[1]),
-      enabled: serviceFormId ? true : false,
+      enabled: formId ? true : false,
     });
 
   return {

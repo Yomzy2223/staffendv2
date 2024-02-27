@@ -90,7 +90,13 @@ export const useFormFieldActions = ({
 };
 export type fieldReturnType = ReturnType<typeof useFormFieldActions>;
 
-export const getDynamicFieldSchema = (type?: string) => {
+export const getDynamicFieldSchema = ({
+  type,
+  hasSelectedFile,
+}: {
+  type?: string;
+  hasSelectedFile: boolean;
+}) => {
   let schema: any = {
     question: z
       .string({ required_error: "Enter field / field title" })
@@ -115,6 +121,25 @@ export const getDynamicFieldSchema = (type?: string) => {
           { message: "Option cannot be empty" }
         ),
     };
+  }
+
+  if (type === "document template") {
+    hasSelectedFile
+      ? (schema = {
+          ...schema,
+          documentTemp: z
+            .instanceof(File, { message: "Kindly upload a valid file" })
+            .refine((file) => file, { message: "Kindly upload a file" })
+            .refine((file) => file.size <= 1024 * 1024, {
+              message: "File size must be less than 1MB",
+            }),
+        })
+      : (schema = {
+          ...schema,
+          fileName: z.string(),
+          fileLink: z.string(),
+          fileType: z.string(),
+        });
   }
 
   return z.object(schema);

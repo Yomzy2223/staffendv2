@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { UseFormSetValue } from "react-hook-form";
-import { FieldType } from "../constants";
 import { z } from "zod";
+import { FieldType, IDependsOn } from "../types";
 
 export const useFormFieldActions = ({
   fieldInfo,
@@ -17,9 +17,12 @@ export const useFormFieldActions = ({
   const [options, setOptions] = useState<string[]>([]);
   const [compulsory, setCompulsory] = useState(false);
   const [fileName, setFileName] = useState("");
-  const [fileDescription, setFileDescription] = useState("");
   const [fileLink, setFileLink] = useState("");
   const [fileType, setFileType] = useState("");
+  const [dependsOn, setDependsOn] = useState<IDependsOn>({
+    field: "",
+    options: [],
+  });
 
   const mountInfo = (info: FieldType) => {
     if (info.question) {
@@ -41,10 +44,6 @@ export const useFormFieldActions = ({
       setFileName(info.fileName);
       setValue("fileName", info.fileName);
     }
-    if (info.fileDescription) {
-      setFileDescription(info.fileDescription);
-      setValue("fileDescription", info.fileDescription);
-    }
     if (info.fileLink) {
       setFileLink(info.fileLink);
       setValue("fileLink", info.fileLink);
@@ -53,10 +52,18 @@ export const useFormFieldActions = ({
       setFileType(info.fileType);
       setValue("fileType", info.fileType);
     }
+
+    // Set depends on
+    const dependsOn = info.dependsOn || {
+      field: "",
+      options: [],
+    };
+    setDependsOn(dependsOn);
+    setValue("dependsOn", dependsOn);
   };
 
   useEffect(() => {
-    mountInfo(fieldInfo);
+    if (fieldInfo) mountInfo(fieldInfo);
   }, [fieldInfo]);
 
   const handleOptionSelect = (selected?: FieldType) => {
@@ -78,10 +85,11 @@ export const useFormFieldActions = ({
     options,
     setOptions,
     fileName,
-    fileDescription,
     fileLink,
     compulsory,
     setCompulsory,
+    dependsOn,
+    setDependsOn,
     fileType,
     mountInfo,
     cancelChanges,
@@ -105,6 +113,10 @@ export const getDynamicFieldSchema = ({
       .string({ required_error: "Select type" })
       .min(1, { message: "Select type" }),
     compulsory: z.boolean(),
+    dependsOn: z.object({
+      field: z.string(),
+      options: z.string().array(),
+    }),
   };
 
   if (type === "checkbox" || type === "objectives") {

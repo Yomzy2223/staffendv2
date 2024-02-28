@@ -45,11 +45,21 @@ export const customTheme: ThemeProps = {
     checkbox: {
       root: {
         base: "h-4 w-4 rounded focus:ring-0",
+        color: {
+          primary: "checked:accent-primary",
+          "primary-full":
+            "h-4 w-4 appearance-none bg-muted border-none rounded ring-border ring-1 ring-offset-1 checked:bg-primary checked:ring-primary disabled:opacity-70",
+        },
       },
     },
     progress: {
       color: {
         primary: "bg-primary",
+      },
+    },
+    radio: {
+      root: {
+        base: "h-4 w-4 appearance-none bg-muted border-none rounded-full ring-border ring-1 ring-offset-1 checked:bg-primary checked:ring-primary",
       },
     },
   },

@@ -1,6 +1,6 @@
 import { Button, TextInput } from "flowbite-react";
 import { PencilLine, Trash2 } from "lucide-react";
-import React, { KeyboardEvent, useRef, useState } from "react";
+import React, { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { Oval } from "react-loading-icons";
 
 const EditDelete = ({
@@ -15,6 +15,7 @@ const EditDelete = ({
   const [deleteClicked, setDeleteClicked] = useState(false);
   const [value, setValue] = useState("");
 
+  const inputRef = useRef<HTMLInputElement>(null);
   const matches = value.trim().toLowerCase() === "delete";
 
   const handleDelete = () => {
@@ -31,10 +32,15 @@ const EditDelete = ({
     }
   };
 
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, [deleteClicked]);
+
   return (
     <div className="flex items-center gap-4">
       {deleteClicked ? (
         <TextInput
+          ref={inputRef}
           placeholder="Type DELETE to confirm action"
           value={value}
           onChange={(e) => setValue(e.target.value)}

@@ -1,12 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "flowbite-react";
-import { FieldType } from "../constants";
 import FieldTypePopUp from "../fieldTypePopUp";
-import { MoreHorizontal } from "lucide-react";
+import { ChevronDown, MoreHorizontal } from "lucide-react";
 import { fieldReturnType } from "./actions";
+import PopOverWrapper from "@/components/wrappers/popOverWrapper";
+import DependsOn from "./dependsOn";
+import { IDependsOn } from "../types";
+import { UseFormSetValue } from "react-hook-form";
 
-const Header = ({ fieldTitle, number, edit, info, loading, type }: IProps) => {
+const Header = ({
+  fieldTitle,
+  number,
+  edit,
+  info,
+  loading,
+  type,
+  fields,
+  setValue,
+}: IProps) => {
+  const [open, setOpen] = useState(false);
   const { compulsory, handleOptionSelect } = info;
+
+  const handleDependsOn = (selected: IDependsOn) => {
+    setValue("dependsOn", selected);
+    setOpen(false);
+  };
 
   return (
     <div className="flex justify-between items-center gap-6">
@@ -19,6 +37,32 @@ const Header = ({ fieldTitle, number, edit, info, loading, type }: IProps) => {
           <span className="ml-2 text-[10px] bg-primary-8 text-primary rounded-md px-2.5 py-0.5">
             Compulsory
           </span>
+        )}
+
+        {edit && fields && (
+          <PopOverWrapper
+            open={open}
+            setOpen={setOpen}
+            disabled={loading}
+            content={
+              <DependsOn
+                handleSelect={handleDependsOn}
+                fields={fields}
+                info={info}
+              />
+            }
+          >
+            <Button
+              size="fit"
+              color="transparent"
+              className="flex items-center"
+            >
+              <span className="ml-2 text-xs text-primary rounded-md pl-2.5 py-0.5">
+                Depends on
+              </span>
+              <ChevronDown color="hsl(var(--primary))" size={16} />
+            </Button>
+          </PopOverWrapper>
         )}
       </div>
 
@@ -55,4 +99,6 @@ interface IProps {
   info: fieldReturnType;
   loading: boolean;
   type: string;
+  fields?: IDependsOn[];
+  setValue: UseFormSetValue<{ [x: string]: any }>;
 }

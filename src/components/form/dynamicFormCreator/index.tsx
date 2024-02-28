@@ -3,9 +3,9 @@ import { PlusCircle } from "lucide-react";
 import React, { useState } from "react";
 import Masonry from "react-masonry-css";
 import EachForm from "./eachForm";
-import { FieldType, FormType } from "./eachForm/constants";
+import { FormType } from "./eachForm/constants";
 import FieldTypePopUp from "./eachForm/fieldTypePopUp";
-import { IFieldSubmitHandlerArg } from "./eachForm/types";
+import { FieldType, IFieldSubmitHandlerArg } from "./eachForm/types";
 
 const DynamicFormCreator = ({
   fieldTitle,

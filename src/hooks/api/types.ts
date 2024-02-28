@@ -1,3 +1,5 @@
+import { IDependsOn } from "@/components/form/dynamicFormCreator/eachForm/types";
+
 export interface IService {
   name: string;
   description: string;
@@ -48,10 +50,10 @@ export interface IProductSubForm {
   options?: (string | number)[];
   compulsory: boolean;
   fileName?: string;
-  allowOther?: boolean;
-  dependsOn?: string;
   fileLink?: string;
   fileType?: string;
+  dependsOn?: IDependsOn;
+  allowOther?: boolean;
 }
 
 export interface ICountry {

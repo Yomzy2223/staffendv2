@@ -7,14 +7,9 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { FieldType, fieldOptions, formOptions, FormType } from "./constants";
-import { useGlobalFucntions } from "@/hooks/globalFunctions";
-import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
+import { fieldOptions, formOptions, FormType } from "./constants";
+import PopOverWrapper from "@/components/wrappers/popOverWrapper";
+import { FieldType } from "./types";
 
 interface IProps {
   children: ReactNode;
@@ -30,40 +25,22 @@ const FieldTypePopUp = ({
   disabled,
 }: IProps) => {
   const [open, setOpen] = useState(false);
-  const { isDesktop } = useGlobalFucntions();
 
   return (
-    <div>
-      {isDesktop ? (
-        <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild disabled={disabled}>
-            {children}
-          </PopoverTrigger>
-          <PopoverContent className="w-[200px] p-0" align="start">
-            <QuestionList
-              setOpen={setOpen}
-              handleSelect={handleSelect}
-              isForm={isForm}
-            />
-          </PopoverContent>
-        </Popover>
-      ) : (
-        <Drawer open={open} onOpenChange={setOpen}>
-          <DrawerTrigger asChild disabled={disabled}>
-            {children}
-          </DrawerTrigger>
-          <DrawerContent>
-            <div className="mt-4 border-t">
-              <QuestionList
-                setOpen={setOpen}
-                handleSelect={handleSelect}
-                isForm={isForm}
-              />
-            </div>
-          </DrawerContent>
-        </Drawer>
-      )}
-    </div>
+    <PopOverWrapper
+      open={open}
+      setOpen={setOpen}
+      disabled={disabled}
+      content={
+        <QuestionList
+          setOpen={setOpen}
+          handleSelect={handleSelect}
+          isForm={isForm}
+        />
+      }
+    >
+      {children}
+    </PopOverWrapper>
   );
 };
 

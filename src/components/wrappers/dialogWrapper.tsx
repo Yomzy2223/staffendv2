@@ -52,7 +52,7 @@ const DialogWrapper = ({
       ) : (
         <Drawer open={open} onOpenChange={setOpen}>
           <DrawerContent
-            className={cn("p-5 pt-0 rounded-t-3xl ", {
+            className={cn("p-5 pt-0 rounded-t-3xl max-h-screen", {
               "h-[90%]": !fit,
             })}
           >

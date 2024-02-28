@@ -4,7 +4,7 @@ import { Button, Checkbox } from "flowbite-react";
 import { PencilLine, Trash2 } from "lucide-react";
 import React, { Dispatch, SetStateAction } from "react";
 import { UseFormGetValues, UseFormSetValue } from "react-hook-form";
-import { FieldType } from "../constants";
+import { FieldType } from "../types";
 import { fieldReturnType } from "./actions";
 
 const Footer = ({

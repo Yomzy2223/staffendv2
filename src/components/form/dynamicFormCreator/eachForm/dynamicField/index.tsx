@@ -109,10 +109,12 @@ const DynamicField = ({
         info={fieldInfo}
         loading={loading}
         type={type}
-        fields={fieldsInfo?.map((el, i) => ({
-          field: "field " + (i + 1),
-          options: el.options || [],
-        }))}
+        fields={fieldsInfo
+          ?.map((el, i) => ({
+            field: "field " + (i + 1),
+            options: el.options || [],
+          }))
+          ?.filter((field, i) => i + 1 !== number)}
         setValue={setValue}
       />
       <form

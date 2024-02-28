@@ -25,33 +25,39 @@ export const useFormFieldActions = ({
   });
 
   const mountInfo = (info: FieldType) => {
-    if (info.question) {
-      setValue("question", info.question);
-    }
-    if (info.type) {
-      setType(info.type);
-      setValue("type", info.type);
-    }
-    if (info.options) {
-      setOptions(info.options);
-      setValue("options", info.options);
-    }
-    if (info.compulsory) {
-      setCompulsory(info.compulsory);
-      setValue("compulsory", info.compulsory);
-    }
-    if (info.fileName) {
-      setFileName(info.fileName);
-      setValue("fileName", info.fileName);
-    }
-    if (info.fileLink) {
-      setFileLink(info.fileLink);
-      setValue("fileLink", info.fileLink);
-    }
-    if (info.fileType) {
-      setFileType(info.fileType);
-      setValue("fileType", info.fileType);
-    }
+    // Set question
+    const question = info.question || "";
+    setValue("question", question);
+
+    // Set type
+    const type = info.type || "";
+    setType(type);
+    setValue("type", type);
+
+    // Set options
+    const options = info.options || [];
+    setOptions(options);
+    setValue("options", options);
+
+    // Set compulsory
+    const compulsory = info.compulsory || false;
+    setCompulsory(compulsory);
+    setValue("compulsory", compulsory);
+
+    // Set file name
+    const fileName = info.fileName || "";
+    setFileName(fileName);
+    setValue("fileName", fileName);
+
+    // Set file link
+    const fileLink = info.fileLink || "";
+    setFileLink(fileLink);
+    setValue("fileLink", fileLink);
+
+    // Set file type
+    const fileType = info.fileType || "";
+    setFileType(fileType);
+    setValue("fileType", fileType);
 
     // Set depends on
     const dependsOn = info.dependsOn || {
@@ -80,6 +86,12 @@ export const useFormFieldActions = ({
     setEdit(false);
   };
 
+  const cancelDependsChanges = () => {
+    const depends = dependsOn || fieldInfo.dependsOn;
+    setDependsOn(depends);
+    setValue("dependsOn", depends);
+  };
+
   return {
     setType,
     options,
@@ -93,6 +105,7 @@ export const useFormFieldActions = ({
     fileType,
     mountInfo,
     cancelChanges,
+    cancelDependsChanges,
     handleOptionSelect,
   };
 };

@@ -10,31 +10,31 @@ import React, { useState } from "react";
 import { IDependsOn } from "../types";
 import { fieldReturnType } from "./actions";
 
-const DependsOn = ({ handleSelect, fields, info }: IProps) => {
-  const { dependsOn, setDependsOn } = info;
+const DependsOn = ({ onApply, fields, info }: IProps) => {
+  const [selected, setSelected] = useState<IDependsOn>(info.dependsOn);
 
   const onSelect = (field: string, value?: string) => {
-    let isPresent = !!dependsOn.options.find((el) => el === value);
-    let options = [...dependsOn.options];
+    let isPresent = !!selected.options.find((el) => el === value);
+    let options = [...selected.options];
     if (isPresent) {
       options = options.filter((el) => el !== value); //deselect
     } else {
       options = value
-        ? dependsOn.field === field
+        ? selected.field === field
           ? [...options, value]
           : [value]
         : []; //select
     }
     options = [...new Set(options)]; //Remove duplicates
-    setDependsOn({ field, options });
+    setSelected({ field, options });
   };
 
   //   Select and deselect all
   const selectAll = (el: IDependsOn) => {
     const { field, options } = el;
     if (options) {
-      const allSelected = options.length === dependsOn.options.length;
-      setDependsOn({ field, options: allSelected ? [] : options });
+      const allSelected = options.length === selected.options.length;
+      setSelected({ field, options: allSelected ? [] : options });
     }
   };
 
@@ -45,7 +45,7 @@ const DependsOn = ({ handleSelect, fields, info }: IProps) => {
           <div
             key={each.field}
             className={cn("text-foreground-5 text-sm p-2 rounded-lg", {
-              " bg-foreground-1": dependsOn.field === each.field,
+              " bg-foreground-1": selected.field === each.field,
             })}
           >
             <div className="flex items-center justify-between">
@@ -54,27 +54,28 @@ const DependsOn = ({ handleSelect, fields, info }: IProps) => {
                   name="name"
                   id={each.field}
                   className="w-3 h-3"
-                  onClick={() => onSelect(each.field)}
+                  checked={each.field === selected.field}
+                  onChange={() => onSelect(each.field)}
                 />
                 <label htmlFor={each.field}>{each.field}</label>
               </div>
               {each.options &&
                 each.options.length > 1 &&
-                dependsOn.field === each.field && (
+                selected.field === each.field && (
                   <Button
                     size="fit"
                     color="transparent"
                     className="text-primary text-xs"
                     onClick={() => selectAll(each)}
                   >
-                    {each.options.length === dependsOn.options.length
+                    {each.options.length === selected.options.length
                       ? "Deselect all"
                       : "Select all"}
                   </Button>
                 )}
             </div>
 
-            {each.options && dependsOn.field === each.field && (
+            {each.options && selected.field === each.field && (
               <>
                 {each.options?.length > 10 && (
                   <CommandInput placeholder="Search options..." />
@@ -89,7 +90,7 @@ const DependsOn = ({ handleSelect, fields, info }: IProps) => {
                       <Checkbox
                         id={el}
                         checked={
-                          !!dependsOn.options.find((option) => option === el)
+                          !!selected.options.find((option) => option === el)
                         }
                         onChange={() => onSelect(each.field, el)}
                         color="primary"
@@ -107,9 +108,9 @@ const DependsOn = ({ handleSelect, fields, info }: IProps) => {
 
       <div className="sticky bottom-0 bg-white py-3">
         <Button
-          disabled={!dependsOn.field}
+          disabled={!selected.field}
           color="primary"
-          onClick={() => handleSelect(dependsOn)}
+          onClick={() => onApply(selected)}
         >
           Apply
         </Button>
@@ -121,7 +122,7 @@ const DependsOn = ({ handleSelect, fields, info }: IProps) => {
 export default DependsOn;
 
 interface IProps {
-  handleSelect: (selected: IDependsOn) => void;
+  onApply: (selected: IDependsOn) => void;
   fields: IDependsOn[];
   info: fieldReturnType;
 }

@@ -19,10 +19,12 @@ const Header = ({
   setValue,
 }: IProps) => {
   const [open, setOpen] = useState(false);
-  const { compulsory, handleOptionSelect } = info;
+  const { compulsory, handleOptionSelect, setDependsOn, cancelDependsChanges } =
+    info;
 
   const handleDependsOn = (selected: IDependsOn) => {
     setValue("dependsOn", selected);
+    setDependsOn(selected);
     setOpen(false);
   };
 
@@ -44,9 +46,10 @@ const Header = ({
             open={open}
             setOpen={setOpen}
             disabled={loading}
+            onClose={cancelDependsChanges}
             content={
               <DependsOn
-                handleSelect={handleDependsOn}
+                onApply={handleDependsOn}
                 fields={fields}
                 info={info}
               />

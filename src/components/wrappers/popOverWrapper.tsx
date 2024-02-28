@@ -13,19 +13,19 @@ const PopOverWrapper = ({
   open,
   setOpen,
   disabled,
-}: {
-  children: ReactNode;
-  content: ReactNode;
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  disabled?: boolean;
-}) => {
+  onClose,
+}: IProps) => {
   const { isDesktop } = useGlobalFucntions();
+
+  const handleOpenChange = (open: boolean) => {
+    setOpen(open);
+    if (open === false && onClose) onClose();
+  };
 
   return (
     <div>
       {isDesktop ? (
-        <Popover open={open} onOpenChange={setOpen}>
+        <Popover open={open} onOpenChange={handleOpenChange}>
           <PopoverTrigger asChild disabled={disabled}>
             {children}
           </PopoverTrigger>
@@ -51,3 +51,12 @@ const PopOverWrapper = ({
 };
 
 export default PopOverWrapper;
+
+interface IProps {
+  children: ReactNode;
+  content: ReactNode;
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  disabled?: boolean;
+  onClose?: () => void;
+}

@@ -17,6 +17,9 @@ export const useFormActions = ({
   const [titleError, setTitleError] = useState("");
   const [descError, setDescError] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [fieldsEditState, setFieldsEditState] = useState<
+    { number: number; edit: boolean }[]
+  >([]);
 
   const validateFields = () => {
     if (title.length === 0) setTitleError("Enter title");
@@ -78,6 +81,8 @@ export const useFormActions = ({
     titleError,
     setTitleError,
     descError,
+    fieldsEditState,
+    setFieldsEditState,
     validateFields,
     handleOptionSelect,
     cancelChanges,

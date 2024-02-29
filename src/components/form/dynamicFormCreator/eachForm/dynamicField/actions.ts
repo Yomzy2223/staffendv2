@@ -1,25 +1,36 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { UseFormSetValue } from "react-hook-form";
 import { boolean, z } from "zod";
+import { useFormActions } from "../actions";
 import { FieldType, IDependsOn } from "../types";
 
 export const useFormFieldActions = ({
+  number,
   fieldInfo,
   setValue,
+  edit,
   setEdit,
   setType,
+  fieldsEditState,
+  setFieldsEditState,
 }: {
+  number: number;
   fieldInfo: FieldType;
+  edit: boolean;
   setValue: UseFormSetValue<{ [x: string]: any }>;
   setEdit: Dispatch<SetStateAction<boolean>>;
   setType: Dispatch<SetStateAction<string>>;
+  fieldsEditState: { number: number; edit: boolean }[];
+  setFieldsEditState: Dispatch<
+    SetStateAction<{ number: number; edit: boolean }[]>
+  >;
 }) => {
   const [options, setOptions] = useState<string[]>([]);
   const [compulsory, setCompulsory] = useState(false);
   const [fileName, setFileName] = useState("");
   const [fileLink, setFileLink] = useState("");
   const [fileType, setFileType] = useState("");
-  const [allowOther, setAllowOther] = useState<boolean>();
+  const [allowOther, setAllowOther] = useState<boolean>(false);
   const [dependsOn, setDependsOn] = useState<IDependsOn>({
     field: "",
     options: [],
@@ -78,6 +89,19 @@ export const useFormFieldActions = ({
     if (fieldInfo) mountInfo(fieldInfo);
   }, [fieldInfo]);
 
+  // Update the edit state of each field in the form action
+  useEffect(() => {
+    const exists = fieldsEditState.find((el) => el.number === number);
+    if (exists) {
+      const newEditState = fieldsEditState.map((el) =>
+        el.number === number ? { number, edit } : el
+      );
+      setFieldsEditState(newEditState);
+    } else {
+      setFieldsEditState([...fieldsEditState, { number, edit }]);
+    }
+  }, [edit]);
+
   const handleOptionSelect = (selected?: FieldType) => {
     if (!selected) return;
     if (selected.type === fieldInfo.type) {
@@ -135,7 +159,7 @@ export const getDynamicFieldSchema = ({
       .min(1, { message: "Select type" }),
     compulsory: z.boolean(),
     dependsOn: z.object({
-      field: z.string(),
+      field: z.string().nullable(),
       options: z.string().array(),
     }),
     allowOther: z.boolean(),

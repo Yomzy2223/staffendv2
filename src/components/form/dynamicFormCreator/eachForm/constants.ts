@@ -214,5 +214,22 @@ export const formOptions: FormType[] = [
     title: "Person title",
     compulsory: true,
     description: "Here is the form description",
+    subForm: [
+      {
+        type: "short answer",
+        question: "Enter your full name",
+        compulsory: true,
+      },
+      {
+        type: "short answer",
+        question: "Enter your email address",
+        compulsory: true,
+      },
+      {
+        type: "short answer",
+        question: "Enter your phone number",
+        compulsory: true,
+      },
+    ],
   },
 ];

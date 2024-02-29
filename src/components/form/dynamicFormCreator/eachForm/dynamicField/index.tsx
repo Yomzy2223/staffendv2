@@ -23,6 +23,8 @@ const DynamicField = ({
   deleteField,
   isNew,
   fieldsInfo,
+  fieldsEditState,
+  setFieldsEditState,
 }: IProps) => {
   const [edit, setEdit] = useState(isNew || false);
   const [type, setType] = useState(info?.type);
@@ -51,10 +53,14 @@ const DynamicField = ({
   });
 
   const fieldInfo = useFormFieldActions({
+    number,
     fieldInfo: info,
     setValue,
+    edit,
     setEdit,
     setType,
+    fieldsEditState,
+    setFieldsEditState,
   });
 
   // Submit handler
@@ -94,10 +100,6 @@ const DynamicField = ({
   }
 
   const errorMsg = errors["question"]?.message;
-
-  // useEffect(() => {
-  //   if (isEdit === false) setEdit(false);
-  // }, [isEdit]);
 
   return (
     <Card className="shadow-none [&>div]:p-4 max-w-[500px]">
@@ -195,4 +197,8 @@ interface IProps {
   deleteField: () => void;
   isNew?: boolean;
   fieldsInfo?: FieldType[];
+  fieldsEditState: { number: number; edit: boolean }[];
+  setFieldsEditState: Dispatch<
+    SetStateAction<{ number: number; edit: boolean }[]>
+  >;
 }

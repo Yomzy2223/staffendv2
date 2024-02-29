@@ -3,8 +3,8 @@ import { cn } from "@/lib/utils";
 import { Button } from "flowbite-react";
 import { PencilLine, PlusCircle, Trash2 } from "lucide-react";
 import React, { Dispatch, MouseEventHandler, SetStateAction } from "react";
-import { FieldType } from "./constants";
 import FieldTypePopUp from "./fieldTypePopUp";
+import { FieldType } from "./types";
 
 const Footer = ({
   edit,
@@ -12,7 +12,7 @@ const Footer = ({
   onDoneClick,
   setNewlyAdded,
   btnText,
-  loading,
+  disabled,
   deleteLoading,
   cancelChanges,
   disableAddNew,
@@ -51,7 +51,7 @@ const Footer = ({
             color="ghost"
             size="fit"
             className="text-primary"
-            disabled={loading}
+            disabled={disabled}
             onClick={cancelChanges}
           >
             Cancel
@@ -62,7 +62,7 @@ const Footer = ({
             size="fit"
             className="underline text-primary"
             onClick={onDoneClick}
-            disabled={loading}
+            disabled={disabled}
           >
             Done
           </Button>
@@ -86,7 +86,7 @@ interface IProps {
   onDoneClick?: MouseEventHandler<HTMLButtonElement>;
   setNewlyAdded: Dispatch<SetStateAction<FieldType | undefined>>;
   btnText?: string;
-  loading: boolean;
+  disabled: boolean;
   deleteLoading: boolean;
   cancelChanges: () => void;
   disableAddNew?: boolean;

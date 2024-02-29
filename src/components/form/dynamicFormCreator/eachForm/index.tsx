@@ -40,6 +40,8 @@ const EachForm = ({
     setIsSubmitted,
     validateFields,
     cancelChanges,
+    fieldsEditState,
+    setFieldsEditState,
   } = formInfo;
 
   const formValues = {
@@ -79,6 +81,8 @@ const EachForm = ({
 
   const lastField = (fieldsInfo?.length ?? 0) + 1;
 
+  const disableButtons = fieldsEditState.some((el) => el.edit === true);
+
   return (
     <Card className="shadow-none [&>div]:p-4 max-w-[500px] h-max">
       <Header
@@ -108,6 +112,8 @@ const EachForm = ({
             field.id && fieldDeleteHandler(field.id);
           }}
           fieldsInfo={fieldsInfo}
+          fieldsEditState={fieldsEditState}
+          setFieldsEditState={setFieldsEditState}
         />
       ))}
       {newlyAdded && (
@@ -126,6 +132,8 @@ const EachForm = ({
           isEdit={edit}
           loading={fieldLoading && loadingField === lastField}
           deleteField={() => setNewlyAdded(undefined)}
+          fieldsEditState={fieldsEditState}
+          setFieldsEditState={setFieldsEditState}
           isNew
         />
       )}
@@ -136,7 +144,7 @@ const EachForm = ({
         onDoneClick={handleFormSubmit}
         setNewlyAdded={setNewlyAdded}
         btnText={btnText}
-        loading={formLoading && loadingForm === number}
+        disabled={disableButtons || (formLoading && loadingForm === number)}
         deleteLoading={formDeleteLoading && loadingForm === number}
         cancelChanges={cancelChanges}
         disableAddNew={newlyAdded ? true : false}

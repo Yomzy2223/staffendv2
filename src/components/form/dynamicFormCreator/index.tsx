@@ -22,7 +22,11 @@ const DynamicFormCreator = ({
 
   const handleSelect = (selected?: FormType | any) => {
     if (!selected) return;
-    setNewlyAdded(selected);
+    console.log(selected);
+    if (selected.type === "person") {
+      onFormSubmit({});
+    }
+    // setNewlyAdded(selected);
   };
 
   const btnText = formInfo?.length > 0 ? "Add another form" : "Create a form";

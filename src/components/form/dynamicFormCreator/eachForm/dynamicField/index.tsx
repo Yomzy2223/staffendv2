@@ -5,12 +5,12 @@ import { useForm } from "react-hook-form";
 import Header from "./header";
 import * as z from "zod";
 import Footer from "./footer";
-import { FieldType } from "../constants";
 import { cn } from "@/lib/utils";
 import Options from "./allFieldTypes/options";
 import DocumentTemplate from "./allFieldTypes/documentTemplate";
 import { getDynamicFieldSchema, useFormFieldActions } from "./actions";
 import { uploadFileToCloudinary } from "@/hooks/globalFunctions";
+import { FieldType } from "../types";
 
 const DynamicField = ({
   info,
@@ -22,6 +22,7 @@ const DynamicField = ({
   deleteLoading,
   deleteField,
   isNew,
+  fieldsInfo,
 }: IProps) => {
   const [edit, setEdit] = useState(isNew || false);
   const [type, setType] = useState(info?.type);
@@ -107,6 +108,13 @@ const DynamicField = ({
         info={fieldInfo}
         loading={loading}
         type={type}
+        fields={fieldsInfo
+          ?.map((el, i) => ({
+            field: "field " + (i + 1),
+            options: el.options || [],
+          }))
+          ?.filter((field, i) => i + 1 !== number)}
+        setValue={setValue}
       />
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -186,4 +194,5 @@ interface IProps {
   deleteLoading?: boolean;
   deleteField: () => void;
   isNew?: boolean;
+  fieldsInfo?: FieldType[];
 }

@@ -13,19 +13,7 @@ import {
   User,
 } from "lucide-react";
 import * as z from "zod";
-
-export interface FieldType {
-  id?: string;
-  type: string;
-  question?: string;
-  icon?: LucideIcon;
-  compulsory?: boolean;
-  options?: any[];
-  fileName?: string;
-  fileDescription?: string;
-  fileLink?: string;
-  fileType?: string;
-}
+import { FieldType } from "./types";
 
 const formSchema = z.object({
   title: z

@@ -2,10 +2,14 @@ import { Card } from "flowbite-react";
 import React, { useState } from "react";
 import Header from "./header";
 import Footer from "./footer";
-import { FieldType, FormType } from "./constants";
+import { FormType } from "./constants";
 import DynamicField from "./dynamicField";
 import { useFormActions } from "./actions";
-import { IFieldSubmitHandlerArg, IFormSubmitHandlerArg } from "./types";
+import {
+  FieldType,
+  IFieldSubmitHandlerArg,
+  IFormSubmitHandlerArg,
+} from "./types";
 
 const EachForm = ({
   number,
@@ -103,6 +107,7 @@ const EachForm = ({
             setLoadingField(i + 1);
             field.id && fieldDeleteHandler(field.id);
           }}
+          fieldsInfo={fieldsInfo}
         />
       ))}
       {newlyAdded && (

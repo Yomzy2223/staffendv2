@@ -1,6 +1,7 @@
 import { IServiceForm } from "@/hooks/api/types";
+import { LucideIcon } from "lucide-react";
 import { Dispatch, SetStateAction } from "react";
-import { FieldType, FormType } from "./constants";
+import { FormType } from "./constants";
 
 export interface IFieldSubmitHandlerArg {
   number?: number;
@@ -18,4 +19,23 @@ export interface IFormSubmitHandlerArg {
   values: FormType;
   setEdit: Dispatch<SetStateAction<boolean>>;
   setNewlyAdded?: Dispatch<SetStateAction<FieldType | undefined>>;
+}
+
+export interface FieldType {
+  id?: string;
+  type: string;
+  question?: string;
+  icon?: LucideIcon;
+  compulsory?: boolean;
+  options?: string[];
+  fileName?: string;
+  fileLink?: string;
+  fileType?: string;
+  dependsOn?: IDependsOn;
+  allowOther?: boolean;
+}
+
+export interface IDependsOn {
+  field: string;
+  options: string[];
 }

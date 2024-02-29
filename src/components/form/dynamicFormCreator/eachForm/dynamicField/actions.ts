@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { UseFormSetValue } from "react-hook-form";
-import { FieldType } from "../constants";
-import { z } from "zod";
+import { boolean, z } from "zod";
+import { FieldType, IDependsOn } from "../types";
 
 export const useFormFieldActions = ({
   fieldInfo,
@@ -17,46 +17,65 @@ export const useFormFieldActions = ({
   const [options, setOptions] = useState<string[]>([]);
   const [compulsory, setCompulsory] = useState(false);
   const [fileName, setFileName] = useState("");
-  const [fileDescription, setFileDescription] = useState("");
   const [fileLink, setFileLink] = useState("");
   const [fileType, setFileType] = useState("");
+  const [allowOther, setAllowOther] = useState<boolean>();
+  const [dependsOn, setDependsOn] = useState<IDependsOn>({
+    field: "",
+    options: [],
+  });
 
   const mountInfo = (info: FieldType) => {
-    if (info.question) {
-      setValue("question", info.question);
-    }
-    if (info.type) {
-      setType(info.type);
-      setValue("type", info.type);
-    }
-    if (info.options) {
-      setOptions(info.options);
-      setValue("options", info.options);
-    }
-    if (info.compulsory) {
-      setCompulsory(info.compulsory);
-      setValue("compulsory", info.compulsory);
-    }
-    if (info.fileName) {
-      setFileName(info.fileName);
-      setValue("fileName", info.fileName);
-    }
-    if (info.fileDescription) {
-      setFileDescription(info.fileDescription);
-      setValue("fileDescription", info.fileDescription);
-    }
-    if (info.fileLink) {
-      setFileLink(info.fileLink);
-      setValue("fileLink", info.fileLink);
-    }
-    if (info.fileType) {
-      setFileType(info.fileType);
-      setValue("fileType", info.fileType);
-    }
+    // Set question
+    const question = info.question || "";
+    setValue("question", question);
+
+    // Set type
+    const type = info.type || "";
+    setType(type);
+    setValue("type", type);
+
+    // Set options
+    const options = info.options || [];
+    setOptions(options);
+    setValue("options", options);
+
+    // Set compulsory
+    const compulsory = info.compulsory || false;
+    setCompulsory(compulsory);
+    setValue("compulsory", compulsory);
+
+    // Set file name
+    const fileName = info.fileName || "";
+    setFileName(fileName);
+    setValue("fileName", fileName);
+
+    // Set file link
+    const fileLink = info.fileLink || "";
+    setFileLink(fileLink);
+    setValue("fileLink", fileLink);
+
+    // Set file type
+    const fileType = info.fileType || "";
+    setFileType(fileType);
+    setValue("fileType", fileType);
+
+    // Set depends on
+    const dependsOn = info.dependsOn || {
+      field: "",
+      options: [],
+    };
+    setDependsOn(dependsOn);
+    setValue("dependsOn", dependsOn);
+
+    // Set allow other
+    const allowOther = info.allowOther || false;
+    setAllowOther(allowOther);
+    setValue("allowOther", allowOther);
   };
 
   useEffect(() => {
-    mountInfo(fieldInfo);
+    if (fieldInfo) mountInfo(fieldInfo);
   }, [fieldInfo]);
 
   const handleOptionSelect = (selected?: FieldType) => {
@@ -73,18 +92,28 @@ export const useFormFieldActions = ({
     setEdit(false);
   };
 
+  const cancelDependsChanges = () => {
+    const depends = dependsOn || fieldInfo.dependsOn;
+    setDependsOn(depends);
+    setValue("dependsOn", depends);
+  };
+
   return {
     setType,
     options,
     setOptions,
     fileName,
-    fileDescription,
     fileLink,
     compulsory,
     setCompulsory,
+    dependsOn,
+    setDependsOn,
+    allowOther,
+    setAllowOther,
     fileType,
     mountInfo,
     cancelChanges,
+    cancelDependsChanges,
     handleOptionSelect,
   };
 };
@@ -105,6 +134,11 @@ export const getDynamicFieldSchema = ({
       .string({ required_error: "Select type" })
       .min(1, { message: "Select type" }),
     compulsory: z.boolean(),
+    dependsOn: z.object({
+      field: z.string(),
+      options: z.string().array(),
+    }),
+    allowOther: z.boolean(),
   };
 
   if (type === "checkbox" || type === "objectives") {

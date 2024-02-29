@@ -32,6 +32,7 @@ export interface FieldType {
   fileLink?: string;
   fileType?: string;
   dependsOn?: IDependsOn;
+  allowOther?: boolean;
 }
 
 export interface IDependsOn {

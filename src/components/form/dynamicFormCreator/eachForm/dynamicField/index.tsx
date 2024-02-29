@@ -59,39 +59,38 @@ const DynamicField = ({
 
   // Submit handler
   async function onSubmit(values: formType) {
-    console.log(values);
-    // const file = values?.documentTemp;
-    // if (file) {
-    //   const response = await uploadFileToCloudinary({
-    //     file,
-    //     getProgress: (progress) => {
-    //       setUploadProgress(progress);
-    //     },
-    //   });
-    //   const data = response?.data;
-    //   if (data) {
-    //     const newValues = {
-    //       ...values,
-    //       fileName: data.original_filename,
-    //       fileLink: data.secure_url,
-    //       fileType: data.secure_url.split(".").pop(),
-    //     };
-    //     submitHandler({ values: newValues, setEdit });
-    //   }
-    //   return;
-    // }
-    // if (values?.fileName && values?.fileLink && values?.fileType) {
-    //   const newValues = {
-    //     ...values,
-    //     fileName: values.fileName,
-    //     fileLink: values.fileLink,
-    //     fileType: values.fileType,
-    //   };
-    //   submitHandler({ values: newValues, setEdit });
-    //   return;
-    // }
+    const file = values?.documentTemp;
+    if (file) {
+      const response = await uploadFileToCloudinary({
+        file,
+        getProgress: (progress) => {
+          setUploadProgress(progress);
+        },
+      });
+      const data = response?.data;
+      if (data) {
+        const newValues = {
+          ...values,
+          fileName: data.original_filename,
+          fileLink: data.secure_url,
+          fileType: data.secure_url.split(".").pop(),
+        };
+        submitHandler({ values: newValues, setEdit });
+      }
+      return;
+    }
+    if (values?.fileName && values?.fileLink && values?.fileType) {
+      const newValues = {
+        ...values,
+        fileName: values.fileName,
+        fileLink: values.fileLink,
+        fileType: values.fileType,
+      };
+      submitHandler({ values: newValues, setEdit });
+      return;
+    }
 
-    // submitHandler({ values, setEdit });
+    submitHandler({ values, setEdit });
   }
 
   const errorMsg = errors["question"]?.message;

@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { UseFormSetValue } from "react-hook-form";
-import { z } from "zod";
+import { boolean, z } from "zod";
 import { FieldType, IDependsOn } from "../types";
 
 export const useFormFieldActions = ({
@@ -19,6 +19,7 @@ export const useFormFieldActions = ({
   const [fileName, setFileName] = useState("");
   const [fileLink, setFileLink] = useState("");
   const [fileType, setFileType] = useState("");
+  const [allowOther, setAllowOther] = useState<boolean>();
   const [dependsOn, setDependsOn] = useState<IDependsOn>({
     field: "",
     options: [],
@@ -66,6 +67,11 @@ export const useFormFieldActions = ({
     };
     setDependsOn(dependsOn);
     setValue("dependsOn", dependsOn);
+
+    // Set allow other
+    const allowOther = info.allowOther || false;
+    setAllowOther(allowOther);
+    setValue("allowOther", allowOther);
   };
 
   useEffect(() => {
@@ -102,6 +108,8 @@ export const useFormFieldActions = ({
     setCompulsory,
     dependsOn,
     setDependsOn,
+    allowOther,
+    setAllowOther,
     fileType,
     mountInfo,
     cancelChanges,
@@ -130,6 +138,7 @@ export const getDynamicFieldSchema = ({
       field: z.string(),
       options: z.string().array(),
     }),
+    allowOther: z.boolean(),
   };
 
   if (type === "checkbox" || type === "objectives") {

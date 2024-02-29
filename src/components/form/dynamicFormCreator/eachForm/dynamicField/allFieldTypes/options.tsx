@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import { cn } from "@/lib/utils";
 
 const Options = ({ info, setValue, edit, error, type }: IProps) => {
-  const { options, setOptions } = info;
+  const { options, setOptions, allowOther, setAllowOther } = info;
 
   const id = uuidv4();
 
@@ -54,8 +54,33 @@ const Options = ({ info, setValue, edit, error, type }: IProps) => {
     element?.focus();
   };
 
+  const handleOther = (e: ChangeEvent<HTMLInputElement>) => {
+    const checked = e.target.checked;
+    setAllowOther(checked);
+    setValue("allowOther", checked);
+  };
+
   return (
     <div>
+      <div className="flex items-center gap-1">
+        <label
+          htmlFor="allow-other"
+          className={cn("text-sm", {
+            "text-foreground-5": !edit,
+          })}
+        >
+          Allow other
+        </label>
+        <Checkbox
+          id="allow-other"
+          className="w-4 h-4"
+          color="primary"
+          checked={allowOther}
+          onChange={handleOther}
+          disabled={!edit}
+        />
+      </div>
+
       <div
         className={cn("space-y-3 mt-4 max-h-52 pb-1 overflow-hidden", {
           "overflow-y-auto": edit,

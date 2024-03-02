@@ -30,6 +30,7 @@ export interface FieldType {
   fileType?: string;
   dependsOn?: IDependsOn;
   allowOther?: boolean;
+  documentType?: string;
 }
 
 export interface IDependsOn {

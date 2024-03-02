@@ -23,7 +23,7 @@ const Header = ({
     info;
 
   const handleDependsOn = (selected: IDependsOn) => {
-    setValue("dependsOn", selected);
+    setValue("dependsOn", selected, { shouldValidate: true });
     setDependsOn(selected);
     setOpen(false);
   };
@@ -41,7 +41,7 @@ const Header = ({
           </span>
         )}
 
-        {edit && fields && (
+        {fields && fields?.length > 0 && edit && (
           <PopOverWrapper
             open={open}
             setOpen={setOpen}

@@ -21,6 +21,7 @@ export interface IServiceSubForm {
   fileDescription?: string;
   fileLink?: string;
   fileType?: string;
+  documentType?: string;
 }
 
 export interface IProduct {

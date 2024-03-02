@@ -1,4 +1,4 @@
-import { IServiceForm } from "@/hooks/api/types";
+import { AxiosResponse } from "axios";
 import { LucideIcon } from "lucide-react";
 import { Dispatch, SetStateAction } from "react";
 import { FormType } from "./constants";
@@ -6,19 +6,16 @@ import { FormType } from "./constants";
 export interface IFieldSubmitHandlerArg {
   number?: number;
   formId?: string;
-  formValues: IServiceForm;
   fieldId?: string;
   values: { [x: string]: any };
-  setEdit: Dispatch<SetStateAction<boolean>>;
+  onSuccess?: (data: AxiosResponse<any, any>) => void;
   setNewlyAdded?: Dispatch<SetStateAction<FieldType | undefined>>;
-  setNewlyAddedForm?: Dispatch<SetStateAction<FormType | undefined>>;
 }
 
 export interface IFormSubmitHandlerArg {
   formId?: string;
   values: FormType;
-  setEdit: Dispatch<SetStateAction<boolean>>;
-  setNewlyAdded?: Dispatch<SetStateAction<FieldType | undefined>>;
+  onSuccess?: (data: AxiosResponse<any, any>) => void;
 }
 
 export interface FieldType {

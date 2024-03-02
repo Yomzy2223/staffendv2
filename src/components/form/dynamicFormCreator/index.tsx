@@ -5,7 +5,11 @@ import Masonry from "react-masonry-css";
 import EachForm from "./eachForm";
 import { FormType } from "./eachForm/constants";
 import FieldTypePopUp from "./eachForm/fieldTypePopUp";
-import { FieldType, IFieldSubmitHandlerArg } from "./eachForm/types";
+import {
+  FieldType,
+  IFieldSubmitHandlerArg,
+  IFormSubmitHandlerArg,
+} from "./eachForm/types";
 
 const DynamicFormCreator = ({
   fieldTitle,
@@ -24,9 +28,7 @@ const DynamicFormCreator = ({
     if (!selected) return;
     console.log(selected);
     if (selected.type === "person") {
-      onFormSubmit({});
     }
-    // setNewlyAdded(selected);
   };
 
   const btnText = formInfo?.length > 0 ? "Add another form" : "Create a form";
@@ -70,18 +72,17 @@ const DynamicFormCreator = ({
             number={lastForm}
             fieldsInfo={[]}
             fieldTitle={fieldTitle}
-            fieldSubmitHandler={(arg) =>
-              onEachSubmit({ ...arg, setNewlyAddedForm: setNewlyAdded })
-            }
+            fieldSubmitHandler={onEachSubmit}
             formSubmitHandler={(arg) => {
               setLoadingForm(lastForm);
-              onFormSubmit({ ...arg, setNewlyAdded });
+              onFormSubmit(arg);
             }}
             fieldDeleteHandler={onEachDelete}
             formDeleteHandler={() => setNewlyAdded(undefined)}
             info={{ ...newlyAdded }}
             formState={formState}
             loadingForm={loadingForm}
+            setNewlyAddedForm={setNewlyAdded}
             isEdit
           />
         )}
@@ -107,7 +108,7 @@ interface IProps {
   fieldTitle?: string;
   onEachSubmit: (arg: IFieldSubmitHandlerArg) => void;
   onEachDelete: (id: string) => void;
-  onFormSubmit: (values: any) => void;
+  onFormSubmit: (values: IFormSubmitHandlerArg) => void;
   onFormDelete: (id: string) => void;
   formInfo: {
     id: string;

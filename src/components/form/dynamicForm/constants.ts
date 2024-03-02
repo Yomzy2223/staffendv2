@@ -23,6 +23,7 @@ export interface FormInput {
   maxTag?: number;
   minTagChars?: number;
   fieldName?: string;
+  optionsLoading?: boolean;
 }
 
 export interface DynamicFormProps {

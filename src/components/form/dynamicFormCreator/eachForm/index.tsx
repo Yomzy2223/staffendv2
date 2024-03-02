@@ -1,5 +1,5 @@
 import { Card } from "flowbite-react";
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import Header from "./header";
 import Footer from "./footer";
 import { FormType } from "./constants";
@@ -10,6 +10,7 @@ import {
   IFieldSubmitHandlerArg,
   IFormSubmitHandlerArg,
 } from "./types";
+import { AxiosResponse } from "axios";
 
 const EachForm = ({
   number,
@@ -23,6 +24,7 @@ const EachForm = ({
   isEdit,
   formState,
   loadingForm,
+  setNewlyAddedForm,
 }: IProps) => {
   const [edit, setEdit] = useState(isEdit || false);
   const [newlyAdded, setNewlyAdded] = useState<FieldType | undefined>();
@@ -52,16 +54,23 @@ const EachForm = ({
   };
 
   // Runs when form is submitted
-  const handleFormSubmit = () => {
+  const handleFormSubmit = ({
+    onSuccess,
+  }: {
+    onSuccess?: (data: AxiosResponse<any, any>) => void;
+  }) => {
     setIsSubmitted(true);
     if (validateFields()) {
       if (info.id) {
         formSubmitHandler({
           formId: info.id || "",
           values: formValues,
-          setEdit,
+          onSuccess: (data) => {
+            setNewlyAddedForm && setNewlyAddedForm(undefined);
+            onSuccess && onSuccess(data);
+          },
         });
-      } else formSubmitHandler({ values: formValues, setEdit });
+      } else formSubmitHandler({ values: formValues });
       return true;
     }
   };
@@ -69,9 +78,32 @@ const EachForm = ({
   // Runs when each field is submitted
   const handleFieldSubmit = (arg: IFieldSubmitHandlerArg) => {
     setLoadingField(arg.number);
+    const formId = info.id;
+
+    // Triggered after a field is successfully created
+    const onFieldSuccess = (data: AxiosResponse<any, any>) => {
+      arg.setNewlyAdded && arg.setNewlyAdded(undefined);
+      arg.onSuccess && arg.onSuccess(data);
+    };
+
+    // Triggered after a form is successfully created
+    const onFormSuccess = (data: AxiosResponse<any, any>) => {
+      const formId = data.data.data.id;
+      fieldSubmitHandler({
+        ...arg,
+        formId,
+        onSuccess: onFieldSuccess,
+      });
+    };
+
+    if (!formId) {
+      handleFormSubmit({ onSuccess: onFormSuccess }); // Create form, then create field with the formId
+      return;
+    }
     fieldSubmitHandler({
       ...arg,
       formId: info.id || "",
+      onSuccess: onFieldSuccess,
     });
   };
 
@@ -101,7 +133,7 @@ const EachForm = ({
               ...arg,
               number: i + 1,
               fieldId: field.id,
-              formValues,
+              onSuccess: () => arg.setEdit(false),
             })
           }
           isEdit={edit}
@@ -125,8 +157,8 @@ const EachForm = ({
             handleFieldSubmit({
               ...arg,
               number: lastField,
-              formValues,
               setNewlyAdded,
+              onSuccess: () => arg.setEdit(false),
             })
           }
           isEdit={edit}
@@ -163,16 +195,10 @@ interface IProps {
   fieldTitle?: string;
   fieldSubmitHandler: ({
     formId,
-    formValues,
     fieldId,
     values,
-    setEdit,
   }: IFieldSubmitHandlerArg) => void;
-  formSubmitHandler: ({
-    formId,
-    values,
-    setEdit,
-  }: IFormSubmitHandlerArg) => void;
+  formSubmitHandler: ({ formId, values }: IFormSubmitHandlerArg) => void;
   fieldDeleteHandler: (id: string) => void;
   formDeleteHandler: () => void;
   isEdit?: boolean;
@@ -185,4 +211,5 @@ interface IProps {
     formDeleteLoading: boolean;
   };
   loadingForm?: number;
+  setNewlyAddedForm?: Dispatch<SetStateAction<FormType | undefined>>;
 }

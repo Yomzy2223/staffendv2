@@ -77,77 +77,48 @@ export const useServiceFormActions = () => {
   const submitServiceForm = async ({
     formId,
     values,
-    setEdit,
-    setNewlyAdded,
+    onSuccess,
   }: IFormSubmitHandlerArg) => {
     formId
       ? updateServiceFormMutation.mutate(
           { id: formId, formInfo: values },
-          { onSuccess: () => setEdit(false) }
+          { onSuccess: (data) => onSuccess && onSuccess(data) }
         )
       : createServiceFormMutation.mutate(
           {
             serviceId: (serviceId as string) || "",
             formInfo: values,
           },
-          {
-            onSuccess: () => {
-              setEdit(false);
-              setNewlyAdded && setNewlyAdded(undefined);
-            },
-          }
+          { onSuccess: (data) => onSuccess && onSuccess(data) }
         );
   };
 
   const submitServiceFormField = ({
     formId,
-    formValues,
     fieldId,
     values,
-    setEdit,
-    setNewlyAdded,
-    setNewlyAddedForm,
+    onSuccess,
   }: IFieldSubmitHandlerArg) => {
-    const submitField = (formId: string) => {
-      fieldId
-        ? updateServiceSubFormMutation.mutate(
-            {
-              id: fieldId,
-              formInfo: values as IServiceSubForm,
-            },
-            { onSuccess: () => setEdit(false) }
-          )
-        : createServiceSubFormMutation.mutate(
-            {
-              formId,
-              formInfo: values as IServiceSubForm,
-            },
-            {
-              onSuccess: () => {
-                setEdit(false);
-                setNewlyAdded && setNewlyAdded(undefined);
-                setNewlyAddedForm && setNewlyAddedForm(undefined);
-              },
-            }
-          );
-    };
-
-    if (formId) {
-      submitField(formId);
-    } else {
-      createServiceFormMutation.mutate(
-        {
-          serviceId: (serviceId as string) || "",
-          formInfo: formValues,
-        },
-        {
-          onSuccess: (data) => {
-            const formId = data.data.data.id;
-            submitField(formId);
+    fieldId
+      ? updateServiceSubFormMutation.mutate(
+          {
+            id: fieldId,
+            formInfo: values as IServiceSubForm,
           },
-        }
-      );
-    }
+          {
+            onSuccess: (data) => onSuccess && onSuccess(data),
+          }
+        )
+      : formId &&
+        createServiceSubFormMutation.mutate(
+          {
+            formId,
+            formInfo: values as IServiceSubForm,
+          },
+          {
+            onSuccess: (data) => onSuccess && onSuccess(data),
+          }
+        );
   };
 
   const handleFormDelete = (id: string) => {

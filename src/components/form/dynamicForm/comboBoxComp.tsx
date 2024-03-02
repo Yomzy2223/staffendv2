@@ -15,6 +15,7 @@ import { Check, ChevronDown } from "lucide-react";
 import { Button } from "flowbite-react";
 import { cn } from "@/lib/utils";
 import { UseFormSetValue } from "react-hook-form";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const ComboBoxComp = ({
   name,
@@ -25,6 +26,7 @@ const ComboBoxComp = ({
   leftContent,
   defaultValue,
   disabled,
+  optionsLoading,
 }: IProps) => {
   const [openSelect, setOpenSelect] = useState(false);
   const [selectValue, setSelectValue] = useState(defaultValue);
@@ -62,8 +64,19 @@ const ComboBoxComp = ({
           {options.length > 5 && (
             <CommandInput placeholder={`Search ${fieldName}...`} />
           )}
-          <CommandEmpty>{`No ${fieldName} found`}</CommandEmpty>
+          {!optionsLoading && options.length === 0 && (
+            <p className="text-sm text-foreground-5 p-2 pb-0">{`No ${
+              fieldName || name
+            } found`}</p>
+          )}
           <CommandGroup>
+            {optionsLoading && (
+              <div className="space-y-1">
+                <Skeleton className="w-40 h-6" />
+                <Skeleton className="w-40 h-6" />
+                <Skeleton className="w-40 h-6" />
+              </div>
+            )}
             {options.map((option) => (
               <CommandItem
                 key={option}
@@ -106,4 +119,5 @@ interface IProps {
   leftContent?: string | ReactNode;
   defaultValue?: string;
   disabled?: boolean;
+  optionsLoading?: boolean;
 }

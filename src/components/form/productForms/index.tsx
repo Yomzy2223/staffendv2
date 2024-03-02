@@ -6,12 +6,17 @@ import DialogWrapper from "@/components/wrappers/dialogWrapper";
 import DynamicFormCreator from "../dynamicFormCreator";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import { Oval } from "react-loading-icons";
-import { useProductFormActions, useProductInfoActions } from "./actions";
-import { section1FormInfo, productInfoSchema } from "./constants";
+import {
+  useProductFormActions,
+  useProductInfoActions,
+  useSectionInfo,
+} from "./actions";
+import { productInfoSchema } from "./constants";
 
 const ProductForm = ({ open, setOpen }: IProps) => {
   const [section, setSection] = useState(1);
   const { isDesktop, deleteQueryString } = useGlobalFucntions();
+  const { section1FormInfo } = useSectionInfo();
 
   const { title1, productInfo, submitProductInfo, productLoading } =
     useProductInfoActions({ setSection, section });

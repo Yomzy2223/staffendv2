@@ -1,6 +1,9 @@
-import { IProductSubForm } from "@/hooks/api/types";
+import { getCountries } from "@/hooks/api/countryApi";
+import { ICountry, IProductSubForm } from "@/hooks/api/types";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
+import { useCountryApi } from "@/hooks/useCountryApi";
 import useProductApi from "@/hooks/useProductApi";
+import { countries, TCountryCode } from "countries-list";
 import { useParams, useSearchParams } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 import {
@@ -83,80 +86,53 @@ export const useProductFormActions = () => {
   } = useProductApi();
   const productFormInfo = useGetProductFormsQuery(productId);
 
+  // SUBMITS A FORM
   const submitProductForm = async ({
     formId,
     values,
-    setEdit,
-    setNewlyAdded,
+    onSuccess,
   }: IFormSubmitHandlerArg) => {
     formId
       ? updateProductFormMutation.mutate(
           { id: formId, formInfo: values },
-          { onSuccess: () => setEdit(false) }
+          { onSuccess: (data) => onSuccess && onSuccess(data) }
         )
       : createProductFormMutation.mutate(
           {
             productId,
             formInfo: values,
           },
-          {
-            onSuccess: () => {
-              setEdit(false);
-              setNewlyAdded && setNewlyAdded(undefined);
-            },
-          }
+          { onSuccess: (data) => onSuccess && onSuccess(data) }
         );
   };
 
+  // SUBMITS A FIELD
   const submitProductFormField = ({
     formId,
-    formValues,
     fieldId,
     values,
-    setEdit,
-    setNewlyAdded,
-    setNewlyAddedForm,
+    onSuccess,
   }: IFieldSubmitHandlerArg) => {
-    const submitField = (formId: string) => {
-      fieldId
-        ? updateProductSubFormMutation.mutate(
-            {
-              id: fieldId,
-              formInfo: values as IProductSubForm,
-            },
-            { onSuccess: () => setEdit(false) }
-          )
-        : createProductSubFormMutation.mutate(
-            {
-              formId: formId,
-              formInfo: values as IProductSubForm,
-            },
-            {
-              onSuccess: () => {
-                setEdit(false);
-                setNewlyAdded && setNewlyAdded(undefined);
-                setNewlyAddedForm && setNewlyAddedForm(undefined);
-              },
-            }
-          );
-    };
-
-    if (formId) {
-      submitField(formId);
-    } else {
-      createProductFormMutation.mutate(
-        {
-          productId,
-          formInfo: formValues,
-        },
-        {
-          onSuccess: (data) => {
-            const formId = data.data.data.id;
-            submitField(formId);
+    fieldId
+      ? updateProductSubFormMutation.mutate(
+          {
+            id: fieldId,
+            formInfo: values as IProductSubForm,
           },
-        }
-      );
-    }
+          {
+            onSuccess: (data) => onSuccess && onSuccess(data),
+          }
+        )
+      : formId &&
+        createProductSubFormMutation.mutate(
+          {
+            formId,
+            formInfo: values as IProductSubForm,
+          },
+          {
+            onSuccess: (data) => onSuccess && onSuccess(data),
+          }
+        );
   };
 
   const handleFormDelete = (id: string) => {
@@ -192,4 +168,89 @@ export const useProductFormActions = () => {
     handleFieldDelete,
     handleFormDelete,
   };
+};
+
+// Section info action
+export const useSectionInfo = () => {
+  const { getAllCountriesQuery } = useCountryApi();
+  const countryData = getAllCountriesQuery.data?.data?.data;
+
+  const allCountries = Object.keys(countries).map(
+    (el: string) => countries[el as TCountryCode].name
+  );
+  const countryNames = countryData?.map((el: ICountry) => el.name) || [];
+  const originalCountry = countryNames.map((el: string) =>
+    allCountries?.find((each) => each.toLowerCase() === el)
+  );
+
+  const section1FormInfo = [
+    {
+      name: "name",
+      label: "Enter product name",
+      type: "text",
+      textInputProp: {
+        placeholder: "Enter product name",
+      },
+    },
+    {
+      name: "description",
+      label: "Enter product description",
+      type: "text",
+      textInputProp: {
+        placeholder: "Enter product description",
+      },
+    },
+    {
+      name: "country",
+      label: "Select operational country",
+      selectOptions: originalCountry,
+      optionsLoading: getAllCountriesQuery.isLoading,
+      type: "select",
+      selectProp: {
+        placeholder: "Select operational country",
+      },
+    },
+    {
+      name: "currency",
+      label: "Select currency",
+      selectOptions: ["NGN", "USD"],
+      type: "select",
+      selectProp: {
+        placeholder: "Select currency",
+      },
+    },
+    {
+      name: "amount",
+      label: "Enter product amount",
+      type: "number",
+      textInputProp: {
+        placeholder: "Enter product amount",
+      },
+    },
+    {
+      name: "timeline",
+      label: "Enter processing timeline",
+      type: "text",
+      textInputProp: {
+        placeholder: "Enter processing timeline",
+      },
+    },
+    {
+      name: "feature",
+      label: "Enter product features",
+      type: "tagInput",
+      minTagChars: 3,
+      errors: {
+        empty: "Enter feature",
+        exists: "Feature already exists",
+        minTagChars: "Feature must be at least three characters",
+        length: "Features cannot be more than 4",
+      },
+      textInputProp: {
+        placeholder: "Enter product features",
+      },
+    },
+  ];
+
+  return { section1FormInfo };
 };

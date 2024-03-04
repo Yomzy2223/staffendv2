@@ -35,6 +35,7 @@ export const useFormFieldActions = ({
   const [dependsOn, setDependsOn] = useState<IDependsOn>({
     field: "",
     options: [],
+    question: "",
   });
 
   const mountInfo = (info: FieldType) => {
@@ -76,6 +77,7 @@ export const useFormFieldActions = ({
     const dependsOn = info.dependsOn || {
       field: "",
       options: [],
+      question: "",
     };
     setDependsOn(dependsOn);
     setValue("dependsOn", dependsOn, { shouldValidate: true });

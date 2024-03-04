@@ -13,7 +13,7 @@ import { fieldReturnType } from "./actions";
 const DependsOn = ({ onApply, fields, info }: IProps) => {
   const [selected, setSelected] = useState<IDependsOn>(info.dependsOn);
 
-  const onSelect = (field: string, value?: string) => {
+  const onSelect = (field: string, question: string, value?: string) => {
     let isPresent = !!selected.options.find((el) => el === value);
     let options = [...selected.options];
     if (isPresent) {
@@ -26,21 +26,21 @@ const DependsOn = ({ onApply, fields, info }: IProps) => {
         : []; //select
     }
     options = [...new Set(options)]; //Remove duplicates
-    setSelected({ field, options });
+    setSelected({ field, options, question });
   };
 
   //   Select and deselect all
   const selectAll = (el: IDependsOn) => {
-    const { field, options } = el;
+    const { field, question, options } = el;
     if (options) {
       const allSelected = options.length === selected.options.length;
-      setSelected({ field, options: allSelected ? [] : options });
+      setSelected({ field, question, options: allSelected ? [] : options });
     }
   };
 
   return (
     <div className="flex flex-col p-3 pb-0">
-      <Command className="flex flex-col gap-1.5">
+      <Command className="flex flex-col gap-1.5 overflow-hidden">
         {fields.map((each) => (
           <div
             key={each.field}
@@ -48,31 +48,36 @@ const DependsOn = ({ onApply, fields, info }: IProps) => {
               " bg-foreground-1": selected.field === each.field,
             })}
           >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Radio
-                  name="name"
-                  id={each.field}
-                  className="w-3 h-3"
-                  checked={each.field === selected.field}
-                  onChange={() => onSelect(each.field)}
-                />
-                <label htmlFor={each.field}>{each.field}</label>
+            <div className="flex items-start gap-2 max-w-full">
+              <Radio
+                name="name"
+                id={each.field}
+                className="w-3 h-3 shrink-0 mt-1"
+                checked={each.field === selected.field}
+                onChange={() => onSelect(each.field, each.question)}
+              />
+              <div className="flex flex-col max-w-[calc(100%-20px)]">
+                <div className="flex items-center gap-2 justify-between">
+                  <label htmlFor={each.field}>{each.field}</label>
+                  {each.options &&
+                    each.options.length > 1 &&
+                    selected.field === each.field && (
+                      <Button
+                        size="fit"
+                        color="transparent"
+                        className="text-primary text-xs"
+                        onClick={() => selectAll(each)}
+                      >
+                        {each.options.length === selected.options.length
+                          ? "Deselect all"
+                          : "Select all"}
+                      </Button>
+                    )}
+                </div>
+                <p className="text-xs text-nowrap overflow-hidden text-ellipsis ">
+                  {each.question}
+                </p>
               </div>
-              {each.options &&
-                each.options.length > 1 &&
-                selected.field === each.field && (
-                  <Button
-                    size="fit"
-                    color="transparent"
-                    className="text-primary text-xs"
-                    onClick={() => selectAll(each)}
-                  >
-                    {each.options.length === selected.options.length
-                      ? "Deselect all"
-                      : "Select all"}
-                  </Button>
-                )}
             </div>
 
             {each.options && selected.field === each.field && (
@@ -92,7 +97,7 @@ const DependsOn = ({ onApply, fields, info }: IProps) => {
                         checked={
                           !!selected.options.find((option) => option === el)
                         }
-                        onChange={() => onSelect(each.field, el)}
+                        onChange={() => onSelect(each.field, each.question, el)}
                         color="primary"
                         className="w-4 h-4"
                       />

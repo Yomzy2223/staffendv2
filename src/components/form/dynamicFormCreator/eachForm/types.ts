@@ -36,4 +36,5 @@ export interface FieldType {
 export interface IDependsOn {
   field: string;
   options: string[];
+  question: string;
 }

@@ -115,6 +115,7 @@ const DynamicField = ({
           ?.map((el, i) => ({
             field: "field " + (i + 1),
             options: el.options || [],
+            question: el.question || "",
           }))
           ?.filter((field, i) => i + 1 !== number)}
         setValue={setValue}

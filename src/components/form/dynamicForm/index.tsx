@@ -5,7 +5,6 @@ import {
   FileInput,
   Label,
   Radio,
-  Select,
   Textarea,
   TextInput,
   ToggleSwitch,
@@ -92,9 +91,12 @@ const DynamicForm = ({
                   sizing={el.size || "md"}
                   helperText={<>{errorMsg}</>}
                   color={errors[el.name] && "failure"}
-                  className={errorMsg ? "focus:[&_input]:outline-none" : ""}
                   disabled={disableAll}
                   {...el.textInputProp}
+                  className={cn(
+                    { "focus:[&_input]:outline-none": errorMsg },
+                    el.textInputProp?.className
+                  )}
                   {...register(el.name)}
                 />
               )}
@@ -124,6 +126,7 @@ const DynamicForm = ({
                   leftContent={el.leftContent}
                   defaultValue={defaultValues[el.name]}
                   disabled={disableAll}
+                  optionsLoading={el.optionsLoading}
                 />
               )}
 

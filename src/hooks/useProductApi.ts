@@ -1,4 +1,5 @@
 import {
+  createMultipleProductSubForms,
   createProduct,
   createProductForm,
   createProductSubForm,
@@ -85,7 +86,7 @@ const useProductApi = () => {
     },
     onSuccess(data, variables, context) {
       handleSuccess({ data });
-      queryClient.invalidateQueries({ queryKey: ["productForm"] });
+      queryClient.invalidateQueries({ queryKey: ["Product Form"] });
     },
     retry: 3,
   });
@@ -97,7 +98,7 @@ const useProductApi = () => {
     },
     onSuccess(data, variables, context) {
       handleSuccess({ data });
-      queryClient.invalidateQueries({ queryKey: ["productForm"] });
+      queryClient.invalidateQueries({ queryKey: ["Product Form"] });
     },
     retry: 3,
   });
@@ -109,21 +110,21 @@ const useProductApi = () => {
     },
     onSuccess(data, variables, context) {
       handleSuccess({ data });
-      queryClient.invalidateQueries({ queryKey: ["productForm"] });
+      queryClient.invalidateQueries({ queryKey: ["Product Form"] });
     },
     retry: 3,
   });
 
   const useGetProductFormsQuery = (productId: string) =>
     useQuery({
-      queryKey: ["productForm", productId],
+      queryKey: ["Product Form", productId],
       queryFn: ({ queryKey }) => getProductForm(queryKey[1]),
       enabled: productId ? true : false,
     });
 
   const useGetServiceProductFormsQuery = (serviceId: string) =>
     useQuery({
-      queryKey: ["productForm", serviceId],
+      queryKey: ["Product Form", serviceId],
       queryFn: ({ queryKey }) => getServiceProductForms(queryKey[1]),
       enabled: serviceId ? true : false,
     });
@@ -140,7 +141,19 @@ const useProductApi = () => {
     },
     onSuccess(data, variables, context) {
       handleSuccess({ data });
-      queryClient.invalidateQueries({ queryKey: ["productForm"] });
+      queryClient.invalidateQueries({ queryKey: ["Product Form"] });
+    },
+    retry: 3,
+  });
+
+  const createMultipleProductSubFormsMutation = useMutation({
+    mutationFn: createMultipleProductSubForms,
+    onError(error, variables, context) {
+      handleError({ title: "Failed", error });
+    },
+    onSuccess(data, variables, context) {
+      handleSuccess({ data });
+      queryClient.invalidateQueries({ queryKey: ["Product Form"] });
     },
     retry: 3,
   });
@@ -152,7 +165,7 @@ const useProductApi = () => {
     },
     onSuccess(data, variables, context) {
       handleSuccess({ data });
-      queryClient.invalidateQueries({ queryKey: ["productForm"] });
+      queryClient.invalidateQueries({ queryKey: ["Product Form"] });
     },
     retry: 3,
   });
@@ -164,21 +177,21 @@ const useProductApi = () => {
     },
     onSuccess(data, variables, context) {
       handleSuccess({ data });
-      queryClient.invalidateQueries({ queryKey: ["productForm"] });
+      queryClient.invalidateQueries({ queryKey: ["Product Form"] });
     },
     retry: 3,
   });
 
   const useGetProductSubFormQuery = (id: string) =>
     useQuery({
-      queryKey: ["productForm", id],
+      queryKey: ["Product Form", id],
       queryFn: ({ queryKey }) => getProductSubForm(queryKey[1]),
       enabled: id ? true : false,
     });
 
   const useGetProductFormSubFormsQuery = (formId: string) =>
     useQuery({
-      queryKey: ["productForm", formId],
+      queryKey: ["Product Form", formId],
       queryFn: ({ queryKey }) => getProductSubForm(queryKey[1]),
       enabled: formId ? true : false,
     });
@@ -199,6 +212,7 @@ const useProductApi = () => {
     getAllServicesProductsFormQuery,
 
     createProductSubFormMutation,
+    createMultipleProductSubFormsMutation,
     updateProductSubFormMutation,
     deleteProductSubFormMutation,
     useGetProductSubFormQuery,

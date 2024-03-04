@@ -99,6 +99,19 @@ export const createProductSubForm = async ({
   return await client.post(`/products/subform/${formId}`, formInfo);
 };
 
+export const createMultipleProductSubForms = async ({
+  formId,
+  formInfo,
+}: {
+  formId: string;
+  formInfo: IProductSubForm[];
+}) => {
+  const client = await Client();
+  return await client.post(`/products/subforms/${formId}`, {
+    subform: formInfo,
+  });
+};
+
 export const updateProductSubForm = async ({
   id,
   formInfo,

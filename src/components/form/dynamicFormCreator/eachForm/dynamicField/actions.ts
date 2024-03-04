@@ -31,58 +31,66 @@ export const useFormFieldActions = ({
   const [fileLink, setFileLink] = useState("");
   const [fileType, setFileType] = useState("");
   const [allowOther, setAllowOther] = useState<boolean>(false);
+  const [documentType, setDocumentType] = useState<string>();
   const [dependsOn, setDependsOn] = useState<IDependsOn>({
     field: "",
     options: [],
+    question: "",
   });
 
   const mountInfo = (info: FieldType) => {
     // Set question
     const question = info.question || "";
-    setValue("question", question);
+    setValue("question", question, { shouldValidate: true });
 
     // Set type
     const type = info.type || "";
     setType(type);
-    setValue("type", type);
+    setValue("type", type, { shouldValidate: true });
 
     // Set options
     const options = info.options || [];
     setOptions(options);
-    setValue("options", options);
+    setValue("options", options, { shouldValidate: true });
 
     // Set compulsory
     const compulsory = info.compulsory || false;
     setCompulsory(compulsory);
-    setValue("compulsory", compulsory);
+    setValue("compulsory", compulsory, { shouldValidate: true });
 
     // Set file name
     const fileName = info.fileName || "";
     setFileName(fileName);
-    setValue("fileName", fileName);
+    setValue("fileName", fileName, { shouldValidate: true });
 
     // Set file link
     const fileLink = info.fileLink || "";
     setFileLink(fileLink);
-    setValue("fileLink", fileLink);
+    setValue("fileLink", fileLink, { shouldValidate: true });
 
     // Set file type
     const fileType = info.fileType || "";
     setFileType(fileType);
-    setValue("fileType", fileType);
+    setValue("fileType", fileType, { shouldValidate: true });
 
     // Set depends on
     const dependsOn = info.dependsOn || {
       field: "",
       options: [],
+      question: "",
     };
     setDependsOn(dependsOn);
-    setValue("dependsOn", dependsOn);
+    setValue("dependsOn", dependsOn, { shouldValidate: true });
 
     // Set allow other
     const allowOther = info.allowOther || false;
     setAllowOther(allowOther);
-    setValue("allowOther", allowOther);
+    setValue("allowOther", allowOther, { shouldValidate: true });
+
+    // Set document type
+    const documentType = info.documentType || "";
+    setDocumentType(documentType);
+    setValue("documentType", documentType, { shouldValidate: true });
   };
 
   useEffect(() => {
@@ -134,6 +142,7 @@ export const useFormFieldActions = ({
     setDependsOn,
     allowOther,
     setAllowOther,
+    documentType,
     fileType,
     mountInfo,
     cancelChanges,
@@ -178,6 +187,15 @@ export const getDynamicFieldSchema = ({
           },
           { message: "Option cannot be empty" }
         ),
+    };
+  }
+
+  if (type === "document template" || type === "document upload") {
+    schema = {
+      ...schema,
+      documentType: z
+        .string({ required_error: "Select document type" })
+        .min(3, { message: "Select document type" }),
     };
   }
 

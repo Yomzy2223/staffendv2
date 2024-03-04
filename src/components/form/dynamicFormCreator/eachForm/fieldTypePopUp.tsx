@@ -11,13 +11,6 @@ import { fieldOptions, formOptions, FormType } from "./constants";
 import PopOverWrapper from "@/components/wrappers/popOverWrapper";
 import { FieldType } from "./types";
 
-interface IProps {
-  children: ReactNode;
-  isForm?: boolean;
-  handleSelect: (selected?: FieldType | FormType) => void;
-  disabled?: boolean;
-}
-
 const FieldTypePopUp = ({
   children,
   handleSelect,
@@ -88,4 +81,11 @@ function QuestionList({
       </CommandList>
     </Command>
   );
+}
+
+interface IProps {
+  children: ReactNode;
+  isForm?: boolean;
+  handleSelect: (selected?: FieldType | FormType) => void;
+  disabled?: boolean;
 }

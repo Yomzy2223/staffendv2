@@ -1,5 +1,6 @@
 import EditDelete from "@/components/features/editDelete";
 import { cn } from "@/lib/utils";
+import { AxiosResponse } from "axios";
 import { Button } from "flowbite-react";
 import { PencilLine, PlusCircle, Trash2 } from "lucide-react";
 import React, { Dispatch, MouseEventHandler, SetStateAction } from "react";
@@ -61,7 +62,7 @@ const Footer = ({
             color="ghost"
             size="fit"
             className="underline text-primary"
-            onClick={onDoneClick}
+            onClick={() => onDoneClick({ onSuccess: () => setEdit(false) })}
             disabled={disabled}
           >
             Done
@@ -83,7 +84,11 @@ export default Footer;
 interface IProps {
   edit: boolean;
   setEdit: (value: boolean) => void;
-  onDoneClick?: MouseEventHandler<HTMLButtonElement>;
+  onDoneClick: ({
+    onSuccess,
+  }: {
+    onSuccess?: (data: AxiosResponse<any, any>) => void;
+  }) => void;
   setNewlyAdded: Dispatch<SetStateAction<FieldType | undefined>>;
   btnText?: string;
   disabled: boolean;

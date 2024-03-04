@@ -11,6 +11,7 @@ import DocumentTemplate from "./allFieldTypes/documentTemplate";
 import { getDynamicFieldSchema, useFormFieldActions } from "./actions";
 import { uploadFileToCloudinary } from "@/hooks/globalFunctions";
 import { FieldType } from "../types";
+import ComboBoxComp from "@/components/form/dynamicForm/comboBoxComp";
 
 const DynamicField = ({
   info,
@@ -114,6 +115,7 @@ const DynamicField = ({
           ?.map((el, i) => ({
             field: "field " + (i + 1),
             options: el.options || [],
+            question: el.question || "",
           }))
           ?.filter((field, i) => i + 1 !== number)}
         setValue={setValue}
@@ -129,7 +131,7 @@ const DynamicField = ({
             sizing="md"
             placeholder="Enter field title (field name, question, etc.)"
             helperText={<>{errorMsg}</>}
-            color={errors["title"] && "failure"}
+            color={errorMsg && "failure"}
             className={errorMsg ? "focus:[&_input]:outline-none" : ""}
             disabled={!edit}
             {...register("question")}
@@ -149,17 +151,33 @@ const DynamicField = ({
               type={type}
             />
           )}
-        {type === "document template" && (
-          <DocumentTemplate
-            info={fieldInfo}
-            setValue={setValue}
-            error={errors["documentTemp"]}
-            edit={edit}
-            uploadProgress={uploadProgress}
-            loading={loading}
-            setHasSelectedFile={setHasSelectedFile}
-          />
-        )}
+        <div>
+          {type === "document template" && (
+            <DocumentTemplate
+              info={fieldInfo}
+              setValue={setValue}
+              error={errors["documentTemp"]}
+              edit={edit}
+              uploadProgress={uploadProgress}
+              loading={loading}
+              setHasSelectedFile={setHasSelectedFile}
+            />
+          )}
+          {(type === "document template" || type === "document upload") && (
+            <div className="w-4/5">
+              <ComboBoxComp
+                name="documentType"
+                fieldName="document type"
+                options={["NIN", "Proof of address"]}
+                setValue={setValue}
+                errorMsg={errors["documentType"]?.message as string}
+                defaultValue={fieldInfo.documentType}
+                disabled={!edit}
+                optionsLoading={false}
+              />
+            </div>
+          )}
+        </div>
 
         {isEdit && (
           <Footer

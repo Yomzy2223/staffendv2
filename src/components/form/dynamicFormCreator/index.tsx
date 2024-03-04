@@ -1,3 +1,4 @@
+import { IProductSubForm } from "@/hooks/api/types";
 import { Button } from "flowbite-react";
 import { PlusCircle } from "lucide-react";
 import React, { useState } from "react";
@@ -5,10 +6,16 @@ import Masonry from "react-masonry-css";
 import EachForm from "./eachForm";
 import { FormType } from "./eachForm/constants";
 import FieldTypePopUp from "./eachForm/fieldTypePopUp";
-import { FieldType, IFieldSubmitHandlerArg } from "./eachForm/types";
+import {
+  FieldType,
+  IFieldSubmitHandlerArg,
+  IFormSubmitHandlerArg,
+} from "./eachForm/types";
+import { v4 as uuidv4 } from "uuid";
 
 const DynamicFormCreator = ({
   fieldTitle,
+  submitMultipleFields,
   onEachSubmit,
   onEachDelete,
   onFormSubmit,
@@ -22,11 +29,28 @@ const DynamicFormCreator = ({
 
   const handleSelect = (selected?: FormType | any) => {
     if (!selected) return;
-    console.log(selected);
     if (selected.type === "person") {
-      onFormSubmit({});
+      const { title, description, compulsory, type, subForm } = selected;
+      if (!subForm) return;
+      onFormSubmit({
+        values: {
+          title: title + " - " + uuidv4(),
+          description,
+          compulsory,
+          type,
+        },
+        onSuccess: (data) => {
+          console.log(data);
+          const formId = data.data.data.id;
+          submitMultipleFields({
+            formId,
+            values: subForm,
+          });
+        },
+      });
+      return;
     }
-    // setNewlyAdded(selected);
+    setNewlyAdded(selected);
   };
 
   const btnText = formInfo?.length > 0 ? "Add another form" : "Create a form";
@@ -70,18 +94,17 @@ const DynamicFormCreator = ({
             number={lastForm}
             fieldsInfo={[]}
             fieldTitle={fieldTitle}
-            fieldSubmitHandler={(arg) =>
-              onEachSubmit({ ...arg, setNewlyAddedForm: setNewlyAdded })
-            }
+            fieldSubmitHandler={onEachSubmit}
             formSubmitHandler={(arg) => {
               setLoadingForm(lastForm);
-              onFormSubmit({ ...arg, setNewlyAdded });
+              onFormSubmit(arg);
             }}
             fieldDeleteHandler={onEachDelete}
             formDeleteHandler={() => setNewlyAdded(undefined)}
             info={{ ...newlyAdded }}
             formState={formState}
             loadingForm={loadingForm}
+            setNewlyAddedForm={setNewlyAdded}
             isEdit
           />
         )}
@@ -105,9 +128,16 @@ export default DynamicFormCreator;
 
 interface IProps {
   fieldTitle?: string;
+  submitMultipleFields: ({
+    formId,
+    values,
+  }: {
+    formId: string;
+    values: FieldType[];
+  }) => void;
   onEachSubmit: (arg: IFieldSubmitHandlerArg) => void;
   onEachDelete: (id: string) => void;
-  onFormSubmit: (values: any) => void;
+  onFormSubmit: (values: IFormSubmitHandlerArg) => void;
   onFormDelete: (id: string) => void;
   formInfo: {
     id: string;

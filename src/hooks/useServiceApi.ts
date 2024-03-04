@@ -1,4 +1,5 @@
 import {
+  createMultipleServiceSubForms,
   createService,
   createServiceForm,
   createServiceSubForm,
@@ -135,6 +136,18 @@ const useServiceApi = () => {
     retry: 3,
   });
 
+  const createMultipleServiceSubFormsMutation = useMutation({
+    mutationFn: createMultipleServiceSubForms,
+    onError(error, variables, context) {
+      handleError({ title: "Failed", error });
+    },
+    onSuccess(data, variables, context) {
+      handleSuccess({ data });
+      queryClient.invalidateQueries({ queryKey: ["Service Form"] });
+    },
+    retry: 3,
+  });
+
   const updateServiceSubFormMutation = useMutation({
     mutationFn: updateServiceSubForm,
     onError(error, variables, context) {
@@ -185,6 +198,7 @@ const useServiceApi = () => {
     useGetServiceFormQuery,
     useGetServiceFormsQuery,
     createServiceSubFormMutation,
+    createMultipleServiceSubFormsMutation,
     updateServiceSubFormMutation,
     deleteServiceSubFormMutation,
     useGetServiceSubFormQuery,

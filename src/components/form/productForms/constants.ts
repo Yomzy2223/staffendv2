@@ -1,72 +1,10 @@
+import { getCountries } from "@/hooks/api/countryApi";
+import { ICountry } from "@/hooks/api/types";
 import * as z from "zod";
 
-export const section1FormInfo = [
-  {
-    name: "name",
-    label: "Enter product name",
-    type: "text",
-    textInputProp: {
-      placeholder: "Enter product name",
-    },
-  },
-  {
-    name: "description",
-    label: "Enter product description",
-    type: "text",
-    textInputProp: {
-      placeholder: "Enter product description",
-    },
-  },
-  {
-    name: "country",
-    label: "Select operational country",
-    selectOptions: ["Nigeria", "USA"],
-    type: "select",
-    selectProp: {
-      placeholder: "Select operational country",
-    },
-  },
-  {
-    name: "currency",
-    label: "Select currency",
-    selectOptions: ["NGN", "USD"],
-    type: "select",
-    selectProp: {
-      placeholder: "Select currency",
-    },
-  },
-  {
-    name: "amount",
-    label: "Enter product amount",
-    type: "number",
-    textInputProp: {
-      placeholder: "Enter product amount",
-    },
-  },
-  {
-    name: "timeline",
-    label: "Enter processing timeline",
-    type: "text",
-    textInputProp: {
-      placeholder: "Enter processing timeline",
-    },
-  },
-  {
-    name: "feature",
-    label: "Enter product features",
-    type: "tagInput",
-    minTagChars: 3,
-    errors: {
-      empty: "Enter feature",
-      exists: "Feature already exists",
-      minTagChars: "Feature must be at least three characters",
-      length: "Features cannot be more than 4",
-    },
-    textInputProp: {
-      placeholder: "Enter product features",
-    },
-  },
-];
+//  (async () =>
+//       (await getCountries()).data.data?.map((el: ICountry) => el.name))(),
+// export
 
 export const productInfoSchema = z.object({
   name: z.string().min(3, "Product name should be at least 3 characters"),

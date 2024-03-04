@@ -1,3 +1,4 @@
+import { IProductSubForm } from "@/hooks/api/types";
 import { Button } from "flowbite-react";
 import { PlusCircle } from "lucide-react";
 import React, { useState } from "react";
@@ -10,9 +11,11 @@ import {
   IFieldSubmitHandlerArg,
   IFormSubmitHandlerArg,
 } from "./eachForm/types";
+import { v4 as uuidv4 } from "uuid";
 
 const DynamicFormCreator = ({
   fieldTitle,
+  submitMultipleFields,
   onEachSubmit,
   onEachDelete,
   onFormSubmit,
@@ -26,8 +29,26 @@ const DynamicFormCreator = ({
 
   const handleSelect = (selected?: FormType | any) => {
     if (!selected) return;
-    // console.log(selected);
     if (selected.type === "person") {
+      const { title, description, compulsory, type, subForm } = selected;
+      if (!subForm) return;
+      onFormSubmit({
+        values: {
+          title: title + " - " + uuidv4(),
+          description,
+          compulsory,
+          type,
+        },
+        onSuccess: (data) => {
+          console.log(data);
+          const formId = data.data.data.id;
+          submitMultipleFields({
+            formId,
+            values: subForm,
+          });
+        },
+      });
+      return;
     }
     setNewlyAdded(selected);
   };
@@ -107,6 +128,13 @@ export default DynamicFormCreator;
 
 interface IProps {
   fieldTitle?: string;
+  submitMultipleFields: ({
+    formId,
+    values,
+  }: {
+    formId: string;
+    values: FieldType[];
+  }) => void;
   onEachSubmit: (arg: IFieldSubmitHandlerArg) => void;
   onEachDelete: (id: string) => void;
   onFormSubmit: (values: IFormSubmitHandlerArg) => void;

@@ -3,6 +3,7 @@ import useServiceApi from "@/hooks/useServiceApi";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 import {
+  FieldType,
   IFieldSubmitHandlerArg,
   IFormSubmitHandlerArg,
 } from "../dynamicFormCreator/eachForm/types";
@@ -69,6 +70,7 @@ export const useServiceFormActions = () => {
     deleteServiceFormMutation,
     useGetServiceFormsQuery,
     createServiceSubFormMutation,
+    createMultipleServiceSubFormsMutation,
     updateServiceSubFormMutation,
     deleteServiceSubFormMutation,
   } = useServiceApi();
@@ -121,6 +123,20 @@ export const useServiceFormActions = () => {
         );
   };
 
+  const submitMultipleFields = ({
+    formId,
+    values,
+  }: {
+    formId: string;
+    values: FieldType[];
+  }) => {
+    if (!formId) return;
+    createMultipleServiceSubFormsMutation.mutate({
+      formId,
+      formInfo: values as IServiceSubForm[],
+    });
+  };
+
   const handleFormDelete = (id: string) => {
     deleteServiceFormMutation.mutate(id);
   };
@@ -153,5 +169,6 @@ export const useServiceFormActions = () => {
     serviceFormState,
     handleFieldDelete,
     handleFormDelete,
+    submitMultipleFields,
   };
 };

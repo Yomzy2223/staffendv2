@@ -23,6 +23,7 @@ const ServiceForm = ({ open, setOpen }: IProps) => {
     serviceFormState,
     handleFieldDelete,
     handleFormDelete,
+    submitMultipleFields,
   } = useServiceFormActions();
 
   const serviceData = serviceInfo?.data?.data?.data;
@@ -92,6 +93,7 @@ const ServiceForm = ({ open, setOpen }: IProps) => {
         <div className="flex flex-col justify-between gap-6 flex-1">
           <DynamicFormCreator
             formInfo={serviceFormData}
+            submitMultipleFields={submitMultipleFields}
             onEachSubmit={submitServiceFormField}
             onEachDelete={handleFieldDelete}
             onFormSubmit={submitServiceForm}

@@ -6,7 +6,9 @@ import useProductApi from "@/hooks/useProductApi";
 import { countries, TCountryCode } from "countries-list";
 import { useParams, useSearchParams } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
+import { FormType } from "../dynamicFormCreator/eachForm/constants";
 import {
+  FieldType,
   IFieldSubmitHandlerArg,
   IFormSubmitHandlerArg,
 } from "../dynamicFormCreator/eachForm/types";
@@ -81,6 +83,7 @@ export const useProductFormActions = () => {
     deleteProductFormMutation,
     useGetProductFormsQuery,
     createProductSubFormMutation,
+    createMultipleProductSubFormsMutation,
     updateProductSubFormMutation,
     deleteProductSubFormMutation,
   } = useProductApi();
@@ -135,6 +138,20 @@ export const useProductFormActions = () => {
         );
   };
 
+  const submitMultipleFields = ({
+    formId,
+    values,
+  }: {
+    formId: string;
+    values: FieldType[];
+  }) => {
+    if (!formId) return;
+    createMultipleProductSubFormsMutation.mutate({
+      formId,
+      formInfo: values as IProductSubForm[],
+    });
+  };
+
   const handleFormDelete = (id: string) => {
     deleteProductFormMutation.mutate(id);
   };
@@ -145,6 +162,7 @@ export const useProductFormActions = () => {
 
   const productFormState = {
     formLoading:
+      createMultipleProductSubFormsMutation.isPending ||
       createProductFormMutation.isPending ||
       updateProductFormMutation.isPending,
     formSuccess:
@@ -167,6 +185,7 @@ export const useProductFormActions = () => {
     productFormState,
     handleFieldDelete,
     handleFormDelete,
+    submitMultipleFields,
   };
 };
 

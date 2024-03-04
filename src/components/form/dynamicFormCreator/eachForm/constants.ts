@@ -211,7 +211,7 @@ export const formOptions: FormType[] = [
   },
   {
     type: "person",
-    title: "Person title",
+    title: "Title",
     compulsory: true,
     description: "Here is the form description",
     subForm: [

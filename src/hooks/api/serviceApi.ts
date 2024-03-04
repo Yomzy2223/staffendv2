@@ -82,6 +82,19 @@ export const createServiceSubForm = async ({
   return await client.post(`/services/subform/${formId}`, formInfo);
 };
 
+export const createMultipleServiceSubForms = async ({
+  formId,
+  formInfo,
+}: {
+  formId: string;
+  formInfo: IServiceSubForm[];
+}) => {
+  const client = await Client();
+  return await client.post(`/services/subforms/${formId}`, {
+    subform: formInfo,
+  });
+};
+
 export const updateServiceSubForm = async ({
   id,
   formInfo,

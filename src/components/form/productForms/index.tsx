@@ -28,6 +28,7 @@ const ProductForm = ({ open, setOpen }: IProps) => {
     productFormState,
     handleFieldDelete,
     handleFormDelete,
+    submitMultipleFields,
   } = useProductFormActions();
 
   const productData = productInfo?.data?.data?.data;
@@ -104,6 +105,7 @@ const ProductForm = ({ open, setOpen }: IProps) => {
         <div className="flex flex-col justify-between gap-6 flex-1">
           <DynamicFormCreator
             formInfo={productFormData}
+            submitMultipleFields={submitMultipleFields}
             onEachSubmit={submitProductFormField}
             onEachDelete={handleFieldDelete}
             onFormSubmit={submitProductForm}

@@ -45,7 +45,15 @@ const handler = NextAuth({
     }),
     CredentialsProvider({
       id: "signUp",
-      async authorize(credentials) {
+      credentials: {
+        fullName: { label: "Full Name" },
+        email: { label: "Email" },
+        password: { label: "Password" },
+        referral: { label: "Referral" },
+        isStaff: { label: "isStaff" },
+        isPartner: { label: "isPartner" },
+      },
+      authorize: async (credentials) => {
         try {
           if (
             credentials?.fullName &&
@@ -74,13 +82,19 @@ const handler = NextAuth({
         } catch (e: any) {
           throw new Error(e.response.data.error);
         }
+        return null;
       },
     }),
     CredentialsProvider({
       id: "signIn",
-      async authorize(credentials, req) {
-        if (credentials?.email && credentials?.password) {
-          try {
+      name: "Sign In",
+      credentials: {
+        email: { label: "Email" },
+        password: { label: "Password" },
+      },
+      authorize: async (credentials, req) => {
+        try {
+          if (credentials?.email && credentials?.password) {
             const client = await Client();
             const { email, password } = credentials;
             const response = await client.post(
@@ -92,10 +106,10 @@ const handler = NextAuth({
             );
             console.log(response.data);
             if (response.data) return response.data as Awaitable<User>;
-          } catch (e: any) {
-            throw new Error(e.response.data.error);
           }
           return null;
+        } catch (e: any) {
+          throw new Error(e.response.data.error);
         }
       },
     }),

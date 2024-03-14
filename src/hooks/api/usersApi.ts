@@ -1,28 +1,28 @@
 import { Client } from "@/lib/axios";
 
-interface signInType {
+interface ISignIn {
   email: string;
   password: string;
 }
 
-interface signUpType extends signInType {
+interface ISignUp extends ISignIn {
   fullName: string;
   referral: string;
   isPartner: boolean;
   isStaff: boolean;
 }
 
-interface resetType {
+interface IResetPassword {
   token: string;
   password: string;
 }
 
-export const signUp = async (formInfo: signUpType) => {
+export const signUp = async (formInfo: ISignUp) => {
   const client = await Client();
   return await client.post("/users", formInfo);
 };
 
-export const signIn = async (formInfo: signInType) => {
+export const signIn = async (formInfo: ISignIn) => {
   const client = await Client();
   return await client.post("/users/login", formInfo);
 };
@@ -32,7 +32,7 @@ export const forgotPassword = async (email: string) => {
   return await client.post("/users/forgotpassword", { email });
 };
 
-export const resetPassword = async (formInfo: resetType) => {
+export const resetPassword = async (formInfo: IResetPassword) => {
   const client = await Client();
   return await client.post("/users/passwordreset", formInfo);
 };
@@ -42,7 +42,13 @@ export const verifyUserEmail = async (token: string) => {
   return await client.post(`/users/verification/${token}`);
 };
 
-export const updateUser = async ({ id, formInfo }: { id: string; formInfo: signUpType }) => {
+export const updateUser = async ({
+  id,
+  formInfo,
+}: {
+  id: string;
+  formInfo: ISignUp;
+}) => {
   const client = await Client();
   return await client.put(`/users/${id}`, formInfo);
 };

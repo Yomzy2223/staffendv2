@@ -6,7 +6,7 @@ import { Button } from "flowbite-react";
 import { ArrowRightCircle } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import * as z from "zod";
-import useUserApi from "@/hooks/useUsersApi";
+import useUserApi from "@/hooks/useUserApi";
 import { useGlobalFucntions } from "@/hooks/globalFunctions";
 import { useSearchParams } from "next/navigation";
 import { Oval } from "react-loading-icons";

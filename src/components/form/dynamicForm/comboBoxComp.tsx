@@ -1,7 +1,6 @@
-import React, { HTMLAttributes, ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import {
   Command,
-  CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
@@ -14,9 +13,8 @@ import {
 import { Check, ChevronDown } from "lucide-react";
 import { Button } from "flowbite-react";
 import { cn } from "@/lib/utils";
-import { FieldError, Merge, UseFormSetValue } from "react-hook-form";
+import { UseFormSetValue } from "react-hook-form";
 import { Skeleton } from "@/components/ui/skeleton";
-import { FieldErrorsImpl } from "react-hook-form";
 
 const ComboBoxComp = ({
   name,

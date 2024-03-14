@@ -1,4 +1,3 @@
-import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 function useMediaQuery(query: string) {

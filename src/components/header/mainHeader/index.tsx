@@ -11,7 +11,6 @@ import {
 } from "lucide-react";
 import { Avatar, Button } from "flowbite-react";
 import SearchComp from "../../search";
-import Separator from "../../separator";
 import { useRouter } from "next/navigation";
 import {
   Popover,
@@ -30,15 +29,15 @@ export const Header = () => {
   return (
     <div className="sticky top-0 bg-background border-b z-20 px-5 md:px-8 ">
       {/* Desktop header */}
-      <div className="hidden items-center gap-8 w-full h-20 md:flex">
+      <div className="hidden items-center w-full h-20 divide-x md:flex">
         <Image
           src={SidebriefLogo}
           alt="sidebrief"
           quality={100}
-          className="object-contain py-4"
+          className="object-contain py-4 mr-8"
         />
-        <Separator vertical />
-        <div className="flex items-center justify-between py-4 gap-8 w-full">
+
+        <div className="flex items-center justify-between py-4 gap-8 w-full pl-10">
           <div className="flex flex-1 items-center gap-8">
             <h2 className="sb-text-24 font-semibold whitespace-nowrap">
               Hello, <span className="text-foreground-4">Joshua</span>👋
@@ -89,7 +88,7 @@ export const Header = () => {
             src={SidebriefLogo}
             alt="sidebrief"
             quality={100}
-            className="object-contain"
+            className="object-contain w-20"
           />
         </div>
         <div className="flex items-center gap-3">

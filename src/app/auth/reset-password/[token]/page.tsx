@@ -7,7 +7,7 @@ import { ArrowRightCircle } from "lucide-react";
 import React, { useEffect } from "react";
 import * as z from "zod";
 import { useParams, useRouter } from "next/navigation";
-import useUserApi from "@/hooks/useUsersApi";
+import useUserApi from "@/hooks/useUserApi";
 import { Oval } from "react-loading-icons";
 
 const ResetPassword = () => {

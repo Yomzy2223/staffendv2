@@ -1,6 +1,6 @@
 "use client";
 
-import { useGlobalFucntions } from "@/hooks/globalFunctions";
+import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { Button } from "flowbite-react";
 import { ExternalLink } from "lucide-react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
@@ -17,7 +17,7 @@ const ServiceSummaryCard = ({
 }) => {
   const [open, setOpen] = useState(false);
 
-  const { setQuery } = useGlobalFucntions();
+  const { setQuery } = useGlobalFunctions();
   const { push } = useRouter();
   const { serviceId } = useParams();
 

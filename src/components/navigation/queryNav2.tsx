@@ -1,4 +1,4 @@
-import { useGlobalFucntions } from "@/hooks/globalFunctions";
+import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { Label, Radio } from "flowbite-react";
 import { useSearchParams } from "next/navigation";
 import React from "react";
@@ -10,7 +10,7 @@ interface IProps {
 }
 
 const QueryNav2 = ({ queryNav, defaultActive = 0, variant }: IProps) => {
-  const { setQuery } = useGlobalFucntions();
+  const { setQuery } = useGlobalFunctions();
 
   const searchParams = useSearchParams();
 

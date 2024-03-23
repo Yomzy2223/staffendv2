@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import useMediaQuery from "./useMediaQuery";
 import { saveAs } from "file-saver";
 
-export const useGlobalFucntions = () => {
+export const useGlobalFunctions = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();

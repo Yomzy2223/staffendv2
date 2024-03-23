@@ -27,6 +27,7 @@ const DynamicForm = ({
   className,
   formClassName,
   disableAll,
+  renderOtherFields,
 }: DynamicFormProps) => {
   type FormType = z.infer<typeof formSchema>;
 
@@ -170,6 +171,7 @@ const DynamicForm = ({
             </div>
           );
         })}
+        {renderOtherFields && renderOtherFields({ setValue })}
       </div>
 
       {children}
@@ -178,32 +180,3 @@ const DynamicForm = ({
 };
 
 export default DynamicForm;
-
-//  {
-//    el.type === "toggle" && (
-//      <ToggleSwitch
-//        checked={getValues()[el.name]}
-//        label="Toggle me (checked)"
-//        // {...register(el.name)}
-//        onChange={() => setValue(el.name, !getValues()[el.name])}
-//      />
-//    );
-//  }
-
-// {
-//   el.type === "select" && el.selectOptions && (
-//     <Select
-//       id={el.name}
-//       helperText={<>{errorMsg}</>}
-//       color={errors[el.name] && "failure"}
-//       disabled={disableAll}
-//       defaultValue={defaultValues[el.name]}
-//       {...el.selectProp}
-//       {...register(el.name)}
-//     >
-//       {el.selectOptions.map((option) => (
-//         <option key={option}>{option}</option>
-//       ))}
-//     </Select>
-//   );
-// }

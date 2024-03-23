@@ -2,7 +2,7 @@
 
 import QueryNav3 from "@/components/navigation/queryNav3";
 import TextWithDetails from "@/components/texts/textWithDetails";
-import { useGlobalFucntions } from "@/hooks/globalFunctions";
+import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { cn } from "@/lib/utils";
 import { Button, Card, Navbar, NavbarCollapse } from "flowbite-react";
 import { Minus, Plus, User } from "lucide-react";
@@ -17,7 +17,7 @@ const PersonsCard = ({
   title: string;
   info: { field: string; value: string; type?: string }[][];
 }) => {
-  const { setQuery } = useGlobalFucntions();
+  const { setQuery } = useGlobalFunctions();
 
   const searchParams = useSearchParams();
   const clicked = searchParams.get(title.toLowerCase());

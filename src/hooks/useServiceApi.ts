@@ -17,12 +17,12 @@ import {
   updateServiceSubForm,
 } from "@/hooks/api/serviceApi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useGlobalFucntions } from "./globalFunctions";
+import { useGlobalFunctions } from "./globalFunctions";
 import { useResponse } from "./useResponse";
 
 const useServiceApi = () => {
   const { handleError, handleSuccess } = useResponse();
-  const { setQuery } = useGlobalFucntions();
+  const { setQuery } = useGlobalFunctions();
   const queryClient = useQueryClient();
 
   const createServiceMutation = useMutation({

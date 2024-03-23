@@ -1,5 +1,5 @@
 import DialogWrapper from "@/components/wrappers/dialogWrapper";
-import { useGlobalFucntions } from "@/hooks/globalFunctions";
+import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { Button } from "flowbite-react";
 import React, { Dispatch, SetStateAction } from "react";
 import { Oval } from "react-loading-icons";
@@ -8,7 +8,7 @@ import { useCountryActions } from "./actions";
 import { countrySchema } from "./constants";
 
 const CountryForm = ({ open, setOpen }: IProps) => {
-  const { deleteQueryString } = useGlobalFucntions();
+  const { deleteQueryString } = useGlobalFunctions();
 
   const {
     formInfo,

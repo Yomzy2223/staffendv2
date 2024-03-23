@@ -1,3 +1,5 @@
+"use client";
+
 import { Button, TextInput } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import TagIcon from "@/assets/icons/tagIcon";
@@ -45,7 +47,7 @@ const InputWithTags = ({
         type="text"
         sizing={size || "md"}
         helperText={<>{errorMsg}</>}
-        color={errorMsg && "failure"}
+        // color={errorMsg && "failure"}
         className={errorMsg ? "focus:[&_input]:outline-none" : ""}
         onKeyDown={onKeyDown}
         value={value}
@@ -54,7 +56,7 @@ const InputWithTags = ({
           setValue(e.target.value);
         }}
         disabled={disabled}
-        {...textInputProp}
+        // {...textInputProp}
       />
       <div className="flex gap-2 flex-wrap">
         {tags?.map((tag: string, i) => {

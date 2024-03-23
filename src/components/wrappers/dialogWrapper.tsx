@@ -7,7 +7,7 @@ import {
   DrawerClose,
 } from "@/components/ui/drawer";
 import { Modal } from "flowbite-react";
-import { useGlobalFucntions } from "@/hooks/globalFunctions";
+import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -21,7 +21,7 @@ const DialogWrapper = ({
   classNames,
   dismissible,
 }: propsType) => {
-  const { isDesktop } = useGlobalFucntions();
+  const { isDesktop } = useGlobalFunctions();
 
   return (
     <div>

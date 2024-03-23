@@ -1,6 +1,6 @@
 "use client";
 
-import { useGlobalFucntions } from "@/hooks/globalFunctions";
+import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { cn } from "@/lib/utils";
 import { Button } from "flowbite-react";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -13,7 +13,7 @@ interface IProps {
 }
 
 const QueryNav = ({ queryNav, defaultActive = 0, variant }: IProps) => {
-  const { setQuery } = useGlobalFucntions();
+  const { setQuery } = useGlobalFunctions();
 
   const searchParams = useSearchParams();
 

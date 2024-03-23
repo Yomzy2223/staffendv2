@@ -10,7 +10,7 @@ import {
 import CardWrapper from "@/components/wrappers/cardWrapper";
 import { countries, getEmojiFlag, TCountryCode } from "countries-list";
 import { Currency, MoreHorizontal, Phone, WholeWord } from "lucide-react";
-import { useGlobalFucntions } from "@/hooks/globalFunctions";
+import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { ICountryFull } from "@/hooks/api/types";
 import ConfirmAction from "@/components/confirmAction";
 import { useCountryApi } from "@/hooks/useCountryApi";
@@ -20,7 +20,7 @@ const CountryCard = ({ info, setOpen }: IProps) => {
 
   const { deleteCountryMutation } = useCountryApi();
   const { mutate, isPending } = deleteCountryMutation;
-  const { setQuery } = useGlobalFucntions();
+  const { setQuery } = useGlobalFunctions();
 
   const countryName = countries[info?.iso as TCountryCode].name;
 

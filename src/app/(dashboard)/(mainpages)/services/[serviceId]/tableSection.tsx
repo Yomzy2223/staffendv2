@@ -3,7 +3,7 @@
 import GeneralTable from "@/components/tables/generalTable";
 import CardWrapper from "@/components/wrappers/cardWrapper";
 import React from "react";
-import { useTableInfo } from "../../constants";
+import { useTableInfo } from "../../actions";
 
 const TableSection = () => {
   const { tableHeaders, tableBody } = useTableInfo();

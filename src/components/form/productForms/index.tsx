@@ -4,7 +4,7 @@ import { Button } from "flowbite-react";
 import { cn } from "@/lib/utils";
 import DialogWrapper from "@/components/wrappers/dialogWrapper";
 import DynamicFormCreator from "../dynamicFormCreator";
-import { useGlobalFucntions } from "@/hooks/globalFunctions";
+import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { Oval } from "react-loading-icons";
 import {
   useProductFormActions,
@@ -12,10 +12,11 @@ import {
   useSectionInfo,
 } from "./actions";
 import { productInfoSchema } from "./constants";
+import ExpectedProducts from "./expectedProducts";
 
 const ProductForm = ({ open, setOpen }: IProps) => {
   const [section, setSection] = useState(1);
-  const { isDesktop, deleteQueryString } = useGlobalFucntions();
+  const { isDesktop, deleteQueryString } = useGlobalFunctions();
   const { section1FormInfo } = useSectionInfo();
 
   const { title1, productInfo, submitProductInfo, productLoading } =
@@ -63,6 +64,8 @@ const ProductForm = ({ open, setOpen }: IProps) => {
     amount: productData?.amount || "",
     timeline: productData?.timeline || "",
     feature: productData?.feature || [],
+    recurringInterval: productData?.recurringInterval || "",
+    otherExpectedRequest: productData?.otherExpectedRequest || [],
   };
 
   return (
@@ -84,7 +87,9 @@ const ProductForm = ({ open, setOpen }: IProps) => {
             "grid grid-cols-2 gap-x-5": isDesktop,
           })}
           disableAll={productInfo.isLoading}
+          renderOtherFields={(args) => <ExpectedProducts {...args} />}
         >
+          {/* <ExpectedProducts /> */}
           <div className="bg-white flex items-center justify-end pt-4 sticky bottom-0">
             <Button
               type="submit"

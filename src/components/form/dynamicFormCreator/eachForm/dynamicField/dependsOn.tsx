@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Command,
   CommandGroup,
@@ -85,7 +87,7 @@ const DependsOn = ({ onApply, fields, info }: IProps) => {
                 {each.options?.length > 10 && (
                   <CommandInput placeholder="Search options..." />
                 )}
-                <CommandGroup className="ml-2 max-h-[190px] overflow-auto">
+                <CommandGroup className="ml-2 max-h-[190px] overflow-auto ">
                   {each.options?.map((el) => (
                     <CommandItem
                       key={el}

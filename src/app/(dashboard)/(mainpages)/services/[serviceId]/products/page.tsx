@@ -5,7 +5,7 @@ import ProductForm from "@/components/form/productForms";
 import ProoductsHeader from "@/components/header/productsHeader";
 import ItemsWrapper from "@/components/wrappers/itemsWrapper";
 import { IProductFull } from "@/hooks/api/types";
-import { useGlobalFucntions } from "@/hooks/globalFunctions";
+import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import useProductApi from "@/hooks/useProductApi";
 import useServiceApi from "@/hooks/useServiceApi";
 import { useParams } from "next/navigation";
@@ -13,7 +13,7 @@ import React, { Dispatch, SetStateAction, useState } from "react";
 
 const Products = () => {
   const [open, setOpen] = useState(false);
-  const { setQuery } = useGlobalFucntions();
+  const { setQuery } = useGlobalFunctions();
 
   const { serviceId } = useParams();
   const { useGetServiceQuery } = useServiceApi();

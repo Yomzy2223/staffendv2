@@ -7,14 +7,14 @@ import { ArrowRightCircle } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import * as z from "zod";
 import useUserApi from "@/hooks/useUserApi";
-import { useGlobalFucntions } from "@/hooks/globalFunctions";
+import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { useSearchParams } from "next/navigation";
 import { Oval } from "react-loading-icons";
 
 const ForgotPassword = () => {
   const [formValue, setformValue] = useState<forgotPasswordType>({ email: "" });
 
-  const { setQuery } = useGlobalFucntions();
+  const { setQuery } = useGlobalFunctions();
   const { forgotPasswordMutation } = useUserApi();
   const { mutate, isSuccess, isPending } = forgotPasswordMutation;
 

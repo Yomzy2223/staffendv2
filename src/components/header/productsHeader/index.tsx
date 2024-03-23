@@ -1,7 +1,7 @@
 "use client";
 
 import ServiceForm from "@/components/form/serviceForm";
-import { useGlobalFucntions } from "@/hooks/globalFunctions";
+import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { Button } from "flowbite-react";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
@@ -10,7 +10,7 @@ import React, { useState } from "react";
 const ProoductsHeader = ({ title }: { title: string }) => {
   const [open, setOpen] = useState(false);
 
-  const { setQuery } = useGlobalFucntions();
+  const { setQuery } = useGlobalFunctions();
   const { push } = useRouter();
   const { serviceId } = useParams();
 

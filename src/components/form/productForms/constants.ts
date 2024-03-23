@@ -22,6 +22,10 @@ export const productInfoSchema = z.object({
       },
       { message: "Enter at least 4 feature" }
     ),
+  recurringInterval: z
+    .string({ required_error: "Select recurring interval" })
+    .min(1, "Select recurring interval"),
+  otherExpectedRequest: z.string().array(),
 });
 
 export type productInfoType = z.infer<typeof productInfoSchema>;

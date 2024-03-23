@@ -10,13 +10,13 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useResponse } from "@/hooks/useResponse";
 import { Oval } from "react-loading-icons";
-import { useGlobalFucntions } from "@/hooks/globalFunctions";
+import { useGlobalFunctions } from "@/hooks/globalFunctions";
 
 const SignIn = () => {
   const [isPending, setIsPending] = useState(false);
   const { push } = useRouter();
   const { handleError, handleSuccess } = useResponse();
-  const { isDesktop } = useGlobalFucntions();
+  const { isDesktop } = useGlobalFunctions();
 
   const handleSignIn = async (values: any) => {
     setIsPending(true);

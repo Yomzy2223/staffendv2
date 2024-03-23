@@ -4,14 +4,14 @@ import { Button } from "flowbite-react";
 import { cn } from "@/lib/utils";
 import DialogWrapper from "@/components/wrappers/dialogWrapper";
 import DynamicFormCreator from "../dynamicFormCreator";
-import { useGlobalFucntions } from "@/hooks/globalFunctions";
+import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { Oval } from "react-loading-icons";
 import { useServiceFormActions, useServiceInfoActions } from "./actions";
 import { section1FormInfo, serviceInfoSchema } from "./constants";
 
 const ServiceForm = ({ open, setOpen }: IProps) => {
   const [section, setSection] = useState(1);
-  const { isDesktop, deleteQueryString } = useGlobalFucntions();
+  const { isDesktop, deleteQueryString } = useGlobalFunctions();
 
   const { isEdit, serviceInfo, submitServiceInfo, serviceLoading } =
     useServiceInfoActions({ section, setSection });

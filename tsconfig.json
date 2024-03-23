@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
+    // "target": "ESNext",
     "target": "es2020",
+    // "moduleDetection": "force",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -12,7 +14,16 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
+    // "jsx": "preserve",
+    "noFallthroughCasesInSwitch": true,
+    // Some stricter flags
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
     "incremental": true,
+    "outDir": "./lib/cjs/",
+    "sourceMap": true,
+    "declaration": true,
+    "noImplicitAny": true,
     "plugins": [
       {
         "name": "next"
@@ -23,6 +34,5 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"],
-  "typesRoots": ["./types", "./node_modules/@types"]
+  "exclude": ["node_modules"]
 }

@@ -5,6 +5,10 @@ export interface IService {
   description: string;
 }
 
+export interface IServiceFull extends IService {
+  id: string;
+}
+
 export interface IServiceForm {
   title: string;
   description: string;
@@ -32,6 +36,8 @@ export interface IProduct {
   amount: number;
   timeline: string;
   feature: string[];
+  recurringInterval: string;
+  otherExpectedRequest: string[];
 }
 
 export interface IProductFull extends IProduct {

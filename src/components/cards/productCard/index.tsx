@@ -8,13 +8,13 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar";
 import { IProductFull } from "@/hooks/api/types";
-import { useGlobalFucntions } from "@/hooks/globalFunctions";
+import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { Currency, MoreHorizontal, Timer, WholeWord } from "lucide-react";
 import React, { Dispatch, SetStateAction, useState } from "react";
 
 const ProductCard = ({ info, setOpen, handleDelete, isLoading }: IProps) => {
   const [openConfirm, setOpenConfirm] = useState(false);
-  const { setQuery } = useGlobalFucntions();
+  const { setQuery } = useGlobalFunctions();
 
   const handleEdit = () => {
     setOpen(true);

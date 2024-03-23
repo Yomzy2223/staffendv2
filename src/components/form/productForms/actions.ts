@@ -1,11 +1,12 @@
 import { getCountries } from "@/hooks/api/countryApi";
 import { ICountry, IProductSubForm } from "@/hooks/api/types";
-import { useGlobalFucntions } from "@/hooks/globalFunctions";
+import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { useCountryApi } from "@/hooks/useCountryApi";
 import useProductApi from "@/hooks/useProductApi";
 import { countries, TCountryCode } from "countries-list";
 import { useParams, useSearchParams } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
+import { IDynamicFormField } from "../dynamicForm/constants";
 import { FormType } from "../dynamicFormCreator/eachForm/constants";
 import {
   FieldType,
@@ -24,7 +25,7 @@ export const useProductInfoActions = ({
 }) => {
   const { get } = useSearchParams();
   const { serviceId } = useParams();
-  const { setQuery } = useGlobalFucntions();
+  const { setQuery } = useGlobalFunctions();
   const productId = get("productId");
 
   const title1 = productId ? "Update Product" : "Create Product";
@@ -202,7 +203,10 @@ export const useSectionInfo = () => {
     allCountries?.find((each) => each.toLowerCase() === el)
   );
 
-  const section1FormInfo = [
+  const countryCurrencies =
+    countryData?.map((el: ICountry) => el.currency) || [];
+
+  const section1FormInfo: IDynamicFormField[] = [
     {
       name: "name",
       label: "Enter product name",
@@ -232,7 +236,8 @@ export const useSectionInfo = () => {
     {
       name: "currency",
       label: "Select currency",
-      selectOptions: ["NGN", "USD"],
+      selectOptions: countryCurrencies,
+      optionsLoading: getAllCountriesQuery.isLoading,
       type: "select",
       selectProp: {
         placeholder: "Select currency",
@@ -253,6 +258,11 @@ export const useSectionInfo = () => {
       textInputProp: {
         placeholder: "Enter processing timeline",
       },
+    },
+    {
+      name: "interval",
+      label: "Select recurring interval",
+      type: "select",
     },
     {
       name: "feature",

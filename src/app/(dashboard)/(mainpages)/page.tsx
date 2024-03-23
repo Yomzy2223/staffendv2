@@ -16,9 +16,9 @@ import {
   paymentQueryNav,
   serviceQueryNav2,
   serviceTableNav,
-  useTableInfo,
 } from "./constants";
 import { motion } from "framer-motion";
+import { useTableInfo } from "./actions";
 
 const Home = () => {
   const { tableHeaders, tableBody } = useTableInfo();

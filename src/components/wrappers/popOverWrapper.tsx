@@ -1,4 +1,4 @@
-import { useGlobalFucntions } from "@/hooks/globalFunctions";
+import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import React, { Dispatch, ReactNode, SetStateAction } from "react";
 import {
   Popover,
@@ -6,6 +6,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
+import { cn } from "@/lib/utils";
 
 const PopOverWrapper = ({
   children,
@@ -14,8 +15,9 @@ const PopOverWrapper = ({
   setOpen,
   disabled,
   onClose,
+  big,
 }: IProps) => {
-  const { isDesktop } = useGlobalFucntions();
+  const { isDesktop } = useGlobalFunctions();
 
   const handleOpenChange = (open: boolean) => {
     setOpen(open);
@@ -30,7 +32,12 @@ const PopOverWrapper = ({
             {children}
           </PopoverTrigger>
           <PopoverContent
-            className="min-w-[200px] w-max max-w-[400px] p-0 max-h-[400px] overflow-auto"
+            className={cn(
+              "min-w-[200px] w-max max-w-[400px] p-0 max-h-[400px] overflow-auto",
+              {
+                "max-w-[1000px] p-0 max-h-[1000px]": big,
+              }
+            )}
             align="start"
           >
             {content}
@@ -59,4 +66,5 @@ interface IProps {
   setOpen: Dispatch<SetStateAction<boolean>>;
   disabled?: boolean;
   onClose?: () => void;
+  big?: boolean;
 }

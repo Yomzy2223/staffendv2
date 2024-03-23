@@ -7,7 +7,7 @@ import DoChecks from "@/components/DoChecks";
 import ServiceForm from "@/components/form/serviceForm";
 import AnalyticsHeader from "@/components/header/analyticsHeader";
 import CardWrapper from "@/components/wrappers/cardWrapper";
-import { useGlobalFucntions } from "@/hooks/globalFunctions";
+import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import React, { useState } from "react";
@@ -23,7 +23,7 @@ import TableSection from "./tableSection";
 
 const Service = () => {
   const [open, setOpen] = useState(false);
-  const { setQuery } = useGlobalFucntions();
+  const { setQuery } = useGlobalFunctions();
   const { serviceId } = useParams();
 
   const addNewService = () => {

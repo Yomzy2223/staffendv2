@@ -50,8 +50,9 @@ const SearchComp = ({
       {onSubmit && (
         <Button
           size="md"
+          color="primary"
           onClick={handleSearchSubmit}
-          className={cn("text-sm font-medium bg-primary h-max", {
+          className={cn("text-sm font-medium h-max", {
             "rounded-l-none": onSubmit,
           })}
           {...buttonProps}

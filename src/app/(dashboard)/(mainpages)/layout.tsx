@@ -7,12 +7,12 @@ import { Navigation } from "@/components/navigation";
 import { Button } from "flowbite-react";
 import Image from "next/image";
 import { useActions } from "./actions";
-import { useGlobalFucntions } from "@/hooks/globalFunctions";
+import { useGlobalFunctions } from "@/hooks/globalFunctions";
 
 const layout = ({ children }: { children: ReactNode }) => {
   const [open, setOpen] = useState(false);
   const { navRoutes } = useActions();
-  const { setQuery } = useGlobalFucntions();
+  const { setQuery } = useGlobalFunctions();
 
   const openServiceForm = () => {
     // push("/services");

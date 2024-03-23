@@ -1,7 +1,8 @@
 import { ReactNode } from "react";
+import { UseFormSetValue } from "react-hook-form";
 import { ZodType } from "zod";
 
-export interface FormInput {
+export interface IDynamicFormField {
   id?: string;
   name: string;
   label?: string;
@@ -28,11 +29,16 @@ export interface FormInput {
 
 export interface DynamicFormProps {
   children: ReactNode;
-  formInfo: FormInput[];
+  formInfo: IDynamicFormField[];
   defaultValues?: Record<string, any>;
   formSchema: ZodType<any, any, any>;
   onFormSubmit: (values: any) => void;
   className?: string;
   formClassName?: string;
   disableAll?: boolean;
+  renderOtherFields?: ({
+    setValue,
+  }: {
+    setValue: UseFormSetValue<any>;
+  }) => ReactNode;
 }

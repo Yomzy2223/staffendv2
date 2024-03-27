@@ -16,7 +16,8 @@ import * as z from "zod";
 import { DynamicFormProps } from "./constants";
 import { cn } from "@/lib/utils";
 import InputWithTags from "@/components/inputs/inputWithTags";
-import ComboBoxComp from "./comboBoxComp";
+import ComboBox from "./comboBox";
+import MultiSelectCombo from "./multiSelectCombo";
 
 const DynamicForm = ({
   children,
@@ -118,7 +119,7 @@ const DynamicForm = ({
               )}
 
               {el.type === "select" && el.selectOptions && (
-                <ComboBoxComp
+                <ComboBox
                   name={el.name}
                   options={el.selectOptions}
                   setValue={setValue}
@@ -126,6 +127,20 @@ const DynamicForm = ({
                   fieldName={el.fieldName}
                   leftContent={el.leftContent}
                   defaultValue={defaultValues[el.name]}
+                  disabled={disableAll}
+                  optionsLoading={el.optionsLoading}
+                />
+              )}
+
+              {el.type === "multiSelect" && el.selectOptions && (
+                <MultiSelectCombo
+                  name={el.name}
+                  options={el.selectOptions}
+                  setValue={setValue}
+                  selectProp={el.selectProp}
+                  fieldName={el.fieldName}
+                  leftContent={el.leftContent}
+                  defaultTags={defaultValues[el.name]}
                   disabled={disableAll}
                   optionsLoading={el.optionsLoading}
                 />

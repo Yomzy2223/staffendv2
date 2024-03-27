@@ -13,6 +13,8 @@ export const productInfoSchema = z.object({
     .min(1, "Select currency"),
   amount: z.coerce.number().min(1, "Enter product amount"),
   timeline: z.string().min(1, "Enter product processing timeline"),
+  recurringInterval: z.string({ required_error: "Select recurring interval" }),
+  otherExpectedRequest: z.string().array(),
   feature: z
     .string({ required_error: "Enter at least one feature" })
     .array()
@@ -22,10 +24,33 @@ export const productInfoSchema = z.object({
       },
       { message: "Enter at least 4 feature" }
     ),
-  recurringInterval: z
-    .string({ required_error: "Select recurring interval" })
-    .min(1, "Select recurring interval"),
-  otherExpectedRequest: z.string().array(),
 });
 
 export type productInfoType = z.infer<typeof productInfoSchema>;
+
+export const recurringIntervals = [
+  "1 month",
+  "2 months",
+  "3 months",
+  "4 months",
+  "5 months",
+  "6 months",
+  "7 months",
+  "8 months",
+  "9 months",
+  "10 months",
+  "11 months",
+  "12 months",
+  "13 months",
+  "14 months",
+  "15 months",
+  "16 months",
+  "17 months",
+  "18 months",
+  "19 months",
+  "20 months",
+  "21 months",
+  "22 months",
+  "23 months",
+  "24 months",
+];

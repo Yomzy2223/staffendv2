@@ -11,7 +11,7 @@ import DocumentTemplate from "./allFieldTypes/documentTemplate";
 import { getDynamicFieldSchema, useFormFieldActions } from "./actions";
 import { uploadFileToCloudinary } from "@/hooks/globalFunctions";
 import { FieldType } from "../types";
-import ComboBoxComp from "@/components/form/dynamicForm/comboBoxComp";
+import ComboBox from "@/components/form/dynamicForm/comboBox";
 
 const DynamicField = ({
   info,
@@ -165,7 +165,7 @@ const DynamicField = ({
           )}
           {(type === "document template" || type === "document upload") && (
             <div className="w-4/5">
-              <ComboBoxComp
+              <ComboBox
                 name="documentType"
                 fieldName="document type"
                 options={["NIN", "Proof of address"]}

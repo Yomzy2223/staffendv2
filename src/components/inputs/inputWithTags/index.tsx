@@ -6,6 +6,7 @@ import TagIcon from "@/assets/icons/tagIcon";
 import { useActions } from "./actions";
 import { X } from "lucide-react";
 import { IProps } from "./constants";
+import { useGlobalFunctions } from "@/hooks/globalFunctions";
 
 const InputWithTags = ({
   size,
@@ -22,7 +23,8 @@ const InputWithTags = ({
   const [errorMsg, setErrorMsg] = useState("");
   const [value, setValue] = useState("");
 
-  const { onKeyDown, validateTags, removeTag, getRandColor } = useActions({
+  const { getRandColor } = useGlobalFunctions();
+  const { onKeyDown, validateTags, removeTag } = useActions({
     setValue,
     tags,
     setTags,

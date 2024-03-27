@@ -64,7 +64,9 @@ const DialogWrapper = ({
                 <X color="hsl(var(--foreground-5))" />
               </DrawerClose>
             </DrawerHeader>
-            <div className="flex flex-col overflow-auto flex-1">{children}</div>
+            <div className="flex flex-col overflow-auto flex-1 p-0.5">
+              {children}
+            </div>
           </DrawerContent>
         </Drawer>
       )}

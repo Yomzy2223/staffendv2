@@ -1,5 +1,4 @@
 import { Dispatch, KeyboardEvent, SetStateAction } from "react";
-import { tagColors } from "./constants";
 
 export const useActions = ({
   setValue,
@@ -55,15 +54,10 @@ export const useActions = ({
     setTags(newTags);
   };
 
-  const getRandColor = (i: number) => {
-    return tagColors[i % 5];
-  };
-
   return {
     onKeyDown,
     validateTags,
     removeTag,
-    getRandColor,
   };
 };
 

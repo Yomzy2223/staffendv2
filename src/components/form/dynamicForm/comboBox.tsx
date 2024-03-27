@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 import { UseFormSetValue } from "react-hook-form";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const ComboBoxComp = ({
+const ComboBox = ({
   name,
   options,
   selectProp,
@@ -45,7 +45,9 @@ const ComboBoxComp = ({
           <Button
             outline
             role="combobox"
-            className="w-full [&_span]:justify-between"
+            className={cn("w-full [&_span]:justify-between [&>span]:!p-2.5", {
+              "border-primary ring-primary ring-1": openSelect,
+            })}
             disabled={disabled}
             {...selectProp}
           >
@@ -114,7 +116,7 @@ const ComboBoxComp = ({
     </>
   );
 };
-export default ComboBoxComp;
+export default ComboBox;
 
 interface IProps {
   name: string;

@@ -7,13 +7,16 @@ import { countries, TCountryCode } from "countries-list";
 import { useParams, useSearchParams } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 import { IDynamicFormField } from "../dynamicForm/constants";
-import { FormType } from "../dynamicFormCreator/eachForm/constants";
+import {
+  BusinessObjectives,
+  FormType,
+} from "../dynamicFormCreator/eachForm/constants";
 import {
   FieldType,
   IFieldSubmitHandlerArg,
   IFormSubmitHandlerArg,
 } from "../dynamicFormCreator/eachForm/types";
-import { productInfoType } from "./constants";
+import { productInfoType, recurringIntervals } from "./constants";
 
 // Actions for service info section
 export const useProductInfoActions = ({
@@ -35,6 +38,7 @@ export const useProductInfoActions = ({
   const productInfo = useGetProductQuery(productId as string);
 
   const submitProductInfo = async (values: productInfoType) => {
+    console.log(values);
     productId
       ? updateProductMutation.mutate(
           {
@@ -72,6 +76,10 @@ export const useProductInfoActions = ({
     submitProductInfo,
   };
 };
+
+//
+
+//
 
 // Actions for service form section
 export const useProductFormActions = () => {
@@ -190,6 +198,10 @@ export const useProductFormActions = () => {
   };
 };
 
+//
+
+//
+
 // Section info action
 export const useSectionInfo = () => {
   const { getAllCountriesQuery } = useCountryApi();
@@ -260,9 +272,23 @@ export const useSectionInfo = () => {
       },
     },
     {
-      name: "interval",
-      label: "Select recurring interval",
+      name: "recurringInterval",
+      label: "Select recurring interval (optional)",
+      selectOptions: recurringIntervals,
       type: "select",
+      selectProp: {
+        placeholder: "Select recurring interval",
+      },
+    },
+    {
+      name: "otherExpectedRequest",
+      fieldName: "objective(s)",
+      label: "Select objectives expected to buy (optional)",
+      type: "multiSelect",
+      selectOptions: BusinessObjectives,
+      selectProp: {
+        placeholder: "Select objectives",
+      },
     },
     {
       name: "feature",

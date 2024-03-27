@@ -1,6 +1,7 @@
 import * as z from "zod";
+import { IDynamicFormField } from "../dynamicForm/constants";
 
-export const section1FormInfo = [
+export const section1FormInfo: IDynamicFormField[] = [
   {
     name: "name",
     label: "Enter service name",

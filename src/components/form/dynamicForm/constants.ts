@@ -6,7 +6,18 @@ export interface IDynamicFormField {
   id?: string;
   name: string;
   label?: string;
-  type: string;
+  type:
+    | "text"
+    | "password"
+    | "email"
+    | "number"
+    | "textarea"
+    | "select"
+    | "multiSelect"
+    | "tagInput"
+    | "checkbox"
+    | "radio"
+    | "file";
   size?: string;
   labelProp?: Record<string, string | number>;
   textInputProp?: Record<any, any>;

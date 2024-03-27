@@ -12,7 +12,6 @@ import {
   useSectionInfo,
 } from "./actions";
 import { productInfoSchema } from "./constants";
-import ExpectedProducts from "./expectedProducts";
 
 const ProductForm = ({ open, setOpen }: IProps) => {
   const [section, setSection] = useState(1);
@@ -87,9 +86,7 @@ const ProductForm = ({ open, setOpen }: IProps) => {
             "grid grid-cols-2 gap-x-5": isDesktop,
           })}
           disableAll={productInfo.isLoading}
-          renderOtherFields={(args) => <ExpectedProducts {...args} />}
         >
-          {/* <ExpectedProducts /> */}
           <div className="bg-white flex items-center justify-end pt-4 sticky bottom-0">
             <Button
               type="submit"

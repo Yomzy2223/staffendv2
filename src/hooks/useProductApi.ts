@@ -130,7 +130,7 @@ const useProductApi = () => {
     });
 
   const getAllServicesProductsFormQuery = useQuery({
-    queryKey: ["product"],
+    queryKey: ["Product Form"],
     queryFn: getAllServicesProductsForm,
   });
 

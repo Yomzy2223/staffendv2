@@ -78,7 +78,7 @@ const Header = ({ edit, info, loading }: IProps) => {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           helperText={<>{descError}</>}
-          color={descError && "failure"}
+          color={descError ? "failure" : "primary"}
           className={cn("resize-none px-2 py-1", {
             "focus:outline-none": descError,
           })}

@@ -82,6 +82,10 @@ export const customTheme: ThemeProps = {
     },
     textarea: {
       base: "block w-full rounded-lg border disabled:cursor-not-allowed disabled:opacity-50 text-sm outline-primary",
+      colors: {
+        primary:
+          "border-border text-foreground placeholder-cyan-700 focus:border-primary focus:ring-primary dark:border-cyan-400 dark:bg-cyan-100 dark:focus:border-primary dark:focus:ring-primary",
+      },
     },
     checkbox: {
       root: {

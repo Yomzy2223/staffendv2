@@ -7,10 +7,12 @@ const EditDelete = ({
   onEdit,
   deleteAction,
   loading,
+  text,
 }: {
   onEdit: () => void;
   deleteAction: () => void;
   loading?: boolean;
+  text?: boolean;
 }) => {
   const [deleteClicked, setDeleteClicked] = useState(false);
   const [value, setValue] = useState("");
@@ -50,8 +52,12 @@ const EditDelete = ({
           className="[&_input]:h-6 [&_input]:py-0 [&_input]:placeholder:text-sm focus:[&_input]:outline-none"
         />
       ) : (
-        <Button type="button" color="ghost" size="fit">
-          <PencilLine size={16} color="hsl(var(--primary))" onClick={onEdit} />
+        <Button type="button" color="ghost" size="fit" onClick={onEdit}>
+          {text ? (
+            <span className="text-primary text-sm">Edit</span>
+          ) : (
+            <PencilLine size={16} color="hsl(var(--primary))" />
+          )}
         </Button>
       )}
 
@@ -70,7 +76,11 @@ const EditDelete = ({
           onClick={handleDelete}
           disabled={deleteClicked && !matches}
         >
-          <Trash2 size={16} color="hsl(var(--destructive-foreground))" />
+          {text ? (
+            <span className="text-destructive-foreground text-sm">Delete</span>
+          ) : (
+            <Trash2 size={16} color="hsl(var(--destructive-foreground))" />
+          )}
         </Button>
       )}
       {deleteClicked && (

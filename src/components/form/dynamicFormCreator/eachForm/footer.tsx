@@ -73,6 +73,7 @@ const Footer = ({
           onEdit={() => setEdit(true)}
           deleteAction={deleteForm}
           loading={deleteLoading}
+          text
         />
       )}
     </div>

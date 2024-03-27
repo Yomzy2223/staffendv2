@@ -35,7 +35,7 @@ const Footer = ({
         <div className="flex items-center gap-2 text-foreground-9">
           <Checkbox
             id="compulsory"
-            className="accent-primary"
+            color="primary"
             checked={getValues("compulsory")}
             onChange={onCheckToggle}
           />

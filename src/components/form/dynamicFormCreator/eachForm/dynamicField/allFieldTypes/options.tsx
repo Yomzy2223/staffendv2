@@ -100,7 +100,7 @@ const Options = ({ info, setValue, edit, error, type }: IProps) => {
                 placeholder={"Enter option " + (i + 1)}
                 onChange={(e) => handleChange(e, i)}
                 onKeyDown={(e) => handleKeyDown(e, option, i)}
-                className="h-5 [&_input]:p-0 [&_input]:border-0 [&_input]:outline-none [&_input]:bg-transparent [&_input]:rounded-none focus:[&_input]:border-b [&_input]:!border-border w-full"
+                className="h-5 [&_input]:p-0 [&_input]:border-0 [&_input]:outline-none [&_input]:bg-transparent [&_input]:rounded-none focus:[&_input]:border-b focus:[&_input]:ring-0 [&_input]:!border-border w-full"
                 disabled={!edit}
               />
               {edit && (

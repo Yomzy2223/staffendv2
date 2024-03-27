@@ -163,7 +163,12 @@ const EachForm = ({
           }
           isEdit={edit}
           loading={fieldLoading && loadingField === lastField}
-          deleteField={() => setNewlyAdded(undefined)}
+          deleteField={() => {
+            setFieldsEditState(
+              [...fieldsEditState].filter((el) => el.number !== lastField)
+            );
+            setNewlyAdded(undefined);
+          }}
           fieldsEditState={fieldsEditState}
           setFieldsEditState={setFieldsEditState}
           isNew

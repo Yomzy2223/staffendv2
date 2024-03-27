@@ -62,6 +62,8 @@ const DynamicField = ({
     setType,
     fieldsEditState,
     setFieldsEditState,
+    isNew,
+    deleteField,
   });
 
   // Submit handler

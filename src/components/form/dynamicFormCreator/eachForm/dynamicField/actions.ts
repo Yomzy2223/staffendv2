@@ -13,6 +13,8 @@ export const useFormFieldActions = ({
   setType,
   fieldsEditState,
   setFieldsEditState,
+  isNew,
+  deleteField,
 }: {
   number: number;
   fieldInfo: FieldType;
@@ -24,6 +26,8 @@ export const useFormFieldActions = ({
   setFieldsEditState: Dispatch<
     SetStateAction<{ number: number; edit: boolean }[]>
   >;
+  isNew?: boolean;
+  deleteField: Function;
 }) => {
   const [options, setOptions] = useState<string[]>([]);
   const [compulsory, setCompulsory] = useState(false);
@@ -120,7 +124,7 @@ export const useFormFieldActions = ({
   };
 
   const cancelChanges = () => {
-    mountInfo(fieldInfo);
+    isNew ? deleteField() : mountInfo(fieldInfo);
     setEdit(false);
   };
 

@@ -24,10 +24,10 @@ const Header = ({ edit, info, loading }: IProps) => {
       <div className="flex justify-between items-center gap-6">
         <div className="flex items-center gap-2 flex-1">
           <Checkbox
-            className="accent-primary"
             checked={compulsory}
             onChange={(e) => setCompulsory(e.target.checked)}
             disabled={!edit || loading}
+            color="primary"
           />
           <div className="flex gap-2 space-y-0">
             {edit || !title ? (

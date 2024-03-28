@@ -38,7 +38,6 @@ export const useProductInfoActions = ({
   const productInfo = useGetProductQuery(productId as string);
 
   const submitProductInfo = async (values: productInfoType) => {
-    console.log(values);
     productId
       ? updateProductMutation.mutate(
           {

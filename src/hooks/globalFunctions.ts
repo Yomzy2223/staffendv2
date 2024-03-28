@@ -54,9 +54,11 @@ export const useGlobalFunctions = () => {
 export const uploadFileToCloudinary = async ({
   getProgress,
   file,
+  userId,
 }: {
   file: File;
   getProgress: (e: number) => void;
+  userId?: string;
 }) => {
   const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_NAME}/raw/upload`;
   const formData = new FormData();
@@ -65,7 +67,7 @@ export const uploadFileToCloudinary = async ({
     "upload_preset",
     `${process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}`
   );
-  formData.append("folder", "App V2");
+  formData.append("folder", userId ? `App V2/${userId}` : "App V2");
 
   return await axios.post(url, formData, {
     onUploadProgress: (progressEvent) => {

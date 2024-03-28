@@ -50,7 +50,7 @@ export const FileInput = ({
 
   return (
     <div
-      {...getRootProps({})}
+      {...getRootProps()}
       className={cn(
         "bg-gray-50 px-8 py-4 cursor-pointer rounded-lg border-2 border-gray-200 border-dashed flex flex-col gap-2 items-center justify-center",
         {
@@ -58,7 +58,7 @@ export const FileInput = ({
         }
       )}
     >
-      <input {...getInputProps({})} />
+      {/* <input {...getInputProps({})} /> */}
       {!file && !fileName && !fileLink ? (
         editMode ? (
           <>

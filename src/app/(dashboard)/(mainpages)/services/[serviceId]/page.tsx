@@ -7,66 +7,33 @@ import DoChecks from "@/components/DoChecks";
 import ServiceForm from "@/components/form/serviceForm";
 import AnalyticsHeader from "@/components/header/analyticsHeader";
 import CardWrapper from "@/components/wrappers/cardWrapper";
-import { IRequest } from "@/hooks/api/types";
+import { IServiceFull } from "@/hooks/api/types";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
-import useRequestApi from "@/hooks/useRequestApi";
-import { isSameMonth, subMonths } from "date-fns";
+import useServiceApi from "@/hooks/useServiceApi";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 import React, { useState } from "react";
+import { useActions } from "./actions";
 import TableSection from "./tableSection";
-
-// export async function generateStaticParams() {
-//   const posts = [{ service: "launch" }, { service: "manage" }, { service: "tax" }];
-
-//   return posts.map((post) => ({
-//     slug: post,
-//   }));
-// }
 
 const Service = ({ params }: { params: { serviceId: string } }) => {
   const [open, setOpen] = useState(false);
   const { setQuery } = useGlobalFunctions();
   const { serviceId } = params;
 
-  const { useGetServiceRequestQuery } = useRequestApi();
-  const { data } = useGetServiceRequestQuery(serviceId as string);
+  const { useGetServiceQuery } = useServiceApi();
+  const service = useGetServiceQuery(serviceId as string);
+  const serviceData: IServiceFull = service?.data?.data?.data;
+  if (!serviceData && !service.isLoading) redirect("/services");
 
-  const requestsData: IRequest[] = data?.data?.data;
-
-  const pendingRequests = requestsData?.filter(
-    (el: IRequest) => el.status === "PENDING"
-  );
-
-  const submittedRequests = requestsData?.filter(
-    (el: IRequest) => el.status === "SUBMITTED"
-  );
-  const completedRequests = requestsData?.filter(
-    (el: IRequest) => el.status === "COMPLETED"
-  );
-
-  const thisMonthReq = {
-    pending: pendingRequests?.filter((el: IRequest) =>
-      isSameMonth(el.createdAt, new Date())
-    ),
-    submitted: submittedRequests?.filter((el: IRequest) =>
-      isSameMonth(el.submittedAt, new Date())
-    ),
-    completed: completedRequests?.filter((el: IRequest) =>
-      isSameMonth(el.completedAt, new Date())
-    ),
-  };
-
-  const lastMonthReq = {
-    pending: pendingRequests?.filter((el: IRequest) =>
-      isSameMonth(el.createdAt, subMonths(new Date(), 1))
-    ),
-    submitted: submittedRequests?.filter((el: IRequest) =>
-      isSameMonth(el.submittedAt, subMonths(new Date(), 1))
-    ),
-    completed: completedRequests?.filter((el: IRequest) =>
-      isSameMonth(el.completedAt, subMonths(new Date(), 1))
-    ),
-  };
+  const {
+    requestsData,
+    pendingRequests,
+    submittedRequests,
+    completedRequests,
+    lastMonthReq,
+    thisMonthReq,
+  } = useActions({ serviceId });
 
   const addNewService = () => {
     setOpen(true);
@@ -77,7 +44,11 @@ const Service = ({ params }: { params: { serviceId: string } }) => {
     <>
       <div className="flex flex-col gap-8 pt-4 pb-6 lg:flex-row ">
         <div className="flex flex-nowrap gap-8 overflow-auto px-1 py-2 lg:w-1/2 lg:grid lg:grid-cols-2">
-          <ServiceSummaryCard totalProducts={requestsData?.length || 0} />
+          <ServiceSummaryCard
+            totalProducts={requestsData?.length || 0}
+            serviceData={serviceData}
+            isLoading={service.isLoading}
+          />
           <AnalyticsCard3
             title="Completed requests"
             total={completedRequests?.length}

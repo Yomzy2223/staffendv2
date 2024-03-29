@@ -31,7 +31,7 @@ const Service = () => {
         btnText="Add new service"
         btnAction={addNewService}
       >
-        d
+        No service has been added
       </DoChecks>
       <ServiceForm setOpen={setOpen} open={open} />
     </>

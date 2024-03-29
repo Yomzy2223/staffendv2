@@ -13,7 +13,7 @@ const DoChecks = ({
   btnText,
 }: {
   children: ReactNode;
-  items: (string | number)[];
+  items: any[];
   errorText?: string;
   emptyText?: string;
   className?: string;

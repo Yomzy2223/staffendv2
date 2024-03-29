@@ -15,7 +15,6 @@ const layout = ({ children }: { children: ReactNode }) => {
   const { setQuery } = useGlobalFunctions();
 
   const openServiceForm = () => {
-    // push("/services");
     setQuery("action", "add");
     setOpen(true);
   };

@@ -1,9 +1,9 @@
 import useServiceApi from "@/hooks/useServiceApi";
-import { Service } from "custom-types";
 import { useParams } from "next/navigation";
 import slugify from "slugify";
 import { cn } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
+import { IServiceFull } from "@/hooks/api/types";
 
 export const useActions = () => {
   const { getAllServicesQuery } = useServiceApi();
@@ -14,7 +14,7 @@ export const useActions = () => {
 
   const getServicesRoute = () => {
     if (services) {
-      return services.map((service: Service) => ({
+      return services.map((service: IServiceFull) => ({
         name: service.name,
         to: `/services/${slugify(service.id)}`,
       }));

@@ -16,13 +16,13 @@ const AnalyticsCard3 = ({
   title: string;
   previous: number;
   current: number;
-  total: string;
+  total: number;
   bottomText?: string;
   className?: string;
 }) => {
   const difference = current - previous;
-  let perc = ((100 * difference) / previous).toFixed(2) || 0;
-  perc = parseInt(perc.toString());
+  let perc = 100 * difference || 0;
+  if (previous > 0) perc = parseInt((perc / previous).toFixed(2));
   const decreased = perc < 0;
 
   return (
@@ -37,7 +37,6 @@ const AnalyticsCard3 = ({
         <p className="sb-text-24 font-semibold">{total}</p>
         <Image src={Chart3} alt="analytics chart" />
       </div>
-
       <div className="flex items-center text-sm text-foreground-5 font-normal">
         <span>
           {decreased ? (
@@ -52,9 +51,9 @@ const AnalyticsCard3 = ({
             "text-destructive-foreground": decreased,
           })}
         >
-          {perc + "%"}
+          {perc}%
         </span>
-        {" " + ("vs last month" || bottomText)}
+        <span className="ml-1">{"vs last month" || bottomText}</span>
       </div>
     </CardWrapper>
   );

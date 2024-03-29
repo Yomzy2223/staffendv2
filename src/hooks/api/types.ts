@@ -77,3 +77,15 @@ export interface ICountryFull {
   iso: string;
   currency: string;
 }
+
+export interface IRequest {
+  completedAt: string;
+  createdAt: string;
+  currentState: string;
+  id: string;
+  paid: boolean;
+  productId: string;
+  status: "PENDING" | "SUBMITTED" | "COMPLETED";
+  submittedAt: string;
+  updatedAt: string;
+}

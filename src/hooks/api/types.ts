@@ -16,16 +16,18 @@ export interface IServiceForm {
   compulsory: boolean;
 }
 
-export interface IServiceSubForm {
+export interface ISubForm {
   question: string;
   type: string;
   options?: string[];
   compulsory: boolean;
+  allowOther?: boolean;
   fileName?: string;
-  fileDescription?: string;
   fileLink?: string;
   fileType?: string;
-  documentType?: string;
+  fileSize?: string;
+  documentType: string; //to be removed
+  dependsOn?: IDependsOn;
 }
 
 export interface IProduct {
@@ -49,18 +51,6 @@ export interface IProductForm {
   description: string;
   type: string;
   compulsory: boolean;
-}
-
-export interface IProductSubForm {
-  question: string;
-  type: string;
-  options?: (string | number)[];
-  compulsory: boolean;
-  fileName?: string;
-  fileLink?: string;
-  fileType?: string;
-  dependsOn?: IDependsOn;
-  allowOther?: boolean;
 }
 
 export interface ICountry {
@@ -88,4 +78,8 @@ export interface IRequest {
   status: "PENDING" | "SUBMITTED" | "COMPLETED";
   submittedAt: string;
   updatedAt: string;
+}
+
+export interface IPartnerForm {
+  forms: ISubForm;
 }

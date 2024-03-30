@@ -3,6 +3,13 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
 import useMediaQuery from "./useMediaQuery";
 import { saveAs } from "file-saver";
+import {
+  MutationFunction,
+  QueryClient,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { useResponse } from "./useResponse";
 
 export const useGlobalFunctions = () => {
   const searchParams = useSearchParams();
@@ -127,3 +134,27 @@ export const tagColors = [
     bg: "bg-[hsl(50,100%,91%)]",
   },
 ];
+
+export const useCustomMutation = ({
+  queryClient,
+  mutationFn,
+  queryKey,
+}: {
+  queryClient: QueryClient;
+  mutationFn?: MutationFunction<unknown, any>;
+  queryKey: readonly unknown[];
+}) => {
+  const { handleError, handleSuccess } = useResponse();
+
+  return useMutation({
+    mutationFn,
+    onError(error, variables, context) {
+      handleError({ title: "Failed", error });
+    },
+    onSuccess(data, variables, context) {
+      handleSuccess({ data });
+      queryClient.invalidateQueries({ queryKey });
+    },
+    retry: 3,
+  });
+};

@@ -3,18 +3,6 @@ import { useToast } from "@/components/ui/use-toast";
 export const useResponse = () => {
   const { toast } = useToast();
 
-  interface responseType {
-    title?: string;
-    action?: any;
-    hideIcon?: boolean;
-  }
-  interface successType extends responseType {
-    data: any;
-  }
-  interface errorType extends responseType {
-    error: any;
-  }
-
   const handleError = ({ error, title, action, hideIcon }: errorType) => {
     let errorMessage;
     if (error?.response?.data?.error)
@@ -49,3 +37,15 @@ export const useResponse = () => {
     handleSuccess,
   };
 };
+
+interface responseType {
+  title?: string;
+  action?: any;
+  hideIcon?: boolean;
+}
+interface successType extends responseType {
+  data: any;
+}
+interface errorType extends responseType {
+  error: any;
+}

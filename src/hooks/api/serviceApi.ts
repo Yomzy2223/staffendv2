@@ -1,5 +1,5 @@
 import { Client } from "@/lib/axios";
-import { IService, IServiceForm, IServiceSubForm } from "./types";
+import { IService, IServiceForm, ISubForm } from "./types";
 
 // Service endpoints
 export const createService = async (formInfo: IService) => {
@@ -76,7 +76,7 @@ export const createServiceSubForm = async ({
   formInfo,
 }: {
   formId: string;
-  formInfo: IServiceSubForm;
+  formInfo: ISubForm;
 }) => {
   const client = await Client();
   return await client.post(`/services/subform/${formId}`, formInfo);
@@ -87,7 +87,7 @@ export const createMultipleServiceSubForms = async ({
   formInfo,
 }: {
   formId: string;
-  formInfo: IServiceSubForm[];
+  formInfo: ISubForm[];
 }) => {
   const client = await Client();
   return await client.post(`/services/subforms/${formId}`, {
@@ -100,7 +100,7 @@ export const updateServiceSubForm = async ({
   formInfo,
 }: {
   id: string;
-  formInfo: IServiceSubForm;
+  formInfo: ISubForm;
 }) => {
   const client = await Client();
   return await client.put(`/services/subform/${id}`, formInfo);

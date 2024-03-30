@@ -1,4 +1,4 @@
-import { IServiceSubForm } from "@/hooks/api/types";
+import { ISubForm } from "@/hooks/api/types";
 import useServiceApi from "@/hooks/useServiceApi";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
@@ -105,7 +105,7 @@ export const useServiceFormActions = () => {
       ? updateServiceSubFormMutation.mutate(
           {
             id: fieldId,
-            formInfo: values as IServiceSubForm,
+            formInfo: values as ISubForm,
           },
           {
             onSuccess: (data) => onSuccess && onSuccess(data),
@@ -115,7 +115,7 @@ export const useServiceFormActions = () => {
         createServiceSubFormMutation.mutate(
           {
             formId,
-            formInfo: values as IServiceSubForm,
+            formInfo: values as ISubForm,
           },
           {
             onSuccess: (data) => onSuccess && onSuccess(data),
@@ -133,7 +133,7 @@ export const useServiceFormActions = () => {
     if (!formId) return;
     createMultipleServiceSubFormsMutation.mutate({
       formId,
-      formInfo: values as IServiceSubForm[],
+      formInfo: values as ISubForm[],
     });
   };
 

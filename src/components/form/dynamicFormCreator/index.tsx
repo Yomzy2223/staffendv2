@@ -1,4 +1,4 @@
-import { IProductSubForm } from "@/hooks/api/types";
+import { ISubForm } from "@/hooks/api/types";
 import { Button } from "flowbite-react";
 import { PlusCircle } from "lucide-react";
 import React, { useState } from "react";

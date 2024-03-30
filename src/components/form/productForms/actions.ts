@@ -1,5 +1,5 @@
 import { getCountries } from "@/hooks/api/countryApi";
-import { ICountry, IProductSubForm } from "@/hooks/api/types";
+import { ICountry, ISubForm } from "@/hooks/api/types";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { useCountryApi } from "@/hooks/useCountryApi";
 import useProductApi from "@/hooks/useProductApi";
@@ -128,7 +128,7 @@ export const useProductFormActions = () => {
       ? updateProductSubFormMutation.mutate(
           {
             id: fieldId,
-            formInfo: values as IProductSubForm,
+            formInfo: values as ISubForm,
           },
           {
             onSuccess: (data) => onSuccess && onSuccess(data),
@@ -138,7 +138,7 @@ export const useProductFormActions = () => {
         createProductSubFormMutation.mutate(
           {
             formId,
-            formInfo: values as IProductSubForm,
+            formInfo: values as ISubForm,
           },
           {
             onSuccess: (data) => onSuccess && onSuccess(data),
@@ -156,7 +156,7 @@ export const useProductFormActions = () => {
     if (!formId) return;
     createMultipleProductSubFormsMutation.mutate({
       formId,
-      formInfo: values as IProductSubForm[],
+      formInfo: values as ISubForm[],
     });
   };
 

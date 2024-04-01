@@ -1,23 +1,24 @@
 import ConfirmAction from "@/components/confirmAction";
-import {
-  Menubar,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarSeparator,
-  MenubarTrigger,
-} from "@/components/ui/menubar";
+import { MenubarSeparator } from "@/components/ui/menubar";
+import PopOverWrapper from "@/components/wrappers/popOverWrapper";
 import { IProductFull } from "@/hooks/api/types";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
+import { Button } from "flowbite-react";
 import { Currency, MoreHorizontal, Timer, WholeWord } from "lucide-react";
 import React, { Dispatch, SetStateAction, useState } from "react";
 
-const ProductCard = ({ info, setOpen, handleDelete, isLoading }: IProps) => {
+const ProductCard = ({
+  info,
+  setOpenEdit,
+  handleDelete,
+  isLoading,
+}: IProps) => {
+  const [open, setOpen] = useState(false);
   const [openConfirm, setOpenConfirm] = useState(false);
   const { setQuery } = useGlobalFunctions();
 
   const handleEdit = () => {
-    setOpen(true);
+    setOpenEdit(true);
     setQuery("productId", info.id);
   };
 
@@ -31,7 +32,40 @@ const ProductCard = ({ info, setOpen, handleDelete, isLoading }: IProps) => {
               {info?.feature?.[0]}
             </span>
           </div>
-          <Menubar className="p-0 h-max border-none">
+          <PopOverWrapper
+            open={open}
+            setOpen={setOpen}
+            onClose={() => setOpen(false)}
+            className="p-1"
+            content={
+              <div>
+                <Button
+                  color="transparent"
+                  className="w-full md:[&_span]:justify-start"
+                  onClick={handleEdit}
+                >
+                  Edit
+                </Button>
+                <MenubarSeparator className="max-w-full m-0" />
+                <Button
+                  color="transparent"
+                  className="md:[&_span]:justify-start w-full text-destructive-foreground hover:!text-destructive-foreground hover:!bg-destructive"
+                  onClick={() => setOpenConfirm(true)}
+                >
+                  Delete
+                </Button>
+              </div>
+            }
+          >
+            <Button
+              size="fit"
+              color="transparent"
+              className="flex items-center"
+            >
+              <MoreHorizontal color="hsl(var(--foreground-5))" />
+            </Button>
+          </PopOverWrapper>
+          {/* <Menubar className="p-0 h-max border-none">
             <MenubarMenu>
               <MenubarTrigger asChild className="p-0 cursor-pointer">
                 <MoreHorizontal color="hsl(var(--foreground-5))" />
@@ -47,7 +81,7 @@ const ProductCard = ({ info, setOpen, handleDelete, isLoading }: IProps) => {
                 </MenubarItem>
               </MenubarContent>
             </MenubarMenu>
-          </Menubar>
+          </Menubar> */}
           {openConfirm && (
             <ConfirmAction
               open={openConfirm}
@@ -91,7 +125,7 @@ export default ProductCard;
 
 interface IProps {
   info: IProductFull;
-  setOpen: Dispatch<SetStateAction<boolean>>;
+  setOpenEdit: Dispatch<SetStateAction<boolean>>;
   handleDelete: ({
     info,
     setOpenConfirm,

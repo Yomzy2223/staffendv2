@@ -89,11 +89,8 @@ export const customTheme: ThemeProps = {
     },
     checkbox: {
       root: {
-        base: "h-4 w-4 rounded focus:ring-0",
-        color: {
-          primary:
-            "h-4 w-4 appearance-none bg-muted border-none rounded ring-border ring-1 ring-offset-1 checked:bg-primary checked:ring-primary disabled:opacity-70",
-        },
+        base: "h-4 w-4 rounded focus:ring-offset-0 focus:ring-0 appearance-none bg-muted border-none rounded ring-0 checked:bg-primary checked:ring-primary disabled:opacity-70",
+        color: {},
       },
     },
     progress: {

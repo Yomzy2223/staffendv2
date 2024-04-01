@@ -73,8 +73,6 @@ const Options = ({ info, setValue, edit, error, type }: IProps) => {
         </label>
         <Checkbox
           id="allow-other"
-          className="w-4 h-4"
-          color="primary"
           checked={allowOther}
           onChange={handleOther}
           disabled={!edit}
@@ -87,10 +85,12 @@ const Options = ({ info, setValue, edit, error, type }: IProps) => {
         })}
       >
         {options.map((option, i) => (
-          <div key={i} className="flex items-center gap-2">
-            {type === "checkbox" && <Checkbox disabled className="w-5 h-5" />}
+          <div key={i} className="flex items-center gap-2 pl-0.5">
+            {type === "checkbox" && (
+              <Checkbox disabled className="ring-1 ring-border" />
+            )}
             {type === "multiple choice" && (
-              <Radio disabled className="w-5 h-5" />
+              <Radio disabled className="ring-1 ring-border" />
             )}
             <div className="flex justify-between gap-4 w-full">
               <TextInput

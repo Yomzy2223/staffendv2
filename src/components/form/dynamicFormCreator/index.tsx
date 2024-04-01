@@ -23,6 +23,7 @@ const DynamicFormCreator = ({
   formInfo,
   formState,
   wide,
+  disallowPerson,
 }: IProps) => {
   const [newlyAdded, setNewlyAdded] = useState<FormType>();
   const [loadingForm, setLoadingForm] = useState<number>();
@@ -40,7 +41,7 @@ const DynamicFormCreator = ({
           type,
         },
         onSuccess: (data) => {
-          console.log(data);
+          if (!submitMultipleFields) return;
           const formId = data.data.data.id;
           submitMultipleFields({
             formId,
@@ -110,16 +111,28 @@ const DynamicFormCreator = ({
         )}
       </Masonry>
 
-      <FieldTypePopUp
-        handleSelect={handleSelect}
-        isForm
-        disabled={formState.formLoading || newlyAdded ? true : false}
-      >
-        <Button color="ghost" size="fit" className="my-4 text-foreground-5">
+      {disallowPerson ? (
+        <Button
+          color="ghost"
+          size="fit"
+          className="my-4 text-foreground-5"
+          onClick={() => handleSelect("form")}
+        >
           <PlusCircle size={20} />
           {btnText}
         </Button>
-      </FieldTypePopUp>
+      ) : (
+        <FieldTypePopUp
+          handleSelect={handleSelect}
+          isForm
+          disabled={formState.formLoading || newlyAdded ? true : false}
+        >
+          <Button color="ghost" size="fit" className="my-4 text-foreground-5">
+            <PlusCircle size={20} />
+            {btnText}
+          </Button>
+        </FieldTypePopUp>
+      )}
     </div>
   );
 };
@@ -128,7 +141,7 @@ export default DynamicFormCreator;
 
 interface IProps {
   fieldTitle?: string;
-  submitMultipleFields: ({
+  submitMultipleFields?: ({
     formId,
     values,
   }: {
@@ -157,4 +170,5 @@ interface IProps {
     formDeleteLoading: boolean;
   };
   wide?: boolean;
+  disallowPerson?: boolean;
 }

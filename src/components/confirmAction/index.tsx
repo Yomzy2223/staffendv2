@@ -28,6 +28,7 @@ const ConfirmAction = ({
         body: "min-h-max",
       }}
       dismissible={dismissible}
+      fit
     >
       <div className="flex flex-col gap-4">
         <p className="sb-text-16 text-foreground-5 text-center">

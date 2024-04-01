@@ -54,7 +54,7 @@ const Products = () => {
           <ProductCard
             key={i}
             info={product}
-            setOpen={setOpen}
+            setOpenEdit={setOpen}
             handleDelete={deleteProduct}
             isLoading={deleteProductMutation.isPending}
           />

@@ -1,5 +1,5 @@
 import { Client } from "@/lib/axios";
-import { IProductForm, ISubForm, IProduct } from "./types";
+import { IForm, ISubForm, IProduct } from "./types";
 
 // Product endpoints
 export const createProduct = async ({
@@ -50,7 +50,7 @@ export const createProductForm = async ({
   formInfo,
 }: {
   productId: string;
-  formInfo: IProductForm;
+  formInfo: IForm;
 }) => {
   const client = await Client();
   return await client.post(`/products/form/${productId}`, formInfo);
@@ -61,7 +61,7 @@ export const updateProductForm = async ({
   formInfo,
 }: {
   id: string;
-  formInfo: IProductForm;
+  formInfo: IForm;
 }) => {
   const client = await Client();
   return await client.put(`/products/form/${id}`, formInfo);

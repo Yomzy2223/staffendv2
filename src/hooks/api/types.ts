@@ -9,7 +9,7 @@ export interface IServiceFull extends IService {
   id: string;
 }
 
-export interface IServiceForm {
+export interface IForm {
   title: string;
   description: string;
   type: string;
@@ -46,13 +46,6 @@ export interface IProductFull extends IProduct {
   id: string;
 }
 
-export interface IProductForm {
-  title: string;
-  description: string;
-  type: string;
-  compulsory: boolean;
-}
-
 export interface ICountry {
   name: string;
   code: string;
@@ -78,8 +71,4 @@ export interface IRequest {
   status: "PENDING" | "SUBMITTED" | "COMPLETED";
   submittedAt: string;
   updatedAt: string;
-}
-
-export interface IPartnerForm {
-  forms: ISubForm;
 }

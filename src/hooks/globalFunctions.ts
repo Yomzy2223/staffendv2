@@ -15,7 +15,8 @@ export const useGlobalFunctions = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
-  const isDesktop = useMediaQuery("(min-width: 800px)");
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+
   // Get a new searchParams string by merging the current
   // searchParams with a provided key/value pair
   const createQueryString = useCallback(
@@ -134,27 +135,3 @@ export const tagColors = [
     bg: "bg-[hsl(50,100%,91%)]",
   },
 ];
-
-export const useCustomMutation = ({
-  queryClient,
-  mutationFn,
-  queryKey,
-}: {
-  queryClient: QueryClient;
-  mutationFn?: MutationFunction<unknown, any>;
-  queryKey: readonly unknown[];
-}) => {
-  const { handleError, handleSuccess } = useResponse();
-
-  return useMutation({
-    mutationFn,
-    onError(error, variables, context) {
-      handleError({ title: "Failed", error });
-    },
-    onSuccess(data, variables, context) {
-      handleSuccess({ data });
-      queryClient.invalidateQueries({ queryKey });
-    },
-    retry: 3,
-  });
-};

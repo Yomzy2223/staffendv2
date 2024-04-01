@@ -16,6 +16,7 @@ const PopOverWrapper = ({
   disabled,
   onClose,
   big,
+  className,
 }: IProps) => {
   const { isDesktop } = useGlobalFunctions();
 
@@ -36,7 +37,8 @@ const PopOverWrapper = ({
               "min-w-[200px] w-max max-w-[400px] p-0 max-h-[400px] overflow-auto",
               {
                 "max-w-[1000px] p-0 max-h-[1000px]": big,
-              }
+              },
+              className
             )}
             align="start"
           >
@@ -49,7 +51,9 @@ const PopOverWrapper = ({
             {children}
           </DrawerTrigger>
           <DrawerContent className="max-h-screen">
-            <div className="overflow-auto mt-4 border-t">{content}</div>
+            <div className={cn("overflow-auto mt-4 border-t", cn)}>
+              {content}
+            </div>
           </DrawerContent>
         </Drawer>
       )}
@@ -67,4 +71,5 @@ interface IProps {
   disabled?: boolean;
   onClose?: () => void;
   big?: boolean;
+  className?: string;
 }

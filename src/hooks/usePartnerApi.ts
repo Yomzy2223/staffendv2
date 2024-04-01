@@ -1,32 +1,55 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createPartnerForm,
+  createPartnerSubForm,
   deletePartnerForm,
-  getAllPartnerForm,
+  deletePartnerSubForm,
+  getCountryPartnerForm,
   getPartnerForm,
+  getPartnerSubForm,
   updatePartnerForm,
+  updatePartnerSubForm,
 } from "./api/partnerApi";
-import { useCustomMutation } from "./globalFunctions";
+import { useResponse } from "./useResponse";
 
 const usePartnerApi = () => {
+  const { handleError, handleSuccess } = useResponse();
   const queryClient = useQueryClient();
 
-  const createPartnerFormMutation = useCustomMutation({
+  const createPartnerFormMutation = useMutation({
     mutationFn: createPartnerForm,
-    queryKey: ["partner"],
-    queryClient,
+    onError(error, variables, context) {
+      handleError({ title: "Failed", error });
+    },
+    onSuccess(data, variables, context) {
+      handleSuccess({ data });
+      queryClient.invalidateQueries({ queryKey: ["partner"] });
+    },
+    retry: 3,
   });
 
-  const updatePartnerFormMutation = useCustomMutation({
+  const updatePartnerFormMutation = useMutation({
     mutationFn: updatePartnerForm,
-    queryKey: ["partner"],
-    queryClient,
+    onError(error, variables, context) {
+      handleError({ title: "Failed", error });
+    },
+    onSuccess(data, variables, context) {
+      handleSuccess({ data });
+      queryClient.invalidateQueries({ queryKey: ["partner"] });
+    },
+    retry: 3,
   });
 
-  const deletePartnerFormMutation = useCustomMutation({
+  const deletePartnerFormMutation = useMutation({
     mutationFn: deletePartnerForm,
-    queryKey: ["partner"],
-    queryClient,
+    onError(error, variables, context) {
+      handleError({ title: "Failed", error });
+    },
+    onSuccess(data, variables, context) {
+      handleSuccess({ data });
+      queryClient.invalidateQueries({ queryKey: ["partner"] });
+    },
+    retry: 3,
   });
 
   const useGetPartnerFormQuery = (country: string) =>
@@ -36,17 +59,66 @@ const usePartnerApi = () => {
       enabled: country ? true : false,
     });
 
-  const getAllPartnerFormQuery = useQuery({
-    queryKey: ["partner"],
-    queryFn: getAllPartnerForm,
+  const useGetCountryPartnerFormsQuery = (country: string) =>
+    useQuery({
+      queryKey: ["partner", country],
+      queryFn: ({ queryKey }) => getCountryPartnerForm(queryKey[1]),
+      enabled: country ? true : false,
+    });
+
+  const createPartnerSubFormMutation = useMutation({
+    mutationFn: createPartnerSubForm,
+    onError(error, variables, context) {
+      handleError({ title: "Failed", error });
+    },
+    onSuccess(data, variables, context) {
+      handleSuccess({ data });
+      queryClient.invalidateQueries({ queryKey: ["partner"] });
+    },
+    retry: 3,
   });
+
+  const updatePartnerSubFormMutation = useMutation({
+    mutationFn: updatePartnerSubForm,
+    onError(error, variables, context) {
+      handleError({ title: "Failed", error });
+    },
+    onSuccess(data, variables, context) {
+      handleSuccess({ data });
+      queryClient.invalidateQueries({ queryKey: ["partner"] });
+    },
+    retry: 3,
+  });
+
+  const deletePartnerSubFormMutation = useMutation({
+    mutationFn: deletePartnerSubForm,
+    onError(error, variables, context) {
+      handleError({ title: "Failed", error });
+    },
+    onSuccess(data, variables, context) {
+      handleSuccess({ data });
+      queryClient.invalidateQueries({ queryKey: ["partner"] });
+    },
+    retry: 3,
+  });
+
+  const useGetPartnerSubFormQuery = (id: string) =>
+    useQuery({
+      queryKey: ["partner", id],
+      queryFn: ({ queryKey }) => getPartnerSubForm(queryKey[1]),
+      enabled: id ? true : false,
+    });
 
   return {
     createPartnerFormMutation,
     updatePartnerFormMutation,
     deletePartnerFormMutation,
     useGetPartnerFormQuery,
-    getAllPartnerFormQuery,
+    useGetCountryPartnerFormsQuery,
+    createPartnerSubFormMutation,
+    updatePartnerSubFormMutation,
+    deletePartnerSubFormMutation,
+    useGetPartnerSubFormQuery,
   };
 };
 

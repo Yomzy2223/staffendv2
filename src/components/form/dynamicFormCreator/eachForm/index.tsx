@@ -21,6 +21,7 @@ const EachForm = ({
   fieldDeleteHandler,
   formSubmitHandler,
   formDeleteHandler,
+  isNew,
   isEdit,
   formState,
   loadingForm,
@@ -33,7 +34,13 @@ const EachForm = ({
   const { formLoading, fieldLoading, fieldDeleteLoading, formDeleteLoading } =
     formState;
 
-  const formInfo = useFormActions({ formInfo: info, formLoading, setEdit });
+  const formInfo = useFormActions({
+    formInfo: info,
+    formLoading,
+    setEdit,
+    isNew,
+    formDeleteHandler,
+  });
   const {
     title,
     description,
@@ -66,6 +73,7 @@ const EachForm = ({
         formSubmitHandler({
           formId: info.id || "",
           values: formValues,
+          onSuccess: (data) => onSuccess && onSuccess(data),
         });
       } else
         formSubmitHandler({
@@ -211,6 +219,7 @@ interface IProps {
   fieldDeleteHandler: (id: string) => void;
   formDeleteHandler: () => void;
   isEdit?: boolean;
+  isNew?: boolean;
   formState: {
     formLoading: boolean;
     formSuccess: boolean;

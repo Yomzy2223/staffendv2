@@ -107,6 +107,7 @@ const DynamicFormCreator = ({
             loadingForm={loadingForm}
             setNewlyAddedForm={setNewlyAdded}
             isEdit
+            isNew
           />
         )}
       </Masonry>
@@ -116,6 +117,7 @@ const DynamicFormCreator = ({
           color="ghost"
           size="fit"
           className="my-4 text-foreground-5"
+          disabled={formState.formLoading || newlyAdded ? true : false}
           onClick={() => handleSelect(formOptions[0])}
         >
           <PlusCircle size={20} />

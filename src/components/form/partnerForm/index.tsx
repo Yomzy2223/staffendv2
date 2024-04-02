@@ -27,7 +27,7 @@ const PartnerForm = ({ open, setOpen }: IProps) => {
   const resetDialog = () => {
     setOpen(false);
     deleteQueryString("action");
-    deleteQueryString("countryId");
+    deleteQueryString("country");
   };
 
   const wide = partnerFormData?.length > 1;

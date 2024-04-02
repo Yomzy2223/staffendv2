@@ -5,10 +5,14 @@ export const useFormActions = ({
   formInfo,
   formLoading,
   setEdit,
+  isNew,
+  formDeleteHandler,
 }: {
   formInfo: FormType;
   formLoading: boolean;
   setEdit: Dispatch<SetStateAction<boolean>>;
+  isNew?: boolean;
+  formDeleteHandler: Function;
 }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -63,7 +67,7 @@ export const useFormActions = ({
   };
 
   const cancelChanges = () => {
-    mountInfo(formInfo);
+    isNew ? formDeleteHandler() : mountInfo(formInfo);
     setEdit(false);
   };
 

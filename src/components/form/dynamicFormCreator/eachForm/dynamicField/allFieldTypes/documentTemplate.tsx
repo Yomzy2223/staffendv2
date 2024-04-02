@@ -30,6 +30,7 @@ const DocumentTemplate = ({
         fileName={fileName}
         fileLink={info?.fileLink}
         fileType={info?.fileType}
+        fileSize={info?.fileSize}
       />
       {uploadProgress && uploadProgress !== 100 ? (
         <Progress

@@ -50,6 +50,7 @@ const PartnerForm = ({ open, setOpen }: IProps) => {
           onFormDelete={handleFormDelete}
           formState={partnerFormState}
           wide={wide}
+          disallowPerson
         />
         <div className="bg-white flex items-center justify-end gap-4 pt-4 sticky bottom-0">
           <Button color="primary" onClick={resetDialog}>

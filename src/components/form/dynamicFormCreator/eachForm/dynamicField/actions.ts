@@ -34,6 +34,7 @@ export const useFormFieldActions = ({
   const [fileName, setFileName] = useState("");
   const [fileLink, setFileLink] = useState("");
   const [fileType, setFileType] = useState("");
+  const [fileSize, setFileSize] = useState("");
   const [allowOther, setAllowOther] = useState<boolean>(false);
   const [documentType, setDocumentType] = useState<string>();
   const [dependsOn, setDependsOn] = useState<IDependsOn>({
@@ -76,6 +77,11 @@ export const useFormFieldActions = ({
     const fileType = info.fileType || "";
     setFileType(fileType);
     setValue("fileType", fileType, { shouldValidate: true });
+
+    // Set file size
+    const fileSize = info.fileSize || "";
+    setFileSize(fileSize);
+    setValue("fileSize", fileSize, { shouldValidate: true });
 
     // Set depends on
     const dependsOn = info.dependsOn || {
@@ -140,6 +146,7 @@ export const useFormFieldActions = ({
     setOptions,
     fileName,
     fileLink,
+    fileSize,
     compulsory,
     setCompulsory,
     dependsOn,
@@ -175,7 +182,6 @@ export const getDynamicFieldSchema = ({
       field: z.string().nullable(),
       options: z.string().array(),
     }),
-    allowOther: z.boolean(),
   };
 
   if (type === "checkbox" || type === "objectives") {
@@ -191,6 +197,7 @@ export const getDynamicFieldSchema = ({
           },
           { message: "Option cannot be empty" }
         ),
+      allowOther: z.boolean(),
     };
   }
 
@@ -219,6 +226,7 @@ export const getDynamicFieldSchema = ({
           fileName: z.string(),
           fileLink: z.string(),
           fileType: z.string(),
+          fileSize: z.string(),
         });
   }
 

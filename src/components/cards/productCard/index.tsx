@@ -65,23 +65,7 @@ const ProductCard = ({
               <MoreHorizontal color="hsl(var(--foreground-5))" />
             </Button>
           </PopOverWrapper>
-          {/* <Menubar className="p-0 h-max border-none">
-            <MenubarMenu>
-              <MenubarTrigger asChild className="p-0 cursor-pointer">
-                <MoreHorizontal color="hsl(var(--foreground-5))" />
-              </MenubarTrigger>
-              <MenubarContent>
-                <MenubarItem onClick={handleEdit}>Edit</MenubarItem>
-                <MenubarSeparator />
-                <MenubarItem
-                  className="text-destructive-foreground hover:!text-destructive-foreground hover:!bg-destructive"
-                  onClick={() => setOpenConfirm(true)}
-                >
-                  Delete
-                </MenubarItem>
-              </MenubarContent>
-            </MenubarMenu>
-          </Menubar> */}
+
           {openConfirm && (
             <ConfirmAction
               open={openConfirm}

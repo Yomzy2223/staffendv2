@@ -61,16 +61,20 @@ const EachForm = ({
   }) => {
     setIsSubmitted(true);
     if (validateFields()) {
+      //Only runs block when all fields are validated
       if (info.id) {
         formSubmitHandler({
           formId: info.id || "",
+          values: formValues,
+        });
+      } else
+        formSubmitHandler({
           values: formValues,
           onSuccess: (data) => {
             setNewlyAddedForm && setNewlyAddedForm(undefined);
             onSuccess && onSuccess(data);
           },
         });
-      } else formSubmitHandler({ values: formValues });
       return true;
     }
   };

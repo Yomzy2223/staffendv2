@@ -10,6 +10,7 @@ export interface IServiceFull extends IService {
 }
 
 export interface IForm {
+  id?: string;
   title: string;
   description: string;
   type: string;
@@ -17,6 +18,7 @@ export interface IForm {
 }
 
 export interface ISubForm {
+  id?: string;
   question: string;
   type: string;
   options?: string[];
@@ -26,7 +28,7 @@ export interface ISubForm {
   fileLink?: string;
   fileType?: string;
   fileSize?: string;
-  documentType: string; //to be removed
+  documentType?: string; //to be removed
   dependsOn?: IDependsOn;
 }
 

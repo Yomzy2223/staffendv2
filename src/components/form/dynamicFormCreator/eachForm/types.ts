@@ -2,6 +2,7 @@ import { AxiosResponse } from "axios";
 import { LucideIcon } from "lucide-react";
 import { Dispatch, SetStateAction } from "react";
 import { FormType } from "./constants";
+import { ISubForm } from "@/hooks/api/types";
 
 export interface IFieldSubmitHandlerArg {
   number?: number;
@@ -18,19 +19,8 @@ export interface IFormSubmitHandlerArg {
   onSuccess?: (data: AxiosResponse<any, any>) => void;
 }
 
-export interface FieldType {
-  id?: string;
-  type: string;
-  question?: string;
+export interface FieldType extends ISubForm {
   icon?: LucideIcon;
-  compulsory?: boolean;
-  options?: string[];
-  fileName?: string;
-  fileLink?: string;
-  fileType?: string;
-  dependsOn?: IDependsOn;
-  allowOther?: boolean;
-  documentType?: string;
 }
 
 export interface IDependsOn {

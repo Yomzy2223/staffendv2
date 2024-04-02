@@ -15,10 +15,12 @@ export const FileInput = ({
   onFileChange,
   editMode = true,
   fileType,
+  fileSize,
 }: {
   fileName: string;
   fileLink: string;
   fileType: string;
+  fileSize: string;
   onFileChange: (file: File) => void;
   editMode?: boolean;
 }) => {
@@ -44,9 +46,10 @@ export const FileInput = ({
 
   const fileExtension = file?.name.split(".").pop() || fileType;
 
-  let fileSize: string | number = Math.ceil(file?.size ? file?.size / 1000 : 0);
-  if (fileSize >= 1000) fileSize = (fileSize / 1000).toFixed(2) + "MB";
-  else fileSize = fileSize + "KB";
+  let size: string | number =
+    Math.ceil(file?.size ? file?.size / 1000 : 0) || parseInt(fileSize);
+  if (size >= 1000) size = (size / 1000).toFixed(2) + "MB";
+  else if (size > 0) size = size + "KB";
 
   return (
     <div
@@ -99,7 +102,7 @@ export const FileInput = ({
             </div>
             <div>
               <p className="text-sm underline">{file?.name || fileName}</p>
-              <p className="text-xs">{fileSize || fileLink}</p>
+              <p className="text-xs">{size || 0}</p>
             </div>
           </div>
           {(file || fileLink) && (

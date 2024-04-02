@@ -4,7 +4,7 @@ import { PlusCircle } from "lucide-react";
 import React, { useState } from "react";
 import Masonry from "react-masonry-css";
 import EachForm from "./eachForm";
-import { FormType } from "./eachForm/constants";
+import { formOptions, FormType } from "./eachForm/constants";
 import FieldTypePopUp from "./eachForm/fieldTypePopUp";
 import {
   FieldType,
@@ -116,7 +116,7 @@ const DynamicFormCreator = ({
           color="ghost"
           size="fit"
           className="my-4 text-foreground-5"
-          onClick={() => handleSelect("form")}
+          onClick={() => handleSelect(formOptions[0])}
         >
           <PlusCircle size={20} />
           {btnText}

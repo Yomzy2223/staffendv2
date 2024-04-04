@@ -1,5 +1,22 @@
 import { IDependsOn } from "@/components/form/dynamicFormCreator/eachForm/types";
 
+export interface ISignIn {
+  email: string;
+  password: string;
+}
+
+export interface ISignUp extends ISignIn {
+  fullName: string;
+  referral: string;
+  isPartner: boolean;
+  isStaff: boolean;
+}
+
+export interface IResetPassword {
+  token: string;
+  password: string;
+}
+
 export interface IService {
   name: string;
   description: string;
@@ -64,13 +81,51 @@ export interface ICountryFull {
 }
 
 export interface IRequest {
-  completedAt: string;
-  createdAt: string;
-  currentState: string;
+  businessname: string;
+  completedat: string;
+  createdat: string;
+  createdby: string;
   id: string;
   paid: boolean;
-  productId: string;
-  status: "PENDING" | "SUBMITTED" | "COMPLETED";
-  submittedAt: string;
+  productcountry: string;
+  productid: string;
+  productname: string;
+  requeststatus:
+    | "PENDING"
+    | "SUBMITTED"
+    | "ASSIGNED"
+    | "REJECTED"
+    | "COMPLETED";
+  servicename: string;
+  submittedat: string;
+  updatedat: string;
+  currentState: string;
+}
+
+export interface IUser {
+  country?: string;
+  createdAt: string;
+  email: string;
+  fullName: string;
+  googleId?: string;
+  id: string;
+  isActivated: boolean;
+  isDeprecated: boolean;
+  isIdentificationRegistered: boolean;
+  isIdentificationVerified: boolean;
+  isPartner: boolean;
+  isPhoneRegistered: boolean;
+  isPhoneVerified: boolean;
+  isStaff: boolean;
+  isVerified: boolean;
+  partnerPermission: string[];
+  password: string;
+  phone?: string;
+  picture?: string;
+  referral: string;
+  resetToken?: string;
+  staffPermission: [];
   updatedAt: string;
+  userPermission: string[];
+  username?: string;
 }

@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import React from "react";
 
 interface IProps {
-  queryNav: { name: string; value: string }[];
+  queryNav: { name: string; value: string; text: string }[];
   defaultActive?: number;
   variant?: number;
 }
@@ -26,17 +26,17 @@ const QueryNav2 = ({ queryNav, defaultActive = 0, variant }: IProps) => {
         return (
           <div key={el.value} className="flex items-center cursor-pointer">
             <Radio
-              id={el.value}
+              id={el.text}
               name={el.name}
               checked={isActive}
               onChange={() => setQuery(el.name, el.value)}
               className="cursor-pointer"
             />
             <Label
-              htmlFor={el.value}
+              htmlFor={el.text}
               className="text-sm font-normal first-letter:uppercase cursor-pointer pl-2"
             >
-              {el.value}
+              {el.text}
             </Label>
           </div>
         );

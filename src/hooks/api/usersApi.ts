@@ -1,21 +1,5 @@
 import { Client } from "@/lib/axios";
-
-interface ISignIn {
-  email: string;
-  password: string;
-}
-
-interface ISignUp extends ISignIn {
-  fullName: string;
-  referral: string;
-  isPartner: boolean;
-  isStaff: boolean;
-}
-
-interface IResetPassword {
-  token: string;
-  password: string;
-}
+import { IResetPassword, ISignIn, ISignUp } from "./types";
 
 export const signUp = async (formInfo: ISignUp) => {
   const client = await Client();

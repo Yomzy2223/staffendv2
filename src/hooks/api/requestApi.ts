@@ -25,10 +25,22 @@ export const getRequest = async (id: string) => {
 
 export const getServiceRequests = async (serviceId: string) => {
   const client = await Client();
-  return await client.get(`/productRequest/service/${serviceId}`);
+  return await client.get(`/productRequest`);
 };
 
 export const getAllRequests = async () => {
   const client = await Client();
   return await client.get(`/productRequest`);
+};
+
+export const assignRequest = async ({
+  formInfo,
+}: {
+  formInfo: {
+    userId: string;
+    requestIds: string[];
+  };
+}) => {
+  const client = await Client();
+  return await client.post(`/productRequest/assign`, formInfo);
 };

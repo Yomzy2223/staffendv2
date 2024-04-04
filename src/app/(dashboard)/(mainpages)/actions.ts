@@ -1,9 +1,19 @@
 import useServiceApi from "@/hooks/useServiceApi";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import slugify from "slugify";
 import { cn } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
-import { IServiceFull } from "@/hooks/api/types";
+import { IRequest, IServiceFull, IUser } from "@/hooks/api/types";
+import useRequestApi from "@/hooks/useRequestApi";
+import {
+  IRowInfo,
+  ITableBody,
+} from "@/components/tables/generalTable/constants";
+import { format } from "date-fns";
+import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
+import { useGlobalFunctions } from "@/hooks/globalFunctions";
+import usePartnerApi from "@/hooks/usePartnerApi";
+import useUserApi from "@/hooks/useUserApi";
 
 export const useActions = () => {
   const { getAllServicesQuery } = useServiceApi();
@@ -77,137 +87,108 @@ export const useActions = () => {
 };
 
 const cellClassName =
-  "[&_span]:bg-yellow-300 [&_span]:px-[10px] [&_span]:py-[2px] [&_span]:rounded-md";
+  "[&_span]:bg-yellow-300 [&_span]:px-[10px] [&_span]:py-[2px] [&_span]:rounded-md  text-xs";
 
-export const useTableInfo = () => {
+export const useTableInfo = ({
+  setOpen,
+}: {
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}) => {
+  const [selectedRequests, setSelectedRequests] = useState<string[]>([]);
+
+  const { getReqStatusColor, setQuery } = useGlobalFunctions();
+
   const router = useRouter();
-  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  const onClick = () => router.push(pathname + "/reg1");
+  const { getAllUsersQuery } = useUserApi();
+  const users = getAllUsersQuery;
+  const usersData = users.data?.data?.data;
+  const partners = usersData?.filter((el: IUser) => !el.isPartner);
+
+  const { getAllServicesQuery } = useServiceApi();
+  const services = getAllServicesQuery;
+  const servicesData = services.data?.data?.data || [];
+
+  const selectedServiceId =
+    searchParams.get("serviceId") || servicesData[0]?.id;
+
+  const { useGetServiceRequestQuery, assignRequestMutation } = useRequestApi();
+  const requests = useGetServiceRequestQuery(selectedServiceId);
+  const requestsData = requests.data?.data?.data;
+
+  const serviceTableNav = servicesData?.map((service: IServiceFull) => ({
+    name: "serviceId",
+    value: service.id,
+    text: service.name,
+  }));
+
+  const handleClick = (
+    e: MouseEvent<HTMLTableRowElement>,
+    rowId: string,
+    rowInfo: IRowInfo[]
+  ) => {
+    router.push(`/services/request/${rowId}`);
+  };
+
+  const handleAssignClick = (
+    e: MouseEvent<HTMLTableCellElement>,
+    rowId: string,
+    text: string
+  ) => {
+    e.stopPropagation();
+    setOpen(true);
+    setSelectedRequests([rowId]);
+  };
 
   // Services table header
   const tableHeaders = [
     "S/N",
     "BUSINESS NAME",
+    "PRODUCT NAME",
     "STATUS",
-    "SERVICE TYPE",
+    "CURRENT STATE",
+    "PAYMENT STATUS",
     "DATE",
+    "ACTION",
   ];
 
   // Services table body
-  const tableBody = [
-    {
-      rowProps: { onClick },
-      rowInfo: [
-        { text: "01" },
-        { text: "Sayo oil and gas" },
-        {
-          text: "Submitted",
-          cellProps: {
-            className: cn(
-              cellClassName,
-              "[&_span]:bg-success [&_span]:text-success-foreground"
-            ),
+  const tableBody =
+    requestsData?.map(
+      (request: IRequest, i: number): ITableBody => ({
+        rowId: request.id,
+        handleClick,
+        rowInfo: [
+          { text: i.toString().padStart(2, "0") },
+          { text: request?.businessname || "" },
+          { text: request?.servicename },
+          {
+            text: request.requeststatus,
+            cellProps: {
+              className: cn(
+                cellClassName,
+                getReqStatusColor(request.requeststatus)
+              ),
+            },
           },
-        },
-        { text: "Manage" },
-        { text: "April 23, 2021" },
-      ],
-    },
-    {
-      rowProps: { onClick },
-      rowInfo: [
-        { text: "01" },
-        { text: "Sayo oil and gas" },
-        {
-          text: "Submitted",
-          cellProps: {
-            className: cn(
-              cellClassName,
-              "[&_span]:bg-success [&_span]:text-success-foreground"
-            ),
+          { text: request.currentState },
+          { text: request.paid ? "Paid" : "Not Paid Yet" },
+          { text: format(request.createdat, "MMMM dd, yyyy") },
+          {
+            text: "Assign",
+            handleClick: handleAssignClick,
+            cellProps: { className: "text-primary underline" },
           },
-        },
-        { text: "Manage" },
-        { text: "April 23, 2021" },
-      ],
-    },
-    {
-      rowProps: { onClick },
-      rowInfo: [
-        { text: "01" },
-        { text: "Sayo oil and gas" },
-        {
-          text: "Done",
-          cellProps: {
-            className: cn(
-              cellClassName,
-              "[&_span]:bg-primary/20 [&_span]:text-primary"
-            ),
-          },
-        },
-        { text: "Manage" },
-        { text: "April 23, 2021" },
-      ],
-    },
-    {
-      rowProps: { onClick },
-      rowInfo: [
-        { text: "01" },
-        { text: "Sayo oil and gas" },
-        {
-          text: "In progress",
-          cellProps: {
-            className: cn(
-              cellClassName,
-              "[&_span]:bg-secondary/20 [&_span]:text-secondary"
-            ),
-          },
-        },
-        { text: "Manage" },
-        { text: "April 23, 2021" },
-      ],
-    },
-    {
-      rowProps: { onClick },
-      rowInfo: [
-        { text: "01" },
-        { text: "Sayo oil and gas" },
-        {
-          text: "Submitted",
-          cellProps: {
-            className: cn(
-              cellClassName,
-              "[&_span]:bg-primary/20 [&_span]:text-primary"
-            ),
-          },
-        },
-        { text: "Manage" },
-        { text: "April 23, 2021" },
-      ],
-    },
-    {
-      rowProps: { onClick },
-      rowInfo: [
-        { text: "01" },
-        { text: "Sayo oil and gas" },
-        {
-          text: "Submitted",
-          cellProps: {
-            className: cn(
-              cellClassName,
-              "[&_span]:bg-primary/20 [&_span]:text-primary"
-            ),
-          },
-        },
-        { text: "Manage" },
-        { text: "April 23, 2021" },
-      ],
-    },
-  ];
+        ],
+      })
+    ) || [];
 
   return {
+    serviceTableNav,
     tableHeaders,
     tableBody,
+    partners,
+    selectedRequests,
   };
 };

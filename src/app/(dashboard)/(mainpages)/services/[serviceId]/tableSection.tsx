@@ -13,7 +13,7 @@ const TableSection = () => {
       <GeneralTable
         tableHeaders={tableHeaders}
         tableBody={tableBody}
-        serviceTableNav={serviceTableNav}
+        tableNav={serviceTableNav}
       />
     </CardWrapper>
   );
@@ -25,21 +25,26 @@ const serviceTableNav = [
   {
     name: "status",
     value: "all",
+    text: "All",
   },
   {
     name: "status",
     value: "completed",
+    text: "Completed",
   },
   {
     name: "status",
     value: "submitted",
+    text: "Submitted",
   },
   {
     name: "status",
     value: "in progress",
+    text: "In Progress",
   },
   {
     name: "status",
     value: "in draft",
+    text: "Draft",
   },
 ];

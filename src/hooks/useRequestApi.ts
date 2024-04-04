@@ -7,6 +7,7 @@ import {
   getAllRequests,
   updateRequest,
   getServiceRequests,
+  assignRequest,
 } from "./api/requestApi";
 
 const useRequestApi = () => {
@@ -57,12 +58,25 @@ const useRequestApi = () => {
     queryFn: getAllRequests,
   });
 
+  const assignRequestMutation = useMutation({
+    mutationFn: assignRequest,
+    onError(error, variables, context) {
+      handleError({ title: "Failed", error });
+    },
+    onSuccess(data, variables, context) {
+      handleSuccess({ data });
+      queryClient.invalidateQueries({ queryKey: ["request"] });
+    },
+    retry: 3,
+  });
+
   return {
     updateRequestMutation,
     deleteRequestMutation,
     useGetRequestQuery,
     useGetServiceRequestQuery,
     getAllRequestsQuery,
+    assignRequestMutation,
   };
 };
 

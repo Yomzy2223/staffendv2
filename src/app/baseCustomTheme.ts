@@ -44,7 +44,7 @@ export const customTheme: ThemeProps = {
       },
     },
     button: {
-      base: " w-max focus:!ring-0 hover:opacity-80 active:opacity-90 transition transition-all text-sm",
+      base: "w-max focus:!ring-0 hover:opacity-80 active:opacity-90 transition transition-all text-sm",
       color: {
         primary:
           "bg-primary text-primary-foreground border border-transparent enabled:hover:bg-primary-dark",
@@ -100,7 +100,7 @@ export const customTheme: ThemeProps = {
     },
     radio: {
       root: {
-        base: "h-4 w-4 appearance-none bg-muted border-none rounded-full ring-border ring-1 ring-offset-1 checked:bg-primary checked:ring-primary focus:ring-1 focus:ring-offset-1",
+        base: "h-4 w-4 appearance-none bg-muted border-none rounded-full ring-border ring-0 ring-offset-0 checked:bg-primary checked:ring-primary focus:ring-0 focus:ring-offset-0",
       },
     },
   },

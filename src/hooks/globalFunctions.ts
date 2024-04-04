@@ -50,12 +50,28 @@ export const useGlobalFunctions = () => {
     return tagColors[i % 5];
   };
 
+  const getReqStatusColor = (status: string) => {
+    if (status === "PENDING")
+      return "[&_span]:bg-success [&_span]:text-success-foreground";
+    if (status === "SUBMITTED")
+      return "[&_span]:bg-success [&_span]:text-success-foreground";
+    if (status === "ASSIGNED")
+      return "[&_span]:bg-success [&_span]:text-success-foreground";
+    if (status === "ACCEPTED")
+      return "[&_span]:bg-success [&_span]:text-success-foreground";
+    if (status === "REJECTED")
+      return "[&_span]:bg-destructive [&_span]:text-destructive-foreground";
+    if (status === "COMPLETED")
+      return "[&_span]:bg-success [&_span]:text-success-foreground";
+  };
+
   return {
     createQueryString,
     deleteQueryString,
     setQuery,
     isDesktop,
     getRandColor,
+    getReqStatusColor,
   };
 };
 

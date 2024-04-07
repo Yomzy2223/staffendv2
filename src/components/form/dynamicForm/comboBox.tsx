@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { HTMLAttributes, ReactNode, useEffect, useState } from "react";
 import {
   Command,
   CommandGroup,
@@ -21,6 +21,7 @@ const ComboBox = ({
   placeholder,
   options,
   selectProp,
+  handleSelect,
   setValue,
   errorMsg,
   fieldName,
@@ -29,6 +30,7 @@ const ComboBox = ({
   disabled,
   optionsLoading,
   isMultiCombo,
+  className,
 }: IProps) => {
   const [openSelect, setOpenSelect] = useState(false);
   const [selectValue, setSelectValue] = useState(defaultValue);
@@ -43,15 +45,20 @@ const ComboBox = ({
   return (
     <>
       <Popover open={openSelect} onOpenChange={setOpenSelect}>
-        <PopoverTrigger asChild>
+        <PopoverTrigger asChild className="w-max">
           <Button
             outline
             role="combobox"
-            className={cn("w-full [&_span]:justify-between [&>span]:!p-2.5", {
-              "border-primary ring-primary ring-1": openSelect && !isMultiCombo,
-              "[&_span]:rounded-none rounded-none border-none bg-transparent":
-                isMultiCombo,
-            })}
+            className={cn(
+              "w-full [&_span]:justify-between [&>span]:!p-2.5",
+              {
+                "border-primary ring-primary ring-1":
+                  openSelect && !isMultiCombo,
+                "[&_span]:rounded-none rounded-none border-none bg-transparent":
+                  isMultiCombo,
+              },
+              className
+            )}
             disabled={disabled}
             {...selectProp}
           >
@@ -96,8 +103,7 @@ const ComboBox = ({
                       name &&
                       setValue(name, selected, { shouldValidate: true });
                     setOpenSelect(false);
-                    selectProp?.onSelect &&
-                      selectProp?.onSelect(findOriginalValue(selected));
+                    handleSelect && handleSelect(findOriginalValue(selected));
                   }}
                 >
                   <Check
@@ -127,7 +133,8 @@ interface IProps {
   name?: string;
   placeholder?: string;
   options: string[];
-  selectProp?: Record<any, any>;
+  selectProp?: HTMLAttributes<HTMLButtonElement>;
+  handleSelect?: (selected?: string) => void;
   setValue?: UseFormSetValue<any>;
   errorMsg?: string;
   fieldName?: string;
@@ -136,4 +143,5 @@ interface IProps {
   disabled?: boolean;
   optionsLoading?: boolean;
   isMultiCombo?: boolean;
+  className?: string;
 }

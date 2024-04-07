@@ -82,6 +82,7 @@ export const allMonthsShort = [
 ];
 
 export const allMonths = [
+  "All",
   "January",
   "February",
   "March",
@@ -96,4 +97,4 @@ export const allMonths = [
   "December",
 ];
 
-export const years = ["2021", "2022", "2023", "2024", "2025", "2026"];
+export const years = ["All", "2021", "2022", "2023", "2024", "2025", "2026"];

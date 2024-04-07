@@ -196,6 +196,7 @@ export const fieldOptions: FieldType[] = [
     compulsory: true,
   },
   {
+    question: "",
     type: "short answer",
     icon: FormInput,
     compulsory: true,

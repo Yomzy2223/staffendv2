@@ -1,12 +1,19 @@
 "use client";
 
+import PartnerAssignDialog from "@/components/dialogs/partnerAssign";
 import GeneralTable from "@/components/tables/generalTable";
 import CardWrapper from "@/components/wrappers/cardWrapper";
-import React from "react";
+import React, { useState } from "react";
 import { useTableInfo } from "../../actions";
 
 const TableSection = () => {
-  const { tableHeaders, tableBody } = useTableInfo();
+  const [open, setOpen] = useState(false);
+  const [selectedRequests, setSelectedRequests] = useState<string[]>([]);
+
+  const { tableHeaders, tableBody } = useTableInfo({
+    setOpen,
+    setSelectedRequests,
+  });
 
   return (
     <CardWrapper>
@@ -14,6 +21,12 @@ const TableSection = () => {
         tableHeaders={tableHeaders}
         tableBody={tableBody}
         tableNav={serviceTableNav}
+      />
+      <PartnerAssignDialog
+        setOpen={setOpen}
+        open={open}
+        selectedRequests={selectedRequests}
+        setSelectedRequests={setSelectedRequests}
       />
     </CardWrapper>
   );

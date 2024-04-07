@@ -29,9 +29,11 @@ const MultiCombo = ({
   defaultValue2,
   options1Loading,
   options2Loading,
+  handleSelect1,
+  handleSelect2,
 }: IProps) => {
   return (
-    <div className="flex border border-border rounded-md overflow-hidden">
+    <div className="flex border border-border rounded-md overflow-hidden max-w-max">
       <div className="">
         {type1 === "select" ? (
           <ComboBox
@@ -39,6 +41,7 @@ const MultiCombo = ({
             options={select1Options}
             setValue={setValue}
             selectProp={select1Prop}
+            handleSelect={handleSelect1}
             fieldName={fieldName1}
             defaultValue={defaultValue1}
             disabled={disabled1}
@@ -73,6 +76,7 @@ const MultiCombo = ({
             options={select2Options}
             setValue={setValue}
             selectProp={select2Prop}
+            handleSelect={handleSelect2}
             fieldName={fieldName2}
             defaultValue={defaultValue2}
             disabled={disabled2}
@@ -118,8 +122,8 @@ interface IProps {
   errMsg2?: string;
   input1Prop?: HTMLAttributes<HTMLInputElement>;
   input2Prop?: HTMLAttributes<HTMLInputElement>;
-  select1Prop?: HTMLAttributes<HTMLSelectElement>;
-  select2Prop?: HTMLAttributes<HTMLSelectElement>;
+  select1Prop?: HTMLAttributes<HTMLButtonElement>;
+  select2Prop?: HTMLAttributes<HTMLButtonElement>;
   disabled1?: boolean;
   disabled2?: boolean;
   setValue?: UseFormSetValue<{ [x: string]: any }>;
@@ -130,4 +134,6 @@ interface IProps {
   defaultValue2?: string;
   options1Loading?: boolean;
   options2Loading?: boolean;
+  handleSelect1?: (selected?: string) => void;
+  handleSelect2?: (selected?: string) => void;
 }

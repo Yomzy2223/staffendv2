@@ -124,6 +124,7 @@ const DynamicForm = ({
                   options={el.selectOptions}
                   setValue={setValue}
                   selectProp={el.selectProp}
+                  handleSelect={el.handleSelect}
                   fieldName={el.fieldName}
                   leftContent={el.leftContent}
                   defaultValue={defaultValues[el.name]}

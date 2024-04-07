@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useGlobalFunctions } from "@/hooks/globalFunctions";
 
 const DraggableScroll = ({
   children,
@@ -18,8 +19,9 @@ const DraggableScroll = ({
   const scrollableContainer = useRef<HTMLDivElement>(null);
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [startX, setStartX] = useState(0);
-
   const [hasHorScroll, setHasHorScroll] = useState(false);
+
+  const { isDesktop } = useGlobalFunctions();
 
   const handleMouseDown: MouseEventHandler<HTMLDivElement> = (event) => {
     setIsMouseDown(true);
@@ -62,7 +64,7 @@ const DraggableScroll = ({
       >
         {children}
       </motion.div>
-      {hasHorScroll && (
+      {hasHorScroll && isDesktop && (
         <div className="absolute bottom-0 left-0 right-0 h-3.5 z-40 bg-white group-hover:bg-transparent transition-all duration-500" />
       )}
     </div>

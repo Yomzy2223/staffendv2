@@ -36,6 +36,7 @@ export interface IDynamicFormField {
   minTagChars?: number;
   fieldName?: string;
   optionsLoading?: boolean;
+  handleSelect?: (selected?: string) => void;
 }
 
 export interface DynamicFormProps {

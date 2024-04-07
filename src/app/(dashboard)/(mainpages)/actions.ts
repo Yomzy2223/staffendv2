@@ -87,13 +87,22 @@ export const useRouteActions = () => {
 
 // Dashboard Overview Actions
 export const useOverviewActions = () => {
+  const [selectedYear, setSelectedYear] = useState("");
+  const [selectedMonth, setSelectedMonth] = useState("");
+  const [selecteService, setSelecteService] = useState("");
+
   const { getAllUsersQuery } = useUserApi();
   const { data } = getAllUsersQuery;
   const users = data?.data?.data?.map(
     (el: IUser) => !el.isStaff && !el.isPartner
   );
 
+  const {} = useRequestApi();
+
   return {
+    selectedMonth,
+    selectedYear,
+    selecteService,
     users,
   };
 };
@@ -101,22 +110,15 @@ export const useOverviewActions = () => {
 // Table information
 export const useTableInfo = ({
   setOpen,
-  selectedPartnerId,
+  setSelectedRequests,
 }: {
   setOpen: Dispatch<SetStateAction<boolean>>;
-  selectedPartnerId: string;
+  setSelectedRequests: Dispatch<SetStateAction<string[]>>;
 }) => {
-  const [selectedRequests, setSelectedRequests] = useState<string[]>([]);
-
   const { getReqStatusColor } = useGlobalFunctions();
 
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  const { getAllUsersQuery } = useUserApi();
-  const users = getAllUsersQuery;
-  const usersData = users.data?.data?.data;
-  const partners = usersData?.filter((el: IUser) => !el.isPartner);
 
   const { getAllServicesQuery } = useServiceApi();
   const services = getAllServicesQuery;
@@ -159,24 +161,6 @@ export const useTableInfo = ({
     setOpen(true);
     setSelectedRequests([rowId]);
   };
-
-  const handleAssignRequests = () => {
-    assignRequestMutation.mutate(
-      {
-        formInfo: {
-          userId: selectedPartnerId,
-          requestIds: selectedRequests,
-        },
-      },
-      {
-        onSuccess: () => {
-          setSelectedRequests([]);
-          setOpen(false);
-        },
-      }
-    );
-  };
-
   // Services table header
   const tableHeaders = [
     "S/N",
@@ -224,9 +208,6 @@ export const useTableInfo = ({
     serviceTableNav,
     tableHeaders,
     tableBody,
-    partners,
-    selectedRequests,
-    handleAssignRequests,
     assignRequestMutation,
   };
 };

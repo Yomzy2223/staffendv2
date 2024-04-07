@@ -8,6 +8,7 @@ import {
 } from "countries-list";
 import { useSearchParams } from "next/navigation";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { IDynamicFormField } from "../dynamicForm/constants";
 
 // Actions for country info
 export const useCountryActions = ({
@@ -54,7 +55,8 @@ export const useCountryActions = ({
     createCountryMutation.isSuccess || updateCountryMutation.isSuccess;
 
   // Updates other fields when a country is selected
-  const handleCountrySelect = (selected: string) => {
+  const handleCountrySelect = (selected?: string) => {
+    if (!selected) return;
     const code = getCountryCode(selected);
     const countryInfo = countries[code as TCountryCode];
     setDefaultValues({
@@ -76,7 +78,7 @@ export const useCountryActions = ({
   }, [contryData]);
 
   // Country form
-  const formInfo = [
+  const formInfo: IDynamicFormField[] = [
     {
       name: "name",
       label: "Country name",
@@ -87,10 +89,10 @@ export const useCountryActions = ({
       ),
       selectProp: {
         placeholder: "Select country",
-        onSelect: handleCountrySelect,
         disabled: countryInfo.isLoading,
       },
       leftContent: getEmojiFlag(defaultValues.iso as TCountryCode),
+      handleSelect: handleCountrySelect,
     },
     {
       name: "iso",

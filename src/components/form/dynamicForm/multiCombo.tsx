@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { TextInput } from "flowbite-react";
-import React, { HTMLAttributes } from "react";
+import React, { HTMLAttributes, ReactNode } from "react";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import ComboBox from "./comboBox";
 

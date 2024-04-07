@@ -9,7 +9,15 @@ import {
   IRowInfo,
   ITableBody,
 } from "@/components/tables/generalTable/constants";
-import { format } from "date-fns";
+import {
+  endOfMonth,
+  format,
+  isAfter,
+  isLeapYear,
+  isSameMonth,
+  isSameYear,
+  isWithinInterval,
+} from "date-fns";
 import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import useUserApi from "@/hooks/useUserApi";
@@ -87,23 +95,81 @@ export const useRouteActions = () => {
 
 // Dashboard Overview Actions
 export const useOverviewActions = () => {
-  const [selectedYear, setSelectedYear] = useState("");
-  const [selectedMonth, setSelectedMonth] = useState("");
+  const [monthFrom, setMonthFrom] = useState("");
+  const [monthTo, setMonthTo] = useState("");
+  const [yearFrom, setYearFrom] = useState("");
+  const [yearTo, setYearTo] = useState("");
   const [selecteService, setSelecteService] = useState("");
 
   const { getAllUsersQuery } = useUserApi();
-  const { data } = getAllUsersQuery;
-  const users = data?.data?.data?.map(
+  const usersResponse = getAllUsersQuery;
+  const users = usersResponse.data?.data?.data?.map(
     (el: IUser) => !el.isStaff && !el.isPartner
   );
 
-  const {} = useRequestApi();
+  const { getAllServicesQuery } = useServiceApi();
+  const servicesResponse = getAllServicesQuery;
+  const services = servicesResponse.data?.data?.data;
+
+  const { getAllRequestsQuery } = useRequestApi();
+  const requestsResponse = getAllRequestsQuery;
+  const requests = requestsResponse.data?.data?.data;
+
+  // Return all requests if filters are not completely selected, filter otherwise
+  const filteredRequests =
+    !monthFrom || !monthTo || !yearFrom || !yearTo
+      ? requests
+      : requests?.filter((el: IRequest) =>
+          isWithinInterval(new Date(el.createdat), {
+            start: new Date(monthFrom + " " + yearFrom),
+            end: endOfMonth(new Date(monthTo + " " + yearTo)),
+          })
+        );
+
+  console.log(filteredRequests);
+
+  const allMonthsEnd = [
+    "31, Jan",
+    `${isLeapYear(yearTo) ? "29" : "28"}, Feb`,
+    "31, Mar",
+    "31, Apr",
+    "31, May",
+    "31, Jun",
+    "31, Jul",
+    "31, Aug",
+    "31, Sep",
+    "31, Oct",
+    "31, Nov",
+    "31, Dec",
+  ].filter((el) =>
+    monthFrom && yearFrom && yearTo
+      ? isAfter(
+          new Date(el + " " + yearTo),
+          new Date(monthFrom + " " + yearFrom)
+        )
+      : true
+  );
+
+  const yearsEnd = ["2021", "2022", "2023", "2024", "2025", "2026"]?.filter(
+    (el) => (yearFrom ? parseInt(el) >= parseInt(yearFrom) : true)
+  );
 
   return {
-    selectedMonth,
-    selectedYear,
+    monthFrom,
+    setMonthFrom,
+    monthTo,
+    setMonthTo,
+    yearFrom,
+    setYearFrom,
+    yearTo,
+    setYearTo,
     selecteService,
+    setSelecteService,
     users,
+    services,
+    filteredRequests,
+    allMonthsEnd,
+    yearsEnd,
   };
 };
 

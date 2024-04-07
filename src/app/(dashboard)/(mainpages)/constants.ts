@@ -66,23 +66,22 @@ export const serviceTableNav = [
   },
 ];
 
-export const allMonthsShort = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
+export const allMonthsStart = [
+  "01, Jan",
+  "01, Feb",
+  "01, Mar",
+  "01, Apr",
+  "01, May",
+  "01, Jun",
+  "01, Jul",
+  "01, Aug",
+  "01, Sep",
+  "01, Oct",
+  "01, Nov",
+  "01, Dec",
 ];
 
 export const allMonths = [
-  "All",
   "January",
   "February",
   "March",
@@ -97,4 +96,12 @@ export const allMonths = [
   "December",
 ];
 
-export const years = ["All", "2021", "2022", "2023", "2024", "2025", "2026"];
+export const yearsStart = [
+  "All",
+  "2021",
+  "2022",
+  "2023",
+  "2024",
+  "2025",
+  "2026",
+];

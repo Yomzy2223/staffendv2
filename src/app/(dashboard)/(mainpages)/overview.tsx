@@ -5,17 +5,31 @@ import AnalyticsCard3 from "@/components/cards/analytics/analyticsCard3";
 import { useOverviewActions } from "./actions";
 import ComboBox from "@/components/form/dynamicForm/comboBox";
 import MultiCombo from "@/components/form/dynamicForm/multiCombo";
-import { allMonths, years } from "./constants";
+import { allMonths, allMonthsStart, yearsStart } from "./constants";
 
 const OverviewSection = () => {
-  const { selectedMonth, selectedYear, selecteService, users } =
-    useOverviewActions();
+  const {
+    monthFrom,
+    setMonthFrom,
+    yearFrom,
+    setYearFrom,
+    monthTo,
+    setMonthTo,
+    yearTo,
+    setYearTo,
+    selecteService,
+    setSelecteService,
+    users,
+    services,
+    allMonthsEnd,
+    yearsEnd,
+  } = useOverviewActions();
 
   return (
     <div>
       <div className="flex flex-col gap-5 w-full pt-6 pb-4 sm:pb-6 sm:flex-row sm:items-center sm:justify-between">
-        <p className="sb-text-16 font-semibold">MONTHLY OVERVIEW</p>
-        <div className="flex flex-col gap-2 sm:flex-row">
+        <div>
+          <p className="sb-text-16 font-semibold">MONTHLY OVERVIEW</p>
           <ComboBox
             name="service"
             options={["dklj", "sdkjf"]}
@@ -26,18 +40,41 @@ const OverviewSection = () => {
             optionsLoading={false}
             className="max-w-max"
           />
-          <MultiCombo
-            fieldName1="month"
-            fieldName2="year"
-            defaultValue1={selectedMonth}
-            defaultValue2={selectedYear}
-            type1="select"
-            type2="select"
-            select1Options={allMonths}
-            select2Options={years}
-            handleSelect1={(selected?: string) => console.log(selected)}
-            handleSelect2={(selected?: string) => console.log(selected)}
-          />
+        </div>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <div className="flex items-center gap-1">
+            <p className="sb-text-16 ">From:</p>
+            <MultiCombo
+              fieldName1="month"
+              fieldName2="year"
+              defaultValue1={monthFrom}
+              defaultValue2={yearFrom}
+              type1="select"
+              type2="select"
+              select1Options={allMonthsStart}
+              select2Options={yearsStart}
+              handleSelect1={(selected?: string) =>
+                setMonthFrom(selected || "")
+              }
+              handleSelect2={(selected?: string) => setYearFrom(selected || "")}
+            />
+          </div>
+
+          <div className="sb-text-16 flex items-center gap-1">
+            <p className="sb-text-16 ">To:</p>
+            <MultiCombo
+              fieldName1="month"
+              fieldName2="year"
+              defaultValue1={monthTo}
+              defaultValue2={yearTo}
+              type1="select"
+              type2="select"
+              select1Options={allMonthsEnd}
+              select2Options={yearsEnd}
+              handleSelect1={(selected?: string) => setMonthTo(selected || "")}
+              handleSelect2={(selected?: string) => setYearTo(selected || "")}
+            />
+          </div>
         </div>
       </div>
       <DraggableScroll className="snap snap-mandatory snap-x flex gap-8 p-1 pb-2 scroll-smooth">

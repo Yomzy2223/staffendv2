@@ -9,7 +9,7 @@ import QueryNav from "@/components/navigation/queryNav";
 import GeneralTable from "@/components/tables/generalTable";
 import CardWrapper from "@/components/wrappers/cardWrapper";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { paymentQueryNav, serviceQueryNav2 } from "./constants";
 import { motion } from "framer-motion";
 import { useTableInfo } from "./actions";
@@ -17,9 +17,13 @@ import { Button, Radio, Select } from "flowbite-react";
 import { allMonths, years } from "./constants";
 import DialogWrapper from "@/components/wrappers/dialogWrapper";
 import { IUser } from "@/hooks/api/types";
+import Oval from "react-loading-icons/dist/esm/components/oval";
+import useUserApi from "@/hooks/useUserApi";
+import DraggableDiv from "@/components/wrappers/draggableScroll";
 
 const Home = () => {
   const [open, setOpen] = useState(false);
+  const [selectedPartnerId, setSelectedPartnerId] = useState("");
 
   const {
     tableHeaders,
@@ -27,9 +31,18 @@ const Home = () => {
     serviceTableNav,
     partners,
     selectedRequests,
+    handleAssignRequests,
+    assignRequestMutation,
   } = useTableInfo({
     setOpen,
+    selectedPartnerId,
   });
+
+  const { getAllUsersQuery } = useUserApi();
+  const { data } = getAllUsersQuery;
+  const users = data?.data?.data?.map(
+    (el: IUser) => !el.isStaff && !el.isPartner
+  );
 
   const resetDialog = () => {
     setOpen(false);
@@ -54,20 +67,17 @@ const Home = () => {
       </div>
 
       <div className="flex flex-col gap-8">
-        <motion.div
-          className="snap snap-mandatory snap-x flex gap-8 max-w-full h-40 overflow-hidden"
-          whileHover={{ overflowX: "auto" }}
-        >
-          <AnalyticsCard1
+        <DraggableDiv className="snap snap-mandatory snap-x flex gap-8 p-1 pb-2 scroll-smooth">
+          {/* <AnalyticsCard1
             previous={50}
             current={51}
             title="Website visits"
             total="163.5K"
             className="snap-start"
-          />
+          /> */}
           <AnalyticsCard2
             title="User signups"
-            total="345.6k"
+            total={users?.length || 0}
             className="snap-start"
           />
           <AnalyticsCard3
@@ -98,7 +108,7 @@ const Home = () => {
             previous={1000}
             className="snap-start"
           />
-        </motion.div>
+        </DraggableDiv>
 
         <div className="flex flex-col gap-8 lg:flex-row">
           <CardWrapper big className="flex flex-col gap-8 max-w-[634px]">
@@ -144,9 +154,15 @@ const Home = () => {
         <div className="flex flex-col gap-5">
           {partners?.map((el: IUser) => (
             <div key={el.id} className="flex items-center gap-3">
-              <Radio id={el.id} name="partners" />
+              <Radio
+                id={el.id}
+                name="partners"
+                onChange={() => setSelectedPartnerId(el.id)}
+              />
               <label htmlFor={el.id}>
-                <p className="sb-text-16 font-medium">{el.fullName}</p>
+                <p className="sb-text-16 font-medium">
+                  {el.fullName + " " + `(${el.country})`}
+                </p>
                 <p className="text-xs text-foreground-5 font-normal">
                   {el.email}
                 </p>
@@ -159,10 +175,21 @@ const Home = () => {
             size="fit"
             color="ghost"
             className="text-destructive-foreground"
+            onClick={() => setOpen(false)}
           >
             Cancel
           </Button>
-          <Button color="primary">Assign</Button>
+          <Button
+            color="primary"
+            disabled={!selectedPartnerId || assignRequestMutation.isPending}
+            onClick={handleAssignRequests}
+            isProcessing={assignRequestMutation.isPending}
+            processingSpinner={
+              <Oval color="white" strokeWidth={4} className="h-4 w-4" />
+            }
+          >
+            Assign
+          </Button>
         </div>
       </DialogWrapper>
     </div>

@@ -4,6 +4,16 @@ import { cn } from "@/lib/utils";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import Image from "next/image";
 import React from "react";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 const AnalyticsCard3 = ({
   title,
@@ -35,7 +45,18 @@ const AnalyticsCard3 = ({
       <p className="text-sm text-foreground-5 mb-3">{title}</p>
       <div className="flex justify-between gap-4 mb-6">
         <p className="sb-text-24 font-semibold">{total}</p>
-        <Image src={Chart3} alt="analytics chart" />
+        {/* <Image src={Chart3} alt="analytics chart" /> */}
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart width={300} height={100} data={data}>
+            <Line
+              type="monotone"
+              dataKey="pv"
+              stroke="#8884d8"
+              strokeWidth={2}
+              dot={false}
+            />
+          </LineChart>
+        </ResponsiveContainer>
       </div>
       <div className="flex items-center text-sm text-foreground-5 font-normal">
         <span>
@@ -60,3 +81,27 @@ const AnalyticsCard3 = ({
 };
 
 export default AnalyticsCard3;
+
+const data = [
+  {
+    pv: 2400,
+  },
+  {
+    pv: 1398,
+  },
+  {
+    pv: 9800,
+  },
+  {
+    pv: 3908,
+  },
+  {
+    pv: 4800,
+  },
+  {
+    pv: 3800,
+  },
+  {
+    pv: 4300,
+  },
+];

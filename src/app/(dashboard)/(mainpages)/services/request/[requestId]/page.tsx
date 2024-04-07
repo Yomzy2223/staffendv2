@@ -9,10 +9,6 @@ import React from "react";
 import { shareholders } from "./constants";
 
 const Request = () => {
-  const { request } = useParams();
-
-  const fn = () => {};
-
   return (
     <div className="flex flex-col gap-8">
       <RequestDetailsSectionWrapper

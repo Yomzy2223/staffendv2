@@ -33,7 +33,7 @@ export const useGlobalFunctions = () => {
     (name: string) => {
       const newQuery = new URLSearchParams(searchParams.toString());
       newQuery.delete(name);
-      router.push(pathname + "?" + newQuery.toString());
+      router.push(pathname + "?" + newQuery.toString(), { scroll: false });
 
       return newQuery.toString();
     },

@@ -6,12 +6,12 @@ import ServiceForm from "@/components/form/serviceForm";
 import { Navigation } from "@/components/navigation";
 import { Button } from "flowbite-react";
 import Image from "next/image";
-import { useActions } from "./actions";
+import { useRoute } from "./actions";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
 
 const layout = ({ children }: { children: ReactNode }) => {
   const [open, setOpen] = useState(false);
-  const { navRoutes } = useActions();
+  const { navRoutes } = useRoute();
   const { setQuery } = useGlobalFunctions();
 
   const openServiceForm = () => {

@@ -2,7 +2,7 @@ import useServiceApi from "@/hooks/useServiceApi";
 import { useParams, useSearchParams } from "next/navigation";
 import slugify from "slugify";
 import { cn } from "@/lib/utils";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { IRequest, IServiceFull, IUser } from "@/hooks/api/types";
 import useRequestApi from "@/hooks/useRequestApi";
 import {
@@ -12,10 +12,9 @@ import {
 import { format } from "date-fns";
 import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
-import usePartnerApi from "@/hooks/usePartnerApi";
 import useUserApi from "@/hooks/useUserApi";
 
-export const useActions = () => {
+export const useRoute = () => {
   const { getAllServicesQuery } = useServiceApi();
   const { data } = getAllServicesQuery;
   const services = data?.data?.data;
@@ -89,14 +88,17 @@ export const useActions = () => {
 const cellClassName =
   "[&_span]:bg-yellow-300 [&_span]:px-[10px] [&_span]:py-[2px] [&_span]:rounded-md  text-xs";
 
+// Table information
 export const useTableInfo = ({
   setOpen,
+  selectedPartnerId,
 }: {
   setOpen: Dispatch<SetStateAction<boolean>>;
+  selectedPartnerId: string;
 }) => {
   const [selectedRequests, setSelectedRequests] = useState<string[]>([]);
 
-  const { getReqStatusColor, setQuery } = useGlobalFunctions();
+  const { getReqStatusColor } = useGlobalFunctions();
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -113,9 +115,16 @@ export const useTableInfo = ({
   const selectedServiceId =
     searchParams.get("serviceId") || servicesData[0]?.id;
 
-  const { useGetServiceRequestQuery, assignRequestMutation } = useRequestApi();
-  const requests = useGetServiceRequestQuery(selectedServiceId);
-  const requestsData = requests.data?.data?.data;
+  const {
+    useGetServiceRequestQuery,
+    assignRequestMutation,
+    getAllRequestsQuery,
+  } = useRequestApi();
+  const serviceRequests = useGetServiceRequestQuery(selectedServiceId);
+  const allRequests = getAllRequestsQuery;
+
+  const allRequestsData = allRequests.data?.data?.data;
+  const serviceRequestsData = serviceRequests.data?.data?.data;
 
   const serviceTableNav = servicesData?.map((service: IServiceFull) => ({
     name: "serviceId",
@@ -141,6 +150,23 @@ export const useTableInfo = ({
     setSelectedRequests([rowId]);
   };
 
+  const handleAssignRequests = () => {
+    assignRequestMutation.mutate(
+      {
+        formInfo: {
+          userId: selectedPartnerId,
+          requestIds: selectedRequests,
+        },
+      },
+      {
+        onSuccess: () => {
+          setSelectedRequests([]);
+          setOpen(false);
+        },
+      }
+    );
+  };
+
   // Services table header
   const tableHeaders = [
     "S/N",
@@ -155,7 +181,7 @@ export const useTableInfo = ({
 
   // Services table body
   const tableBody =
-    requestsData?.map(
+    serviceRequestsData?.map(
       (request: IRequest, i: number): ITableBody => ({
         rowId: request.id,
         handleClick,
@@ -190,5 +216,7 @@ export const useTableInfo = ({
     tableBody,
     partners,
     selectedRequests,
+    handleAssignRequests,
+    assignRequestMutation,
   };
 };

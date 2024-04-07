@@ -3,7 +3,6 @@ import CardWrapper from "@/components/wrappers/cardWrapper";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import React from "react";
-
 const AnalyticsCard2 = ({
   title,
   total,
@@ -21,10 +20,11 @@ const AnalyticsCard2 = ({
       )}
     >
       <div className="flex justify-between ">
-        <div className="flex flex-col justify-between items-center gap-3">
+        <div className="flex flex-col justify-between gap-3">
           <p className="text-sm text-foreground-5">{title}</p>
           <p className="sb-text-24 font-semibold">{total}</p>
         </div>
+
         <Image src={Chart2} alt="analytics chart" />
       </div>
       <div className="flex gap-3 w-max m-auto">

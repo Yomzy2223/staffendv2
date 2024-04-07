@@ -17,7 +17,7 @@ const PersonsCard = ({
   title: string;
   info: { field: string; value: string; type?: string }[][];
 }) => {
-  const { setQuery } = useGlobalFunctions();
+  const { setQuery, deleteQueryString } = useGlobalFunctions();
 
   const searchParams = useSearchParams();
   const clicked = searchParams.get(title.toLowerCase());
@@ -36,7 +36,7 @@ const PersonsCard = ({
   };
 
   const hideDetails = () => {
-    setQuery(title.toLowerCase(), "all");
+    deleteQueryString(title.toLowerCase());
   };
 
   return (

@@ -12,7 +12,7 @@ import Image from "next/image";
 import React, { useRef, useState } from "react";
 import { paymentQueryNav, serviceQueryNav2 } from "./constants";
 import { motion } from "framer-motion";
-import { useTableInfo } from "./actions";
+import { useOverviewActions, useTableInfo } from "./actions";
 import { Button, Radio, Select } from "flowbite-react";
 import { allMonths, years } from "./constants";
 import DialogWrapper from "@/components/wrappers/dialogWrapper";
@@ -20,6 +20,8 @@ import { IUser } from "@/hooks/api/types";
 import Oval from "react-loading-icons/dist/esm/components/oval";
 import useUserApi from "@/hooks/useUserApi";
 import DraggableDiv from "@/components/wrappers/draggableScroll";
+import ComboBox from "@/components/form/dynamicForm/comboBox";
+import MultiCombo from "@/components/form/dynamicForm/multiCombo";
 
 const Home = () => {
   const [open, setOpen] = useState(false);
@@ -38,11 +40,7 @@ const Home = () => {
     selectedPartnerId,
   });
 
-  const { getAllUsersQuery } = useUserApi();
-  const { data } = getAllUsersQuery;
-  const users = data?.data?.data?.map(
-    (el: IUser) => !el.isStaff && !el.isPartner
-  );
+  const { users } = useOverviewActions();
 
   const resetDialog = () => {
     setOpen(false);
@@ -52,8 +50,28 @@ const Home = () => {
     <div>
       <div className="flex items-center justify-between gap-5 w-full pt-6 pb-4 sm:pb-6">
         <p className="sb-text-16 font-semibold">MONTHLY OVERVIEW</p>
-        <div className="flex">
-          <Select className="[&_select]:rounded-r-none [&_select]:border-r-0 [&_select]:text-sm ">
+        {/* <ComboBox
+            name="service"
+            options={["dklj", "sdkjf"]}
+            fieldName="Service"
+            selectProp={{
+              onSelect: (selected: string) => console.log(selected),
+            }}
+            // disabled={disableAll}
+            optionsLoading={false}
+          /> */}
+        <MultiCombo
+          fieldName1="month"
+          fieldName2="year"
+          // defaultValue1="January"
+          // defaultValue2="2022"
+          type1="select"
+          type2="select"
+          select1Prop={{}}
+          select1Options={allMonths}
+          select2Options={years}
+        />
+        {/* <Select className="[&_select]:rounded-r-none [&_select]:border-r-0 [&_select]:text-sm ">
             {allMonths.map((el) => (
               <option key={el}>{el}</option>
             ))}
@@ -62,8 +80,7 @@ const Home = () => {
             {years.map((el) => (
               <option key={el}>{el}</option>
             ))}
-          </Select>
-        </div>
+          </Select> */}
       </div>
 
       <div className="flex flex-col gap-8">

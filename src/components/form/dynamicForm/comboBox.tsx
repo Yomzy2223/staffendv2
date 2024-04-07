@@ -18,6 +18,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const ComboBox = ({
   name,
+  placeholder,
   options,
   selectProp,
   setValue,
@@ -27,6 +28,7 @@ const ComboBox = ({
   defaultValue,
   disabled,
   optionsLoading,
+  isMultiCombo,
 }: IProps) => {
   const [openSelect, setOpenSelect] = useState(false);
   const [selectValue, setSelectValue] = useState(defaultValue);
@@ -46,7 +48,9 @@ const ComboBox = ({
             outline
             role="combobox"
             className={cn("w-full [&_span]:justify-between [&>span]:!p-2.5", {
-              "border-primary ring-primary ring-1": openSelect,
+              "border-primary ring-primary ring-1": openSelect && !isMultiCombo,
+              "[&_span]:rounded-none rounded-none border-none bg-transparent":
+                isMultiCombo,
             })}
             disabled={disabled}
             {...selectProp}
@@ -57,14 +61,14 @@ const ComboBox = ({
                 <span>{findOriginalValue(selectValue)}</span>
               </div>
             ) : (
-              selectProp?.placeholder || "Select " + (fieldName || name)
+              placeholder || "Select " + (fieldName || name)
             )}
             <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-full p-0 max-h-96 overflow-y-auto">
           <Command className="min-w-40">
-            {options.length > 5 && (
+            {options.length > 10 && (
               <CommandInput placeholder={`Search ${fieldName}...`} />
             )}
             {!optionsLoading && options.length === 0 && (
@@ -89,6 +93,7 @@ const ComboBox = ({
                       currentValue === selectValue ? "" : currentValue;
                     setSelectValue(selected);
                     setValue &&
+                      name &&
                       setValue(name, selected, { shouldValidate: true });
                     setOpenSelect(false);
                     selectProp?.onSelect &&
@@ -119,14 +124,16 @@ const ComboBox = ({
 export default ComboBox;
 
 interface IProps {
-  name: string;
+  name?: string;
+  placeholder?: string;
   options: string[];
   selectProp?: Record<any, any>;
-  setValue: UseFormSetValue<any>;
+  setValue?: UseFormSetValue<any>;
   errorMsg?: string;
   fieldName?: string;
   leftContent?: string | ReactNode;
   defaultValue?: string;
   disabled?: boolean;
   optionsLoading?: boolean;
+  isMultiCombo?: boolean;
 }

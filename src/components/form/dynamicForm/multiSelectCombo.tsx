@@ -18,6 +18,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import TagIcon from "@/assets/icons/tagIcon";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
 
+// A combo box to select multiple options
 const MultiSelectCombo = ({
   name,
   options,

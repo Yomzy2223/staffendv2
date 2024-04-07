@@ -14,7 +14,7 @@ import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import useUserApi from "@/hooks/useUserApi";
 
-export const useRoute = () => {
+export const useRouteActions = () => {
   const { getAllServicesQuery } = useServiceApi();
   const { data } = getAllServicesQuery;
   const services = data?.data?.data;
@@ -85,8 +85,18 @@ export const useRoute = () => {
   return { navRoutes };
 };
 
-const cellClassName =
-  "[&_span]:bg-yellow-300 [&_span]:px-[10px] [&_span]:py-[2px] [&_span]:rounded-md  text-xs";
+// Dashboard Overview Actions
+export const useOverviewActions = () => {
+  const { getAllUsersQuery } = useUserApi();
+  const { data } = getAllUsersQuery;
+  const users = data?.data?.data?.map(
+    (el: IUser) => !el.isStaff && !el.isPartner
+  );
+
+  return {
+    users,
+  };
+};
 
 // Table information
 export const useTableInfo = ({
@@ -220,3 +230,6 @@ export const useTableInfo = ({
     assignRequestMutation,
   };
 };
+
+const cellClassName =
+  "[&_span]:bg-yellow-300 [&_span]:px-[10px] [&_span]:py-[2px] [&_span]:rounded-md  text-xs";

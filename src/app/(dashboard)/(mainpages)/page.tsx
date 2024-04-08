@@ -1,8 +1,6 @@
 "use client";
 
 import { PaymentAnalyticsImg, ServiceAnalyticsImg } from "@/assets/svg";
-import AnalyticsCard2 from "@/components/cards/analytics/analyticsCard2";
-import AnalyticsCard3 from "@/components/cards/analytics/analyticsCard3";
 import AnalyticsHeader from "@/components/header/analyticsHeader";
 import QueryNav from "@/components/navigation/queryNav";
 import GeneralTable from "@/components/tables/generalTable";
@@ -10,10 +8,7 @@ import CardWrapper from "@/components/wrappers/cardWrapper";
 import Image from "next/image";
 import React, { useState } from "react";
 import { paymentQueryNav, serviceQueryNav2 } from "./constants";
-import { useOverviewActions, useTableInfo } from "./actions";
-import { allMonths, yearsStart } from "./constants";
-import ComboBox from "@/components/form/dynamicForm/comboBox";
-import MultiCombo from "@/components/form/dynamicForm/multiCombo";
+import { useTableInfo } from "./actions";
 import PartnerAssignDialog from "@/components/dialogs/partnerAssign";
 import OverviewSection from "./overview";
 

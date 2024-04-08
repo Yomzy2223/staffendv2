@@ -82,26 +82,29 @@ export const allMonthsStart = [
 ];
 
 export const allMonths = [
-  "January",
-  "February",
-  "March",
-  "April",
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
   "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
 ];
 
-export const yearsStart = [
-  "All",
+export const allYears = [
   "2021",
   "2022",
   "2023",
   "2024",
   "2025",
   "2026",
+  "2027",
+  "2028",
+  "2029",
+  "2030",
 ];

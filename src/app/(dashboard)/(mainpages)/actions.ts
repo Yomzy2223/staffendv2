@@ -10,6 +10,8 @@ import {
   ITableBody,
 } from "@/components/tables/generalTable/constants";
 import {
+  differenceInDays,
+  differenceInMonths,
   endOfMonth,
   format,
   isAfter,
@@ -17,10 +19,12 @@ import {
   isSameMonth,
   isSameYear,
   isWithinInterval,
+  subMonths,
 } from "date-fns";
 import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import useUserApi from "@/hooks/useUserApi";
+import { allMonths, allYears } from "./constants";
 
 export const useRouteActions = () => {
   const { getAllServicesQuery } = useServiceApi();
@@ -99,59 +103,174 @@ export const useOverviewActions = () => {
   const [monthTo, setMonthTo] = useState("");
   const [yearFrom, setYearFrom] = useState("");
   const [yearTo, setYearTo] = useState("");
-  const [selecteService, setSelecteService] = useState("");
+  const [selectedService, setSelectedService] = useState("");
 
   const { getAllUsersQuery } = useUserApi();
   const usersResponse = getAllUsersQuery;
-  const users = usersResponse.data?.data?.data?.map(
-    (el: IUser) => !el.isStaff && !el.isPartner
-  );
+  const users =
+    usersResponse.data?.data?.data?.map(
+      (el: IUser) => !el.isStaff && !el.isPartner
+    ) || [];
 
   const { getAllServicesQuery } = useServiceApi();
   const servicesResponse = getAllServicesQuery;
-  const services = servicesResponse.data?.data?.data;
+  const services =
+    servicesResponse.data?.data?.data?.map((el: IServiceFull) => el?.name) ||
+    [];
 
-  const { getAllRequestsQuery } = useRequestApi();
-  const requestsResponse = getAllRequestsQuery;
+  const { useGetServiceRequestQuery } = useRequestApi();
+  const requestsResponse = useGetServiceRequestQuery(
+    selectedService || services?.[0]
+  );
   const requests = requestsResponse.data?.data?.data;
+  const currMonthRequests = requests?.filter((el: IRequest) =>
+    isSameMonth(el?.createdat, new Date())
+  );
+  const lastMonthRequests = requests?.filter((el: IRequest) =>
+    isSameMonth(el?.createdat, subMonths(new Date(), 1))
+  );
+
+  const dateFrom = new Date(monthFrom + " " + yearFrom);
+  const dateTo = new Date(monthTo + " " + yearTo);
+  const currYear = new Date().getFullYear();
+
+  let monthsDiff = differenceInMonths(dateTo, dateFrom) || 0;
+  monthsDiff = monthsDiff + 1;
+
+  const dateFromVs = subMonths(dateFrom, monthsDiff);
 
   // Return all requests if filters are not completely selected, filter otherwise
   const filteredRequests =
     !monthFrom || !monthTo || !yearFrom || !yearTo
-      ? requests
+      ? currMonthRequests
       : requests?.filter((el: IRequest) =>
           isWithinInterval(new Date(el.createdat), {
-            start: new Date(monthFrom + " " + yearFrom),
-            end: endOfMonth(new Date(monthTo + " " + yearTo)),
+            start: dateFrom,
+            end: dateTo,
           })
         );
 
-  console.log(filteredRequests);
+  // Return last month requests if filters are not completely selected, filter otherwise
+  const requestsVs =
+    !monthFrom || !monthTo || !yearFrom || !yearTo
+      ? lastMonthRequests
+      : requests?.filter((el: IRequest) =>
+          isWithinInterval(new Date(el.createdat), {
+            start: dateFromVs,
+            end: dateFrom,
+          })
+        );
 
-  const allMonthsEnd = [
-    "31, Jan",
-    `${isLeapYear(yearTo) ? "29" : "28"}, Feb`,
-    "31, Mar",
-    "31, Apr",
-    "31, May",
-    "31, Jun",
-    "31, Jul",
-    "31, Aug",
-    "31, Sep",
-    "31, Oct",
-    "31, Nov",
-    "31, Dec",
-  ].filter((el) =>
-    monthFrom && yearFrom && yearTo
-      ? isAfter(
-          new Date(el + " " + yearTo),
-          new Date(monthFrom + " " + yearFrom)
-        )
-      : true
+  // The requests within the selected date range
+  const requestsByStatus = {
+    draft: filteredRequests?.filter(
+      (el: IRequest) => el.requeststatus === "PENDING"
+    ),
+    paidDraft: filteredRequests?.filter(
+      (el: IRequest) => el.requeststatus === "PENDING" && el.paid
+    ),
+    submitted: filteredRequests?.filter(
+      (el: IRequest) => el.requeststatus === "SUBMITTED"
+    ),
+    inProgress: filteredRequests?.filter(
+      (el: IRequest) =>
+        el.requeststatus === "ASSIGNED" || el.requeststatus === "REJECTED"
+    ),
+    completed: filteredRequests?.filter(
+      (el: IRequest) => el.requeststatus === "COMPLETED"
+    ),
+  };
+
+  const requestsVsByStatus = {
+    draft: requestsVs?.filter((el: IRequest) => el.requeststatus === "PENDING"),
+    paidDraft: requestsVs?.filter(
+      (el: IRequest) => el.requeststatus === "PENDING" && el.paid
+    ),
+    submitted: requestsVs?.filter(
+      (el: IRequest) => el.requeststatus === "SUBMITTED"
+    ),
+    inProgress: requestsVs?.filter(
+      (el: IRequest) =>
+        el.requeststatus === "ASSIGNED" || el.requeststatus === "REJECTED"
+    ),
+    completed: requestsVs?.filter(
+      (el: IRequest) => el.requeststatus === "COMPLETED"
+    ),
+  };
+
+  const getMonthsInYear = (year: string, startDate?: string) => {
+    return [
+      `${startDate || "31"}, Jan`,
+      `${startDate ? "01" : isLeapYear(yearTo) ? "29" : "28"}, Feb`,
+      `${startDate || "31"}, Mar`,
+      `${startDate || "30"}, Apr`,
+      `${startDate || "31"}, May`,
+      `${startDate || "30"}, Jun`,
+      `${startDate || "31"}, Jul`,
+      `${startDate || "31"}, Aug`,
+      `${startDate || "30"}, Sep`,
+      `${startDate || "31"}, Oct`,
+      `${startDate || "30"}, Nov`,
+      `${startDate || "31"}, Dec`,
+    ].filter((el) =>
+      year
+        ? differenceInDays(new Date(el + " " + year), new Date()) <= 0 || // Filter out months greater than current date
+          isSameMonth(new Date(el + " " + year), new Date())
+        : true
+    );
+  };
+  const allMonthsStart = getMonthsInYear(yearFrom, "01");
+
+  const allMonthsEnd = getMonthsInYear(yearTo)
+    .map((el) =>
+      yearTo // Update the date of the current month if current year is selected
+        ? isSameMonth(new Date(el + " " + yearTo), new Date())
+          ? new Date().getDate().toString().padStart(2, "0") + el.slice(2)
+          : el
+        : el
+    )
+    ?.filter((el) =>
+      monthFrom && yearFrom && yearTo
+        ? isAfter(new Date(el + " " + yearTo), dateFrom) // Return  only months after the selected date from
+        : true
+    );
+
+  // const allMonthsEnd = [
+  //   "31, Jan",
+  //   `${isLeapYear(yearTo) ? "29" : "28"}, Feb`,
+  //   "31, Mar",
+  //   "30, Apr",
+  //   "31, May",
+  //   "30, Jun",
+  //   "31, Jul",
+  //   "31, Aug",
+  //   "30, Sep",
+  //   "31, Oct",
+  //   "30, Nov",
+  //   "31, Dec",
+  // ]
+  //   .map((el) =>
+  //     yearTo // Update the date of the current month if current year is selected
+  //       ? isSameMonth(new Date(el + " " + yearTo), new Date())
+  //         ? new Date().getDate().toString().padStart(2, "0") + el.slice(2)
+  //         : el
+  //       : el
+  //   )
+  //   .filter(
+  //     (el) =>
+  //       (yearTo
+  //         ? differenceInMonths(new Date(el + " " + yearTo), new Date()) <= 0 // Filter out months greater than current date
+  //         : true) &&
+  //       (monthFrom && yearFrom && yearTo
+  //         ? isAfter(new Date(el + " " + yearTo), dateFrom) // Return  only months after the selected date from
+  //         : true)
+  //   );
+
+  const years = allYears?.filter(
+    (el) => parseInt(el) <= currYear // Filter out years greater than the current year
   );
-
-  const yearsEnd = ["2021", "2022", "2023", "2024", "2025", "2026"]?.filter(
-    (el) => (yearFrom ? parseInt(el) >= parseInt(yearFrom) : true)
+  const yearsEnd = years.filter(
+    (el) => (yearFrom ? parseInt(el) >= parseInt(yearFrom) : true) // Filter out years less than the selected year from
   );
 
   return {
@@ -163,13 +282,19 @@ export const useOverviewActions = () => {
     setYearFrom,
     yearTo,
     setYearTo,
-    selecteService,
-    setSelecteService,
+    selectedService,
+    setSelectedService,
     users,
+    servicesResponse,
     services,
-    filteredRequests,
+    requestsByStatus,
+    requestsVsByStatus,
+    allMonthsStart,
     allMonthsEnd,
+    years,
     yearsEnd,
+    monthsDiff,
+    dateFrom,
   };
 };
 

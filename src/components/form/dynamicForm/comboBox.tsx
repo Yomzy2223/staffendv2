@@ -67,6 +67,8 @@ const ComboBox = ({
                 {leftContent && leftContent}
                 <span>{findOriginalValue(selectValue)}</span>
               </div>
+            ) : optionsLoading ? (
+              "Loading..."
             ) : (
               placeholder || "Select " + (fieldName || name)
             )}

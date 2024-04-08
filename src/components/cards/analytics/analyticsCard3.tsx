@@ -38,7 +38,7 @@ const AnalyticsCard3 = ({
   return (
     <CardWrapper
       className={cn(
-        "flex flex-col justify-between w-full min-w-[200px] max-w-[300px] h-[150px]",
+        "flex flex-col justify-between min-w-max w-[200px] max-w-[300px] h-[150px]",
         className
       )}
     >
@@ -74,7 +74,9 @@ const AnalyticsCard3 = ({
         >
           {perc}%
         </span>
-        <span className="ml-1">{"vs last month" || bottomText}</span>
+        <span className="ml-1 whitespace-nowrap">
+          {bottomText || "vs last month"}
+        </span>
       </div>
     </CardWrapper>
   );

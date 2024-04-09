@@ -15,9 +15,11 @@ import {
   endOfMonth,
   format,
   isAfter,
+  isBefore,
   isLeapYear,
   isSameMonth,
   isSameYear,
+  isValid,
   isWithinInterval,
   subMonths,
 } from "date-fns";
@@ -123,43 +125,35 @@ export const useOverviewActions = () => {
     selectedService || services?.[0]
   );
   const requests = requestsResponse.data?.data?.data;
-  const currMonthRequests = requests?.filter((el: IRequest) =>
-    isSameMonth(el?.createdat, new Date())
-  );
-  const lastMonthRequests = requests?.filter((el: IRequest) =>
-    isSameMonth(el?.createdat, subMonths(new Date(), 1))
-  );
+  // const currMonthRequests = requests?.filter((el: IRequest) =>
+  //   isSameMonth(el?.createdat, new Date())
+  // );
+  // const lastMonthRequests = requests?.filter((el: IRequest) =>
+  //   isSameMonth(el?.createdat, subMonths(new Date(), 1))
+  // );
 
-  const dateFrom = new Date(monthFrom + " " + yearFrom);
-  const dateTo = new Date(monthTo + " " + yearTo);
-  const currYear = new Date().getFullYear();
+  let dateFrom = new Date(monthFrom + " " + yearFrom);
+  let dateTo = new Date(monthTo + " " + yearTo);
+  if (!isValid(dateFrom) || !dateTo) dateFrom = subMonths(new Date(), 1);
+  if (!isValid(dateTo) || !dateFrom) dateTo = new Date();
 
-  let monthsDiff = differenceInMonths(dateTo, dateFrom) || 0;
-  monthsDiff = monthsDiff + 1;
-
-  const dateFromVs = subMonths(dateFrom, monthsDiff);
+  let monthsDiff = differenceInMonths(dateTo, dateFrom) + 1; // Complements for the last month
 
   // Return all requests if filters are not completely selected, filter otherwise
-  const filteredRequests =
-    !monthFrom || !monthTo || !yearFrom || !yearTo
-      ? currMonthRequests
-      : requests?.filter((el: IRequest) =>
-          isWithinInterval(new Date(el.createdat), {
-            start: dateFrom,
-            end: dateTo,
-          })
-        );
+  const filteredRequests = requests?.filter((el: IRequest) =>
+    isWithinInterval(new Date(el.createdat), {
+      start: dateFrom,
+      end: dateTo,
+    })
+  );
 
   // Return last month requests if filters are not completely selected, filter otherwise
-  const requestsVs =
-    !monthFrom || !monthTo || !yearFrom || !yearTo
-      ? lastMonthRequests
-      : requests?.filter((el: IRequest) =>
-          isWithinInterval(new Date(el.createdat), {
-            start: dateFromVs,
-            end: dateFrom,
-          })
-        );
+  const requestsVs = requests?.filter((el: IRequest) =>
+    isWithinInterval(new Date(el.createdat), {
+      start: subMonths(dateFrom, monthsDiff), //same months difference (with selected range) backwards
+      end: dateFrom,
+    })
+  );
 
   // The requests within the selected date range
   const requestsByStatus = {
@@ -181,6 +175,7 @@ export const useOverviewActions = () => {
     ),
   };
 
+  // The requests to be compared with
   const requestsVsByStatus = {
     draft: requestsVs?.filter((el: IRequest) => el.requeststatus === "PENDING"),
     paidDraft: requestsVs?.filter(
@@ -198,6 +193,7 @@ export const useOverviewActions = () => {
     ),
   };
 
+  // Return the months in a specified year, up until the current month
   const getMonthsInYear = (year: string, startDate?: string) => {
     return [
       `${startDate || "31"}, Jan`,
@@ -219,6 +215,7 @@ export const useOverviewActions = () => {
         : true
     );
   };
+
   const allMonthsStart = getMonthsInYear(yearFrom, "01");
 
   const allMonthsEnd = getMonthsInYear(yearTo)
@@ -235,39 +232,8 @@ export const useOverviewActions = () => {
         : true
     );
 
-  // const allMonthsEnd = [
-  //   "31, Jan",
-  //   `${isLeapYear(yearTo) ? "29" : "28"}, Feb`,
-  //   "31, Mar",
-  //   "30, Apr",
-  //   "31, May",
-  //   "30, Jun",
-  //   "31, Jul",
-  //   "31, Aug",
-  //   "30, Sep",
-  //   "31, Oct",
-  //   "30, Nov",
-  //   "31, Dec",
-  // ]
-  //   .map((el) =>
-  //     yearTo // Update the date of the current month if current year is selected
-  //       ? isSameMonth(new Date(el + " " + yearTo), new Date())
-  //         ? new Date().getDate().toString().padStart(2, "0") + el.slice(2)
-  //         : el
-  //       : el
-  //   )
-  //   .filter(
-  //     (el) =>
-  //       (yearTo
-  //         ? differenceInMonths(new Date(el + " " + yearTo), new Date()) <= 0 // Filter out months greater than current date
-  //         : true) &&
-  //       (monthFrom && yearFrom && yearTo
-  //         ? isAfter(new Date(el + " " + yearTo), dateFrom) // Return  only months after the selected date from
-  //         : true)
-  //   );
-
   const years = allYears?.filter(
-    (el) => parseInt(el) <= currYear // Filter out years greater than the current year
+    (el) => parseInt(el) <= new Date().getFullYear() // Filter out years greater than the current year
   );
   const yearsEnd = years.filter(
     (el) => (yearFrom ? parseInt(el) >= parseInt(yearFrom) : true) // Filter out years less than the selected year from
@@ -295,6 +261,7 @@ export const useOverviewActions = () => {
     yearsEnd,
     monthsDiff,
     dateFrom,
+    dateTo,
   };
 };
 

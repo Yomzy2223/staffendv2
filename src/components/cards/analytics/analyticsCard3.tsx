@@ -1,6 +1,17 @@
 import { Chart3 } from "@/assets/images";
 import CardWrapper from "@/components/wrappers/cardWrapper";
 import { cn } from "@/lib/utils";
+import {
+  addDays,
+  differenceInDays,
+  format,
+  formatDate,
+  isDate,
+  isSameDay,
+  isValid,
+  startOfMonth,
+  subMonths,
+} from "date-fns";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import Image from "next/image";
 import React from "react";
@@ -19,42 +30,91 @@ const AnalyticsCard3 = ({
   title,
   previous,
   current,
-  total,
   bottomText,
   className,
+  dateFrom,
+  dateTo,
 }: {
   title: string;
-  previous: number;
-  current: number;
-  total: number;
+  previous: any[];
+  current: any[];
   bottomText?: string;
   className?: string;
+  dateFrom: Date | string;
+  dateTo: Date | string;
 }) => {
-  const difference = current - previous;
+  const totalCurrent = current?.length;
+  const totalPrevious = previous?.length;
+
+  const difference = totalCurrent - totalPrevious;
   let perc = 100 * difference || 0;
-  if (previous > 0) perc = parseInt((perc / previous).toFixed(2));
+  // if (totalPrevious > 0) perc = parseInt((perc / totalPrevious).toFixed(2));
   const decreased = perc < 0;
+
+  if (title === "Drafts") console.log(totalPrevious, totalCurrent);
+
+  const startCurrent = isValid(dateTo) ? dateTo : startOfMonth(new Date());
+  const startPrev = isValid(dateFrom) ? dateFrom : subMonths(startCurrent, 1);
+  const totalDays =
+    isValid(dateTo) || isValid(dateFrom)
+      ? differenceInDays(startCurrent, startPrev)
+      : new Date().getDate();
+
+  const da = Array(totalDays)
+    .fill("")
+    .map((el, i) => {
+      const stepDayCurr = addDays(startCurrent, i);
+      const stepDayPrev = addDays(startPrev, i);
+      if (startPrev && startCurrent) {
+        const dataForStepDayCurr = current?.filter((el) =>
+          isSameDay(el.createdat, stepDayCurr)
+        );
+        const dataForStepDayPrev = previous?.filter((el) =>
+          isSameDay(el.createdat, stepDayPrev)
+        );
+        const name =
+          format(stepDayCurr, "MMM dd, yyy") +
+          " vs " +
+          format(stepDayPrev, "MMM dd, yyy");
+
+        return {
+          name,
+          current: dataForStepDayCurr,
+          previous: dataForStepDayPrev,
+        };
+      }
+    });
+
+  if (title === "Drafts") console.log(previous);
 
   return (
     <CardWrapper
       className={cn(
-        "flex flex-col justify-between min-w-max w-[200px] max-w-[300px] h-[150px]",
+        "flex-1 flex flex-col min-w-[250px] w-max max-w-[300px] h-[150px]",
         className
       )}
     >
       <p className="text-sm text-foreground-5 mb-3">{title}</p>
-      <div className="flex justify-between gap-4 mb-6">
-        <p className="sb-text-24 font-semibold">{total}</p>
-        {/* <Image src={Chart3} alt="analytics chart" /> */}
+      <div className="flex-1 flex justify-between gap-4 mb-2">
+        <p className="sb-text-24 font-semibold">{totalCurrent}</p>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart width={300} height={100} data={data}>
             <Line
               type="monotone"
-              dataKey="pv"
+              dataKey="current"
+              stroke="#84d885"
+              strokeWidth={2}
+              dot={false}
+            />
+
+            <Line
+              type="monotone"
+              dataKey="previous"
               stroke="#8884d8"
               strokeWidth={2}
               dot={false}
             />
+            <Tooltip wrapperStyle={{ opacity: 0.8 }} />
           </LineChart>
         </ResponsiveContainer>
       </div>
@@ -86,24 +146,54 @@ export default AnalyticsCard3;
 
 const data = [
   {
-    pv: 2400,
+    current: 400,
+    previous: 2100,
   },
   {
-    pv: 1398,
+    current: 2400,
+    previous: 1398,
   },
   {
-    pv: 9800,
+    current: 9800,
+    previous: 9200,
   },
   {
-    pv: 3908,
+    current: 3908,
+    previous: 2908,
   },
   {
-    pv: 4800,
+    current: 4800,
+    previous: 4900,
   },
   {
-    pv: 3800,
+    current: 4800,
+    previous: 3800,
   },
   {
-    pv: 4300,
+    current: 4800,
+    previous: 4100,
   },
 ];
+
+const CustomTooltip = ({
+  active,
+  payload,
+  label,
+}: {
+  active?: boolean;
+  payload?: { value: string }[];
+  label?: string;
+}) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="custom-tooltip">
+        <p className="label">{`${label} : ${payload[0].value}`}</p>
+        <p className="label">{`${label} : ${payload[1].value}`}</p>
+        <p className="intro">{label}</p>
+        <p className="desc">Anything you want can be displayed here.</p>
+      </div>
+    );
+  }
+
+  return null;
+};

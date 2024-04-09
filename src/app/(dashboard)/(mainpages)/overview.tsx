@@ -32,9 +32,9 @@ const OverviewSection = () => {
     yearsEnd,
     monthsDiff,
     dateFrom,
+    dateTo,
   } = useOverviewActions();
 
-  // console.log(monthsDiff);
   return (
     <div>
       <div className="flex flex-col gap-5 w-full pt-6 pb-4 sm:pb-6 sm:flex-row sm:items-center sm:justify-between">
@@ -107,44 +107,49 @@ const OverviewSection = () => {
           className="snap-start"
         />
         <AnalyticsCard3
-          title="Draft"
-          total={requestsByStatus.draft?.length}
-          current={requestsByStatus.draft?.length}
-          previous={requestsVsByStatus.draft?.length}
+          title="Drafts"
+          current={requestsByStatus.draft}
+          previous={requestsVsByStatus.draft}
           className="snap-start"
           bottomText={monthsDiff > 1 ? `vs previous ${monthsDiff} months` : ""}
+          dateFrom={dateFrom}
+          dateTo={dateTo}
         />
         <AnalyticsCard3
-          title="Paid Draft"
-          total={requestsByStatus.paidDraft?.length}
-          current={requestsByStatus.paidDraft?.length}
-          previous={requestsVsByStatus.paidDraft?.length}
+          title="Paid Drafts"
+          current={requestsByStatus.paidDraft}
+          previous={requestsVsByStatus.paidDraft}
           className="snap-start"
           bottomText={monthsDiff > 1 ? `vs previous ${monthsDiff} months` : ""}
+          dateFrom={dateFrom}
+          dateTo={dateTo}
         />
         <AnalyticsCard3
           title="Submitted"
-          total={requestsByStatus.submitted?.length}
-          current={requestsByStatus.submitted?.length}
-          previous={requestsVsByStatus.submitted?.length}
+          current={requestsByStatus.submitted}
+          previous={requestsVsByStatus.submitted}
           className="snap-start"
           bottomText={monthsDiff > 1 ? `vs previous ${monthsDiff} months` : ""}
+          dateFrom={dateFrom}
+          dateTo={dateTo}
         />
         <AnalyticsCard3
           title="In Progress"
-          total={requestsByStatus.inProgress?.length}
-          current={requestsByStatus.inProgress?.length}
-          previous={requestsVsByStatus.inProgress?.length}
+          current={requestsByStatus.inProgress}
+          previous={requestsVsByStatus.inProgress}
           className="snap-start"
           bottomText={monthsDiff > 1 ? `vs previous ${monthsDiff} months` : ""}
+          dateFrom={dateFrom}
+          dateTo={dateTo}
         />
         <AnalyticsCard3
           title="Completed"
-          total={requestsByStatus.completed?.length}
-          current={requestsByStatus.completed?.length}
-          previous={requestsVsByStatus.completed?.length}
+          current={requestsByStatus.completed}
+          previous={requestsVsByStatus.completed}
           className="snap-start"
           bottomText={monthsDiff > 1 ? `vs previous ${monthsDiff} months` : ""}
+          dateFrom={dateFrom}
+          dateTo={dateTo}
         />
       </DraggableScroll>
     </div>

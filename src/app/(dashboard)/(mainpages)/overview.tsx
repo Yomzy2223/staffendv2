@@ -7,7 +7,12 @@ import ComboBox from "@/components/form/dynamicForm/comboBox";
 import MultiCombo from "@/components/form/dynamicForm/multiCombo";
 import { allMonthsStart } from "./constants";
 import { IRequest } from "@/hooks/api/types";
-import { differenceInMonths, isSameYear } from "date-fns";
+import {
+  differenceInMonths,
+  isSameYear,
+  startOfMonth,
+  subMonths,
+} from "date-fns";
 
 const OverviewSection = () => {
   const {
@@ -31,9 +36,12 @@ const OverviewSection = () => {
     years,
     yearsEnd,
     monthsDiff,
-    dateFrom,
-    dateTo,
+    currentFrom,
+    currentTo,
   } = useOverviewActions();
+
+  const previousFrom = subMonths(currentFrom, monthsDiff);
+  const bottomText = monthsDiff > 1 ? `vs previous ${monthsDiff} months` : "";
 
   return (
     <div>
@@ -70,7 +78,7 @@ const OverviewSection = () => {
               handleSelect2={(selected?: string) => {
                 setYearFrom(selected || "");
                 console.log(selected);
-                new Date().getFullYear() === parseInt(selected || "") &&
+                new Date().getFullYear() === parseInt(selected || "") && // If current year is selected
                   setYearTo(selected || "");
               }}
             />
@@ -93,7 +101,7 @@ const OverviewSection = () => {
           </div>
         </div>
       </div>
-      <DraggableScroll className="snap snap-mandatory snap-x flex gap-8 p-1 pb-2 scroll-smooth">
+      <DraggableScroll className="snap snap-mandatory snap-x flex gap-8 p-1 pb-2 scroll-smooth overflow-y-hidden">
         {/* <AnalyticsCard1
             previous={50}
             current={51}
@@ -111,45 +119,50 @@ const OverviewSection = () => {
           current={requestsByStatus.draft}
           previous={requestsVsByStatus.draft}
           className="snap-start"
-          bottomText={monthsDiff > 1 ? `vs previous ${monthsDiff} months` : ""}
-          dateFrom={dateFrom}
-          dateTo={dateTo}
+          bottomText={bottomText}
+          currentTo={currentTo}
+          currentFrom={currentFrom}
+          previousFrom={previousFrom}
         />
         <AnalyticsCard3
           title="Paid Drafts"
           current={requestsByStatus.paidDraft}
           previous={requestsVsByStatus.paidDraft}
           className="snap-start"
-          bottomText={monthsDiff > 1 ? `vs previous ${monthsDiff} months` : ""}
-          dateFrom={dateFrom}
-          dateTo={dateTo}
+          bottomText={bottomText}
+          currentTo={currentTo}
+          currentFrom={currentFrom}
+          previousFrom={previousFrom}
         />
         <AnalyticsCard3
           title="Submitted"
           current={requestsByStatus.submitted}
           previous={requestsVsByStatus.submitted}
           className="snap-start"
-          bottomText={monthsDiff > 1 ? `vs previous ${monthsDiff} months` : ""}
-          dateFrom={dateFrom}
-          dateTo={dateTo}
+          bottomText={bottomText}
+          currentTo={currentTo}
+          currentFrom={currentFrom}
+          previousFrom={previousFrom}
         />
         <AnalyticsCard3
           title="In Progress"
           current={requestsByStatus.inProgress}
           previous={requestsVsByStatus.inProgress}
           className="snap-start"
-          bottomText={monthsDiff > 1 ? `vs previous ${monthsDiff} months` : ""}
-          dateFrom={dateFrom}
-          dateTo={dateTo}
+          bottomText={bottomText}
+          currentTo={currentTo}
+          currentFrom={currentFrom}
+          previousFrom={previousFrom}
         />
         <AnalyticsCard3
           title="Completed"
           current={requestsByStatus.completed}
           previous={requestsVsByStatus.completed}
           className="snap-start"
-          bottomText={monthsDiff > 1 ? `vs previous ${monthsDiff} months` : ""}
-          dateFrom={dateFrom}
-          dateTo={dateTo}
+          bottomText={bottomText}
+          currentTo={currentTo}
+          currentFrom={currentFrom}
+          previousFrom={previousFrom}
         />
       </DraggableScroll>
     </div>

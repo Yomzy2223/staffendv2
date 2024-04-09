@@ -21,6 +21,7 @@ import {
   isSameYear,
   isValid,
   isWithinInterval,
+  startOfMonth,
   subMonths,
 } from "date-fns";
 import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
@@ -125,33 +126,39 @@ export const useOverviewActions = () => {
     selectedService || services?.[0]
   );
   const requests = requestsResponse.data?.data?.data;
-  // const currMonthRequests = requests?.filter((el: IRequest) =>
-  //   isSameMonth(el?.createdat, new Date())
-  // );
-  // const lastMonthRequests = requests?.filter((el: IRequest) =>
-  //   isSameMonth(el?.createdat, subMonths(new Date(), 1))
-  // );
 
   let dateFrom = new Date(monthFrom + " " + yearFrom);
   let dateTo = new Date(monthTo + " " + yearTo);
-  if (!isValid(dateFrom) || !dateTo) dateFrom = subMonths(new Date(), 1);
-  if (!isValid(dateTo) || !dateFrom) dateTo = new Date();
+
+  if (!monthFrom || !yearFrom) dateFrom = startOfMonth(new Date());
+  if (!monthTo || !yearTo) dateTo = new Date();
+
+  const rangeSelected = monthFrom && yearFrom && monthTo && yearTo;
+  const currentTo = rangeSelected ? dateTo : new Date();
+  const currentFrom = rangeSelected ? dateFrom : startOfMonth(new Date());
+
+  // if (!rangeSelected) {
+  //   dateFrom = startOfMonth(new Date());
+  //   dateTo = new Date();
+  // }
 
   let monthsDiff = differenceInMonths(dateTo, dateFrom) + 1; // Complements for the last month
+  if (!rangeSelected) monthsDiff = 1;
 
   // Return all requests if filters are not completely selected, filter otherwise
   const filteredRequests = requests?.filter((el: IRequest) =>
     isWithinInterval(new Date(el.createdat), {
-      start: dateFrom,
-      end: dateTo,
+      start: currentFrom,
+      end: currentTo,
     })
   );
 
   // Return last month requests if filters are not completely selected, filter otherwise
   const requestsVs = requests?.filter((el: IRequest) =>
     isWithinInterval(new Date(el.createdat), {
-      start: subMonths(dateFrom, monthsDiff), //same months difference (with selected range) backwards
-      end: dateFrom,
+      // Same months difference (with selected range) backwards
+      start: subMonths(currentFrom, monthsDiff),
+      end: subMonths(currentTo, monthsDiff),
     })
   );
 
@@ -260,8 +267,8 @@ export const useOverviewActions = () => {
     years,
     yearsEnd,
     monthsDiff,
-    dateFrom,
-    dateTo,
+    currentFrom,
+    currentTo,
   };
 };
 

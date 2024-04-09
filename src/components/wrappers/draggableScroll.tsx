@@ -5,7 +5,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
 
@@ -51,7 +50,7 @@ const DraggableScroll = ({
 
   return (
     <div className="relative group">
-      <motion.div
+      <div
         ref={scrollableContainer}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
@@ -63,7 +62,7 @@ const DraggableScroll = ({
         )}
       >
         {children}
-      </motion.div>
+      </div>
       {hasHorScroll && isDesktop && (
         <div className="absolute bottom-0 left-0 right-0 h-3.5 z-40 bg-white group-hover:bg-transparent transition-all duration-500" />
       )}

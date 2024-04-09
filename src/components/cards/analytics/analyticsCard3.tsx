@@ -1,30 +1,9 @@
-import { Chart3 } from "@/assets/images";
 import CardWrapper from "@/components/wrappers/cardWrapper";
 import { cn } from "@/lib/utils";
-import {
-  addDays,
-  differenceInDays,
-  format,
-  formatDate,
-  isDate,
-  isSameDay,
-  isValid,
-  startOfMonth,
-  subMonths,
-} from "date-fns";
+import { addDays, differenceInDays, format, isSameDay } from "date-fns";
 import { ArrowDown, ArrowUp } from "lucide-react";
-import Image from "next/image";
 import React from "react";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
+import { LineChart, Line, Tooltip, ResponsiveContainer } from "recharts";
 
 const AnalyticsCard3 = ({
   title,
@@ -32,40 +11,35 @@ const AnalyticsCard3 = ({
   current,
   bottomText,
   className,
-  dateFrom,
-  dateTo,
+  previousFrom,
+  currentFrom,
+  currentTo,
 }: {
   title: string;
   previous: any[];
   current: any[];
   bottomText?: string;
   className?: string;
-  dateFrom: Date | string;
-  dateTo: Date | string;
+  previousFrom: Date | string;
+  currentFrom: Date | string;
+  currentTo: Date | string;
 }) => {
   const totalCurrent = current?.length;
   const totalPrevious = previous?.length;
 
   const difference = totalCurrent - totalPrevious;
   let perc = 100 * difference || 0;
-  // if (totalPrevious > 0) perc = parseInt((perc / totalPrevious).toFixed(2));
   const decreased = perc < 0;
 
-  if (title === "Drafts") console.log(totalPrevious, totalCurrent);
+  const totalDays = differenceInDays(currentTo, currentFrom) + 1;
 
-  const startCurrent = isValid(dateTo) ? dateTo : startOfMonth(new Date());
-  const startPrev = isValid(dateFrom) ? dateFrom : subMonths(startCurrent, 1);
-  const totalDays =
-    isValid(dateTo) || isValid(dateFrom)
-      ? differenceInDays(startCurrent, startPrev)
-      : new Date().getDate();
-
-  const da = Array(totalDays)
+  // Returns the data to be passed to the chart
+  const data = Array(totalDays)
     .fill("")
     .map((el, i) => {
-      const stepDayCurr = addDays(startCurrent, i);
-      const stepDayPrev = addDays(startPrev, i);
-      if (startPrev && startCurrent) {
+      const stepDayCurr = addDays(currentFrom, i);
+      const stepDayPrev = addDays(previousFrom, i);
+      if (previousFrom && currentFrom) {
         const dataForStepDayCurr = current?.filter((el) =>
           isSameDay(el.createdat, stepDayCurr)
         );
@@ -79,13 +53,13 @@ const AnalyticsCard3 = ({
 
         return {
           name,
-          current: dataForStepDayCurr,
-          previous: dataForStepDayPrev,
+          current: dataForStepDayCurr?.length,
+          previous: dataForStepDayPrev?.length,
         };
       }
     });
 
-  if (title === "Drafts") console.log(previous);
+  // if (title === "Drafts") console.log(data);
 
   return (
     <CardWrapper
@@ -143,57 +117,3 @@ const AnalyticsCard3 = ({
 };
 
 export default AnalyticsCard3;
-
-const data = [
-  {
-    current: 400,
-    previous: 2100,
-  },
-  {
-    current: 2400,
-    previous: 1398,
-  },
-  {
-    current: 9800,
-    previous: 9200,
-  },
-  {
-    current: 3908,
-    previous: 2908,
-  },
-  {
-    current: 4800,
-    previous: 4900,
-  },
-  {
-    current: 4800,
-    previous: 3800,
-  },
-  {
-    current: 4800,
-    previous: 4100,
-  },
-];
-
-const CustomTooltip = ({
-  active,
-  payload,
-  label,
-}: {
-  active?: boolean;
-  payload?: { value: string }[];
-  label?: string;
-}) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="custom-tooltip">
-        <p className="label">{`${label} : ${payload[0].value}`}</p>
-        <p className="label">{`${label} : ${payload[1].value}`}</p>
-        <p className="intro">{label}</p>
-        <p className="desc">Anything you want can be displayed here.</p>
-      </div>
-    );
-  }
-
-  return null;
-};

@@ -127,20 +127,17 @@ export const useOverviewActions = () => {
   );
   const requests = requestsResponse.data?.data?.data;
 
+  // Date range selected
   let dateFrom = new Date(monthFrom + " " + yearFrom);
   let dateTo = new Date(monthTo + " " + yearTo);
 
   if (!monthFrom || !yearFrom) dateFrom = startOfMonth(new Date());
   if (!monthTo || !yearTo) dateTo = new Date();
 
+  // Update currentTo and currentFrom when range is completely selected
   const rangeSelected = monthFrom && yearFrom && monthTo && yearTo;
   const currentTo = rangeSelected ? dateTo : new Date();
   const currentFrom = rangeSelected ? dateFrom : startOfMonth(new Date());
-
-  // if (!rangeSelected) {
-  //   dateFrom = startOfMonth(new Date());
-  //   dateTo = new Date();
-  // }
 
   let monthsDiff = differenceInMonths(dateTo, dateFrom) + 1; // Complements for the last month
   if (!rangeSelected) monthsDiff = 1;
@@ -225,6 +222,7 @@ export const useOverviewActions = () => {
 
   const allMonthsStart = getMonthsInYear(yearFrom, "01");
 
+  // Conditionally generates the months
   const allMonthsEnd = getMonthsInYear(yearTo)
     .map((el) =>
       yearTo // Update the date of the current month if current year is selected

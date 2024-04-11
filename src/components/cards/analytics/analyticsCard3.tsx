@@ -1,6 +1,18 @@
 import CardWrapper from "@/components/wrappers/cardWrapper";
 import { cn } from "@/lib/utils";
-import { addDays, differenceInDays, format, isSameDay } from "date-fns";
+import {
+  addDays,
+  addMonths,
+  differenceInDays,
+  differenceInMonths,
+  format,
+  getDaysInMonth,
+  isLastDayOfMonth,
+  isSameDay,
+  isSameMonth,
+  subDays,
+  subMonths,
+} from "date-fns";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import React from "react";
 import { LineChart, Line, Tooltip, ResponsiveContainer } from "recharts";
@@ -20,9 +32,9 @@ const AnalyticsCard3 = ({
   current: any[];
   bottomText?: string;
   className?: string;
-  previousFrom: Date | string;
-  currentFrom: Date | string;
-  currentTo: Date | string;
+  previousFrom: Date;
+  currentFrom: Date;
+  currentTo: Date;
 }) => {
   const totalCurrent = current?.length;
   const totalPrevious = previous?.length;
@@ -31,35 +43,22 @@ const AnalyticsCard3 = ({
   let perc = 100 * difference || 0;
   const decreased = perc < 0;
 
-  const totalDays = differenceInDays(currentTo, currentFrom) + 1;
+  const totalMonths = differenceInMonths(currentTo, currentFrom);
+
+  console.log(totalMonths);
 
   // Returns the data to be passed to the chart
-  const data = Array(totalDays)
+  const data = Array(2)
     .fill("")
     .map((el, i) => {
-      const stepDayCurr = addDays(currentFrom, i);
-      const stepDayPrev = addDays(previousFrom, i);
-      if (previousFrom && currentFrom) {
-        const dataForStepDayCurr = current?.filter((el) =>
-          isSameDay(el.createdat, stepDayCurr)
-        );
-        const dataForStepDayPrev = previous?.filter((el) =>
-          isSameDay(el.createdat, stepDayPrev)
-        );
-        const name =
-          format(stepDayCurr, "MMM dd, yyy") +
-          " vs " +
-          format(stepDayPrev, "MMM dd, yyy");
-
-        return {
-          name,
-          current: dataForStepDayCurr?.length,
-          previous: dataForStepDayPrev?.length,
-        };
-      }
+      return {
+        name: "",
+        current: 0,
+        previous: 0,
+      };
     });
 
-  // if (title === "Drafts") console.log(data);
+  if (title === "Drafts") console.log(data);
 
   return (
     <CardWrapper

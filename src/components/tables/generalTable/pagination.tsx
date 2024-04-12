@@ -1,7 +1,7 @@
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
-import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import React, { useState } from "react";
+import React from "react";
 import ReactPaginate from "react-paginate";
 
 const PaginatedItems = ({ itemsLength, itemsPerPage }: IPagination) => {
@@ -10,24 +10,11 @@ const PaginatedItems = ({ itemsLength, itemsPerPage }: IPagination) => {
   const searchParams = useSearchParams();
   const tablePage = parseInt(searchParams.get("page") || "1");
 
-  // Here we use item offsets; we could also use page offsets
-  // following the API or data you're working with.
-  const [itemOffset, setItemOffset] = useState(0);
-
-  //   const itemsPerPage = currentItems?.length;
-
-  // Simulate fetching items from another resources.
-  // (This could be items from props; or items loaded in a local state
-  // from an API endpoint with useEffect and useState)
-  //   const endOffset = itemOffset + itemsPerPage;
-
-  //   const currentItems = items.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(itemsLength / itemsPerPage);
 
   // Invoke when user click to request another page.
   const handlePageChange = (event: any) => {
     const newOffset = (event.selected * itemsPerPage) % itemsLength;
-    setItemOffset(newOffset);
     setQuery("page", event.selected + 1);
   };
 

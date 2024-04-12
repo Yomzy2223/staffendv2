@@ -79,10 +79,21 @@ const useUserApi = () => {
       enabled: id ? true : false,
     });
 
-  const getAllUsersQuery = useQuery({
-    queryKey: ["user"],
-    queryFn: getAllUsers,
-  });
+  const useGetAllUsersQuery = ({
+    isStaff,
+    isPartner,
+  }: {
+    isPartner?: boolean;
+    isStaff?: boolean;
+  }) =>
+    useQuery({
+      queryKey: ["user", isStaff, isPartner],
+      queryFn: ({ queryKey }) =>
+        getAllUsers({
+          isStaff: !!queryKey[1],
+          isPartner: !!queryKey[2],
+        }),
+    });
 
   return {
     forgotPasswordMutation,
@@ -90,7 +101,7 @@ const useUserApi = () => {
     verifyUserEmailMutation,
     deleteUserMutation,
     useGetUserQuery,
-    getAllUsersQuery,
+    useGetAllUsersQuery,
   };
 };
 

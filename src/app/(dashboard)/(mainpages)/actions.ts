@@ -1,33 +1,21 @@
 import useServiceApi from "@/hooks/useServiceApi";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import slugify from "slugify";
-import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
-import { IRequest, IServiceFull, IUser } from "@/hooks/api/types";
+import { IRequest, IServiceFull } from "@/hooks/api/types";
 import useRequestApi from "@/hooks/useRequestApi";
-import {
-  IRowInfo,
-  ITableBody,
-} from "@/components/tables/generalTable/constants";
 import {
   differenceInDays,
   differenceInMonths,
-  endOfMonth,
-  format,
   isAfter,
-  isBefore,
   isLeapYear,
   isSameMonth,
-  isSameYear,
-  isValid,
   isWithinInterval,
   startOfMonth,
   subMonths,
 } from "date-fns";
-import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
-import { useGlobalFunctions } from "@/hooks/globalFunctions";
+import { useState } from "react";
 import useUserApi from "@/hooks/useUserApi";
-import { allMonths, allYears } from "./constants";
+import { allYears } from "./constants";
 
 export const useRouteActions = () => {
   const { getAllServicesQuery } = useServiceApi();
@@ -100,6 +88,9 @@ export const useRouteActions = () => {
   return { navRoutes };
 };
 
+//
+//
+
 // Dashboard Overview Actions
 export const useOverviewActions = () => {
   const [monthFrom, setMonthFrom] = useState("");
@@ -108,23 +99,23 @@ export const useOverviewActions = () => {
   const [yearTo, setYearTo] = useState("");
   const [selectedService, setSelectedService] = useState("");
 
-  const { getAllUsersQuery } = useUserApi();
-  const usersResponse = getAllUsersQuery;
-  const users =
-    usersResponse.data?.data?.data?.map(
-      (el: IUser) => !el.isStaff && !el.isPartner
-    ) || [];
+  const { useGetAllUsersQuery } = useUserApi();
+  const usersResponse = useGetAllUsersQuery({});
+  const users = usersResponse.data?.data?.data || [];
 
   const { getAllServicesQuery } = useServiceApi();
   const servicesResponse = getAllServicesQuery;
-  const services =
-    servicesResponse.data?.data?.data?.map((el: IServiceFull) => el?.name) ||
-    [];
+  const services = servicesResponse.data?.data?.data || [];
+  const servicesNames = services?.map((el: IServiceFull) => el?.name);
+
+  const selectedServiceId = services?.find(
+    (el: IServiceFull) => el.name === selectedService || servicesNames?.[0]
+  )?.id;
 
   const { useGetServiceRequestQuery } = useRequestApi();
-  const requestsResponse = useGetServiceRequestQuery(
-    selectedService || services?.[0]
-  );
+  const requestsResponse = useGetServiceRequestQuery({
+    serviceId: selectedServiceId,
+  });
   const requests = requestsResponse.data?.data?.data;
 
   // Date range selected
@@ -144,7 +135,7 @@ export const useOverviewActions = () => {
 
   // Return all requests if filters are not completely selected, filter otherwise
   const filteredRequests = requests?.filter((el: IRequest) =>
-    isWithinInterval(new Date(el.createdat), {
+    isWithinInterval(new Date(el.createdAt), {
       start: currentFrom,
       end: currentTo,
     })
@@ -152,7 +143,7 @@ export const useOverviewActions = () => {
 
   // Return last month requests if filters are not completely selected, filter otherwise
   const requestsVs = requests?.filter((el: IRequest) =>
-    isWithinInterval(new Date(el.createdat), {
+    isWithinInterval(new Date(el.createdAt), {
       // Same months difference (with selected range) backwards
       start: subMonths(currentFrom, monthsDiff),
       end: subMonths(currentTo, monthsDiff),
@@ -161,40 +152,32 @@ export const useOverviewActions = () => {
 
   // The requests within the selected date range
   const requestsByStatus = {
-    draft: filteredRequests?.filter(
-      (el: IRequest) => el.requeststatus === "PENDING"
-    ),
+    draft: filteredRequests?.filter((el: IRequest) => el.status === "PENDING"),
     paidDraft: filteredRequests?.filter(
-      (el: IRequest) => el.requeststatus === "PENDING" && el.paid
+      (el: IRequest) => el.status === "PENDING" && el.paid
     ),
     submitted: filteredRequests?.filter(
-      (el: IRequest) => el.requeststatus === "SUBMITTED"
+      (el: IRequest) => el.status === "SUBMITTED"
     ),
     inProgress: filteredRequests?.filter(
-      (el: IRequest) =>
-        el.requeststatus === "ASSIGNED" || el.requeststatus === "REJECTED"
+      (el: IRequest) => el.status === "ASSIGNED" || el.status === "REJECTED"
     ),
     completed: filteredRequests?.filter(
-      (el: IRequest) => el.requeststatus === "COMPLETED"
+      (el: IRequest) => el.status === "COMPLETED"
     ),
   };
 
   // The requests to be compared with
   const requestsVsByStatus = {
-    draft: requestsVs?.filter((el: IRequest) => el.requeststatus === "PENDING"),
+    draft: requestsVs?.filter((el: IRequest) => el.status === "PENDING"),
     paidDraft: requestsVs?.filter(
-      (el: IRequest) => el.requeststatus === "PENDING" && el.paid
+      (el: IRequest) => el.status === "PENDING" && el.paid
     ),
-    submitted: requestsVs?.filter(
-      (el: IRequest) => el.requeststatus === "SUBMITTED"
-    ),
+    submitted: requestsVs?.filter((el: IRequest) => el.status === "SUBMITTED"),
     inProgress: requestsVs?.filter(
-      (el: IRequest) =>
-        el.requeststatus === "ASSIGNED" || el.requeststatus === "REJECTED"
+      (el: IRequest) => el.status === "ASSIGNED" || el.status === "REJECTED"
     ),
-    completed: requestsVs?.filter(
-      (el: IRequest) => el.requeststatus === "COMPLETED"
-    ),
+    completed: requestsVs?.filter((el: IRequest) => el.status === "COMPLETED"),
   };
 
   // Return the months in a specified year, up until the current month
@@ -257,7 +240,7 @@ export const useOverviewActions = () => {
     setSelectedService,
     users,
     servicesResponse,
-    services,
+    servicesNames,
     requestsByStatus,
     requestsVsByStatus,
     allMonthsStart,
@@ -269,111 +252,3 @@ export const useOverviewActions = () => {
     currentTo,
   };
 };
-
-// Table information
-export const useTableInfo = ({
-  setOpen,
-  setSelectedRequests,
-}: {
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  setSelectedRequests: Dispatch<SetStateAction<string[]>>;
-}) => {
-  const { getReqStatusColor } = useGlobalFunctions();
-
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const { getAllServicesQuery } = useServiceApi();
-  const services = getAllServicesQuery;
-  const servicesData = services.data?.data?.data || [];
-
-  const selectedServiceId =
-    searchParams.get("serviceId") || servicesData[0]?.id;
-
-  const {
-    useGetServiceRequestQuery,
-    assignRequestMutation,
-    getAllRequestsQuery,
-  } = useRequestApi();
-  const serviceRequests = useGetServiceRequestQuery(selectedServiceId);
-  const allRequests = getAllRequestsQuery;
-
-  const allRequestsData = allRequests.data?.data?.data;
-  const serviceRequestsData = serviceRequests.data?.data?.data;
-
-  const serviceTableNav = servicesData?.map((service: IServiceFull) => ({
-    name: "serviceId",
-    value: service.id,
-    text: service.name,
-  }));
-
-  const handleClick = (
-    e: MouseEvent<HTMLTableRowElement>,
-    rowId: string,
-    rowInfo: IRowInfo[]
-  ) => {
-    router.push(`/services/request/${rowId}`);
-  };
-
-  const handleAssignClick = (
-    e: MouseEvent<HTMLTableCellElement>,
-    rowId: string,
-    text: string
-  ) => {
-    e.stopPropagation();
-    setOpen(true);
-    setSelectedRequests([rowId]);
-  };
-  // Services table header
-  const tableHeaders = [
-    "S/N",
-    "BUSINESS NAME",
-    "PRODUCT NAME",
-    "STATUS",
-    "CURRENT STATE",
-    "PAYMENT STATUS",
-    "DATE",
-    "ACTION",
-  ];
-
-  // Services table body
-  const tableBody =
-    serviceRequestsData?.map(
-      (request: IRequest, i: number): ITableBody => ({
-        rowId: request.id,
-        handleClick,
-        rowInfo: [
-          { text: i.toString().padStart(2, "0") },
-          { text: request?.businessname || "" },
-          { text: request?.servicename },
-          {
-            text: request.requeststatus,
-            cellProps: {
-              className: cn(
-                cellClassName,
-                getReqStatusColor(request.requeststatus)
-              ),
-            },
-          },
-          { text: request.currentState },
-          { text: request.paid ? "Paid" : "Not Paid Yet" },
-          { text: format(request.createdat, "MMMM dd, yyyy") },
-          {
-            text: "Assign",
-            handleClick: handleAssignClick,
-            cellProps: { className: "text-primary underline" },
-          },
-        ],
-      })
-    ) || [];
-
-  return {
-    serviceTableNav,
-    tableHeaders,
-    tableBody,
-    assignRequestMutation,
-  };
-};
-
-const cellClassName =
-  "[&_span]:bg-yellow-300 [&_span]:px-[10px] [&_span]:py-[2px] [&_span]:rounded-md  text-xs";

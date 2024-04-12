@@ -45,7 +45,7 @@ const AnalyticsCard3 = ({
 
   const totalMonths = differenceInMonths(currentTo, currentFrom);
 
-  console.log(totalMonths);
+  // console.log(totalMonths);
 
   // Returns the data to be passed to the chart
   const data = Array(2)
@@ -58,7 +58,7 @@ const AnalyticsCard3 = ({
       };
     });
 
-  if (title === "Drafts") console.log(data);
+  // if (title === "Drafts") console.log(data);
 
   return (
     <CardWrapper

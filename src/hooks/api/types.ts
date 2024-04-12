@@ -81,25 +81,23 @@ export interface ICountryFull {
 }
 
 export interface IRequest {
-  businessname: string;
-  completedat: string;
-  createdat: string;
-  createdby: string;
   id: string;
   paid: boolean;
-  productcountry: string;
-  productid: string;
-  productname: string;
-  requeststatus:
-    | "PENDING"
-    | "SUBMITTED"
-    | "ASSIGNED"
-    | "REJECTED"
-    | "COMPLETED";
-  servicename: string;
-  submittedat: string;
-  updatedat: string;
+  businessName: string;
+  status: "PENDING" | "SUBMITTED" | "ASSIGNED" | "REJECTED" | "COMPLETED";
+  completedAt: string;
+  createdAt: string;
+  submittedAt: string;
+  createdBy: string;
+  productCountry: string;
+  processId: string;
+  productName: string;
+  serviceName: string;
+  updatedAt: string;
+  assignedAt: string;
+  productId: string;
   currentState: string;
+  partnerInCharge: string;
 }
 
 export interface IUser {

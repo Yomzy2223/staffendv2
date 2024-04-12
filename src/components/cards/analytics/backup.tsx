@@ -105,10 +105,10 @@ const AnalyticsCard3 = ({
       // console.log(stepDayCurr, stepDayPrev);
       if (previousFrom && currentFrom) {
         const dataForStepDayCurr = stepDayCurr
-          ? current?.filter((el) => isSameDay(el.createdat, stepDayCurr))
+          ? current?.filter((el) => isSameDay(el.createdAt, stepDayCurr))
           : [];
         const dataForStepDayPrev = stepDayPrev
-          ? previous?.filter((el) => isSameDay(el.createdat, stepDayPrev))
+          ? previous?.filter((el) => isSameDay(el.createdAt, stepDayPrev))
           : [];
         const name1 = stepDayCurr ? format(stepDayCurr, "MMM dd, yyy") : "Void";
         const name2 = stepDayPrev ? format(stepDayPrev, "MMM dd, yyy") : "Void";
@@ -132,10 +132,10 @@ const AnalyticsCard3 = ({
   //       : null;
   //     if (previousFrom && currentFrom) {
   //       const dataForStepDayCurr = current?.filter((el) =>
-  //         isSameDay(el.createdat, stepDayCurr)
+  //         isSameDay(el.createdAt, stepDayCurr)
   //       );
   //       const dataForStepDayPrev = previous?.filter((el) =>
-  //         isSameDay(el.createdat, stepDayPrev)
+  //         isSameDay(el.createdAt, stepDayPrev)
   //       );
   //       const name1 = stepDayCurr ? format(stepDayCurr, "MMM dd, yyy") : "Void";
   //       const name2 = stepDayPrev ? format(stepDayPrev, "MMM dd, yyy") : "Void";

@@ -23,14 +23,33 @@ export const getRequest = async (id: string) => {
   return await client.get(`/productRequest/${id}`);
 };
 
-export const getServiceRequests = async (serviceId: string) => {
+export const getServiceRequests = async ({
+  serviceId,
+  page,
+  pageSize,
+}: {
+  serviceId: string;
+  page?: number | string;
+  pageSize?: number | string;
+}) => {
   const client = await Client();
-  return await client.get(`/productRequest`);
+  return await client.get(
+    `/productRequest/service/${serviceId}?page=${page}&pageSize=${pageSize}`
+  );
 };
 
-export const getAllRequests = async () => {
+export const getAllRequests = async ({
+  page,
+  pageSize,
+}: {
+  page?: number | string;
+  pageSize?: number | string;
+}) => {
   const client = await Client();
-  return await client.get(`/productRequest`);
+  let endpoint = `/productRequest`;
+  if (page && pageSize)
+    endpoint = `/productRequest?page=${page}&pageSize=${pageSize}`;
+  return await client.get(endpoint);
 };
 
 export const assignRequest = async ({
@@ -43,4 +62,16 @@ export const assignRequest = async ({
 }) => {
   const client = await Client();
   return await client.post(`/productRequest/assign`, formInfo);
+};
+
+export const unAssignRequest = async ({
+  formInfo,
+}: {
+  formInfo: {
+    userId: string;
+    requestIds: string[];
+  };
+}) => {
+  const client = await Client();
+  return await client.put(`/productRequest/unassign`, formInfo);
 };

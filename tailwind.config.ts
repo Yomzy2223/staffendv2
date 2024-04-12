@@ -38,11 +38,6 @@ const config = {
           8: "hsl(var(--primary-8))",
           foreground: "hsl(var(--primary-foreground))",
         },
-
-        yellow: {
-          DEFAULT: "hsl(var(--yellow))",
-          dark: "hsl(var(--sb-yellow-dark))",
-        },
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
@@ -57,6 +52,10 @@ const config = {
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
+        },
+        tertiary: {
+          DEFAULT: "hsl(var(--tertiary))",
+          foreground: "hsl(var(--tertiary-foreground))",
         },
         label: {
           DEFAULT: "hsl(var(--label))",
@@ -79,10 +78,6 @@ const config = {
           dark: "hsl(var(--magenta-dark))",
           light: "hsla(var(--magenta-light))",
         },
-        sb: {
-          "blue-light": "hsl(var(--sb-blue-light))",
-        },
-
         ring: "hsl(var(--ring))",
         muted: {
           DEFAULT: "hsl(var(--muted))",
@@ -125,29 +120,3 @@ const config = {
 } satisfies Config;
 
 export default config;
-
-// //
-// const config: Config = {
-//   content: [
-//     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-//     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-//     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-//     "./node_modules/flowbite/**/*.js",
-//     "./node_modules/flowbite-react/**/*.js",
-//   ],
-//   theme: {
-//     extend: {
-//       colors: {
-
-//         // sb: {
-//         // 	cyan: "hsl(var(--sb-cyan)",
-//         // 	yellow:  "hsl(var(--sb-cyan)",
-//         // 	yellowdark:  "hsl(var(--sb-yellow-dark)",
-//         // },
-//       },
-
-//     },
-//   },
-//   plugins: [require("flowbite/plugin")],
-// };
-// export default config;

@@ -4,42 +4,42 @@ import { isSameMonth, subMonths } from "date-fns";
 
 export const useActions = ({ serviceId }: { serviceId: string }) => {
   const { useGetServiceRequestQuery } = useRequestApi();
-  const request = useGetServiceRequestQuery(serviceId as string);
+  const request = useGetServiceRequestQuery({ serviceId: serviceId });
 
   const requestsData: IRequest[] = request.data?.data?.data;
 
   const pendingRequests = requestsData?.filter(
-    (el: IRequest) => el.requeststatus === "PENDING"
+    (el: IRequest) => el.status === "PENDING"
   );
 
   const submittedRequests = requestsData?.filter(
-    (el: IRequest) => el.requeststatus === "SUBMITTED"
+    (el: IRequest) => el.status === "SUBMITTED"
   );
   const completedRequests = requestsData?.filter(
-    (el: IRequest) => el.requeststatus === "COMPLETED"
+    (el: IRequest) => el.status === "COMPLETED"
   );
 
   const thisMonthReq = {
     pending: pendingRequests?.filter((el: IRequest) =>
-      isSameMonth(el.createdat, new Date())
+      isSameMonth(el.createdAt, new Date())
     ),
     submitted: submittedRequests?.filter((el: IRequest) =>
-      isSameMonth(el.submittedat, new Date())
+      isSameMonth(el.submittedAt, new Date())
     ),
     completed: completedRequests?.filter((el: IRequest) =>
-      isSameMonth(el.completedat, new Date())
+      isSameMonth(el.completedAt, new Date())
     ),
   };
 
   const lastMonthReq = {
     pending: pendingRequests?.filter((el: IRequest) =>
-      isSameMonth(el.createdat, subMonths(new Date(), 1))
+      isSameMonth(el.createdAt, subMonths(new Date(), 1))
     ),
     submitted: submittedRequests?.filter((el: IRequest) =>
-      isSameMonth(el.submittedat, subMonths(new Date(), 1))
+      isSameMonth(el.submittedAt, subMonths(new Date(), 1))
     ),
     completed: completedRequests?.filter((el: IRequest) =>
-      isSameMonth(el.completedat, subMonths(new Date(), 1))
+      isSameMonth(el.completedAt, subMonths(new Date(), 1))
     ),
   };
 

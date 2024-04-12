@@ -5,14 +5,7 @@ import AnalyticsCard3 from "@/components/cards/analytics/analyticsCard3";
 import { useOverviewActions } from "./actions";
 import ComboBox from "@/components/form/dynamicForm/comboBox";
 import MultiCombo from "@/components/form/dynamicForm/multiCombo";
-import { allMonthsStart } from "./constants";
-import { IRequest } from "@/hooks/api/types";
-import {
-  differenceInMonths,
-  isSameYear,
-  startOfMonth,
-  subMonths,
-} from "date-fns";
+import { subMonths } from "date-fns";
 
 const OverviewSection = () => {
   const {
@@ -27,7 +20,7 @@ const OverviewSection = () => {
     selectedService,
     setSelectedService,
     users,
-    services,
+    servicesNames,
     servicesResponse,
     requestsByStatus,
     requestsVsByStatus,
@@ -50,7 +43,7 @@ const OverviewSection = () => {
           <p className="sb-text-16 font-semibold">SERVICE OVERVIEW</p>
           <ComboBox
             name="service"
-            options={services}
+            options={servicesNames}
             fieldName="Service"
             handleSelect={(selected?: string) =>
               setSelectedService(selected || "")

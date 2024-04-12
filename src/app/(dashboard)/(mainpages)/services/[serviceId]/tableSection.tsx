@@ -4,15 +4,24 @@ import PartnerAssignDialog from "@/components/dialogs/partnerAssign";
 import GeneralTable from "@/components/tables/generalTable";
 import CardWrapper from "@/components/wrappers/cardWrapper";
 import React, { useState } from "react";
-import { useTableInfo } from "../../actions";
+import { useTableInfo } from "../../tableActions";
 
 const TableSection = () => {
-  const [open, setOpen] = useState(false);
+  const [openAssign, setOpenAssign] = useState(false);
+  const [openUnAssign, setOpenUnAssign] = useState(false);
+  const [openInfo, setOpenInfo] = useState(false);
   const [selectedRequests, setSelectedRequests] = useState<string[]>([]);
+  const [partnerId, setPartnerId] = useState("");
 
-  const { tableHeaders, tableBody } = useTableInfo({
-    setOpen,
+  const itemsPerPage = 5;
+
+  const { tableHeaders, tableBody, totalRequests } = useTableInfo({
+    setOpenAssign,
     setSelectedRequests,
+    setOpenInfo,
+    setOpenUnAssign,
+    itemsPerPage,
+    setPartnerId,
   });
 
   return (
@@ -21,10 +30,13 @@ const TableSection = () => {
         tableHeaders={tableHeaders}
         tableBody={tableBody}
         tableNav={serviceTableNav}
+        itemsLength={totalRequests}
+        itemsPerPage={itemsPerPage}
+        onSelect={(selected) => console.log(selected)}
       />
       <PartnerAssignDialog
-        setOpen={setOpen}
-        open={open}
+        setOpen={setOpenAssign}
+        open={openAssign}
         selectedRequests={selectedRequests}
         setSelectedRequests={setSelectedRequests}
       />

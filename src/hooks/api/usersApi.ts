@@ -47,7 +47,13 @@ export const getUser = async (id: string) => {
   return await client.get(`/users/${id}`);
 };
 
-export const getAllUsers = async () => {
+export const getAllUsers = async ({
+  isPartner = false,
+  isStaff = false,
+}: {
+  isPartner?: boolean;
+  isStaff?: boolean;
+}) => {
   const client = await Client();
-  return await client.get(`/users`);
+  return await client.get(`/users?isPartner=${isPartner}&isStaff=${isStaff}`);
 };

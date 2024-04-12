@@ -7,7 +7,7 @@ export const customTheme: ThemeProps = {
         base: "flex h-fit items-center gap-1 font-semibold !py-0.5 !px-2.5 !rounded-md",
         color: {
           magenta:
-            "bg-magenta/10 text-magenta dark:bg-magenta/20 dark:text-magenta group-hover:bg-magenta/20 dark:group-hover:bg-magenta/30",
+            "bg-secondary/10 text-secondary dark:bg-secondary/20 dark:text-secondary group-hover:bg-secondary/20 dark:group-hover:bg-secondary/30",
           pink: "bg-[#d400cc14] text-[#D400CC]",
         },
       },
@@ -49,7 +49,7 @@ export const customTheme: ThemeProps = {
         primary:
           "bg-primary text-primary-foreground border border-transparent enabled:hover:bg-primary-dark",
         secondary:
-          "bg-magenta text-magenta-foreground border border-transparent enabled:hover:bg-magenta-dark",
+          "bg-secondary text-secondary-foreground border border-transparent enabled:hover:bg-secondary-dark",
         ghost: "bg-transparent text-foreground",
       },
       outline: {
@@ -59,7 +59,7 @@ export const customTheme: ThemeProps = {
           primary:
             "border border-primary !text-primary bg-transparent enabled:hover:bg-primary-dark",
           magenta:
-            "border border-magenta bg-transparent enabled:hover:bg-magenta-dark",
+            "border border-secondary bg-transparent enabled:hover:bg-secondary-dark",
         },
         on: "flex justify-center bg-white text-foreground transition-all duration-75 ease-in group-enabled:group-hover:bg-opacity-0 group-enabled:group-hover:text-inherit dark:bg-gray-900 dark:text-white w-full",
       },
@@ -89,7 +89,7 @@ export const customTheme: ThemeProps = {
     },
     checkbox: {
       root: {
-        base: "h-4 w-4 rounded focus:ring-offset-0 focus:ring-0 appearance-none bg-muted border-none rounded ring-0 checked:bg-primary checked:ring-primary disabled:opacity-70",
+        base: "h-4 w-4 rounded focus:ring-offset-0 focus:ring-1 appearance-none bg-muted border-none rounded  bg-white ring-1 ring-border checked:bg-primary checked:ring-primary disabled:opacity-70",
         color: {},
       },
     },

@@ -1,8 +1,7 @@
 "use client";
 
 import { GoogleIcon, YahooIcon } from "@/assets/svg";
-import { Button } from "flowbite-react";
-import { FooterDivider } from "flowbite-react/lib/esm/components/Footer/FooterDivider";
+import { Button, FooterDivider } from "flowbite-react";
 import Image from "next/image";
 import React, { ReactNode } from "react";
 

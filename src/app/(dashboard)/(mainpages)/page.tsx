@@ -8,17 +8,33 @@ import CardWrapper from "@/components/wrappers/cardWrapper";
 import Image from "next/image";
 import React, { useState } from "react";
 import { paymentQueryNav, serviceQueryNav2 } from "./constants";
-import { useTableInfo } from "./actions";
+import { useTableInfo } from "./tableActions";
 import PartnerAssignDialog from "@/components/dialogs/partnerAssign";
 import OverviewSection from "./overview";
+import ConfirmAction from "@/components/confirmAction";
 
 const Home = () => {
-  const [open, setOpen] = useState(false);
+  const [openAssign, setOpenAssign] = useState(false);
+  const [openUnAssign, setOpenUnAssign] = useState(false);
+  const [openInfo, setOpenInfo] = useState(false);
   const [selectedRequests, setSelectedRequests] = useState<string[]>([]);
+  const [partnerId, setPartnerId] = useState("");
 
-  const { tableHeaders, tableBody, serviceTableNav } = useTableInfo({
-    setOpen,
+  const itemsPerPage = 5;
+
+  const {
+    tableHeaders,
+    tableBody,
+    serviceTableNav,
+    unAssignRequestMutation,
+    totalRequests,
+  } = useTableInfo({
+    setOpenAssign,
+    setOpenUnAssign,
+    setOpenInfo,
     setSelectedRequests,
+    setPartnerId,
+    itemsPerPage,
   });
 
   return (
@@ -52,16 +68,41 @@ const Home = () => {
             tableHeaders={tableHeaders}
             tableBody={tableBody}
             tableNav={serviceTableNav}
+            itemsLength={totalRequests}
+            itemsPerPage={itemsPerPage}
+            onSelect={(selected) => console.log(selected)}
           />
         </CardWrapper>
       </div>
 
       <PartnerAssignDialog
-        setOpen={setOpen}
-        open={open}
+        setOpen={setOpenAssign}
+        open={openAssign}
         selectedRequests={selectedRequests}
         setSelectedRequests={setSelectedRequests}
       />
+
+      {openUnAssign && (
+        <ConfirmAction
+          open={openUnAssign}
+          setOpen={setOpenUnAssign}
+          confirmAction={() =>
+            unAssignRequestMutation.mutate(
+              {
+                formInfo: { userId: partnerId, requestIds: selectedRequests },
+              },
+              {
+                onSuccess: () => setOpenUnAssign(false),
+              }
+            )
+          }
+          title="Unassign Task"
+          description="Are you sure you want to unasssign this task? Partner will be notified."
+          isLoading={unAssignRequestMutation.isPending}
+          dismissible
+          isDelete
+        />
+      )}
     </>
   );
 };

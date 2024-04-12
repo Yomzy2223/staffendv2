@@ -8,6 +8,7 @@ import {
   updateRequest,
   getServiceRequests,
   assignRequest,
+  unAssignRequest,
 } from "./api/requestApi";
 
 const useRequestApi = () => {
@@ -46,20 +47,60 @@ const useRequestApi = () => {
       enabled: id ? true : false,
     });
 
-  const useGetServiceRequestQuery = (serviceId: string) =>
+  const useGetServiceRequestQuery = ({
+    serviceId,
+    page,
+    pageSize,
+  }: {
+    serviceId: string;
+    page?: number;
+    pageSize?: number;
+  }) =>
     useQuery({
-      queryKey: ["request", serviceId],
-      queryFn: ({ queryKey }) => getServiceRequests(queryKey[1]),
+      queryKey: ["request", serviceId, page, pageSize],
+      queryFn: ({ queryKey }) => {
+        const payload = {
+          serviceId: queryKey[1]?.toString() || "",
+          page: queryKey[2],
+          pageSize: queryKey[3],
+        };
+        return getServiceRequests(payload);
+      },
       enabled: serviceId ? true : false,
     });
 
-  const getAllRequestsQuery = useQuery({
-    queryKey: ["request"],
-    queryFn: getAllRequests,
-  });
+  const useGetAllRequestsQuery = ({
+    page,
+    pageSize,
+  }: {
+    page?: number;
+    pageSize?: number;
+  }) =>
+    useQuery({
+      queryKey: ["request", page, pageSize],
+      queryFn: ({ queryKey }) => {
+        const payload = {
+          page: queryKey[2],
+          pageSize: queryKey[3],
+        };
+        return getAllRequests(payload);
+      },
+    });
 
   const assignRequestMutation = useMutation({
     mutationFn: assignRequest,
+    onError(error, variables, context) {
+      handleError({ title: "Failed", error });
+    },
+    onSuccess(data, variables, context) {
+      handleSuccess({ data });
+      queryClient.invalidateQueries({ queryKey: ["request"] });
+    },
+    retry: 3,
+  });
+
+  const unAssignRequestMutation = useMutation({
+    mutationFn: unAssignRequest,
     onError(error, variables, context) {
       handleError({ title: "Failed", error });
     },
@@ -75,8 +116,9 @@ const useRequestApi = () => {
     deleteRequestMutation,
     useGetRequestQuery,
     useGetServiceRequestQuery,
-    getAllRequestsQuery,
+    useGetAllRequestsQuery,
     assignRequestMutation,
+    unAssignRequestMutation,
   };
 };
 

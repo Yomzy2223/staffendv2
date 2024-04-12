@@ -7,6 +7,7 @@ import { useSearchParams } from "next/navigation";
 import DoChecks from "@/components/DoChecks";
 import TableSection from "./tableSection";
 import HeaderSection from "./headerSection";
+import CardWrapper from "@/components/wrappers/cardWrapper";
 
 const GeneralTable = ({
   tableHeaders,
@@ -25,42 +26,46 @@ const GeneralTable = ({
   const offset = (tablePage - 1) * itemsPerPage;
 
   return (
-    <div className="max-w-full overflow-auto">
-      <HeaderSection
-        selectOn={selectOn}
-        setSelectOn={setSelectOn}
-        selectedRows={selectedRows}
-        setSelectedRows={setSelectedRows}
-        tableNav={tableNav}
-      />
-
-      <DoChecks items={tableBody}>
-        <TableSection
-          onSelect={onSelect}
+    <CardWrapper>
+      <div>
+        <HeaderSection
           selectOn={selectOn}
+          setSelectOn={setSelectOn}
           selectedRows={selectedRows}
           setSelectedRows={setSelectedRows}
-          tableBody={tableBody}
-          tableHeaders={tableHeaders}
+          tableNav={tableNav}
         />
-        {itemsLength > itemsPerPage && (
-          <div className="flex flex-col justify-between gap-4 sticky left-0 p-0 md:p-4 md:flex-row md:items-center md:py-5">
-            <p className="inline-flex gap-1 text-sm text-foreground-5">
-              Showing
-              <span className="text-foreground font-medium">
-                {offset + 1}-{offset + tableBody?.length}
-              </span>
-              of{" "}
-              <span className="text-foreground font-medium">{itemsLength}</span>
-            </p>
-            <PaginatedItems
-              itemsLength={itemsLength}
-              itemsPerPage={itemsPerPage}
-            />
-          </div>
-        )}
-      </DoChecks>
-    </div>
+
+        <DoChecks items={tableBody} className="max-w-full overflow-auto">
+          <TableSection
+            onSelect={onSelect}
+            selectOn={selectOn}
+            selectedRows={selectedRows}
+            setSelectedRows={setSelectedRows}
+            tableBody={tableBody}
+            tableHeaders={tableHeaders}
+          />
+          {itemsLength > itemsPerPage && (
+            <div className="flex flex-col justify-between gap-4 sticky left-0 p-0 md:p-4 md:flex-row md:items-center md:py-5">
+              <p className="inline-flex gap-1 text-sm text-foreground-5">
+                Showing
+                <span className="text-foreground font-medium">
+                  {offset + 1}-{offset + tableBody?.length}
+                </span>
+                of{" "}
+                <span className="text-foreground font-medium">
+                  {itemsLength}
+                </span>
+              </p>
+              <PaginatedItems
+                itemsLength={itemsLength}
+                itemsPerPage={itemsPerPage}
+              />
+            </div>
+          )}
+        </DoChecks>
+      </div>
+    </CardWrapper>
   );
 };
 

@@ -31,8 +31,8 @@ const PaginatedItems = ({ itemsLength, itemsPerPage }: IPagination) => {
       className="flex border border-border rounded text-foreground-5 overflow-x-auto max-w-max"
       pageClassName="flex [&_a]:h-10 [&_a]:px-3 [&_a]:py-1.5 border-l border-border hover:bg-muted"
       breakClassName="flex [&_a]:px-3 [&_a]:py-1.5 border-l border-border"
-      nextClassName="flex [&_a]:flex [&_a]:items-center [&_a]:px-2  border-l border-border"
-      previousClassName="flex [&_a]:flex [&_a]:items-center [&_a]:px-2 "
+      nextClassName="flex [&_a]:flex [&_a]:items-center [&_a]:px-2  border-l border-border hover:bg-muted"
+      previousClassName="flex [&_a]:flex [&_a]:items-center [&_a]:px-2 hover:bg-muted"
       activeClassName="bg-primary-8/50 text-primary hover:bg-primary-8/50"
     />
   );

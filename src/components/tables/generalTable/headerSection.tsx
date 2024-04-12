@@ -11,7 +11,7 @@ const HeaderSection = ({
   setSelectedRows,
 }: IProps) => {
   return (
-    <div className="flex justify-between gap-6 sticky left-0 py-1">
+    <div className="flex justify-between gap-6 py-1">
       <div>
         <p className="sb-text-24 font-semibold mb-3">Recent services</p>
         <div className="flex flex-col gap-3 text-sm font-normal mb-6 md:gap-4 md:flex-row md:items-center">

@@ -63,16 +63,14 @@ const Home = () => {
           </CardWrapper>
         </div>
 
-        <CardWrapper>
-          <GeneralTable
-            tableHeaders={tableHeaders}
-            tableBody={tableBody}
-            tableNav={serviceTableNav}
-            itemsLength={totalRequests}
-            itemsPerPage={itemsPerPage}
-            onSelect={(selected) => console.log(selected)}
-          />
-        </CardWrapper>
+        <GeneralTable
+          tableHeaders={tableHeaders}
+          tableBody={tableBody}
+          tableNav={serviceTableNav}
+          itemsLength={totalRequests}
+          itemsPerPage={itemsPerPage}
+          onSelect={(selected) => console.log(selected)}
+        />
       </div>
 
       <PartnerAssignDialog

@@ -40,7 +40,7 @@ const TableSection = ({
     <Table hoverable striped>
       <Table.Head>
         {selectOn && (
-          <Table.HeadCell>
+          <Table.HeadCell className="sticky left-0 bg-gray-50">
             <Checkbox
               className="cursor-pointer"
               onChange={handleSelectAll}
@@ -72,7 +72,11 @@ const TableSection = ({
               className={cn({ "cursor-pointer": row?.handleClick })}
             >
               {selectOn && (
-                <Table.Cell>
+                <Table.Cell
+                  className={cn("sticky left-0 bg-white", {
+                    "bg-gray-50": i % 2 !== 0,
+                  })}
+                >
                   <Checkbox
                     className="cursor-pointer"
                     checked={isSelected}

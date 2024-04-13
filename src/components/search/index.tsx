@@ -8,12 +8,13 @@ import React, {
   SVGProps,
   useState,
 } from "react";
+import { DebounceInput } from "react-debounce-input";
 
 const SearchComp = ({
   type,
   icon,
   placeholder,
-  onChange = () => {},
+  onChange,
   searchText,
   onSubmit,
   buttonProps,
@@ -31,22 +32,23 @@ const SearchComp = ({
   };
 
   return (
-    <div
-      className={cn(
-        "hidden w-full max-w-[364px] h-max md:flex",
-        wrapperClassName
-      )}
-    >
-      <TextInput
-        type={type || "text"}
-        icon={icon ? icon : () => <Search color="#727474" />}
-        placeholder={"Search..." || placeholder}
-        onChange={handleChange}
-        className={cn("w-full", {
-          "[&_input]:rounded-r-none": onSubmit,
-        })}
-        theme={{ field: { input: { base: "!py-2 w-full" } } }}
-      />
+    <div className={cn("flex w-[364px] h-max ", wrapperClassName)}>
+      <div className="flex-1 flex items-center relative w-max">
+        <Search
+          color="#727474"
+          className="absolute left-4"
+          width={20}
+          height={20}
+        />
+        <DebounceInput
+          type={type || "text"}
+          minLength={3}
+          debounceTimeout={1000}
+          onChange={handleChange}
+          placeholder={"Search..." || placeholder}
+          className="flex-1 pl-11 pr-4 border-r-0 border-border rounded-l-lg text-sm focus:ring-0 focus:border-primary"
+        />
+      </div>
       {onSubmit && (
         <Button
           size="md"

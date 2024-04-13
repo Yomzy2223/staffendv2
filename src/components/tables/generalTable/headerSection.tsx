@@ -1,7 +1,7 @@
 import QueryNav2 from "@/components/navigation/queryNav2";
 import SearchComp from "@/components/search";
 import { Button } from "flowbite-react";
-import React, { Dispatch, SetStateAction } from "react";
+import React, { ChangeEventHandler, Dispatch, SetStateAction } from "react";
 
 const HeaderSection = ({
   tableNav,
@@ -9,6 +9,8 @@ const HeaderSection = ({
   setSelectOn,
   selectedRows,
   setSelectedRows,
+  onSearchChange,
+  onSearchSubmit,
 }: IProps) => {
   return (
     <div className="flex justify-between gap-6 py-1">
@@ -20,7 +22,7 @@ const HeaderSection = ({
         </div>
       </div>
       <div className="flex flex-col justify-between items-end gap-2 mb-6">
-        <SearchComp onSubmit={() => console.log("searching...")} />
+        <SearchComp onChange={onSearchChange} onSubmit={onSearchSubmit} />
         <div className="flex items-center gap-2">
           {selectOn && (
             <p className="text-foreground-5 text-sm">
@@ -52,4 +54,6 @@ interface IProps {
   setSelectOn: Dispatch<SetStateAction<boolean>>;
   selectedRows: string[];
   setSelectedRows: Dispatch<SetStateAction<string[]>>;
+  onSearchChange: (value: string) => void;
+  onSearchSubmit: (value: string) => void;
 }

@@ -11,6 +11,8 @@ const DoChecks = ({
   className,
   btnAction,
   btnText,
+  isLoading,
+  Skeleton,
 }: {
   children: ReactNode;
   items: any[];
@@ -19,8 +21,12 @@ const DoChecks = ({
   className?: string;
   btnAction?: MouseEventHandler<HTMLButtonElement>;
   btnText?: string;
+  isLoading?: boolean;
+  Skeleton?: any;
 }) => {
   if (errorText) return <p>{errorText}</p>;
+
+  if (isLoading && Skeleton) return Skeleton;
 
   if (items?.length === 0)
     return (

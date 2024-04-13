@@ -75,3 +75,8 @@ export const unAssignRequest = async ({
   const client = await Client();
   return await client.put(`/productRequest/unassign`, formInfo);
 };
+
+export const searchRequest = async (queryString: string) => {
+  const client = await Client();
+  return await client.get(`/productRequest/generalSearch/${queryString}`);
+};

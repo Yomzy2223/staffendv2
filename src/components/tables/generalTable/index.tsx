@@ -8,6 +8,7 @@ import DoChecks from "@/components/DoChecks";
 import TableSection from "./tableSection";
 import HeaderSection from "./headerSection";
 import CardWrapper from "@/components/wrappers/cardWrapper";
+import TableSkeleton from "./TableSkeleton";
 
 const GeneralTable = ({
   tableHeaders,
@@ -15,7 +16,10 @@ const GeneralTable = ({
   tableNav,
   itemsPerPage,
   itemsLength,
-  onSelect,
+  onRowSelect,
+  onSearchChange,
+  onSearchSubmit,
+  dataLoading,
 }: IProps) => {
   const [selectOn, setSelectOn] = useState(false);
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
@@ -26,7 +30,7 @@ const GeneralTable = ({
   const offset = (tablePage - 1) * itemsPerPage;
 
   return (
-    <CardWrapper>
+    <CardWrapper className="pb-0">
       <div>
         <HeaderSection
           selectOn={selectOn}
@@ -34,11 +38,19 @@ const GeneralTable = ({
           selectedRows={selectedRows}
           setSelectedRows={setSelectedRows}
           tableNav={tableNav}
+          onSearchChange={onSearchChange}
+          onSearchSubmit={onSearchSubmit}
         />
 
-        <DoChecks items={tableBody} className="max-w-full overflow-auto">
+        <DoChecks
+          items={tableBody}
+          emptyText="No data"
+          className="max-w-full overflow-auto"
+          Skeleton={<TableSkeleton />}
+          isLoading={dataLoading}
+        >
           <TableSection
-            onSelect={onSelect}
+            onSelect={onRowSelect}
             selectOn={selectOn}
             selectedRows={selectedRows}
             setSelectedRows={setSelectedRows}
@@ -46,7 +58,7 @@ const GeneralTable = ({
             tableHeaders={tableHeaders}
           />
           {itemsLength > itemsPerPage && (
-            <div className="flex flex-col justify-between gap-4 sticky left-0 p-0 md:p-4 md:flex-row md:items-center md:py-5">
+            <div className="flex flex-col justify-between gap-4 sticky left-0 p-4 md:flex-row md:items-center md:py-5">
               <p className="inline-flex gap-1 text-sm text-foreground-5">
                 Showing
                 <span className="text-foreground font-medium">
@@ -75,5 +87,8 @@ interface IProps extends IPagination {
   tableHeaders: string[];
   tableBody: ITableBody[];
   tableNav: { name: string; value: string; text: string }[];
-  onSelect: (selected: string[]) => void;
+  onRowSelect: (selected: string[]) => void;
+  onSearchChange: (value: string) => void;
+  onSearchSubmit: (value: string) => void;
+  dataLoading?: boolean;
 }

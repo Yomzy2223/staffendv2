@@ -42,7 +42,6 @@ export const Header = () => {
             <h2 className="sb-text-24 font-semibold whitespace-nowrap">
               Hello, <span className="text-foreground-4">Joshua</span>👋
             </h2>
-            <SearchComp icon={() => <Search color="#727474" />} />
           </div>
           <div className="flex items-center gap-4">
             <Button
@@ -92,9 +91,6 @@ export const Header = () => {
           />
         </div>
         <div className="flex items-center gap-3">
-          <Button color="ghost" size="fit" className="p-1">
-            <Search color={iconColor} />
-          </Button>
           <Button color="ghost" size="fit" className="p-1">
             <BellRing color={iconColor} />
           </Button>

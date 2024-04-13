@@ -1,5 +1,6 @@
 "use client";
 
+import ConfirmAction from "@/components/confirmAction";
 import PartnerAssignDialog from "@/components/dialogs/partnerAssign";
 import GeneralTable from "@/components/tables/generalTable";
 import CardWrapper from "@/components/wrappers/cardWrapper";
@@ -15,7 +16,14 @@ const TableSection = () => {
 
   const itemsPerPage = 5;
 
-  const { tableHeaders, tableBody, totalRequests } = useTableInfo({
+  const {
+    tableHeaders,
+    tableBody,
+    totalRequests,
+    handleSearchChange,
+    handleSearchSubmit,
+    unAssignRequestMutation,
+  } = useTableInfo({
     setOpenAssign,
     setSelectedRequests,
     setOpenInfo,
@@ -32,7 +40,9 @@ const TableSection = () => {
         tableNav={serviceTableNav}
         itemsLength={totalRequests}
         itemsPerPage={itemsPerPage}
-        onSelect={(selected) => console.log(selected)}
+        onRowSelect={(selected) => setSelectedRequests(selected)}
+        onSearchChange={handleSearchChange}
+        onSearchSubmit={handleSearchSubmit}
       />
       <PartnerAssignDialog
         setOpen={setOpenAssign}
@@ -40,6 +50,28 @@ const TableSection = () => {
         selectedRequests={selectedRequests}
         setSelectedRequests={setSelectedRequests}
       />
+
+      {openUnAssign && (
+        <ConfirmAction
+          open={openUnAssign}
+          setOpen={setOpenUnAssign}
+          confirmAction={() =>
+            unAssignRequestMutation.mutate(
+              {
+                formInfo: { userId: partnerId, requestIds: selectedRequests },
+              },
+              {
+                onSuccess: () => setOpenUnAssign(false),
+              }
+            )
+          }
+          title="Unassign Task"
+          description="Are you sure you want to unasssign this task? Partner will be notified."
+          isLoading={unAssignRequestMutation.isPending}
+          dismissible
+          isDelete
+        />
+      )}
     </CardWrapper>
   );
 };

@@ -20,7 +20,7 @@ const Home = () => {
   const [selectedRequests, setSelectedRequests] = useState<string[]>([]);
   const [partnerId, setPartnerId] = useState("");
 
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
 
   const {
     tableHeaders,
@@ -28,6 +28,9 @@ const Home = () => {
     serviceTableNav,
     unAssignRequestMutation,
     totalRequests,
+    handleSearchChange,
+    handleSearchSubmit,
+    requestsLoading,
   } = useTableInfo({
     setOpenAssign,
     setOpenUnAssign,
@@ -69,7 +72,10 @@ const Home = () => {
           tableNav={serviceTableNav}
           itemsLength={totalRequests}
           itemsPerPage={itemsPerPage}
-          onSelect={(selected) => console.log(selected)}
+          onRowSelect={(selected) => setSelectedRequests(selected)}
+          onSearchChange={handleSearchChange}
+          onSearchSubmit={handleSearchSubmit}
+          dataLoading={requestsLoading}
         />
       </div>
 

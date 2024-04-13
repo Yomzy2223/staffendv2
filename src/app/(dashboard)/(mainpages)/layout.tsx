@@ -36,7 +36,9 @@ const layout = ({ children }: { children: ReactNode }) => {
         }
       />
 
-      <div className="flex flex-col flex-1 px-5 md:px-8">{children}</div>
+      <div className="flex flex-col flex-1 p-5 pt-0 md:p-8 md:pt-0">
+        {children}
+      </div>
 
       <ServiceForm setOpen={setOpen} open={open} />
     </>

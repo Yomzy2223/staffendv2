@@ -28,6 +28,7 @@ export const useTableInfo = ({
   setPartnerId: Dispatch<SetStateAction<string>>;
   itemsPerPage: number;
 }) => {
+  const [searchValue, setSearchValue] = useState("");
   const { getReqStatusColor } = useGlobalFunctions();
 
   const router = useRouter();
@@ -45,32 +46,54 @@ export const useTableInfo = ({
     assignRequestMutation,
     unAssignRequestMutation,
     useGetAllRequestsQuery,
+    useSearchRequestQuery,
   } = useRequestApi();
 
+  const allRequestsResponse = useGetAllRequestsQuery({
+    page: tablePage,
+    pageSize: itemsPerPage,
+  });
   const serviceRequestsResponse = useGetServiceRequestQuery({
     serviceId: selectedServiceId,
     page: tablePage,
     pageSize: itemsPerPage,
   });
-  const allRequestsResponse = useGetAllRequestsQuery({
-    page: tablePage,
-    pageSize: itemsPerPage,
-  });
+  const searchResponse = useSearchRequestQuery(searchValue);
 
-  const allRequestsData = allRequestsResponse.data?.data;
+  const allRequests = allRequestsResponse.data?.data;
   const serviceRequests = serviceRequestsResponse.data?.data;
-  const requests: IRequest[] = selectedServiceId
+  const searchRequests = searchResponse.data?.data;
+
+  const requests: IRequest[] = searchValue
+    ? searchRequests?.data
+    : selectedServiceId
     ? serviceRequests?.data
-    : allRequestsData?.data;
-  const totalRequests = selectedServiceId
+    : allRequests?.data;
+
+  const totalRequests = searchValue
+    ? searchRequests?.total
+    : selectedServiceId
     ? serviceRequests?.total
-    : allRequestsData?.total;
+    : allRequests?.total;
+
+  const requestsLoading =
+    allRequestsResponse.isLoading ||
+    serviceRequestsResponse.isLoading ||
+    searchResponse.isLoading;
 
   const serviceTableNav = servicesData?.map((service: IServiceFull) => ({
     name: "serviceId",
     value: service.id,
     text: service.name,
   }));
+
+  const handleSearchChange = (value: string) => {
+    setSearchValue(value);
+  };
+
+  const handleSearchSubmit = (value: string) => {
+    setSearchValue(value);
+  };
 
   const handleClick = (
     e: MouseEvent<HTMLTableRowElement>,
@@ -188,6 +211,9 @@ export const useTableInfo = ({
     assignRequestMutation,
     unAssignRequestMutation,
     totalRequests,
+    handleSearchChange,
+    handleSearchSubmit,
+    requestsLoading,
   };
 };
 

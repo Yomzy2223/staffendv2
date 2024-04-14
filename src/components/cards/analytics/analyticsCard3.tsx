@@ -7,15 +7,25 @@ import {
   differenceInMonths,
   format,
   getDaysInMonth,
+  getMonth,
   isLastDayOfMonth,
   isSameDay,
   isSameMonth,
+  lastDayOfMonth,
+  setDate,
   subDays,
   subMonths,
 } from "date-fns";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import React from "react";
-import { LineChart, Line, Tooltip, ResponsiveContainer } from "recharts";
+import {
+  LineChart,
+  Line,
+  Tooltip,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 const AnalyticsCard3 = ({
   title,
@@ -43,18 +53,68 @@ const AnalyticsCard3 = ({
   let perc = 100 * difference || 0;
   const decreased = perc < 0;
 
-  const totalMonths = differenceInMonths(currentTo, currentFrom);
+  const monthsInRange = differenceInMonths(currentTo, currentFrom) + 1;
 
-  // console.log(totalMonths);
+  // Returns the data for one month
+  const getMonthData = (monthInc: number, isCurrent: boolean) => {
+    const month = isCurrent ? currentFrom : previousFrom;
+    const monthVs = isCurrent ? currentTo : currentFrom;
+    const monthAdded = addMonths(month, monthInc);
+    const monthVsAdded = addMonths(monthVs, monthInc);
+    const data = isCurrent ? current : previous;
+
+    let daysInGreaterMonth = getDaysInMonth(monthAdded);
+    if (getDaysInMonth(monthVsAdded) > daysInGreaterMonth)
+      daysInGreaterMonth = getDaysInMonth(monthVsAdded);
+
+    let days = daysInGreaterMonth;
+    if (isSameMonth(new Date(), monthAdded)) days = new Date().getDate();
+
+    let monthData: any[] = [];
+    for (let i = 1; i <= days; i++) {
+      // Return the data for each day
+      const matchData = data?.filter((el) => {
+        const sameDay = new Date(el.createdAt).getDate() === i;
+        const sameMonth = isSameMonth(new Date(el.createdAt), monthAdded);
+        return sameMonth && sameDay;
+      });
+      // Restructure the data for each day
+      const date = setDate(monthAdded, i);
+      // date = lastDayOfMonth
+
+      const dayDate =
+        getDaysInMonth(monthAdded) >= i ? format(date, "dd MMM, yyy") : "Void";
+      const dayData: IDayData = {
+        dayDate,
+        dayData: matchData,
+      };
+      monthData = [...monthData, dayData];
+    }
+
+    return monthData;
+  };
+
+  // Returns the data for selected range, if isCurrent is true. Returns for compare range, if otherwise
+  const getRangeData = (isCurrent: boolean) => {
+    let rangeData: any[] = [];
+    for (let i = 0; i < monthsInRange; i++) {
+      const monthData = getMonthData(i, isCurrent);
+      rangeData = [...rangeData, ...monthData];
+    }
+    return rangeData;
+  };
+
+  const rangeData: IDayData[] = getRangeData(true);
+  const rangeVsData: IDayData[] = getRangeData(false);
 
   // Returns the data to be passed to the chart
-  const data = Array(2)
+  const data = Array(rangeData?.length)
     .fill("")
     .map((el, i) => {
       return {
-        name: "",
-        current: 0,
-        previous: 0,
+        name: rangeData[i].dayDate + " " + rangeVsData[i].dayDate,
+        current: rangeData?.[i]?.dayData?.length || 0,
+        previous: rangeVsData?.[i]?.dayData?.length || 0,
       };
     });
 
@@ -79,7 +139,6 @@ const AnalyticsCard3 = ({
               strokeWidth={2}
               dot={false}
             />
-
             <Line
               type="monotone"
               dataKey="previous"
@@ -87,7 +146,12 @@ const AnalyticsCard3 = ({
               strokeWidth={2}
               dot={false}
             />
-            <Tooltip wrapperStyle={{ opacity: 0.8 }} />
+            <Tooltip
+              wrapperStyle={{ opacity: 0.8 }}
+              label
+              // content={<CustomTooltip />}
+            />
+            {/* <XAxis dataKey="name" /> */}
           </LineChart>
         </ResponsiveContainer>
       </div>
@@ -116,3 +180,22 @@ const AnalyticsCard3 = ({
 };
 
 export default AnalyticsCard3;
+
+// const CustomTooltip = (props) => {
+//   console.log(props);
+//   return <div></div>;
+//   // if (active && payload && payload.length) {
+//   //   return (
+//   //     <div className="custom-tooltip">
+//   //       <p className="label">{`${label} : ${payload[0].value}`}</p>
+//   //       {/* <p className="intro">{getIntroOfPage(label)}</p> */}
+//   //       <p className="desc">Anything you want can be displayed here.</p>
+//   //     </div>
+//   //   );
+//   // }
+// };
+
+interface IDayData {
+  dayDate: string;
+  dayData: any[];
+}

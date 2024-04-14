@@ -23,6 +23,7 @@ const TableSection = () => {
     handleSearchChange,
     handleSearchSubmit,
     unAssignRequestMutation,
+    requestsLoading,
   } = useTableInfo({
     setOpenAssign,
     setSelectedRequests,
@@ -43,6 +44,7 @@ const TableSection = () => {
         onRowSelect={(selected) => setSelectedRequests(selected)}
         onSearchChange={handleSearchChange}
         onSearchSubmit={handleSearchSubmit}
+        dataLoading={requestsLoading}
       />
       <PartnerAssignDialog
         setOpen={setOpenAssign}

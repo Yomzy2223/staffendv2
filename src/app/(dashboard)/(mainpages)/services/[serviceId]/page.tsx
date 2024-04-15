@@ -7,12 +7,15 @@ import DoChecks from "@/components/DoChecks";
 import ServiceForm from "@/components/form/serviceForm";
 import AnalyticsHeader from "@/components/header/analyticsHeader";
 import CardWrapper from "@/components/wrappers/cardWrapper";
-import { IServiceFull } from "@/hooks/api/types";
+import { IRequest, IServiceFull } from "@/hooks/api/types";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
+import useRequestApi from "@/hooks/useRequestApi";
 import useServiceApi from "@/hooks/useServiceApi";
+import { subMonths } from "date-fns";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import React, { useState } from "react";
+import { useOverviewActions } from "../../actions";
 import { useActions } from "./actions";
 import TableSection from "./tableSection";
 
@@ -21,19 +24,25 @@ const Service = ({ params }: { params: { serviceId: string } }) => {
   const { setQuery } = useGlobalFunctions();
   const { serviceId } = params;
 
+  const { useGetServiceRequestQuery } = useRequestApi();
+  const request = useGetServiceRequestQuery({ serviceId: serviceId });
+  const requestsData: IRequest[] = request.data?.data?.data;
+
   const { useGetServiceQuery } = useServiceApi();
   const service = useGetServiceQuery(serviceId as string);
   const serviceData: IServiceFull = service?.data?.data?.data;
   if (!serviceData && !service.isLoading) redirect("/services");
 
   const {
-    requestsData,
-    pendingRequests,
-    submittedRequests,
-    completedRequests,
-    lastMonthReq,
-    thisMonthReq,
-  } = useActions({ serviceId });
+    requestsByStatus,
+    requestsVsByStatus,
+    monthsDiff,
+    currentFrom,
+    currentTo,
+  } = useOverviewActions({ serviceId });
+
+  const previousFrom = subMonths(currentFrom, monthsDiff);
+  const bottomText = monthsDiff > 1 ? `vs previous ${monthsDiff} months` : "";
 
   const addNewService = () => {
     setOpen(true);
@@ -50,22 +59,54 @@ const Service = ({ params }: { params: { serviceId: string } }) => {
             isLoading={service.isLoading}
           />
           <AnalyticsCard3
-            title="Completed requests"
-            total={completedRequests?.length}
-            current={thisMonthReq?.completed?.length}
-            previous={lastMonthReq?.completed?.length}
+            title="Drafts"
+            current={requestsByStatus.draft}
+            previous={requestsVsByStatus.draft}
+            className="snap-start"
+            bottomText={bottomText}
+            currentTo={currentTo}
+            currentFrom={currentFrom}
+            previousFrom={previousFrom}
           />
           <AnalyticsCard3
-            title="Submitted requests"
-            total={submittedRequests?.length}
-            current={thisMonthReq?.submitted?.length}
-            previous={lastMonthReq?.submitted?.length}
+            title="Paid Drafts"
+            current={requestsByStatus.paidDraft}
+            previous={requestsVsByStatus.paidDraft}
+            className="snap-start"
+            bottomText={bottomText}
+            currentTo={currentTo}
+            currentFrom={currentFrom}
+            previousFrom={previousFrom}
           />
           <AnalyticsCard3
-            title="Pending requests"
-            total={pendingRequests?.length}
-            current={thisMonthReq?.pending?.length || 0}
-            previous={lastMonthReq?.pending?.length || 0}
+            title="Submitted"
+            current={requestsByStatus.submitted}
+            previous={requestsVsByStatus.submitted}
+            className="snap-start"
+            bottomText={bottomText}
+            currentTo={currentTo}
+            currentFrom={currentFrom}
+            previousFrom={previousFrom}
+          />
+          <AnalyticsCard3
+            title="In Progress"
+            current={requestsByStatus.inProgress}
+            previous={requestsVsByStatus.inProgress}
+            className="snap-start"
+            bottomText={bottomText}
+            currentTo={currentTo}
+            currentFrom={currentFrom}
+            previousFrom={previousFrom}
+          />
+          <AnalyticsCard3
+            title="Completed"
+            current={requestsByStatus.completed}
+            previous={requestsVsByStatus.completed}
+            className="snap-start"
+            bottomText={bottomText}
+            currentTo={currentTo}
+            currentFrom={currentFrom}
+            previousFrom={previousFrom}
           />
         </div>
         <CardWrapper className="flex flex-col gap-6 justify-between">
@@ -78,14 +119,7 @@ const Service = ({ params }: { params: { serviceId: string } }) => {
         </CardWrapper>
       </div>
 
-      <DoChecks
-        items={requestsData}
-        emptyText="You have not added any product"
-        btnText="Add new product"
-        btnAction={addNewService}
-      >
-        <TableSection />
-      </DoChecks>
+      <TableSection serviceId={serviceId} />
       <ServiceForm setOpen={setOpen} open={open} />
     </>
   );

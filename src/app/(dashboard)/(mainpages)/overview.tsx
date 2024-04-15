@@ -31,7 +31,7 @@ const OverviewSection = () => {
     monthsDiff,
     currentFrom,
     currentTo,
-  } = useOverviewActions();
+  } = useOverviewActions({});
 
   const previousFrom = subMonths(currentFrom, monthsDiff);
   const bottomText = monthsDiff > 1 ? `vs previous ${monthsDiff} months` : "";

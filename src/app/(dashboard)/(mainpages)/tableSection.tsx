@@ -5,9 +5,9 @@ import PartnerAssignDialog from "@/components/dialogs/partnerAssign";
 import GeneralTable from "@/components/tables/generalTable";
 import CardWrapper from "@/components/wrappers/cardWrapper";
 import React, { useState } from "react";
-import { useTableActions } from "../../tableActions";
+import { useTableActions } from "./tableActions";
 
-const TableSection = ({ serviceId }: { serviceId: string }) => {
+const TableSection = () => {
   const [openAssign, setOpenAssign] = useState(false);
   const [openUnAssign, setOpenUnAssign] = useState(false);
   const [openInfo, setOpenInfo] = useState(false);
@@ -31,7 +31,6 @@ const TableSection = ({ serviceId }: { serviceId: string }) => {
     setOpenUnAssign,
     itemsPerPage,
     setPartnerId,
-    serviceId,
   });
 
   return (

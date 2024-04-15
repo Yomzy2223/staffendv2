@@ -92,7 +92,7 @@ export const useRouteActions = () => {
 //
 
 // Dashboard Overview Actions
-export const useOverviewActions = () => {
+export const useOverviewActions = ({ serviceId }: { serviceId?: string }) => {
   const [monthFrom, setMonthFrom] = useState("");
   const [monthTo, setMonthTo] = useState("");
   const [yearFrom, setYearFrom] = useState("");
@@ -114,7 +114,7 @@ export const useOverviewActions = () => {
 
   const { useGetServiceRequestQuery } = useRequestApi();
   const requestsResponse = useGetServiceRequestQuery({
-    serviceId: selectedServiceId,
+    serviceId: serviceId || selectedServiceId,
   });
   const requests = requestsResponse.data?.data?.data;
 

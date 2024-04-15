@@ -112,12 +112,17 @@ const useRequestApi = () => {
     retry: 3,
   });
 
-  const useSearchRequestQuery = (queryString: string) =>
-    useQuery({
-      queryKey: ["request", queryString],
-      queryFn: ({ queryKey }) => searchRequest(queryKey[1]),
-      enabled: queryString ? true : false,
-    });
+  const searchRequestMutation = useMutation({
+    mutationFn: searchRequest,
+    onError(error, variables, context) {
+      handleError({ title: "Failed", error });
+    },
+    onSuccess(data, variables, context) {
+      handleSuccess({ data });
+      queryClient.invalidateQueries({ queryKey: ["request"] });
+    },
+    retry: 3,
+  });
 
   return {
     updateRequestMutation,
@@ -127,7 +132,7 @@ const useRequestApi = () => {
     useGetAllRequestsQuery,
     assignRequestMutation,
     unAssignRequestMutation,
-    useSearchRequestQuery,
+    searchRequestMutation,
   };
 };
 

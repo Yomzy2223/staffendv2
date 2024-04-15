@@ -13,13 +13,14 @@ import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { IRequest, IServiceFull } from "@/hooks/api/types";
 
 // Table information
-export const useTableInfo = ({
+export const useTableActions = ({
   setOpenAssign,
   setOpenUnAssign,
   setOpenInfo,
   setSelectedRequests,
   setPartnerId,
   itemsPerPage,
+  serviceId,
 }: {
   setOpenAssign: Dispatch<SetStateAction<boolean>>;
   setOpenUnAssign: Dispatch<SetStateAction<boolean>>;
@@ -27,6 +28,7 @@ export const useTableInfo = ({
   setSelectedRequests: Dispatch<SetStateAction<string[]>>;
   setPartnerId: Dispatch<SetStateAction<string>>;
   itemsPerPage: number;
+  serviceId?: string;
 }) => {
   const [searchValue, setSearchValue] = useState("");
   const { getReqStatusColor } = useGlobalFunctions();
@@ -38,7 +40,7 @@ export const useTableInfo = ({
   const services = getAllServicesQuery;
   const servicesData = services.data?.data?.data || [];
 
-  const selectedServiceId = searchParams.get("serviceId") || "";
+  const selectedServiceId = serviceId || searchParams.get("serviceId") || "";
   const tablePage = parseInt(searchParams.get("page") || "1");
 
   const {
@@ -46,7 +48,7 @@ export const useTableInfo = ({
     assignRequestMutation,
     unAssignRequestMutation,
     useGetAllRequestsQuery,
-    useSearchRequestQuery,
+    searchRequestMutation,
   } = useRequestApi();
 
   const allRequestsResponse = useGetAllRequestsQuery({
@@ -58,11 +60,10 @@ export const useTableInfo = ({
     page: tablePage,
     pageSize: itemsPerPage,
   });
-  const searchResponse = useSearchRequestQuery(searchValue);
 
   const allRequests = allRequestsResponse.data?.data;
   const serviceRequests = serviceRequestsResponse.data?.data;
-  const searchRequests = searchResponse.data?.data;
+  const searchRequests = searchRequestMutation.data?.data;
 
   const requests: IRequest[] = searchValue
     ? searchRequests?.data
@@ -79,7 +80,7 @@ export const useTableInfo = ({
   const requestsLoading =
     allRequestsResponse.isLoading ||
     serviceRequestsResponse.isLoading ||
-    searchResponse.isLoading;
+    searchRequestMutation.isPending;
 
   const serviceTableNav = servicesData?.map((service: IServiceFull) => ({
     name: "serviceId",
@@ -88,6 +89,9 @@ export const useTableInfo = ({
   }));
 
   const handleSearchChange = (value: string) => {
+    searchRequestMutation.mutate({
+      formInfo: { queryString: value, serviceId: selectedServiceId },
+    });
     setSearchValue(value);
   };
 

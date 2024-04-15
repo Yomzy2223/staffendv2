@@ -64,14 +64,14 @@ const useProductApi = () => {
     useQuery({
       queryKey: ["product", id],
       queryFn: ({ queryKey }) => getProduct(queryKey[1]),
-      enabled: id ? true : false,
+      enabled: !!id,
     });
 
   const useGetServiceProductsQuery = (serviceId: string) =>
     useQuery({
       queryKey: ["product", serviceId],
       queryFn: ({ queryKey }) => getServiceProducts(queryKey[1]),
-      enabled: serviceId ? true : false,
+      enabled: !!serviceId,
     });
 
   const getAllProductsQuery = useQuery({
@@ -119,14 +119,14 @@ const useProductApi = () => {
     useQuery({
       queryKey: ["Product Form", productId],
       queryFn: ({ queryKey }) => getProductForm(queryKey[1]),
-      enabled: productId ? true : false,
+      enabled: !!productId,
     });
 
   const useGetServiceProductFormsQuery = (serviceId: string) =>
     useQuery({
       queryKey: ["Product Form", serviceId],
       queryFn: ({ queryKey }) => getServiceProductForms(queryKey[1]),
-      enabled: serviceId ? true : false,
+      enabled: !!serviceId,
     });
 
   const getAllServicesProductsFormQuery = useQuery({
@@ -186,14 +186,14 @@ const useProductApi = () => {
     useQuery({
       queryKey: ["Product Form", id],
       queryFn: ({ queryKey }) => getProductSubForm(queryKey[1]),
-      enabled: id ? true : false,
+      enabled: !!id,
     });
 
   const useGetProductFormSubFormsQuery = (formId: string) =>
     useQuery({
       queryKey: ["Product Form", formId],
       queryFn: ({ queryKey }) => getProductSubForm(queryKey[1]),
-      enabled: formId ? true : false,
+      enabled: !!formId,
     });
 
   return {

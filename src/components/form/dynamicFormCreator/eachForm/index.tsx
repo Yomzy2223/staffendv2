@@ -196,7 +196,7 @@ const EachForm = ({
         disabled={disableButtons || (formLoading && loadingForm === number)}
         deleteLoading={formDeleteLoading && loadingForm === number}
         cancelChanges={cancelChanges}
-        disableAddNew={newlyAdded ? true : false}
+        disableAddNew={!!newlyAdded}
         deleteForm={formDeleteHandler}
       />
     </Card>

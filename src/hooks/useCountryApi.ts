@@ -52,7 +52,7 @@ export const useCountryApi = () => {
     useQuery({
       queryKey: ["country", id],
       queryFn: ({ queryKey }) => getCountry(queryKey[1]),
-      enabled: id ? true : false,
+      enabled: !!id,
     });
 
   const getAllCountriesQuery = useQuery({

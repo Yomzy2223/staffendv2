@@ -52,6 +52,16 @@ export const getAllRequests = async ({
   return await client.get(endpoint);
 };
 
+export const getRequestForm = async (requestId: string) => {
+  const client = await Client();
+  return await client.get(`/productRequest/form/${requestId}`);
+};
+
+export const getBusinessDetails = async (requestId: string) => {
+  const client = await Client();
+  return await client.get(`/processRequest/request/${requestId}`);
+};
+
 export const assignRequest = async ({
   formInfo,
 }: {
@@ -87,3 +97,5 @@ export const searchRequest = async ({
   const client = await Client();
   return await client.post(`/productRequest/search`);
 };
+
+// Request form endpoints

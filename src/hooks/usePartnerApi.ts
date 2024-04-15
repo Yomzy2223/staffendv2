@@ -56,14 +56,14 @@ const usePartnerApi = () => {
     useQuery({
       queryKey: ["partner", country],
       queryFn: ({ queryKey }) => getPartnerForm(queryKey[1]),
-      enabled: country ? true : false,
+      enabled: !!country,
     });
 
   const useGetCountryPartnerFormsQuery = (country: string) =>
     useQuery({
       queryKey: ["partner", country],
       queryFn: ({ queryKey }) => getCountryPartnerForm(queryKey[1]),
-      enabled: country ? true : false,
+      enabled: !!country,
     });
 
   const createPartnerSubFormMutation = useMutation({
@@ -106,7 +106,7 @@ const usePartnerApi = () => {
     useQuery({
       queryKey: ["partner", id],
       queryFn: ({ queryKey }) => getPartnerSubForm(queryKey[1]),
-      enabled: id ? true : false,
+      enabled: !!id,
     });
 
   return {

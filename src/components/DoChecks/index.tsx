@@ -26,7 +26,7 @@ const DoChecks = ({
 }) => {
   if (errorText) return <p>{errorText}</p>;
 
-  if (isLoading && Skeleton) return Skeleton;
+  if (isLoading) return Skeleton || <div></div>;
 
   if (items?.length === 0)
     return (

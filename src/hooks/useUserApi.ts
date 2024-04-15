@@ -76,7 +76,7 @@ const useUserApi = () => {
     useQuery({
       queryKey: ["user", id],
       queryFn: ({ queryKey }) => getUser(queryKey[1]),
-      enabled: id ? true : false,
+      enabled: !!id,
     });
 
   const useGetAllUsersQuery = ({

@@ -3,82 +3,135 @@
 import PersonsCard from "@/components/cards/personsCard";
 import RequestDetailsSectionWrapper from "@/components/wrappers/requestDetailsSectionWrapper";
 import TextWithDetails from "@/components/texts/textWithDetails";
-import { BriefcaseIcon, PiggyBankIcon } from "lucide-react";
-import { useParams } from "next/navigation";
-import React from "react";
+import { BriefcaseIcon } from "lucide-react";
+import React, { useState } from "react";
 import { shareholders } from "./constants";
+import { useActions } from "./actions";
+import { IBusiness, IRequesForm } from "@/hooks/api/types";
+import { Button } from "flowbite-react";
+import DoChecks from "@/components/DoChecks";
+import PartnerAssignDialog from "@/components/dialogs/partnerAssign";
+import ConfirmAction from "@/components/confirmAction";
 
-const Request = () => {
+const Request = ({ params }: { params: { requestId: string } }) => {
+  const [openAssign, setOpenAssign] = useState(false);
+  const [openUnAssign, setOpenUnAssign] = useState(false);
+  const [openInfo, setOpenInfo] = useState(false);
+  const [selectedRequests, setSelectedRequests] = useState<string[]>([]);
+
+  const { requestId } = params;
+
+  const { request, requestResponse, unAssignRequestMutation } = useActions({
+    requestId,
+  });
+
+  const requestForms = request?.requestQA;
+  const businessInfo: IBusiness = request?.process;
+
+  const partnerId = request?.partnerInCharge;
+
+  const handeAssignUnassign = () => {
+    if (partnerId) {
+      setOpenUnAssign(true);
+      setSelectedRequests([requestId]);
+      return;
+    }
+    setSelectedRequests([requestId]);
+    setOpenAssign(true);
+  };
+
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-6">
       <RequestDetailsSectionWrapper
-        title="Business Information"
+        title="Business Details"
         icon={<BriefcaseIcon />}
         raiseIssueAction={() => {}}
         className="flex flex-col gap-6"
       >
-        <TextWithDetails title="Business name" list={["Sayo oil and gas"]} />
         <TextWithDetails
-          title="Where do you want to launch your business?"
-          text="Kenya"
-        />{" "}
-        <TextWithDetails title="Product type" text="Sole proprietorship" />
-        <TextWithDetails
-          title="Choose four objectives that aligns with your business"
-          list={[
-            "Agriculture activities",
-            "Agriculture activities1",
-            "Agriculture activities2",
-            "Agriculture activities3",
-          ]}
+          title={businessInfo?.businessName}
+          list={[businessInfo?.businessName]}
         />
       </RequestDetailsSectionWrapper>
-
-      <RequestDetailsSectionWrapper
-        title="Request Payment"
-        icon={<PiggyBankIcon />}
-        raiseIssueAction={() => {}}
-        className="flex flex-col gap-6"
+      <DoChecks
+        items={requestForms}
+        emptyText="User has not submitted any form"
+        isLoading={requestResponse.isLoading}
+        className="flex-1 flex flex-col justify-between gap-8"
       >
-        <TextWithDetails title="Plan" text="Pro" />
-        <TextWithDetails title="Amount paid" text="15,000 (NGN)" />
-        <TextWithDetails
-          title="Payment status"
-          text="Successful"
-          textClassName="text-success-foreground bg-success rounded px-2.5"
-        />
-      </RequestDetailsSectionWrapper>
+        {requestForms?.map((form: IRequesForm) => {
+          if (form.type === "form")
+            return (
+              <RequestDetailsSectionWrapper
+                key={form.id}
+                title={form.title}
+                icon={<BriefcaseIcon />}
+                raiseIssueAction={() => {}}
+                className="flex flex-col gap-6"
+              >
+                {form?.subForm?.map((el) => (
+                  <TextWithDetails
+                    key={el.id}
+                    title={el.question}
+                    list={el.answer}
+                  />
+                ))}
+              </RequestDetailsSectionWrapper>
+            );
+          if (form.type === "form")
+            return (
+              <RequestDetailsSectionWrapper
+                title={"Individual Information"}
+                icon={<BriefcaseIcon />}
+                raiseIssueAction={() => {}}
+                className="flex flex-col gap-6 border-none p-0"
+              >
+                <PersonsCard title="" info={shareholders} />
+              </RequestDetailsSectionWrapper>
+            );
+        })}
+        <div className="flex gap-2 self-end">
+          {partnerId && (
+            <Button color="primary" outline className="self-end">
+              See partner info
+            </Button>
+          )}
+          <Button color="primary" onClick={handeAssignUnassign}>
+            {partnerId ? "Unassign Task" : "Assign Task"}
+          </Button>
+        </div>
 
-      <IndividualInfoSection
-        title="Shareholders Information"
-        cardTitle="Shareholder"
-      />
-      <IndividualInfoSection
-        title="Directors Information"
-        cardTitle="Director"
-      />
+        <PartnerAssignDialog
+          setOpen={setOpenAssign}
+          open={openAssign}
+          selectedRequests={selectedRequests}
+          setSelectedRequests={setSelectedRequests}
+        />
+
+        {openUnAssign && (
+          <ConfirmAction
+            open={openUnAssign}
+            setOpen={setOpenUnAssign}
+            confirmAction={() =>
+              unAssignRequestMutation.mutate(
+                {
+                  formInfo: { userId: partnerId, requestIds: selectedRequests },
+                },
+                {
+                  onSuccess: () => setOpenUnAssign(false),
+                }
+              )
+            }
+            title="Unassign Task"
+            description="Are you sure you want to unasssign this task? Partner will be notified."
+            isLoading={unAssignRequestMutation.isPending}
+            dismissible
+            isDelete
+          />
+        )}
+      </DoChecks>
     </div>
   );
 };
 
 export default Request;
-
-//----------------------------------------------------------------
-const IndividualInfoSection = ({
-  title,
-  cardTitle,
-}: {
-  title: string;
-  cardTitle: string;
-}) => {
-  return (
-    <RequestDetailsSectionWrapper
-      title={title || "Individual Information"}
-      icon={<BriefcaseIcon />}
-      raiseIssueAction={() => {}}
-      className="flex flex-col gap-6 border-none p-0"
-    >
-      <PersonsCard title={cardTitle} info={shareholders} />
-    </RequestDetailsSectionWrapper>
-  );
-};

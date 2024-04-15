@@ -127,3 +127,38 @@ export interface IUser {
   userPermission: string[];
   username?: string;
 }
+
+export interface IRequesForm {
+  id: string;
+  title: string;
+  description: string;
+  type: string;
+  compulsory: boolean;
+  isGeneral: boolean;
+  createdAt: string;
+  updatedAt: string;
+  isDeprecated: boolean;
+  requestId: string;
+  subForm: {
+    id: string;
+    question: string;
+    answer: string[];
+    type: string;
+    fileName: string;
+    fileType: string;
+    fileLink: string;
+    fileSize: string;
+    compulsory: boolean;
+    isDeprecated: boolean;
+    requestQAId: string;
+  }[];
+}
+
+export interface IBusiness {
+  id: string;
+  businessName: string;
+  isDeprecated: boolean;
+  createdAt: string;
+  updatedAt: string;
+  userId: string;
+}

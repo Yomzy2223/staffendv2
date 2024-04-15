@@ -66,7 +66,7 @@ const useServiceApi = () => {
     useQuery({
       queryKey: ["service", id],
       queryFn: ({ queryKey }) => getService(queryKey[1]),
-      enabled: id ? true : false,
+      enabled: !!id,
     });
 
   const getAllServicesQuery = useQuery({
@@ -114,14 +114,14 @@ const useServiceApi = () => {
     useQuery({
       queryKey: ["Service Form", id],
       queryFn: ({ queryKey }) => getServiceForm(queryKey[1]),
-      enabled: id ? true : false,
+      enabled: !!id,
     });
 
   const useGetServiceFormsQuery = (serviceId: string) =>
     useQuery({
       queryKey: ["Service Form", serviceId],
       queryFn: ({ queryKey }) => getServiceForms(queryKey[1]),
-      enabled: serviceId ? true : false,
+      enabled: !!serviceId,
     });
 
   const createServiceSubFormMutation = useMutation({
@@ -176,14 +176,14 @@ const useServiceApi = () => {
     useQuery({
       queryKey: ["Service Form", id],
       queryFn: ({ queryKey }) => getServiceSubForm(queryKey[1]),
-      enabled: id ? true : false,
+      enabled: !!id,
     });
 
   const useGetServiceSubFormsQuery = (serviceId: string) =>
     useQuery({
       queryKey: ["Service Form", serviceId],
       queryFn: ({ queryKey }) => getServiceSubForms(queryKey[1]),
-      enabled: serviceId ? true : false,
+      enabled: !!serviceId,
     });
 
   return {

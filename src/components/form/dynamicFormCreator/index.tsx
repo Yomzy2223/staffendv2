@@ -116,7 +116,7 @@ const DynamicFormCreator = ({
           color="ghost"
           size="fit"
           className="my-4 text-foreground-5"
-          disabled={formState.formLoading || newlyAdded ? true : false}
+          disabled={formState.formLoading || !!newlyAdded}
           onClick={() => handleSelect(formOptions[0])}
         >
           <PlusCircle size={20} />
@@ -126,7 +126,7 @@ const DynamicFormCreator = ({
         <FieldTypePopUp
           handleSelect={handleSelect}
           isForm
-          disabled={formState.formLoading || newlyAdded ? true : false}
+          disabled={formState.formLoading || !!newlyAdded}
         >
           <Button color="ghost" size="fit" className="my-4 text-foreground-5">
             <PlusCircle size={20} />

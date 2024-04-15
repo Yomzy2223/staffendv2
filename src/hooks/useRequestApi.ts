@@ -10,6 +10,8 @@ import {
   assignRequest,
   unAssignRequest,
   searchRequest,
+  getRequestForm,
+  getBusinessDetails,
 } from "./api/requestApi";
 
 const useRequestApi = () => {
@@ -45,7 +47,14 @@ const useRequestApi = () => {
     useQuery({
       queryKey: ["request", id],
       queryFn: ({ queryKey }) => getRequest(queryKey[1]),
-      enabled: id ? true : false,
+      enabled: !!id,
+    });
+
+  const useGetRequestFormQuery = (requestId: string) =>
+    useQuery({
+      queryKey: ["request form", requestId],
+      queryFn: ({ queryKey }) => getRequestForm(queryKey[1]),
+      enabled: !!requestId,
     });
 
   const useGetServiceRequestQuery = ({
@@ -67,7 +76,7 @@ const useRequestApi = () => {
         };
         return getServiceRequests(payload);
       },
-      enabled: serviceId ? true : false,
+      enabled: !!serviceId,
     });
 
   const useGetAllRequestsQuery = ({
@@ -86,6 +95,13 @@ const useRequestApi = () => {
         };
         return getAllRequests(payload);
       },
+    });
+
+  const useGetBusinessDetailsQuery = (requestId: string) =>
+    useQuery({
+      queryKey: ["business", requestId],
+      queryFn: ({ queryKey }) => getBusinessDetails(queryKey[1]),
+      enabled: !!requestId,
     });
 
   const assignRequestMutation = useMutation({
@@ -130,6 +146,8 @@ const useRequestApi = () => {
     useGetRequestQuery,
     useGetServiceRequestQuery,
     useGetAllRequestsQuery,
+    useGetRequestFormQuery,
+    useGetBusinessDetailsQuery,
     assignRequestMutation,
     unAssignRequestMutation,
     searchRequestMutation,

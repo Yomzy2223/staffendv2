@@ -25,7 +25,7 @@ export const useCountryActions = ({
 
   const { get } = useSearchParams();
   const countryId = get("countryId") as string;
-  const isEdit = countryId ? true : false;
+  const isEdit = !!countryId;
 
   const { createCountryMutation, updateCountryMutation, useGetCountryQuery } =
     useCountryApi();

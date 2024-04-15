@@ -72,7 +72,7 @@ export const useTableActions = ({
     : allRequests?.data;
 
   const totalRequests = searchValue
-    ? searchRequests?.total
+    ? searchRequests?.data?.length
     : selectedServiceId
     ? serviceRequests?.total
     : allRequests?.total;

@@ -90,8 +90,8 @@ const useRequestApi = () => {
       queryKey: ["request", page, pageSize],
       queryFn: ({ queryKey }) => {
         const payload = {
-          page: queryKey[2],
-          pageSize: queryKey[3],
+          page: queryKey[1],
+          pageSize: queryKey[2],
         };
         return getAllRequests(payload);
       },

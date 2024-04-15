@@ -95,7 +95,7 @@ export const searchRequest = async ({
   };
 }) => {
   const client = await Client();
-  return await client.post(`/productRequest/search`);
+  return await client.post(`/productRequest/search`, formInfo);
 };
 
 // Request form endpoints

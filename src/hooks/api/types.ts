@@ -128,6 +128,19 @@ export interface IUser {
   username?: string;
 }
 
+export interface IRequestSubForm {
+  id: string;
+  question: string;
+  answer: string[];
+  type: string;
+  fileName: string;
+  fileType: string;
+  fileLink: string;
+  fileSize: string;
+  compulsory: boolean;
+  isDeprecated: boolean;
+  requestQAId: string;
+}
 export interface IRequesForm {
   id: string;
   title: string;
@@ -139,19 +152,7 @@ export interface IRequesForm {
   updatedAt: string;
   isDeprecated: boolean;
   requestId: string;
-  subForm: {
-    id: string;
-    question: string;
-    answer: string[];
-    type: string;
-    fileName: string;
-    fileType: string;
-    fileLink: string;
-    fileSize: string;
-    compulsory: boolean;
-    isDeprecated: boolean;
-    requestQAId: string;
-  }[];
+  subForm: IRequestSubForm[];
 }
 
 export interface IBusiness {

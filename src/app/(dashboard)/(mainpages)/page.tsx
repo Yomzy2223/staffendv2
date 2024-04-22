@@ -1,43 +1,84 @@
 "use client";
 
-import { PaymentAnalyticsImg, ServiceAnalyticsImg } from "@/assets/svg";
-import AnalyticsHeader from "@/components/header/analyticsHeader";
-import QueryNav from "@/components/navigation/queryNav";
-import CardWrapper from "@/components/wrappers/cardWrapper";
-import Image from "next/image";
-import React from "react";
-import { paymentQueryNav, serviceQueryNav2 } from "./constants";
-import OverviewSection from "./overview";
+import DetailedAnalytics from "@/components/dashboard/detailedAnalytics";
+import OverviewSection from "@/components/dashboard/overview";
+import DashboardHeader from "@/components/dashboard/header";
+import { format, isSameYear, startOfMonth, subDays } from "date-fns";
+import React, { useState } from "react";
 import TableSection from "./tableSection";
+import { useRequestActions } from "./actions";
 
 const Home = () => {
+  const [dateFrom, setDateFrom] = useState(startOfMonth(new Date()));
+  const [dateTo, setDateTo] = useState(new Date());
+  const [selectedService, setSelectedService] = useState("");
+  const [showCompare, setShowCompare] = useState(false);
+
+  const { servicesRes, daysDiff, requestsByStatus, requestsVsByStatus, users } =
+    useRequestActions({
+      dateFrom,
+      dateTo,
+      selectedService,
+    });
+
+  const compareFrom = subDays(dateFrom, daysDiff);
+  const compareTo = subDays(dateTo, daysDiff);
+  const formatStr = isSameYear(compareFrom, dateFrom)
+    ? "MMMM dd"
+    : "MMMM dd, yyy";
+
+  const compareLabel =
+    format(compareFrom, formatStr) + "-" + format(compareTo, formatStr);
+
   return (
-    <div className="flex flex-col gap-8">
-      <OverviewSection />
-
-      <div className="flex flex-col gap-8 lg:flex-row">
-        <CardWrapper big className="flex flex-col gap-8 max-w-[634px]">
-          <AnalyticsHeader
-            title="Service registrations analytics"
-            description="Number of registrations"
-            queryNav={paymentQueryNav}
+    <>
+      <DashboardHeader
+        dateFrom={dateFrom}
+        dateTo={dateTo}
+        setDateFrom={setDateFrom}
+        setDateTo={setDateTo}
+        daysDiff={daysDiff}
+        isLoading={servicesRes.isLoading}
+        errorMsg={servicesRes.error?.message}
+        selectedService={selectedService}
+        setSelectedService={setSelectedService}
+        servicesNames={[]}
+        compareLabel={compareLabel}
+        showCompare={showCompare}
+        setShowCompare={setShowCompare}
+      />
+      <div className="flex flex-col gap-8">
+        <OverviewSection
+          dateFrom={dateFrom}
+          dateTo={dateTo}
+          daysDiff={daysDiff}
+          requestsByStatus={requestsByStatus}
+          requestsVsByStatus={requestsVsByStatus}
+          users={users}
+        />
+        <div className="flex flex-col gap-8 lg:flex-row">
+          <DetailedAnalytics
+            dateFrom={dateFrom}
+            dateTo={dateTo}
+            daysDiff={daysDiff}
+            requestsByStatus={requestsByStatus}
+            requestsVsByStatus={requestsVsByStatus}
+            showCompare={showCompare}
+            compareLabel={compareLabel}
           />
-          <QueryNav queryNav={serviceQueryNav2} variant={2} />
-          <Image src={ServiceAnalyticsImg} alt="service analytics" />
-        </CardWrapper>
-
-        <CardWrapper big className="max-w-[634px]">
-          <AnalyticsHeader
-            title="Payment analytics"
-            description="Total revenue for Sidebrief"
-            queryNav={paymentQueryNav}
+          <DetailedAnalytics
+            dateFrom={dateFrom}
+            dateTo={dateTo}
+            daysDiff={daysDiff}
+            requestsByStatus={requestsByStatus}
+            requestsVsByStatus={requestsVsByStatus}
+            showCompare={showCompare}
+            partner
           />
-          <Image src={PaymentAnalyticsImg} alt="payment analytics" />
-        </CardWrapper>
+        </div>
+        <TableSection />
       </div>
-
-      <TableSection />
-    </div>
+    </>
   );
 };
 

@@ -16,7 +16,7 @@ const AnalyticsHeader = ({ title, description, queryNav }: IProps) => {
           {description}
         </p>
       </div>
-      <QueryNav queryNav={queryNav} defaultActive={1} />
+      {/* <QueryNav queryNav={queryNav} defaultActive={1} /> */}
     </div>
   );
 };

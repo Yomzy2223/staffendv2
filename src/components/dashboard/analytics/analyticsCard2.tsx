@@ -9,7 +9,7 @@ const AnalyticsCard2 = ({
   className,
 }: {
   title: string;
-  total: string;
+  total: number;
   className?: string;
 }) => {
   return (

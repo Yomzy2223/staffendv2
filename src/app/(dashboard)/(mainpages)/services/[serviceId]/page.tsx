@@ -1,7 +1,7 @@
 "use client";
 
 import { PaymentAnalyticsImg2 } from "@/assets/svg";
-import AnalyticsCard3 from "@/components/cards/analytics/analyticsCard3";
+import AnalyticsCard3 from "@/components/dashboard/analytics/analyticsCard3";
 import ServiceSummaryCard from "@/components/cards/serviceSummaryCard";
 import DoChecks from "@/components/DoChecks";
 import ServiceForm from "@/components/form/serviceForm";
@@ -15,7 +15,7 @@ import { subMonths } from "date-fns";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import React, { useState } from "react";
-import { useOverviewActions } from "../../actions";
+import { useRequestActions } from "../../actions";
 import { useActions } from "./actions";
 import TableSection from "./tableSection";
 
@@ -39,9 +39,9 @@ const Service = ({ params }: { params: { serviceId: string } }) => {
     monthsDiff,
     currentFrom,
     currentTo,
-  } = useOverviewActions({ serviceId });
+  } = useRequestActions({ serviceId });
 
-  const previousFrom = subMonths(currentFrom, monthsDiff);
+  const compareFrom = subMonths(currentFrom, monthsDiff);
   const bottomText = monthsDiff > 1 ? `vs previous ${monthsDiff} months` : "";
 
   const addNewService = () => {
@@ -66,7 +66,7 @@ const Service = ({ params }: { params: { serviceId: string } }) => {
             bottomText={bottomText}
             currentTo={currentTo}
             currentFrom={currentFrom}
-            previousFrom={previousFrom}
+            compareFrom={compareFrom}
           />
           <AnalyticsCard3
             title="Paid Drafts"
@@ -76,7 +76,7 @@ const Service = ({ params }: { params: { serviceId: string } }) => {
             bottomText={bottomText}
             currentTo={currentTo}
             currentFrom={currentFrom}
-            previousFrom={previousFrom}
+            compareFrom={compareFrom}
           />
           <AnalyticsCard3
             title="Submitted"
@@ -86,7 +86,7 @@ const Service = ({ params }: { params: { serviceId: string } }) => {
             bottomText={bottomText}
             currentTo={currentTo}
             currentFrom={currentFrom}
-            previousFrom={previousFrom}
+            compareFrom={compareFrom}
           />
           <AnalyticsCard3
             title="In Progress"
@@ -96,7 +96,7 @@ const Service = ({ params }: { params: { serviceId: string } }) => {
             bottomText={bottomText}
             currentTo={currentTo}
             currentFrom={currentFrom}
-            previousFrom={previousFrom}
+            compareFrom={compareFrom}
           />
           <AnalyticsCard3
             title="Completed"
@@ -106,7 +106,7 @@ const Service = ({ params }: { params: { serviceId: string } }) => {
             bottomText={bottomText}
             currentTo={currentTo}
             currentFrom={currentFrom}
-            previousFrom={previousFrom}
+            compareFrom={compareFrom}
           />
         </div>
         <CardWrapper className="flex flex-col gap-6 justify-between">

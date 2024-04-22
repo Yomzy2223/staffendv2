@@ -36,6 +36,7 @@ export interface IDynamicFormField {
   minTagChars?: number;
   fieldName?: string;
   optionsLoading?: boolean;
+  optionsErrorMsg?: string;
   handleSelect?: (selected?: string) => void;
 }
 

@@ -103,5 +103,54 @@ export const customTheme: ThemeProps = {
         base: "h-4 w-4 appearance-none bg-muted border-none rounded-full ring-border ring-0 ring-offset-0 checked:bg-primary checked:ring-primary focus:ring-0 focus:ring-offset-0",
       },
     },
+    datepicker: {
+      popup: {
+        footer: {
+          base: "mt-2 flex space-x-2",
+          button: {
+            today: "bg-primary text-white hover:bg-primary/90",
+          },
+        },
+      },
+      views: {
+        days: {
+          items: {
+            item: {
+              selected: "bg-primary text-white hover:bg-primary/90",
+            },
+          },
+        },
+        months: {
+          items: {
+            item: {
+              selected: "bg-primary text-white hover:bg-primary/90",
+            },
+          },
+        },
+        years: {
+          items: {
+            item: {
+              selected: "bg-primary text-white hover:bg-primary/90",
+            },
+          },
+        },
+        decades: {
+          items: {
+            item: {
+              selected: "bg-primary text-white hover:bg-primary/90",
+            },
+          },
+        },
+      },
+    },
+    toggleSwitch: {
+      toggle: {
+        checked: {
+          color: {
+            primary: "bg-primary border-primary",
+          },
+        },
+      },
+    },
   },
 };

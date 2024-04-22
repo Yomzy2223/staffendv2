@@ -33,7 +33,7 @@ const AnalyticsCard3 = ({
   current,
   bottomText,
   className,
-  previousFrom,
+  compareFrom,
   currentFrom,
   currentTo,
 }: {
@@ -42,7 +42,7 @@ const AnalyticsCard3 = ({
   current: any[];
   bottomText?: string;
   className?: string;
-  previousFrom: Date;
+  compareFrom: Date;
   currentFrom: Date;
   currentTo: Date;
 }) => {
@@ -57,7 +57,7 @@ const AnalyticsCard3 = ({
 
   // Returns the data for one month
   const getMonthData = (monthInc: number, isCurrent: boolean) => {
-    const month = isCurrent ? currentFrom : previousFrom;
+    const month = isCurrent ? currentFrom : compareFrom;
     const monthVs = isCurrent ? currentTo : currentFrom;
     const monthAdded = addMonths(month, monthInc);
     const monthVsAdded = addMonths(monthVs, monthInc);

@@ -6,8 +6,8 @@ import ServiceForm from "@/components/form/serviceForm";
 import { Navigation } from "@/components/navigation";
 import { Button } from "flowbite-react";
 import Image from "next/image";
-import { useRouteActions } from "./actions";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
+import { useRouteActions } from "./actions";
 
 const layout = ({ children }: { children: ReactNode }) => {
   const [open, setOpen] = useState(false);

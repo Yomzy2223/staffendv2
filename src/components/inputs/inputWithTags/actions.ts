@@ -24,7 +24,9 @@ export const useActions = ({
 
   const validateTags = (value: string) => {
     if (maxTag && tags.length >= maxTag) {
-      setErrorMsg(errors?.length || `Tags cannot be more than ${maxTag}`);
+      value.length === 0
+        ? setErrorMsg("")
+        : setErrorMsg(errors?.length || `Tags cannot be more than ${maxTag}`);
       return;
     }
     if (normalize(value) === "") {

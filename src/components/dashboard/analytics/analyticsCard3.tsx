@@ -17,7 +17,7 @@ import {
   subMonths,
 } from "date-fns";
 import { ArrowDown, ArrowUp } from "lucide-react";
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import {
   LineChart,
   Line,
@@ -36,6 +36,8 @@ const AnalyticsCard3 = ({
   compareFrom,
   currentFrom,
   currentTo,
+  selected,
+  onClick,
 }: {
   title: string;
   previous: any[];
@@ -45,11 +47,13 @@ const AnalyticsCard3 = ({
   compareFrom: Date;
   currentFrom: Date;
   currentTo: Date;
+  selected: boolean;
+  onClick: MouseEventHandler<HTMLDivElement>;
 }) => {
   const totalCurrent = current?.length;
-  const totalPrevious = previous?.length;
+  const totalCompare = previous?.length;
 
-  const difference = totalCurrent - totalPrevious;
+  const difference = totalCurrent - totalCompare;
   let perc = 100 * difference || 0;
   const decreased = perc < 0;
 
@@ -122,8 +126,10 @@ const AnalyticsCard3 = ({
 
   return (
     <CardWrapper
+      onClick={onClick}
       className={cn(
-        "flex-1 flex flex-col min-w-[250px] w-max max-w-[300px] h-[150px]",
+        "flex-1 flex flex-col min-w-[250px] w-max max-w-[300px] h-[150px] transition-all",
+        { "bg-primary-8": selected },
         className
       )}
     >

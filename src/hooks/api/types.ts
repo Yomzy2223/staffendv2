@@ -17,15 +17,6 @@ export interface IResetPassword {
   password: string;
 }
 
-export interface IService {
-  name: string;
-  description: string;
-}
-
-export interface IServiceFull extends IService {
-  id: string;
-}
-
 export interface IForm {
   id?: string;
   title: string;

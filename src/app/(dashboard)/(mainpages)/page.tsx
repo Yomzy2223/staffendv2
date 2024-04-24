@@ -7,6 +7,7 @@ import { format, isSameYear, startOfMonth, subDays } from "date-fns";
 import React, { useState } from "react";
 import TableSection from "./tableSection";
 import { useRequestActions } from "./actions";
+import { useSession } from "next-auth/react";
 
 const Home = () => {
   const [dateFrom, setDateFrom] = useState(startOfMonth(new Date()));
@@ -14,12 +15,24 @@ const Home = () => {
   const [selectedService, setSelectedService] = useState("");
   const [showCompare, setShowCompare] = useState(false);
 
-  const { servicesRes, daysDiff, requestsByStatus, requestsVsByStatus, users } =
-    useRequestActions({
-      dateFrom,
-      dateTo,
-      selectedService,
-    });
+  const session = useSession();
+  console.log(session);
+
+  const [selectedOverview, setSelectedOverview] = useState<TStatus>();
+
+  const {
+    activeService,
+    servicesNames,
+    servicesRes,
+    daysDiff,
+    requestsByStatus,
+    requestsVsByStatus,
+    users,
+  } = useRequestActions({
+    dateFrom,
+    dateTo,
+    selectedService,
+  });
 
   const compareFrom = subDays(dateFrom, daysDiff);
   const compareTo = subDays(dateTo, daysDiff);
@@ -28,7 +41,7 @@ const Home = () => {
     : "MMMM dd, yyy";
 
   const compareLabel =
-    format(compareFrom, formatStr) + "-" + format(compareTo, formatStr);
+    format(compareFrom, formatStr) + " - " + format(compareTo, formatStr);
 
   return (
     <>
@@ -42,7 +55,7 @@ const Home = () => {
         errorMsg={servicesRes.error?.message}
         selectedService={selectedService}
         setSelectedService={setSelectedService}
-        servicesNames={[]}
+        servicesNames={servicesNames}
         compareLabel={compareLabel}
         showCompare={showCompare}
         setShowCompare={setShowCompare}
@@ -55,6 +68,8 @@ const Home = () => {
           requestsByStatus={requestsByStatus}
           requestsVsByStatus={requestsVsByStatus}
           users={users}
+          selectedOverview={selectedOverview}
+          setSelectedOverview={setSelectedOverview}
         />
         <div className="flex flex-col gap-8 lg:flex-row">
           <DetailedAnalytics
@@ -65,6 +80,8 @@ const Home = () => {
             requestsVsByStatus={requestsVsByStatus}
             showCompare={showCompare}
             compareLabel={compareLabel}
+            activeService={activeService?.name}
+            selectedOverview={selectedOverview}
           />
           <DetailedAnalytics
             dateFrom={dateFrom}
@@ -83,3 +100,11 @@ const Home = () => {
 };
 
 export default Home;
+
+export type TStatus =
+  | "unPaidDrafts"
+  | "paidDrafts"
+  | "submitted"
+  | "inProgress"
+  | "completed"
+  | undefined;

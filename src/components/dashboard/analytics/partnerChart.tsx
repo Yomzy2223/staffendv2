@@ -14,7 +14,7 @@ import Wrapper from "./wrapper";
 
 const PartnerChart = () => {
   return (
-    <Wrapper title="Partner analytics" description="kdaf">
+    <Wrapper title="Partner analytics">
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart

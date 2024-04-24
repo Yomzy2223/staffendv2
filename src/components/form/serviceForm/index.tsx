@@ -53,6 +53,8 @@ const ServiceForm = ({ open, setOpen }: IProps) => {
   const defaultValues = {
     name: isEdit ? serviceData?.name : "",
     description: isEdit ? serviceData?.description : "",
+    label: isEdit ? serviceData?.label : "",
+    priority: isEdit ? serviceData?.priority : "",
   };
 
   return (

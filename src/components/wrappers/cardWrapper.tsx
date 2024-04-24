@@ -14,6 +14,7 @@ const CardWrapper = ({
 }) => {
   return (
     <div
+      tabIndex={0}
       className={cn(
         "bg-background rounded-lg p-4 shadow-md",
         {

@@ -17,6 +17,7 @@ import {
   YAxis,
   AreaChart,
   Area,
+  CartesianGrid,
 } from "recharts";
 import Wrapper from "./wrapper";
 import { IRequest } from "@/hooks/api/types";
@@ -32,11 +33,12 @@ const ServiceChart = ({
   currentTo,
   compareLabel,
   showCompare,
+  selectedService,
 }: IProps) => {
-  const totalCurrent = current?.length;
-  const totalPrevious = compare?.length;
+  const totalCurrent = current?.length || 0;
+  const totalCompare = compare?.length || 0;
 
-  const difference = totalCurrent - totalPrevious;
+  const difference = totalCurrent - totalCompare;
   let perc = 100 * difference || 0;
   const decreased = perc < 0;
 
@@ -44,7 +46,9 @@ const ServiceChart = ({
     ? "MMMM dd"
     : "MMMM dd, yyy";
 
-  // const monthsInRange = differenceInMonths(currentTo, currentFrom) + 1;
+  const rangeLabel =
+    format(currentFrom, formatStr) + "-" + format(currentTo, formatStr);
+
   const daysInRange = differenceInDays(currentTo, currentFrom) + 1;
 
   // Returns the data for each day
@@ -86,8 +90,15 @@ const ServiceChart = ({
   });
 
   return (
-    <Wrapper title={title} description="kdaf">
-      {/* <p className="sb-text-24 font-semibold">{totalCurrent}</p> */}
+    <Wrapper
+      title={title}
+      selectedService={selectedService}
+      compareLabel={compareLabel}
+      rangeLabel={rangeLabel}
+      totalCompare={totalCompare}
+      totalCurrent={totalCurrent}
+      className="gap-6"
+    >
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
@@ -97,12 +108,13 @@ const ServiceChart = ({
             margin={{
               top: 10,
               right: 30,
-              left: 0,
+              left: -30,
               bottom: 0,
             }}
           >
-            <XAxis dataKey="date" />
-            <YAxis />
+            <CartesianGrid strokeDasharray="3 3" vertical />
+            <XAxis dataKey="date" axisLine={false} className="!mt-9" />
+            <YAxis axisLine={false} />
             <Tooltip
               content={
                 <CustomTooltip
@@ -130,24 +142,26 @@ const ServiceChart = ({
           </AreaChart>
         </ResponsiveContainer>
       </div>
-      <div className="flex items-center text-sm text-foreground-5 font-normal">
-        <span>
-          {decreased ? (
-            <ArrowDown size={14} color="hsl(var(--destructive-foreground))" />
-          ) : (
-            <ArrowUp size={14} color="hsl(var(--success-foreground))" />
-          )}
-        </span>
-        <span
-          className={cn({
-            "text-success-foreground": !decreased,
-            "text-destructive-foreground": decreased,
-          })}
-        >
-          {perc}%
-        </span>
-        <span className="ml-1 whitespace-nowrap">{compareLabel}</span>
-      </div>
+      {showCompare && (
+        <div className="flex items-center text-sm text-foreground-5 font-normal">
+          <span>
+            {decreased ? (
+              <ArrowDown size={14} color="hsl(var(--destructive-foreground))" />
+            ) : (
+              <ArrowUp size={14} color="hsl(var(--success-foreground))" />
+            )}
+          </span>
+          <span
+            className={cn({
+              "text-success-foreground": !decreased,
+              "text-destructive-foreground": decreased,
+            })}
+          >
+            {perc}% vs
+          </span>
+          <span className="ml-1 whitespace-nowrap">{compareLabel}</span>
+        </div>
+      )}
     </Wrapper>
   );
 };
@@ -199,6 +213,7 @@ interface IProps {
   currentTo: Date;
   compareLabel: string;
   showCompare: boolean;
+  selectedService: string;
 }
 
 interface IDayData {

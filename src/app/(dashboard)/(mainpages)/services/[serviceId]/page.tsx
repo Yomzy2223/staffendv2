@@ -70,8 +70,8 @@ const Service = ({ params }: { params: { serviceId: string } }) => {
           />
           <AnalyticsCard3
             title="Paid Drafts"
-            current={requestsByStatus.paidDraft}
-            previous={requestsVsByStatus.paidDraft}
+            current={requestsByStatus.paidDrafts}
+            previous={requestsVsByStatus.paidDrafts}
             className="snap-start"
             bottomText={bottomText}
             currentTo={currentTo}

@@ -1,10 +1,10 @@
-import useServiceApi from "@/hooks/useServiceApi";
-import { IRequest, IServiceFull } from "@/hooks/api/types";
 import useRequestApi from "@/hooks/useRequestApi";
 import { differenceInDays, isWithinInterval, subDays } from "date-fns";
 import useUserApi from "@/hooks/useUserApi";
 import { useParams } from "next/navigation";
 import slugify from "slugify";
+import { useGetAllServicesQuery } from "@/services/service";
+import { IRequest } from "@/hooks/api/types";
 
 // Requests Actions
 export const useRequestActions = ({
@@ -20,16 +20,17 @@ export const useRequestActions = ({
   const usersResponse = useGetAllUsersQuery({});
   const users = usersResponse.data?.data?.data || [];
 
-  const { getAllServicesQuery } = useServiceApi();
-  const servicesRes = getAllServicesQuery;
+  const servicesRes = useGetAllServicesQuery();
   const services = servicesRes.data?.data?.data || [];
-  const servicesNames = services?.map((el: IServiceFull) => el?.name);
-  const serviceId = services?.find(
-    (el: IServiceFull) => el.name === selectedService || servicesNames?.[0]
-  )?.id;
+  const servicesNames = services?.map((el) => el?.name);
+  const activeService = services?.find(
+    (el) => el.name === selectedService || servicesNames?.[0]
+  );
 
   const { useGetServiceRequestQuery } = useRequestApi();
-  const requestsResponse = useGetServiceRequestQuery({ serviceId });
+  const requestsResponse = useGetServiceRequestQuery({
+    serviceId: activeService?.id || "",
+  });
   const requests = requestsResponse.data?.data?.data;
 
   //   let monthsDiff = differenceInMonths(dateTo, dateFrom) + 1; // Complements for the last month
@@ -54,8 +55,10 @@ export const useRequestActions = ({
 
   // The requests within the selected date range
   const requestsByStatus = {
-    draft: filteredRequests?.filter((el: IRequest) => el.status === "PENDING"),
-    paidDraft: filteredRequests?.filter(
+    unPaidDrafts: filteredRequests?.filter(
+      (el: IRequest) => el.status === "PENDING" && !el.paid
+    ),
+    paidDrafts: filteredRequests?.filter(
       (el: IRequest) => el.status === "PENDING" && el.paid
     ),
     submitted: filteredRequests?.filter(
@@ -71,8 +74,10 @@ export const useRequestActions = ({
 
   // The requests to be compared with
   const requestsVsByStatus = {
-    draft: requestsVs?.filter((el: IRequest) => el.status === "PENDING"),
-    paidDraft: requestsVs?.filter(
+    unPaidDrafts: requestsVs?.filter(
+      (el: IRequest) => el.status === "PENDING" && !el.paid
+    ),
+    paidDrafts: requestsVs?.filter(
       (el: IRequest) => el.status === "PENDING" && el.paid
     ),
     submitted: requestsVs?.filter((el: IRequest) => el.status === "SUBMITTED"),
@@ -83,6 +88,8 @@ export const useRequestActions = ({
   };
 
   return {
+    activeService,
+    servicesNames,
     servicesRes,
     users,
     requestsByStatus,
@@ -93,15 +100,14 @@ export const useRequestActions = ({
 
 // Route actions
 export const useRouteActions = () => {
-  const { getAllServicesQuery } = useServiceApi();
-  const { data } = getAllServicesQuery;
+  const { data } = useGetAllServicesQuery();
   const services = data?.data?.data;
 
   const { serviceId } = useParams();
 
   const getServicesRoute = () => {
     if (services) {
-      return services.map((service: IServiceFull) => ({
+      return services.map((service) => ({
         name: service.name,
         to: `/services/${slugify(service.id)}`,
       }));

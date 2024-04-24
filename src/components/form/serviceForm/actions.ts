@@ -1,5 +1,11 @@
 import { ISubForm } from "@/hooks/api/types";
 import useServiceApi from "@/hooks/useServiceApi";
+import {
+  useCreateServiceMutation,
+  useGetServiceQuery,
+  useUpdateServiceMutation,
+} from "@/services/service";
+import { TServiceCreate } from "@/services/service/types";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 import {
@@ -7,7 +13,6 @@ import {
   IFieldSubmitHandlerArg,
   IFormSubmitHandlerArg,
 } from "../dynamicFormCreator/eachForm/types";
-import { serviceInfoType } from "./constants";
 
 // Actions for service info section
 export const useServiceInfoActions = ({
@@ -22,11 +27,12 @@ export const useServiceInfoActions = ({
   const { serviceId } = useParams();
   const isEdit = serviceId && get("action") == "edit";
 
-  const { createServiceMutation, updateServiceMutation, useGetServiceQuery } =
-    useServiceApi();
   const serviceInfo = useGetServiceQuery(serviceId as string);
+  const createServiceMutation = useCreateServiceMutation();
+  const updateServiceMutation = useUpdateServiceMutation();
 
-  const submitServiceInfo = async (values: serviceInfoType) => {
+  const submitServiceInfo = async (values: TServiceCreate) => {
+    console.log(values);
     isEdit
       ? updateServiceMutation.mutate(
           {

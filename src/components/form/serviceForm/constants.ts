@@ -11,6 +11,22 @@ export const section1FormInfo: IDynamicFormField[] = [
     },
   },
   {
+    name: "label",
+    label: "Enter service label",
+    type: "text",
+    textInputProp: {
+      placeholder: "Enter a label for this service",
+    },
+  },
+  {
+    name: "priority",
+    label: "Enter service priority",
+    type: "text",
+    textInputProp: {
+      placeholder: "E.g 1 (Note: highest priority is given to 1)",
+    },
+  },
+  {
     name: "description",
     label: "Enter service description",
     type: "textarea",
@@ -21,10 +37,22 @@ export const section1FormInfo: IDynamicFormField[] = [
 ];
 
 export const serviceInfoSchema = z.object({
-  name: z.string().min(3, "Service name should be at least 3 characters"),
+  name: z
+    .string()
+    .min(3, "Service name should be at least 3 characters")
+    .max(30, "Service name should not be more than 30 characters"),
   description: z
     .string({ required_error: "Provide service description" })
-    .min(20, "Kindly provide more information"),
+    .min(20, "Description should be at least 20 characters")
+    .max(50, "Description should not be more than 50 characters"),
+  label: z
+    .string({ required_error: "Provide service label" })
+    .min(3, "Label should be at least 3 characters")
+    .max(30, "Label should not be more than 30 characters"),
+  priority: z.coerce
+    .number({ required_error: "Provide service priority" })
+    .min(1, { message: "Priority should be at least 1" })
+    .max(10, { message: "Priority cannot be more than 10" }),
 });
 
 export type serviceInfoType = z.infer<typeof serviceInfoSchema>;

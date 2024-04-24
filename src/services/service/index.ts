@@ -152,8 +152,8 @@ export const useGetServiceFormsQuery = (serviceId: string) =>
 
 //
 // SERVICE SUBFORM HOOKS
-export const createServiceSubFormMutation = () => {
-  const { handleError, handleSuccess } = useResponse();
+export const useCreateServiceSubFormMutation = () => {
+  const { handleError } = useResponse();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -162,15 +162,14 @@ export const createServiceSubFormMutation = () => {
       handleError({ title: "Failed", error });
     },
     onSuccess(data, variables, context) {
-      handleSuccess({ data });
       queryClient.invalidateQueries({ queryKey: ["Service Form"] });
     },
     retry: 3,
   });
 };
 
-export const createMultipleServiceSubFormsMutation = () => {
-  const { handleError, handleSuccess } = useResponse();
+export const useCreateMultipleServiceSubFormsMutation = () => {
+  const { handleError } = useResponse();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -179,15 +178,14 @@ export const createMultipleServiceSubFormsMutation = () => {
       handleError({ title: "Failed", error });
     },
     onSuccess(data, variables, context) {
-      handleSuccess({ data });
       queryClient.invalidateQueries({ queryKey: ["Service Form"] });
     },
     retry: 3,
   });
 };
 
-export const updateServiceSubFormMutation = () => {
-  const { handleError, handleSuccess } = useResponse();
+export const useUpdateServiceSubFormMutation = () => {
+  const { handleError } = useResponse();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -196,14 +194,13 @@ export const updateServiceSubFormMutation = () => {
       handleError({ title: "Failed", error });
     },
     onSuccess(data, variables, context) {
-      handleSuccess({ data });
       queryClient.invalidateQueries({ queryKey: ["Service Form"] });
     },
     retry: 3,
   });
 };
 
-export const deleteServiceSubFormMutation = () => {
+export const useDeleteServiceSubFormMutation = () => {
   const { handleError, handleSuccess } = useResponse();
   const queryClient = useQueryClient();
 

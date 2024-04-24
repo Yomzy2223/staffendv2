@@ -1,5 +1,24 @@
 import { IDependsOn } from "@/components/form/dynamicFormCreator/eachForm/types";
 
+export type TServiceCreate = {
+  name: string;
+  description: string;
+  label: string;
+  priority: number;
+};
+
+export type TService = TServiceCreate & {
+  id: string;
+  isDeprecated: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type TServiceGet = TService & {
+  form: TFormGet[];
+  products: []; //To add the product type here
+};
+
 export type TFormCreate = {
   title: string;
   description: string;
@@ -7,8 +26,16 @@ export type TFormCreate = {
   compulsory: boolean;
 };
 
-export type TFormGet = TFormCreate & {
+export type TForm = TFormCreate & {
   id: string;
+  createdAt: string;
+  updatedAt: string;
+  isDeprecated: boolean;
+  serviceId: string;
+};
+
+export type TFormGet = TForm & {
+  subForm: TSubFormGet[];
 };
 
 export type TSubFormCreate = {
@@ -25,23 +52,9 @@ export type TSubFormCreate = {
   dependsOn?: IDependsOn;
 };
 
-export type TSubFormGet = TSubFormCreate & { id: string };
-
-export type TServiceCreate = {
-  name: string;
-  description: string;
-  label: string;
-  priority: number;
-};
-
-export type TService = TServiceCreate & {
+export type TSubFormGet = TSubFormCreate & {
   id: string;
-  isDeprecated: boolean;
   createdAt: string;
   updatedAt: string;
-};
-
-export type TServiceGet = TService & {
-  form: [];
-  products: [];
+  isDeprecated: boolean;
 };

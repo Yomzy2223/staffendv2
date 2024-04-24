@@ -64,7 +64,7 @@ export const updateServiceForm = async ({
 
 export const deleteServiceForm = async (id: string) => {
   const client = await Client();
-  return await client.delete(`/services/form/${id}`);
+  return await client.delete<TRoot>(`/services/form/${id}`);
 };
 
 export const getServiceForm = async (id: string) => {

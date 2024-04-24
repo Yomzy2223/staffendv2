@@ -1,9 +1,17 @@
 import { ISubForm } from "@/hooks/api/types";
 import useServiceApi from "@/hooks/useServiceApi";
 import {
+  useCreateMultipleServiceSubFormsMutation,
+  useCreateServiceFormMutation,
   useCreateServiceMutation,
+  useCreateServiceSubFormMutation,
+  useDeleteServiceFormMutation,
+  useDeleteServiceSubFormMutation,
+  useGetServiceFormsQuery,
   useGetServiceQuery,
+  useUpdateServiceFormMutation,
   useUpdateServiceMutation,
+  useUpdateServiceSubFormMutation,
 } from "@/services/service";
 import { TServiceCreate } from "@/services/service/types";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
@@ -67,20 +75,17 @@ export const useServiceInfoActions = ({
 
 // Actions for service form section
 export const useServiceFormActions = () => {
-  const { get } = useSearchParams();
   const { serviceId } = useParams();
 
-  const {
-    createServiceFormMutation,
-    updateServiceFormMutation,
-    deleteServiceFormMutation,
-    useGetServiceFormsQuery,
-    createServiceSubFormMutation,
-    createMultipleServiceSubFormsMutation,
-    updateServiceSubFormMutation,
-    deleteServiceSubFormMutation,
-  } = useServiceApi();
   const serviceFormInfo = useGetServiceFormsQuery(serviceId as string);
+  const createServiceFormMutation = useCreateServiceFormMutation();
+  const updateServiceFormMutation = useUpdateServiceFormMutation();
+  const deleteServiceFormMutation = useDeleteServiceFormMutation();
+  const createServiceSubFormMutation = useCreateServiceSubFormMutation();
+  const updateServiceSubFormMutation = useUpdateServiceSubFormMutation();
+  const deleteServiceSubFormMutation = useDeleteServiceSubFormMutation();
+  const createMultipleServiceSubFormsMutation =
+    useCreateMultipleServiceSubFormsMutation();
 
   const submitServiceForm = async ({
     formId,

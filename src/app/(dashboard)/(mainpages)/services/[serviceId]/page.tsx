@@ -7,10 +7,9 @@ import DoChecks from "@/components/DoChecks";
 import ServiceForm from "@/components/form/serviceForm";
 import AnalyticsHeader from "@/components/header/analyticsHeader";
 import CardWrapper from "@/components/wrappers/cardWrapper";
-import { IRequest, IServiceFull } from "@/hooks/api/types";
+import { IRequest } from "@/hooks/api/types";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import useRequestApi from "@/hooks/useRequestApi";
-import useServiceApi from "@/hooks/useServiceApi";
 import { subMonths } from "date-fns";
 import Image from "next/image";
 import { redirect } from "next/navigation";
@@ -18,6 +17,7 @@ import React, { useState } from "react";
 import { useRequestActions } from "../../actions";
 import { useActions } from "./actions";
 import TableSection from "./tableSection";
+import { useGetServiceQuery } from "@/services/service";
 
 const Service = ({ params }: { params: { serviceId: string } }) => {
   const [open, setOpen] = useState(false);
@@ -28,9 +28,8 @@ const Service = ({ params }: { params: { serviceId: string } }) => {
   const request = useGetServiceRequestQuery({ serviceId: serviceId });
   const requestsData: IRequest[] = request.data?.data?.data;
 
-  const { useGetServiceQuery } = useServiceApi();
   const service = useGetServiceQuery(serviceId as string);
-  const serviceData: IServiceFull = service?.data?.data?.data;
+  const serviceData = service?.data?.data?.data;
   if (!serviceData && !service.isLoading) redirect("/services");
 
   const {

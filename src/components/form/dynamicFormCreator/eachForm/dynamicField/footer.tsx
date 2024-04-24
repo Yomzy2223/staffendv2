@@ -1,10 +1,10 @@
 import EditDelete from "@/components/features/editDelete";
 import { cn } from "@/lib/utils";
+import { TSubFormCreate } from "@/services/service/types";
 import { Button, Checkbox } from "flowbite-react";
 import { PencilLine, Trash2 } from "lucide-react";
 import React, { Dispatch, SetStateAction } from "react";
 import { UseFormGetValues, UseFormSetValue } from "react-hook-form";
-import { FieldType } from "../types";
 import { fieldReturnType } from "./actions";
 
 const Footer = ({
@@ -82,7 +82,7 @@ interface IProps {
   setEdit: (value: boolean) => void;
   getValues: UseFormGetValues<{ [x: string]: any }>;
   setValue: UseFormSetValue<{ [x: string]: any }>;
-  setNewlyAdded?: Dispatch<SetStateAction<FieldType | undefined>>;
+  setNewlyAdded?: Dispatch<SetStateAction<TSubFormCreate | undefined>>;
   info: fieldReturnType;
   loading: boolean;
   deleteLoading?: boolean;

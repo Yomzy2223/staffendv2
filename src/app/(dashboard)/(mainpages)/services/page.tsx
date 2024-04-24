@@ -3,7 +3,7 @@
 import DoChecks from "@/components/DoChecks";
 import ServiceForm from "@/components/form/serviceForm";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
-import useServiceApi from "@/hooks/useServiceApi";
+import { useGetAllServicesQuery } from "@/services/service";
 import { redirect } from "next/navigation";
 import React, { useState } from "react";
 import slugify from "slugify";
@@ -12,8 +12,7 @@ const Service = () => {
   const [open, setOpen] = useState(false);
   const { setQuery } = useGlobalFunctions();
 
-  const { getAllServicesQuery } = useServiceApi();
-  const { data } = getAllServicesQuery;
+  const { data } = useGetAllServicesQuery();
   const services = data?.data?.data;
 
   if (services?.[0]) redirect(`/services/${slugify(services[0].id)}`);

@@ -31,7 +31,9 @@ const ServiceForm = ({ open, setOpen }: IProps) => {
 
   const title1 = isEdit ? "Update Service" : "Create Service";
   const title2 =
-    serviceFormData?.length > 0 ? "Update Service Form" : "Add Service Form";
+    (serviceFormData?.length ?? 0) > 0
+      ? "Update Service Form"
+      : "Add Service Form";
   const title = section === 1 ? title1 : title2;
 
   const handleBack = () => {
@@ -48,7 +50,7 @@ const ServiceForm = ({ open, setOpen }: IProps) => {
     deleteQueryString("action");
   };
 
-  const wide = serviceFormData?.length > 1 && section !== 1;
+  const wide = (serviceFormData?.length ?? 0) > 1 && section !== 1;
 
   const defaultValues = {
     name: isEdit ? serviceData?.name : "",
@@ -101,6 +103,7 @@ const ServiceForm = ({ open, setOpen }: IProps) => {
             onFormSubmit={submitServiceForm}
             onFormDelete={handleFormDelete}
             formState={serviceFormState}
+            disallowPerson
             wide={wide}
           />
           <div className="bg-white flex items-center justify-end gap-4 pt-4 sticky bottom-0">

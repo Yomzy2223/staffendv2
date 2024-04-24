@@ -5,7 +5,7 @@ import { MoreHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formReturnType } from "./actions";
 
-const Header = ({ edit, info, loading }: IProps) => {
+const Header = ({ edit, info, loading, disallowPerson }: IProps) => {
   const {
     type,
     title,
@@ -53,7 +53,7 @@ const Header = ({ edit, info, loading }: IProps) => {
           <span className="text-sm text-foreground-5 font-normal capitalize">
             {type}
           </span>
-          {edit && (
+          {edit && !disallowPerson && (
             <FieldTypePopUp
               handleSelect={handleOptionSelect}
               disabled={loading}
@@ -97,4 +97,5 @@ interface IProps {
   loading: boolean;
   edit: boolean;
   info: formReturnType;
+  disallowPerson?: boolean;
 }

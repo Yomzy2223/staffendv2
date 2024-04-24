@@ -1,8 +1,7 @@
 import { AxiosResponse } from "axios";
-import { LucideIcon } from "lucide-react";
 import { Dispatch, SetStateAction } from "react";
 import { FormType } from "./constants";
-import { ISubForm } from "@/hooks/api/types";
+import { TSubFormCreate } from "@/services/service/types";
 
 export interface IFieldSubmitHandlerArg {
   number?: number;
@@ -10,7 +9,7 @@ export interface IFieldSubmitHandlerArg {
   fieldId?: string;
   values: { [x: string]: any };
   onSuccess?: (data: AxiosResponse<any, any>) => void;
-  setNewlyAdded?: Dispatch<SetStateAction<FieldType | undefined>>;
+  setNewlyAdded?: Dispatch<SetStateAction<TSubFormCreate | undefined>>;
 }
 
 export interface IFormSubmitHandlerArg {
@@ -19,9 +18,9 @@ export interface IFormSubmitHandlerArg {
   onSuccess?: (data: AxiosResponse<any, any>) => void;
 }
 
-export interface FieldType extends ISubForm {
-  icon?: LucideIcon;
-}
+// export interface FieldType extends TSubFormGet {
+//   icon?: LucideIcon;
+// }
 
 export interface IDependsOn {
   field: string;

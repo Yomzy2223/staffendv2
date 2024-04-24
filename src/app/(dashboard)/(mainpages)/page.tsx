@@ -7,16 +7,12 @@ import { format, isSameYear, startOfMonth, subDays } from "date-fns";
 import React, { useState } from "react";
 import TableSection from "./tableSection";
 import { useRequestActions } from "./actions";
-import { useSession } from "next-auth/react";
 
 const Home = () => {
   const [dateFrom, setDateFrom] = useState(startOfMonth(new Date()));
   const [dateTo, setDateTo] = useState(new Date());
   const [selectedService, setSelectedService] = useState("");
   const [showCompare, setShowCompare] = useState(false);
-
-  const session = useSession();
-  console.log(session);
 
   const [selectedOverview, setSelectedOverview] = useState<TStatus>();
 

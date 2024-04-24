@@ -7,15 +7,20 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { fieldOptions, formOptions, FormType } from "./constants";
+import {
+  fieldOptions,
+  fieldOptionsFull,
+  formOptions,
+} from "./constants";
 import PopOverWrapper from "@/components/wrappers/popOverWrapper";
-import { FieldType } from "./types";
+import { TSubFormGet } from "@/services/service/types";
 
 const FieldTypePopUp = ({
   children,
   handleSelect,
   isForm,
   disabled,
+  disallowPerson,
 }: IProps) => {
   const [open, setOpen] = useState(false);
 
@@ -28,6 +33,7 @@ const FieldTypePopUp = ({
         <QuestionList
           setOpen={setOpen}
           handleSelect={handleSelect}
+          disallowPerson={disallowPerson}
           isForm={isForm}
         />
       }
@@ -42,13 +48,20 @@ export default FieldTypePopUp;
 function QuestionList({
   setOpen,
   handleSelect,
+  disallowPerson,
   isForm,
 }: {
   setOpen: (open: boolean) => void;
-  handleSelect: (type?: FieldType) => void;
+  handleSelect: (type?: TSubFormGet) => void;
+  disallowPerson?: boolean;
   isForm?: boolean;
 }) {
-  const options = isForm ? formOptions : fieldOptions;
+  const options = isForm
+    ? formOptions
+    : disallowPerson
+    ? fieldOptions
+    : fieldOptionsFull;
+    const opt = options.map(el => ({type: el.type, title: el. }))
 
   return (
     <Command>
@@ -58,15 +71,14 @@ function QuestionList({
         <CommandGroup>
           {options
             .sort((a, b) => a.type.localeCompare(b.type))
-            .map((item: FieldType) => (
+            .map((item) => (
               <CommandItem
                 key={item.type}
                 value={item.type}
                 onSelect={(value) => {
                   handleSelect(
                     [...options].find(
-                      (each: FieldType) =>
-                        each.type.toLowerCase() === value.toLowerCase()
+                      (each) => each.type.toLowerCase() === value.toLowerCase()
                     )
                   );
                   setOpen(false);
@@ -86,6 +98,7 @@ function QuestionList({
 interface IProps {
   children: ReactNode;
   isForm?: boolean;
-  handleSelect: (selected?: FieldType | FormType) => void;
+  handleSelect: (selected?: TSubFormGet ) => void;
   disabled?: boolean;
+  disallowPerson?: boolean;
 }

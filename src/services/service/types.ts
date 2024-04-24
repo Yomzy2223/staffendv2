@@ -58,3 +58,23 @@ export type TSubFormGet = TSubFormCreate & {
   updatedAt: string;
   isDeprecated: boolean;
 };
+
+export type TFieldTypes =
+  | "text"
+  | "password"
+  | "address"
+  | "business name"
+  | "checkbox"
+  | "countries-operation"
+  | "countries-all"
+  | "document template"
+  | "document upload"
+  | "select"
+  | "email"
+  | "email address"
+  | "paragraph"
+  | "objectives"
+  | "phone number"
+  | "promocode"
+  | "multiple choice"
+  | "short answer";

@@ -10,9 +10,9 @@ import Options from "./allFieldTypes/options";
 import DocumentTemplate from "./allFieldTypes/documentTemplate";
 import { getDynamicFieldSchema, useFormFieldActions } from "./actions";
 import { uploadFileToCloudinary } from "@/hooks/globalFunctions";
-import { FieldType } from "../types";
 import ComboBox from "@/components/form/dynamicForm/comboBox";
 import { useSession } from "next-auth/react";
+import { TSubFormCreate, TSubFormGet } from "@/services/service/types";
 
 const DynamicField = ({
   info,
@@ -207,7 +207,7 @@ const DynamicField = ({
 export default DynamicField;
 
 interface IProps {
-  info: FieldType;
+  info: TSubFormGet;
   number: number;
   fieldTitle?: string;
   submitHandler: ({
@@ -222,7 +222,7 @@ interface IProps {
   deleteLoading?: boolean;
   deleteField: () => void;
   isNew?: boolean;
-  fieldsInfo?: FieldType[];
+  fieldsInfo?: TSubFormCreate[];
   fieldsEditState: { number: number; edit: boolean }[];
   setFieldsEditState: Dispatch<
     SetStateAction<{ number: number; edit: boolean }[]>

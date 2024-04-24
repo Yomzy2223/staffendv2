@@ -1,4 +1,3 @@
-import useServiceApi from "@/hooks/useServiceApi";
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
@@ -10,7 +9,8 @@ import {
 import { format } from "date-fns";
 import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
-import { IRequest, IServiceFull } from "@/hooks/api/types";
+import { IRequest } from "@/hooks/api/types";
+import { useGetAllServicesQuery } from "@/services/service";
 
 // Table information
 export const useTableActions = ({
@@ -36,8 +36,7 @@ export const useTableActions = ({
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const { getAllServicesQuery } = useServiceApi();
-  const services = getAllServicesQuery;
+  const services = useGetAllServicesQuery();
   const servicesData = services.data?.data?.data || [];
 
   const selectedServiceId = serviceId || searchParams.get("serviceId") || "";
@@ -82,7 +81,7 @@ export const useTableActions = ({
     serviceRequestsResponse.isLoading ||
     searchRequestMutation.isPending;
 
-  const serviceTableNav = servicesData?.map((service: IServiceFull) => ({
+  const serviceTableNav = servicesData?.map((service) => ({
     name: "serviceId",
     value: service.id,
     text: service.name,

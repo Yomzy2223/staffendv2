@@ -2,7 +2,19 @@ import { getCountries } from "@/hooks/api/countryApi";
 import { ICountry, ISubForm } from "@/hooks/api/types";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { useCountryApi } from "@/hooks/useCountryApi";
-import useProductApi from "@/hooks/useProductApi";
+import {
+  useCreateMultipleProductSubFormsMutation,
+  useCreateProductFormMutation,
+  useCreateProductMutation,
+  useCreateProductSubFormMutation,
+  useDeleteProductFormMutation,
+  useDeleteProductSubFormMutation,
+  useGetProductFormsQuery,
+  useGetProductQuery,
+  useUpdateProductFormMutation,
+  useUpdateProductMutation,
+  useUpdateProductSubFormMutation,
+} from "@/services/product";
 import { countries, TCountryCode } from "countries-list";
 import { useParams, useSearchParams } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
@@ -33,8 +45,8 @@ export const useProductInfoActions = ({
 
   const title1 = productId ? "Update Product" : "Create Product";
 
-  const { createProductMutation, updateProductMutation, useGetProductQuery } =
-    useProductApi();
+  const createProductMutation = useCreateProductMutation();
+  const updateProductMutation = useUpdateProductMutation();
   const productInfo = useGetProductQuery(productId as string);
 
   const submitProductInfo = async (values: productInfoType) => {
@@ -85,16 +97,14 @@ export const useProductFormActions = () => {
   const { get } = useSearchParams();
   const productId = get("productId") as string;
 
-  const {
-    createProductFormMutation,
-    updateProductFormMutation,
-    deleteProductFormMutation,
-    useGetProductFormsQuery,
-    createProductSubFormMutation,
-    createMultipleProductSubFormsMutation,
-    updateProductSubFormMutation,
-    deleteProductSubFormMutation,
-  } = useProductApi();
+  const createProductFormMutation = useCreateProductFormMutation();
+  const updateProductFormMutation = useUpdateProductFormMutation();
+  const deleteProductFormMutation = useDeleteProductFormMutation();
+  const createProductSubFormMutation = useCreateProductSubFormMutation();
+  const createMultipleProductSubFormsMutation =
+    useCreateMultipleProductSubFormsMutation();
+  const updateProductSubFormMutation = useUpdateProductSubFormMutation();
+  const deleteProductSubFormMutation = useDeleteProductSubFormMutation();
   const productFormInfo = useGetProductFormsQuery(productId);
 
   // SUBMITS A FORM

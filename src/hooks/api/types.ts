@@ -40,22 +40,6 @@ export interface ISubForm {
   dependsOn?: IDependsOn;
 }
 
-export interface IProduct {
-  name: string;
-  description: string;
-  country: string;
-  currency: string;
-  amount: number;
-  timeline: string;
-  feature: string[];
-  recurringInterval: string;
-  otherExpectedRequest: string[];
-}
-
-export interface IProductFull extends IProduct {
-  id: string;
-}
-
 export interface ICountry {
   name: string;
   code: string;

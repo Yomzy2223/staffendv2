@@ -1,3 +1,4 @@
+import { TSubFormCreate } from "@/services/service/types";
 import {
   CheckSquare,
   ChevronDown,
@@ -13,7 +14,6 @@ import {
   User,
 } from "lucide-react";
 import * as z from "zod";
-import { FieldType } from "./types";
 
 const formSchema = z.object({
   title: z
@@ -30,7 +30,7 @@ const formSchema = z.object({
 
 export type FormType = z.infer<typeof formSchema> & {
   id?: string;
-  subForm?: FieldType[];
+  subForm?: TSubFormCreate[];
 };
 
 export const BusinessObjectives = [
@@ -107,7 +107,7 @@ export const BusinessObjectives = [
   "Other services",
 ];
 
-export const fieldOptions: FieldType[] = [
+export const fieldOptions: (TSubFormCreate & { icon: LucideIcon })[] = [
   {
     type: "address",
     icon: MapPin,
@@ -138,18 +138,6 @@ export const fieldOptions: FieldType[] = [
     type: "countries-all",
     icon: FlagIcon,
     question: "Select operational country",
-    compulsory: true,
-  },
-  {
-    type: "document template",
-    question: "Kindly download, fill, and upload back",
-    icon: File,
-    compulsory: true,
-  },
-  {
-    type: "document upload",
-    question: "Upload your document",
-    icon: File,
     compulsory: true,
   },
   {
@@ -201,6 +189,22 @@ export const fieldOptions: FieldType[] = [
     question: "",
     type: "short answer",
     icon: FormInput,
+    compulsory: true,
+  },
+];
+
+export const fieldOptionsFull = [
+  ...fieldOptions,
+  {
+    type: "document template",
+    question: "Kindly download, fill, and upload back",
+    icon: File,
+    compulsory: true,
+  },
+  {
+    type: "document upload",
+    question: "Upload your document",
+    icon: File,
     compulsory: true,
   },
 ];

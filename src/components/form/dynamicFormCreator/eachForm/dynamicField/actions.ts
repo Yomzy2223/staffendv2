@@ -1,8 +1,9 @@
+import { TSubFormGet } from "@/services/service/types";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { UseFormSetValue } from "react-hook-form";
 import { boolean, z } from "zod";
 import { useFormActions } from "../actions";
-import { FieldType, IDependsOn } from "../types";
+import { IDependsOn } from "../types";
 
 export const useFormFieldActions = ({
   number,
@@ -17,7 +18,7 @@ export const useFormFieldActions = ({
   deleteField,
 }: {
   number: number;
-  fieldInfo: FieldType;
+  fieldInfo: TSubFormGet;
   edit: boolean;
   setValue: UseFormSetValue<{ [x: string]: any }>;
   setEdit: Dispatch<SetStateAction<boolean>>;
@@ -43,7 +44,7 @@ export const useFormFieldActions = ({
     question: "",
   });
 
-  const mountInfo = (info: FieldType) => {
+  const mountInfo = (info: TSubFormGet) => {
     // Set question
     const question = info.question || "";
     setValue("question", question, { shouldValidate: true });
@@ -120,7 +121,7 @@ export const useFormFieldActions = ({
     }
   }, [edit]);
 
-  const handleOptionSelect = (selected?: FieldType) => {
+  const handleOptionSelect = (selected?: TSubFormGet) => {
     if (!selected) return;
     if (selected.type === fieldInfo.type) {
       mountInfo(fieldInfo);

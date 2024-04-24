@@ -1,11 +1,11 @@
 import EditDelete from "@/components/features/editDelete";
 import { cn } from "@/lib/utils";
+import { TSubFormCreate, TSubFormGet } from "@/services/service/types";
 import { AxiosResponse } from "axios";
 import { Button } from "flowbite-react";
 import { PencilLine, PlusCircle, Trash2 } from "lucide-react";
 import React, { Dispatch, MouseEventHandler, SetStateAction } from "react";
 import FieldTypePopUp from "./fieldTypePopUp";
-import { FieldType } from "./types";
 
 const Footer = ({
   edit,
@@ -19,7 +19,7 @@ const Footer = ({
   disableAddNew,
   deleteForm,
 }: IProps) => {
-  const handleSelect = (selected?: FieldType) => {
+  const handleSelect = (selected?: TSubFormGet) => {
     if (!selected) return;
     setNewlyAdded(selected);
   };
@@ -90,7 +90,7 @@ interface IProps {
   }: {
     onSuccess?: (data: AxiosResponse<any, any>) => void;
   }) => void;
-  setNewlyAdded: Dispatch<SetStateAction<FieldType | undefined>>;
+  setNewlyAdded: Dispatch<SetStateAction<TSubFormCreate | undefined>>;
   btnText?: string;
   disabled: boolean;
   deleteLoading: boolean;

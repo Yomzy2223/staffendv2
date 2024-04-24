@@ -6,11 +6,11 @@ import EachForm from "./eachForm";
 import { formOptions, FormType } from "./eachForm/constants";
 import FieldTypePopUp from "./eachForm/fieldTypePopUp";
 import {
-  FieldType,
   IFieldSubmitHandlerArg,
   IFormSubmitHandlerArg,
 } from "./eachForm/types";
 import { v4 as uuidv4 } from "uuid";
+import { TSubFormGet } from "@/services/service/types";
 
 const DynamicFormCreator = ({
   fieldTitle,
@@ -87,6 +87,7 @@ const DynamicFormCreator = ({
             info={info}
             formState={formState}
             loadingForm={loadingForm}
+            disallowPerson={disallowPerson}
           />
         ))}
         {newlyAdded && (
@@ -105,6 +106,7 @@ const DynamicFormCreator = ({
             formState={formState}
             loadingForm={loadingForm}
             setNewlyAddedForm={setNewlyAdded}
+            disallowPerson={disallowPerson}
             isEdit
             isNew
           />
@@ -125,8 +127,9 @@ const DynamicFormCreator = ({
       ) : (
         <FieldTypePopUp
           handleSelect={handleSelect}
-          isForm
           disabled={formState.formLoading || !!newlyAdded}
+          disallowPerson={disallowPerson}
+          isForm
         >
           <Button color="ghost" size="fit" className="my-4 text-foreground-5">
             <PlusCircle size={20} />
@@ -147,7 +150,7 @@ interface IProps {
     values,
   }: {
     formId: string;
-    values: FieldType[];
+    values: TSubFormGet[];
   }) => void;
   onEachSubmit: (arg: IFieldSubmitHandlerArg) => void;
   onEachDelete: (id: string) => void;
@@ -159,8 +162,8 @@ interface IProps {
     title: string;
     description: string;
     compulsory: boolean;
-    subForm: FieldType[];
-    productSubForm: FieldType[];
+    subForm: TSubFormGet[];
+    productSubForm: TSubFormGet[];
   }[];
   formState: {
     formLoading: boolean;

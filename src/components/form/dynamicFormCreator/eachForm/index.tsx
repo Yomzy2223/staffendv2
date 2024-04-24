@@ -5,12 +5,9 @@ import Footer from "./footer";
 import { FormType } from "./constants";
 import DynamicField from "./dynamicField";
 import { useFormActions } from "./actions";
-import {
-  FieldType,
-  IFieldSubmitHandlerArg,
-  IFormSubmitHandlerArg,
-} from "./types";
+import { IFieldSubmitHandlerArg, IFormSubmitHandlerArg } from "./types";
 import { AxiosResponse } from "axios";
+import { TSubFormCreate, TSubFormGet } from "@/services/service/types";
 
 const EachForm = ({
   number,
@@ -26,9 +23,10 @@ const EachForm = ({
   formState,
   loadingForm,
   setNewlyAddedForm,
+  disallowPerson,
 }: IProps) => {
   const [edit, setEdit] = useState(isEdit || false);
-  const [newlyAdded, setNewlyAdded] = useState<FieldType | undefined>();
+  const [newlyAdded, setNewlyAdded] = useState<TSubFormCreate | undefined>();
   const [loadingField, setLoadingField] = useState<number>();
 
   const { formLoading, fieldLoading, fieldDeleteLoading, formDeleteLoading } =
@@ -133,6 +131,7 @@ const EachForm = ({
         edit={edit}
         info={formInfo}
         loading={formLoading && loadingForm === number}
+        disallowPerson={disallowPerson}
       />
       {fieldsInfo?.map((field, i) => (
         <DynamicField
@@ -207,7 +206,7 @@ export default EachForm;
 
 interface IProps {
   number: number;
-  fieldsInfo: FieldType[];
+  fieldsInfo: TSubFormGet[];
   info: FormType;
   fieldTitle?: string;
   fieldSubmitHandler: ({
@@ -230,4 +229,5 @@ interface IProps {
   };
   loadingForm?: number;
   setNewlyAddedForm?: Dispatch<SetStateAction<FormType | undefined>>;
+  disallowPerson?: boolean;
 }

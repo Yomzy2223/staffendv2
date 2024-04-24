@@ -1,5 +1,3 @@
-import { ISubForm } from "@/hooks/api/types";
-import useServiceApi from "@/hooks/useServiceApi";
 import {
   useCreateMultipleServiceSubFormsMutation,
   useCreateServiceFormMutation,
@@ -13,11 +11,10 @@ import {
   useUpdateServiceMutation,
   useUpdateServiceSubFormMutation,
 } from "@/services/service";
-import { TServiceCreate } from "@/services/service/types";
+import { TServiceCreate, TSubFormCreate } from "@/services/service/types";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 import {
-  FieldType,
   IFieldSubmitHandlerArg,
   IFormSubmitHandlerArg,
 } from "../dynamicFormCreator/eachForm/types";
@@ -40,7 +37,6 @@ export const useServiceInfoActions = ({
   const updateServiceMutation = useUpdateServiceMutation();
 
   const submitServiceInfo = async (values: TServiceCreate) => {
-    console.log(values);
     isEdit
       ? updateServiceMutation.mutate(
           {
@@ -116,7 +112,7 @@ export const useServiceFormActions = () => {
       ? updateServiceSubFormMutation.mutate(
           {
             id: fieldId,
-            formInfo: values as ISubForm,
+            formInfo: values,
           },
           {
             onSuccess: (data) => onSuccess && onSuccess(data),
@@ -126,7 +122,7 @@ export const useServiceFormActions = () => {
         createServiceSubFormMutation.mutate(
           {
             formId,
-            formInfo: values as ISubForm,
+            formInfo: values,
           },
           {
             onSuccess: (data) => onSuccess && onSuccess(data),
@@ -139,12 +135,12 @@ export const useServiceFormActions = () => {
     values,
   }: {
     formId: string;
-    values: FieldType[];
+    values: TSubFormCreate[];
   }) => {
     if (!formId) return;
     createMultipleServiceSubFormsMutation.mutate({
       formId,
-      formInfo: values as ISubForm[],
+      formInfo: values,
     });
   };
 

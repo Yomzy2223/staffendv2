@@ -1,3 +1,4 @@
+import ComboBox from "@/components/form/dynamicForm/comboBox";
 import QueryNav2 from "@/components/navigation/queryNav2";
 import SearchComp from "@/components/search";
 import { Button } from "flowbite-react";
@@ -11,6 +12,7 @@ const HeaderSection = ({
   setSelectedRows,
   onSearchChange,
   onSearchSubmit,
+  handleFilter,
 }: IProps) => {
   return (
     <div className="flex justify-between gap-6 py-1">
@@ -18,7 +20,13 @@ const HeaderSection = ({
         <p className="sb-text-24 font-semibold mb-3">Recent services</p>
         <div className="flex flex-col gap-3 text-sm font-normal mb-6 md:gap-4 md:flex-row md:items-center">
           <span>Show only:</span>
-          <QueryNav2 queryNav={tableNav} />
+          <ComboBox
+            options={tableNav}
+            handleSelect={handleFilter}
+            fieldName="filter"
+            defaultValue={tableNav[0]}
+          />
+          {/* <QueryNav2 queryNav={tableNav} /> */}
         </div>
       </div>
       <div className="flex flex-col justify-between items-end gap-2 mb-6">
@@ -38,7 +46,7 @@ const HeaderSection = ({
               selectOn && setSelectedRows([]);
             }}
           >
-            {selectOn ? "Deselect" : "Select"}
+            {selectOn ? "Cancel" : "Select"}
           </Button>
         </div>
       </div>
@@ -49,11 +57,13 @@ const HeaderSection = ({
 export default HeaderSection;
 
 interface IProps {
-  tableNav: { name: string; value: string; text: string }[];
+  // tableNav: { name: string; value: string; text: string }[];
+  tableNav: string[];
   selectOn: boolean;
   setSelectOn: Dispatch<SetStateAction<boolean>>;
   selectedRows: string[];
   setSelectedRows: Dispatch<SetStateAction<string[]>>;
   onSearchChange: (value: string) => void;
   onSearchSubmit: (value: string) => void;
+  handleFilter: (value?: string) => void;
 }

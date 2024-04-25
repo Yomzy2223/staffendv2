@@ -1,10 +1,11 @@
 import React, { Dispatch, SetStateAction } from "react";
 import DraggableScroll from "@/components/wrappers/draggableScroll";
 import AnalyticsCard2 from "@/components/dashboard/analytics/analyticsCard2";
-import AnalyticsCard3 from "@/components/dashboard/analytics/analyticsCard3";
+import OverviewChart from "@/components/dashboard/analytics/overviewChart";
 import { subDays, subMonths } from "date-fns";
-import { IRequest, IUser } from "@/hooks/api/types";
+import { IUser } from "@/hooks/api/types";
 import { TStatus } from "@/app/(dashboard)/(mainpages)/page";
+import { IReq } from "@/app/(dashboard)/(mainpages)/actions";
 
 const OverviewSection = ({
   dateFrom,
@@ -15,6 +16,8 @@ const OverviewSection = ({
   requestsVsByStatus,
   selectedOverview,
   setSelectedOverview,
+  formatStr,
+  showCompare,
 }: IProps) => {
   const compareFrom = subDays(dateFrom, daysDiff);
   const bottomText = daysDiff > 1 ? `vs previous ${daysDiff} months` : "";
@@ -42,10 +45,10 @@ const OverviewSection = ({
           total={users?.length || 0}
           className="snap-start"
         />
-        <AnalyticsCard3
+        <OverviewChart
           title="Unpaid Drafts"
           current={requestsByStatus.unPaidDrafts}
-          previous={requestsVsByStatus.unPaidDrafts}
+          compare={requestsVsByStatus.unPaidDrafts}
           className="snap-start"
           bottomText={bottomText}
           currentTo={dateTo}
@@ -53,11 +56,13 @@ const OverviewSection = ({
           compareFrom={compareFrom}
           selected={selectedOverview === "unPaidDrafts"}
           onClick={(e) => handleSelect("unPaidDrafts")}
+          formatStr={formatStr}
+          showCompare={showCompare}
         />
-        <AnalyticsCard3
+        <OverviewChart
           title="Paid Drafts"
           current={requestsByStatus.paidDrafts}
-          previous={requestsVsByStatus.paidDrafts}
+          compare={requestsVsByStatus.paidDrafts}
           className="snap-start"
           bottomText={bottomText}
           currentTo={dateTo}
@@ -65,11 +70,13 @@ const OverviewSection = ({
           compareFrom={compareFrom}
           selected={selectedOverview === "paidDrafts"}
           onClick={(e) => handleSelect("paidDrafts")}
+          formatStr={formatStr}
+          showCompare={showCompare}
         />
-        <AnalyticsCard3
+        <OverviewChart
           title="Submitted"
           current={requestsByStatus.submitted}
-          previous={requestsVsByStatus.submitted}
+          compare={requestsVsByStatus.submitted}
           className="snap-start"
           bottomText={bottomText}
           currentTo={dateTo}
@@ -77,11 +84,13 @@ const OverviewSection = ({
           compareFrom={compareFrom}
           selected={selectedOverview === "submitted"}
           onClick={(e) => handleSelect("submitted")}
+          formatStr={formatStr}
+          showCompare={showCompare}
         />
-        <AnalyticsCard3
+        <OverviewChart
           title="In Progress"
           current={requestsByStatus.inProgress}
-          previous={requestsVsByStatus.inProgress}
+          compare={requestsVsByStatus.inProgress}
           className="snap-start"
           bottomText={bottomText}
           currentTo={dateTo}
@@ -89,11 +98,13 @@ const OverviewSection = ({
           compareFrom={compareFrom}
           selected={selectedOverview === "inProgress"}
           onClick={(e) => handleSelect("inProgress")}
+          formatStr={formatStr}
+          showCompare={showCompare}
         />
-        <AnalyticsCard3
+        <OverviewChart
           title="Completed"
           current={requestsByStatus.completed}
-          previous={requestsVsByStatus.completed}
+          compare={requestsVsByStatus.completed}
           className="snap-start"
           bottomText={bottomText}
           currentTo={dateTo}
@@ -101,6 +112,8 @@ const OverviewSection = ({
           compareFrom={compareFrom}
           selected={selectedOverview === "completed"}
           onClick={(e) => handleSelect("completed")}
+          formatStr={formatStr}
+          showCompare={showCompare}
         />
       </DraggableScroll>
     </div>
@@ -118,12 +131,6 @@ interface IProps {
   requestsVsByStatus: IReq;
   selectedOverview: TStatus;
   setSelectedOverview: Dispatch<SetStateAction<TStatus | undefined>>;
-}
-
-export interface IReq {
-  unPaidDrafts: IRequest[];
-  paidDrafts: IRequest[];
-  submitted: IRequest[];
-  inProgress: IRequest[];
-  completed: IRequest[];
+  formatStr: string;
+  showCompare: boolean;
 }

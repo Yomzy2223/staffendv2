@@ -20,7 +20,8 @@ export const useTableActions = ({
   setSelectedRequests,
   setPartnerId,
   itemsPerPage,
-  serviceId,
+  selectedServiceId,
+  activeStatus,
 }: {
   setOpenAssign: Dispatch<SetStateAction<boolean>>;
   setOpenUnAssign: Dispatch<SetStateAction<boolean>>;
@@ -28,7 +29,8 @@ export const useTableActions = ({
   setSelectedRequests: Dispatch<SetStateAction<string[]>>;
   setPartnerId: Dispatch<SetStateAction<string>>;
   itemsPerPage: number;
-  serviceId?: string;
+  selectedServiceId?: string;
+  activeStatus: string;
 }) => {
   const [searchValue, setSearchValue] = useState("");
   const { getReqStatusColor } = useGlobalFunctions();
@@ -39,7 +41,7 @@ export const useTableActions = ({
   const services = useGetAllServicesQuery();
   const servicesData = services.data?.data?.data || [];
 
-  const selectedServiceId = serviceId || searchParams.get("serviceId") || "";
+  // const selectedServiceId = serviceId || searchParams.get("serviceId") || "";
   const tablePage = parseInt(searchParams.get("page") || "1");
 
   const {
@@ -55,7 +57,7 @@ export const useTableActions = ({
     pageSize: itemsPerPage,
   });
   const serviceRequestsResponse = useGetServiceRequestQuery({
-    serviceId: selectedServiceId,
+    serviceId: selectedServiceId || "",
     page: tablePage,
     pageSize: itemsPerPage,
   });
@@ -81,6 +83,24 @@ export const useTableActions = ({
     serviceRequestsResponse.isLoading ||
     searchRequestMutation.isPending;
 
+  const filteredRequests = requests?.filter((request) => {
+    if (!activeStatus) return true;
+    if (activeStatus.toLowerCase() === "unpaid drafts")
+      return request.status === "PENDING" && !request.paid;
+    else if (activeStatus.toLowerCase() === "paid drafts")
+      return request.status === "PENDING" && request.paid;
+    else if (activeStatus.toLowerCase() === "submitted")
+      return request.status === "SUBMITTED";
+    else if (activeStatus.toLowerCase() === "assigned")
+      return request.status === "ASSIGNED";
+    else if (activeStatus.toLowerCase() === "rejected")
+      return request.status === "REJECTED";
+    else if (activeStatus.toLowerCase() === "in progress")
+      return request.status === "ASSIGNED";
+    else if (activeStatus.toLowerCase() === "completed")
+      return request.status === "COMPLETED";
+  });
+
   const serviceTableNav = servicesData?.map((service) => ({
     name: "serviceId",
     value: service.id,
@@ -89,7 +109,7 @@ export const useTableActions = ({
 
   const handleSearchChange = (value: string) => {
     searchRequestMutation.mutate({
-      formInfo: { queryString: value, serviceId: selectedServiceId },
+      formInfo: { queryString: value, serviceId: selectedServiceId || "" },
     });
     setSearchValue(value);
   };
@@ -153,7 +173,7 @@ export const useTableActions = ({
 
   // Services table body
   const tableBody =
-    requests?.map((request: IRequest, i: number): ITableBody => {
+    filteredRequests?.map((request: IRequest, i: number): ITableBody => {
       const assigned = request.status === "ASSIGNED";
       const completed = request.status === "COMPLETED";
       const assignable =

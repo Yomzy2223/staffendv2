@@ -1,7 +1,7 @@
 "use client";
 
 import { PaymentAnalyticsImg2 } from "@/assets/svg";
-import AnalyticsCard3 from "@/components/dashboard/analytics/analyticsCard3";
+import AnalyticsCard3 from "@/components/dashboard/analytics/overviewChart";
 import ServiceSummaryCard from "@/components/cards/serviceSummaryCard";
 import DoChecks from "@/components/DoChecks";
 import ServiceForm from "@/components/form/serviceForm";

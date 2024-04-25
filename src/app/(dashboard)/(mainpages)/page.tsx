@@ -49,7 +49,7 @@ const Home = () => {
         daysDiff={daysDiff}
         isLoading={servicesRes.isLoading}
         errorMsg={servicesRes.error?.message}
-        selectedService={selectedService}
+        selectedService={activeService?.name || ""}
         setSelectedService={setSelectedService}
         servicesNames={servicesNames}
         compareLabel={compareLabel}
@@ -66,6 +66,8 @@ const Home = () => {
           users={users}
           selectedOverview={selectedOverview}
           setSelectedOverview={setSelectedOverview}
+          formatStr={formatStr}
+          showCompare={showCompare}
         />
         <div className="flex flex-col gap-8 lg:flex-row">
           <DetailedAnalytics
@@ -89,7 +91,7 @@ const Home = () => {
             partner
           />
         </div>
-        <TableSection />
+        <TableSection selectedServiceId={activeService?.id} />
       </div>
     </>
   );

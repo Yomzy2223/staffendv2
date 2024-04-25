@@ -4,15 +4,20 @@ import ConfirmAction from "@/components/confirmAction";
 import PartnerAssignDialog from "@/components/dialogs/partnerAssign";
 import GeneralTable from "@/components/tables/generalTable";
 import CardWrapper from "@/components/wrappers/cardWrapper";
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { useTableActions } from "./tableActions";
 
-const TableSection = () => {
+const TableSection = ({
+  selectedServiceId,
+}: {
+  selectedServiceId?: string;
+}) => {
   const [openAssign, setOpenAssign] = useState(false);
   const [openUnAssign, setOpenUnAssign] = useState(false);
   const [openInfo, setOpenInfo] = useState(false);
   const [selectedRequests, setSelectedRequests] = useState<string[]>([]);
   const [partnerId, setPartnerId] = useState("");
+  const [activeStatus, setActiveStatus] = useState("");
 
   const itemsPerPage = 10;
 
@@ -31,6 +36,8 @@ const TableSection = () => {
     setOpenUnAssign,
     itemsPerPage,
     setPartnerId,
+    selectedServiceId,
+    activeStatus,
   });
 
   return (
@@ -45,6 +52,7 @@ const TableSection = () => {
         onSearchChange={handleSearchChange}
         onSearchSubmit={handleSearchSubmit}
         dataLoading={requestsLoading}
+        handleFilter={(value) => setActiveStatus(value || "")}
       />
       <PartnerAssignDialog
         setOpen={setOpenAssign}
@@ -81,29 +89,44 @@ const TableSection = () => {
 export default TableSection;
 
 const serviceTableNav = [
-  {
-    name: "status",
-    value: "all",
-    text: "All",
-  },
-  {
-    name: "status",
-    value: "completed",
-    text: "Completed",
-  },
-  {
-    name: "status",
-    value: "submitted",
-    text: "Submitted",
-  },
-  {
-    name: "status",
-    value: "in progress",
-    text: "In Progress",
-  },
-  {
-    name: "status",
-    value: "in draft",
-    text: "Draft",
-  },
+  "Unpaid Drafts",
+  "Paid Drafts",
+  "Submitted",
+  "Assigned",
+  "Rejected",
+  "In Progress",
+  "Completed",
 ];
+
+// const serviceTableNav = [
+//   {
+//     name: "status",
+//     value: "all",
+//     text: "All",
+//   },
+//   {
+//     name: "status",
+//     value: "in draft",
+//     text: "Unpaid Drafts",
+//   },
+//   {
+//     name: "status",
+//     value: "in draft",
+//     text: "Paid Drafts",
+//   },
+//   {
+//     name: "status",
+//     value: "submitted",
+//     text: "Submitted",
+//   },
+//   {
+//     name: "status",
+//     value: "in progress",
+//     text: "In Progress",
+//   },
+//   {
+//     name: "status",
+//     value: "completed",
+//     text: "Completed",
+//   },
+// ];

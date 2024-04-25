@@ -4,17 +4,18 @@ import { cn } from "@/lib/utils";
 import React, { ReactNode } from "react";
 
 const Wrapper = ({
-  title,
+  status,
   activeService,
   rangeLabel,
   compareLabel,
   totalCurrent,
   totalCompare,
   selectedOverview,
+  showCompare,
   className,
   children,
 }: {
-  title: string;
+  status: string;
   activeService?: string;
   rangeLabel: string;
   compareLabel: string;
@@ -22,8 +23,14 @@ const Wrapper = ({
   totalCompare: number;
   className?: string;
   selectedOverview: TStatus;
+  showCompare: boolean;
   children: ReactNode;
 }) => {
+  const title = selectedOverview
+    ? status + " requests"
+    : activeService + " revenue";
+
+  const description = activeService + " " + (status || "revenue") + " between ";
   return (
     <CardWrapper
       big
@@ -33,13 +40,15 @@ const Wrapper = ({
         <p className="sb-text-24 font-semibold mb-1 capitalize">{title}</p>
         <div>
           <p className="sb-text-14 text-foreground-5">
-            {activeService + " " + selectedOverview + " between " + rangeLabel}:{" "}
+            {description + rangeLabel}:{" "}
             <span className="font-bold">{totalCurrent}</span>
           </p>
-          <p className="sb-text-14 text-foreground-5">
-            {activeService + " " + title + " between " + compareLabel}:{" "}
-            <span className="font-bold">{totalCompare}</span>
-          </p>
+          {showCompare && (
+            <p className="sb-text-14 text-foreground-5">
+              {description + compareLabel}:{" "}
+              <span className="font-bold">{totalCompare}</span>
+            </p>
+          )}
         </div>
       </div>
       {children}

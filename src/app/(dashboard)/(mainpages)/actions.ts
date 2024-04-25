@@ -24,7 +24,7 @@ export const useRequestActions = ({
   const services = servicesRes.data?.data?.data || [];
   const servicesNames = services?.map((el) => el?.name);
   const activeService = services?.find(
-    (el) => el.name === selectedService || servicesNames?.[0]
+    (el) => el.name === (selectedService || servicesNames?.[0])
   );
 
   const { useGetServiceRequestQuery } = useRequestApi();
@@ -33,7 +33,6 @@ export const useRequestActions = ({
   });
   const requests = requestsResponse.data?.data?.data;
 
-  //   let monthsDiff = differenceInMonths(dateTo, dateFrom) + 1; // Complements for the last month
   let daysDiff = differenceInDays(dateTo, dateFrom) + 1; // Complements for the last day
 
   // Return filtered requests
@@ -54,7 +53,8 @@ export const useRequestActions = ({
   );
 
   // The requests within the selected date range
-  const requestsByStatus = {
+  const requestsByStatus: IReq = {
+    allPaid: filteredRequests?.filter((el: IRequest) => el.paid),
     unPaidDrafts: filteredRequests?.filter(
       (el: IRequest) => el.status === "PENDING" && !el.paid
     ),
@@ -73,7 +73,8 @@ export const useRequestActions = ({
   };
 
   // The requests to be compared with
-  const requestsVsByStatus = {
+  const requestsVsByStatus: IReq = {
+    allPaid: filteredRequests?.filter((el: IRequest) => el.paid),
     unPaidDrafts: requestsVs?.filter(
       (el: IRequest) => el.status === "PENDING" && !el.paid
     ),
@@ -168,3 +169,12 @@ export const useRouteActions = () => {
 
   return { navRoutes };
 };
+
+export interface IReq {
+  unPaidDrafts: IRequest[];
+  paidDrafts: IRequest[];
+  submitted: IRequest[];
+  inProgress: IRequest[];
+  completed: IRequest[];
+  allPaid: IRequest[];
+}

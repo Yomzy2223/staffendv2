@@ -24,11 +24,9 @@ import { IRequest } from "@/hooks/api/types";
 import { TStatus } from "@/app/(dashboard)/(mainpages)/page";
 
 const RevenueChart = ({
-  title,
+  status,
   compare,
   current,
-  bottomText,
-  className,
   compareFrom,
   currentFrom,
   currentTo,
@@ -40,8 +38,11 @@ const RevenueChart = ({
   const totalCurrent = current?.length || 0;
   const totalCompare = compare?.length || 0;
 
-  const difference = totalCurrent - totalCompare;
-  let perc = 100 * difference || 0;
+  // const difference = totalCurrent - totalCompare;
+  let perc = ((totalCurrent - totalCompare) / (totalCompare || 1)) * 100;
+  perc = parseFloat(perc.toFixed(2));
+
+  // let perc = 100 * difference || 0;
   const decreased = perc < 0;
 
   const formatStr = isSameYear(compareFrom, currentFrom)
@@ -91,28 +92,16 @@ const RevenueChart = ({
     };
   });
 
-  let modifiedTitle = title;
-  switch (title) {
-    case "unPaidDrafts":
-      modifiedTitle = "Unpaid drafts";
-      break;
-    case "paidDrafts":
-      modifiedTitle = "Paid drafts";
-      break;
-    case "inProgress":
-      modifiedTitle = "In progress";
-  }
-  console.log(modifiedTitle);
-
   return (
     <Wrapper
-      title={modifiedTitle}
+      status={status}
       activeService={activeService}
       compareLabel={compareLabel}
       rangeLabel={rangeLabel}
       totalCompare={totalCompare}
       totalCurrent={totalCurrent}
       selectedOverview={selectedOverview}
+      showCompare={showCompare}
       className="gap-6"
     >
       <div className="h-64">
@@ -218,7 +207,7 @@ const CustomTooltip = (props: any) => {
 };
 
 interface IProps {
-  title: string;
+  status: string;
   compare: IRequest[];
   current: IRequest[];
   bottomText?: string;

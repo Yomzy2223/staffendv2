@@ -19,6 +19,7 @@ const GeneralTable = ({
   onRowSelect,
   onSearchChange,
   onSearchSubmit,
+  handleFilter,
   dataLoading,
 }: IProps) => {
   const [selectOn, setSelectOn] = useState(false);
@@ -40,6 +41,7 @@ const GeneralTable = ({
           tableNav={tableNav}
           onSearchChange={onSearchChange}
           onSearchSubmit={onSearchSubmit}
+          handleFilter={handleFilter}
         />
 
         <DoChecks
@@ -86,9 +88,11 @@ export default GeneralTable;
 interface IProps extends IPagination {
   tableHeaders: string[];
   tableBody: ITableBody[];
-  tableNav: { name: string; value: string; text: string }[];
+  tableNav: string[];
+  // tableNav: { name: string; value: string; text: string }[];
   onRowSelect: (selected: string[]) => void;
   onSearchChange: (value: string) => void;
   onSearchSubmit: (value: string) => void;
+  handleFilter: (value?: string) => void;
   dataLoading?: boolean;
 }

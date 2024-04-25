@@ -7,11 +7,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import {
-  fieldOptions,
-  fieldOptionsFull,
-  formOptions,
-} from "./constants";
+import { fieldOptions, fieldOptionsFull, formOptions } from "./constants";
 import PopOverWrapper from "@/components/wrappers/popOverWrapper";
 import { TSubFormGet } from "@/services/service/types";
 
@@ -61,7 +57,6 @@ function QuestionList({
     : disallowPerson
     ? fieldOptions
     : fieldOptionsFull;
-    const opt = options.map(el => ({type: el.type, title: el. }))
 
   return (
     <Command>
@@ -98,7 +93,7 @@ function QuestionList({
 interface IProps {
   children: ReactNode;
   isForm?: boolean;
-  handleSelect: (selected?: TSubFormGet ) => void;
+  handleSelect: (selected?: TSubFormGet) => void;
   disabled?: boolean;
   disallowPerson?: boolean;
 }

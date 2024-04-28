@@ -9,8 +9,12 @@ import { useTableActions } from "./tableActions";
 
 const TableSection = ({
   selectedServiceId,
+  dateFrom,
+  dateTo,
 }: {
   selectedServiceId?: string;
+  dateFrom: Date;
+  dateTo: Date;
 }) => {
   const [openAssign, setOpenAssign] = useState(false);
   const [openUnAssign, setOpenUnAssign] = useState(false);
@@ -38,6 +42,8 @@ const TableSection = ({
     setPartnerId,
     selectedServiceId,
     activeStatus,
+    dateFrom,
+    dateTo,
   });
 
   return (

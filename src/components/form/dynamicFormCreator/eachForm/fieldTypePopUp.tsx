@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/command";
 import { fieldOptions, fieldOptionsFull, formOptions } from "./constants";
 import PopOverWrapper from "@/components/wrappers/popOverWrapper";
-import { TSubFormGet } from "@/services/service/types";
+import { TSubFormGet } from "@/services";
 
 const FieldTypePopUp = ({
   children,
@@ -48,7 +48,7 @@ function QuestionList({
   isForm,
 }: {
   setOpen: (open: boolean) => void;
-  handleSelect: (type?: TSubFormGet) => void;
+  handleSelect: (type?: any) => void;
   disallowPerson?: boolean;
   isForm?: boolean;
 }) {

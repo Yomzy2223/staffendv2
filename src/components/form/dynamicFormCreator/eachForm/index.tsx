@@ -7,7 +7,7 @@ import DynamicField from "./dynamicField";
 import { useFormActions } from "./actions";
 import { IFieldSubmitHandlerArg, IFormSubmitHandlerArg } from "./types";
 import { AxiosResponse } from "axios";
-import { TSubFormCreate, TSubFormGet } from "@/services/service/types";
+import { TSubFormCreate, TSubFormGet } from "@/services";
 
 const EachForm = ({
   number,
@@ -26,7 +26,7 @@ const EachForm = ({
   disallowPerson,
 }: IProps) => {
   const [edit, setEdit] = useState(isEdit || false);
-  const [newlyAdded, setNewlyAdded] = useState<TSubFormCreate | undefined>();
+  const [newlyAdded, setNewlyAdded] = useState<TSubFormGet | undefined>();
   const [loadingField, setLoadingField] = useState<number>();
 
   const { formLoading, fieldLoading, fieldDeleteLoading, formDeleteLoading } =

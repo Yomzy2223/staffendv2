@@ -1,3 +1,4 @@
+import { TSubFormCreate } from "@/services";
 import {
   useCreateMultipleServiceSubFormsMutation,
   useCreateServiceFormMutation,
@@ -11,7 +12,7 @@ import {
   useUpdateServiceMutation,
   useUpdateServiceSubFormMutation,
 } from "@/services/service";
-import { TServiceCreate, TSubFormCreate } from "@/services/service/types";
+import { TServiceCreate } from "@/services/service/types";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 import {
@@ -112,7 +113,7 @@ export const useServiceFormActions = () => {
       ? updateServiceSubFormMutation.mutate(
           {
             id: fieldId,
-            formInfo: values,
+            formInfo: values as TSubFormCreate,
           },
           {
             onSuccess: (data) => onSuccess && onSuccess(data),
@@ -122,7 +123,7 @@ export const useServiceFormActions = () => {
         createServiceSubFormMutation.mutate(
           {
             formId,
-            formInfo: values,
+            formInfo: values as TSubFormCreate,
           },
           {
             onSuccess: (data) => onSuccess && onSuccess(data),

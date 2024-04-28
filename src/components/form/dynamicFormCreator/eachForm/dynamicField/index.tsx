@@ -12,7 +12,7 @@ import { getDynamicFieldSchema, useFormFieldActions } from "./actions";
 import { uploadFileToCloudinary } from "@/hooks/globalFunctions";
 import ComboBox from "@/components/form/dynamicForm/comboBox";
 import { useSession } from "next-auth/react";
-import { TSubFormCreate, TSubFormGet } from "@/services/service/types";
+import { TSubFormCreate, TSubFormGet } from "@/services";
 
 const DynamicField = ({
   info,

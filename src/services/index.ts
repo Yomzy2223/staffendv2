@@ -6,6 +6,7 @@ import { getSession } from "next-auth/react";
 export type TRoot<T = any> = {
   message: string;
   data: T;
+  total?: number;
 };
 
 export type errorType = AxiosError;
@@ -77,3 +78,37 @@ interface ISuccess extends IResponse {
 interface IError extends IResponse {
   error: any;
 }
+
+export type TFormCreate = {
+  title: string;
+  description: string;
+  type: string;
+  compulsory: boolean;
+};
+
+export type TSubFormCreate = {
+  question: string;
+  type: string;
+  options?: string[];
+  compulsory: boolean;
+  allowOther?: boolean;
+  fileName?: string;
+  fileLink?: string;
+  fileType?: string;
+  fileSize?: string;
+  documentType?: string; //to be removed
+  dependsOn?: TDependsOn;
+};
+
+export type TSubFormGet = TSubFormCreate & {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  isDeprecated: boolean;
+};
+
+export type TDependsOn = {
+  field: string;
+  options: string[];
+  question: string;
+};

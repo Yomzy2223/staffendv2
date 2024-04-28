@@ -1,8 +1,10 @@
-import useRequestApi from "@/hooks/useRequestApi";
+import {
+  useGetRequestQuery,
+  useUnAssignRequestMutation,
+} from "@/services/request";
 
 export const useActions = ({ requestId }: { requestId: string }) => {
-  const { useGetRequestQuery, unAssignRequestMutation } = useRequestApi();
-
+  const unAssignRequestMutation = useUnAssignRequestMutation();
   const requestResponse = useGetRequestQuery(requestId);
   const request = requestResponse.data?.data?.data;
 

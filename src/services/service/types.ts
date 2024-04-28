@@ -1,4 +1,4 @@
-import { IDependsOn } from "@/components/form/dynamicFormCreator/eachForm/types";
+import { TFormCreate, TSubFormGet } from "..";
 
 export type TServiceCreate = {
   name: string;
@@ -15,18 +15,11 @@ export type TService = TServiceCreate & {
 };
 
 export type TServiceGet = TService & {
-  form: TFormGet[];
+  form: TServiceFormGet[];
   products: []; //To add the product type here
 };
 
-export type TFormCreate = {
-  title: string;
-  description: string;
-  type: string;
-  compulsory: boolean;
-};
-
-export type TForm = TFormCreate & {
+export type TServiceFormRes = TFormCreate & {
   id: string;
   createdAt: string;
   updatedAt: string;
@@ -34,29 +27,19 @@ export type TForm = TFormCreate & {
   serviceId: string;
 };
 
-export type TFormGet = TForm & {
-  subForm: TSubFormGet[];
-};
-
-export type TSubFormCreate = {
-  question: string;
-  type: string;
-  options?: string[];
-  compulsory: boolean;
-  allowOther?: boolean;
-  fileName?: string;
-  fileLink?: string;
-  fileType?: string;
-  fileSize?: string;
-  documentType?: string; //to be removed
-  dependsOn?: IDependsOn;
-};
-
-export type TSubFormGet = TSubFormCreate & {
+export type TProductFormRes = TFormCreate & {
   id: string;
   createdAt: string;
   updatedAt: string;
   isDeprecated: boolean;
+  productId: string;
+};
+
+export type TServiceFormGet = TServiceFormRes & {
+  subForm: TSubFormGet[];
+};
+export type TProductFormGet = TProductFormRes & {
+  subForm: TSubFormGet[];
 };
 
 export type TFieldTypes =

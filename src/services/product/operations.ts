@@ -1,11 +1,5 @@
-import { Client, TRoot } from "..";
-import {
-  TForm,
-  TFormCreate,
-  TFormGet,
-  TSubFormCreate,
-  TSubFormGet,
-} from "../service/types";
+import { Client, TFormCreate, TRoot, TSubFormCreate, TSubFormGet } from "..";
+import { TProductFormGet, TProductFormRes } from "../service/types";
 import { TProductGet, TProductCreate } from "./types";
 
 // Product endpoints
@@ -65,7 +59,7 @@ export const createProductForm = async ({
   formInfo: TFormCreate;
 }) => {
   const client = await Client();
-  return await client.post<TRoot<TForm>>(
+  return await client.post<TRoot<TProductFormRes>>(
     `/products/form/${productId}`,
     formInfo
   );
@@ -79,7 +73,10 @@ export const updateProductForm = async ({
   formInfo: TFormCreate;
 }) => {
   const client = await Client();
-  return await client.put<TRoot<TForm>>(`/products/form/${id}`, formInfo);
+  return await client.put<TRoot<TProductFormRes>>(
+    `/products/form/${id}`,
+    formInfo
+  );
 };
 
 export const deleteProductForm = async (id: string) => {
@@ -89,19 +86,21 @@ export const deleteProductForm = async (id: string) => {
 
 export const getProductForm = async (productId: string) => {
   const client = await Client();
-  return await client.get<TRoot<TFormGet>>(
+  return await client.get<TRoot<TProductFormGet>>(
     `/products/formByProduct/${productId}`
   );
 };
 
 export const getServiceProductForms = async (serviceId: string) => {
   const client = await Client();
-  return await client.get<TRoot<TFormGet[]>>(`/products/form/${serviceId}`);
+  return await client.get<TRoot<TProductFormGet[]>>(
+    `/products/form/${serviceId}`
+  );
 };
 
 export const getAllServicesProductsForm = async () => {
   const client = await Client();
-  return await client.get<TRoot<TFormGet[]>>(`/products/form/all`);
+  return await client.get<TRoot<TProductFormGet[]>>(`/products/form/all`);
 };
 
 // Product sub-form endpoints

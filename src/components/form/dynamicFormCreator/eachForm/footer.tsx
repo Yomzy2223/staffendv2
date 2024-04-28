@@ -1,6 +1,6 @@
 import EditDelete from "@/components/features/editDelete";
 import { cn } from "@/lib/utils";
-import { TSubFormCreate, TSubFormGet } from "@/services/service/types";
+import { TSubFormCreate, TSubFormGet } from "@/services";
 import { AxiosResponse } from "axios";
 import { Button } from "flowbite-react";
 import { PencilLine, PlusCircle, Trash2 } from "lucide-react";
@@ -90,7 +90,7 @@ interface IProps {
   }: {
     onSuccess?: (data: AxiosResponse<any, any>) => void;
   }) => void;
-  setNewlyAdded: Dispatch<SetStateAction<TSubFormCreate | undefined>>;
+  setNewlyAdded: Dispatch<SetStateAction<TSubFormGet | undefined>>;
   btnText?: string;
   disabled: boolean;
   deleteLoading: boolean;

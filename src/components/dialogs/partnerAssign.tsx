@@ -1,6 +1,6 @@
 import { IUser } from "@/hooks/api/types";
-import useRequestApi from "@/hooks/useRequestApi";
 import useUserApi from "@/hooks/useUserApi";
+import { useAssignRequestMutation } from "@/services/request";
 import { Button, Radio } from "flowbite-react";
 import { useRouter } from "next/navigation";
 import React, { Dispatch, SetStateAction, useState } from "react";
@@ -27,7 +27,8 @@ const PartnerAssignDialog = ({
     setOpen(false);
   };
 
-  const { assignRequestMutation } = useRequestApi();
+  const assignRequestMutation = useAssignRequestMutation();
+
   const { useGetAllUsersQuery } = useUserApi();
   const users = useGetAllUsersQuery({ isPartner: true });
   const partners = users.data?.data?.data;

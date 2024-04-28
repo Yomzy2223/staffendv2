@@ -91,7 +91,11 @@ const Home = () => {
             partner
           />
         </div>
-        <TableSection selectedServiceId={activeService?.id} />
+        <TableSection
+          selectedServiceId={activeService?.id}
+          dateFrom={dateFrom}
+          dateTo={dateTo}
+        />
       </div>
     </>
   );

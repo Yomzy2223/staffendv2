@@ -1,9 +1,8 @@
-import { TSubFormGet } from "@/services/service/types";
+import { TDependsOn, TSubFormGet } from "@/services";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { UseFormSetValue } from "react-hook-form";
 import { boolean, z } from "zod";
 import { useFormActions } from "../actions";
-import { IDependsOn } from "../types";
 
 export const useFormFieldActions = ({
   number,
@@ -38,7 +37,7 @@ export const useFormFieldActions = ({
   const [fileSize, setFileSize] = useState("");
   const [allowOther, setAllowOther] = useState<boolean>(false);
   const [documentType, setDocumentType] = useState<string>();
-  const [dependsOn, setDependsOn] = useState<IDependsOn>({
+  const [dependsOn, setDependsOn] = useState<TDependsOn>({
     field: "",
     options: [],
     question: "",

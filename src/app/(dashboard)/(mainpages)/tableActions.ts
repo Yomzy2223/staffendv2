@@ -1,7 +1,6 @@
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import useRequestApi from "@/hooks/useRequestApi";
 import {
   IRowInfo,
   ITableBody,
@@ -9,8 +8,14 @@ import {
 import { format } from "date-fns";
 import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
-import { IRequest } from "@/hooks/api/types";
 import { useGetAllServicesQuery } from "@/services/service";
+import {
+  useAssignRequestMutation,
+  useGetAllRequestsQuery,
+  useGetServiceRequestsQuery,
+  useSearchRequestMutation,
+  useUnAssignRequestMutation,
+} from "@/services/request";
 
 // Table information
 export const useTableActions = ({
@@ -22,6 +27,8 @@ export const useTableActions = ({
   itemsPerPage,
   selectedServiceId,
   activeStatus,
+  dateFrom,
+  dateTo,
 }: {
   setOpenAssign: Dispatch<SetStateAction<boolean>>;
   setOpenUnAssign: Dispatch<SetStateAction<boolean>>;
@@ -31,6 +38,8 @@ export const useTableActions = ({
   itemsPerPage: number;
   selectedServiceId?: string;
   activeStatus: string;
+  dateFrom: Date;
+  dateTo: Date;
 }) => {
   const [searchValue, setSearchValue] = useState("");
   const { getReqStatusColor } = useGlobalFunctions();
@@ -41,22 +50,16 @@ export const useTableActions = ({
   const services = useGetAllServicesQuery();
   const servicesData = services.data?.data?.data || [];
 
-  // const selectedServiceId = serviceId || searchParams.get("serviceId") || "";
   const tablePage = parseInt(searchParams.get("page") || "1");
 
-  const {
-    useGetServiceRequestQuery,
-    assignRequestMutation,
-    unAssignRequestMutation,
-    useGetAllRequestsQuery,
-    searchRequestMutation,
-  } = useRequestApi();
-
+  const assignRequestMutation = useAssignRequestMutation();
+  const unAssignRequestMutation = useUnAssignRequestMutation();
+  const searchRequestMutation = useSearchRequestMutation();
   const allRequestsResponse = useGetAllRequestsQuery({
     page: tablePage,
     pageSize: itemsPerPage,
   });
-  const serviceRequestsResponse = useGetServiceRequestQuery({
+  const serviceRequestsResponse = useGetServiceRequestsQuery({
     serviceId: selectedServiceId || "",
     page: tablePage,
     pageSize: itemsPerPage,
@@ -66,7 +69,7 @@ export const useTableActions = ({
   const serviceRequests = serviceRequestsResponse.data?.data;
   const searchRequests = searchRequestMutation.data?.data;
 
-  const requests: IRequest[] = searchValue
+  const requests = searchValue
     ? searchRequests?.data
     : selectedServiceId
     ? serviceRequests?.data
@@ -83,7 +86,7 @@ export const useTableActions = ({
     serviceRequestsResponse.isLoading ||
     searchRequestMutation.isPending;
 
-  const filteredRequests = requests?.filter((request) => {
+  let filteredRequests = requests?.filter((request) => {
     if (!activeStatus) return true;
     if (activeStatus.toLowerCase() === "unpaid drafts")
       return request.status === "PENDING" && !request.paid;
@@ -100,6 +103,13 @@ export const useTableActions = ({
     else if (activeStatus.toLowerCase() === "completed")
       return request.status === "COMPLETED";
   });
+
+  // filteredRequests = requests?.filter((el: IRequest) =>
+  //   isWithinInterval(new Date(el.createdAt), {
+  //     start: dateFrom,
+  //     end: dateTo,
+  //   })
+  // );
 
   const serviceTableNav = servicesData?.map((service) => ({
     name: "serviceId",
@@ -145,7 +155,7 @@ export const useTableActions = ({
     setOpenUnAssign(true);
     setSelectedRequests([rowId]);
     setPartnerId(
-      requests.find((el: IRequest) => el.id === rowId)?.partnerInCharge || ""
+      requests?.find((el) => el.id === rowId)?.partnerInCharge || ""
     );
   };
 
@@ -173,7 +183,7 @@ export const useTableActions = ({
 
   // Services table body
   const tableBody =
-    filteredRequests?.map((request: IRequest, i: number): ITableBody => {
+    filteredRequests?.map((request, i: number): ITableBody => {
       const assigned = request.status === "ASSIGNED";
       const completed = request.status === "COMPLETED";
       const assignable =
@@ -194,7 +204,7 @@ export const useTableActions = ({
           {
             text: currentNumber.toString().padStart(2, "0"),
           },
-          { text: request?.businessName || "No registered name" },
+          { text: request?.companyName || "No registered name" },
           { text: request?.serviceName },
           {
             text: request.status,

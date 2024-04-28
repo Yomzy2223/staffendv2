@@ -7,13 +7,13 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
+import { TDependsOn } from "@/services";
 import { Button, Checkbox, Radio } from "flowbite-react";
 import React, { useState } from "react";
-import { IDependsOn } from "../types";
 import { fieldReturnType } from "./actions";
 
 const DependsOn = ({ onApply, fields, info }: IProps) => {
-  const [selected, setSelected] = useState<IDependsOn>(info.dependsOn);
+  const [selected, setSelected] = useState<TDependsOn>(info.dependsOn);
 
   const onSelect = (field: string, question: string, value?: string) => {
     let isPresent = !!selected.options.find((el) => el === value);
@@ -32,7 +32,7 @@ const DependsOn = ({ onApply, fields, info }: IProps) => {
   };
 
   //   Select and deselect all
-  const selectAll = (el: IDependsOn) => {
+  const selectAll = (el: TDependsOn) => {
     const { field, question, options } = el;
     if (options) {
       const allSelected = options.length === selected.options.length;
@@ -129,7 +129,7 @@ const DependsOn = ({ onApply, fields, info }: IProps) => {
 export default DependsOn;
 
 interface IProps {
-  onApply: (selected: IDependsOn) => void;
-  fields: IDependsOn[];
+  onApply: (selected: TDependsOn) => void;
+  fields: TDependsOn[];
   info: fieldReturnType;
 }

@@ -1,6 +1,6 @@
 import EditDelete from "@/components/features/editDelete";
 import { cn } from "@/lib/utils";
-import { TSubFormCreate } from "@/services/service/types";
+import { TSubFormGet } from "@/services";
 import { Button, Checkbox } from "flowbite-react";
 import { PencilLine, Trash2 } from "lucide-react";
 import React, { Dispatch, SetStateAction } from "react";
@@ -82,7 +82,7 @@ interface IProps {
   setEdit: (value: boolean) => void;
   getValues: UseFormGetValues<{ [x: string]: any }>;
   setValue: UseFormSetValue<{ [x: string]: any }>;
-  setNewlyAdded?: Dispatch<SetStateAction<TSubFormCreate | undefined>>;
+  setNewlyAdded?: Dispatch<SetStateAction<TSubFormGet | undefined>>;
   info: fieldReturnType;
   loading: boolean;
   deleteLoading?: boolean;

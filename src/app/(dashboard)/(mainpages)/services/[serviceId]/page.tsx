@@ -7,9 +7,7 @@ import DoChecks from "@/components/DoChecks";
 import ServiceForm from "@/components/form/serviceForm";
 import AnalyticsHeader from "@/components/header/analyticsHeader";
 import CardWrapper from "@/components/wrappers/cardWrapper";
-import { IRequest } from "@/hooks/api/types";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
-import useRequestApi from "@/hooks/useRequestApi";
 import { subMonths } from "date-fns";
 import Image from "next/image";
 import { redirect } from "next/navigation";
@@ -18,15 +16,15 @@ import { useRequestActions } from "../../actions";
 import { useActions } from "./actions";
 import TableSection from "./tableSection";
 import { useGetServiceQuery } from "@/services/service";
+import { useGetServiceRequestsQuery } from "@/services/request";
 
 const Service = ({ params }: { params: { serviceId: string } }) => {
   const [open, setOpen] = useState(false);
   const { setQuery } = useGlobalFunctions();
   const { serviceId } = params;
 
-  const { useGetServiceRequestQuery } = useRequestApi();
-  const request = useGetServiceRequestQuery({ serviceId: serviceId });
-  const requestsData: IRequest[] = request.data?.data?.data;
+  const request = useGetServiceRequestsQuery({ serviceId: serviceId });
+  const requestsData = request.data?.data?.data;
 
   const service = useGetServiceQuery(serviceId as string);
   const serviceData = service?.data?.data?.data;

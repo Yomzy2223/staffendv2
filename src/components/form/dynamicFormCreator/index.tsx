@@ -10,7 +10,7 @@ import {
   IFormSubmitHandlerArg,
 } from "./eachForm/types";
 import { v4 as uuidv4 } from "uuid";
-import { TSubFormGet } from "@/services/service/types";
+import { TSubFormGet } from "@/services";
 
 const DynamicFormCreator = ({
   fieldTitle,

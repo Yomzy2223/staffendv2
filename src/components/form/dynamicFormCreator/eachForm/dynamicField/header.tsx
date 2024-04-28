@@ -5,8 +5,8 @@ import { ChevronDown, MoreHorizontal } from "lucide-react";
 import { fieldReturnType } from "./actions";
 import PopOverWrapper from "@/components/wrappers/popOverWrapper";
 import DependsOn from "./dependsOn";
-import { IDependsOn } from "../types";
 import { UseFormSetValue } from "react-hook-form";
+import { TDependsOn } from "@/services";
 
 const Header = ({
   fieldTitle,
@@ -22,7 +22,7 @@ const Header = ({
   const { compulsory, handleOptionSelect, setDependsOn, cancelDependsChanges } =
     info;
 
-  const handleDependsOn = (selected: IDependsOn) => {
+  const handleDependsOn = (selected: TDependsOn) => {
     setValue("dependsOn", selected, { shouldValidate: true });
     setDependsOn(selected);
     setOpen(false);
@@ -102,6 +102,6 @@ interface IProps {
   info: fieldReturnType;
   loading: boolean;
   type: string;
-  fields?: IDependsOn[];
+  fields?: TDependsOn[];
   setValue: UseFormSetValue<{ [x: string]: any }>;
 }

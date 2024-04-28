@@ -1,13 +1,10 @@
-import { Client, TRoot } from "..";
+import { Client, TFormCreate, TRoot, TSubFormCreate, TSubFormGet } from "..";
 import {
-  TForm,
-  TFormCreate,
-  TFormGet,
   TService,
   TServiceCreate,
+  TServiceFormGet,
+  TServiceFormRes,
   TServiceGet,
-  TSubFormCreate,
-  TSubFormGet,
 } from "./types";
 
 // Service endpoints
@@ -51,7 +48,7 @@ export const createServiceForm = async ({
   formInfo: TFormCreate;
 }) => {
   const client = await Client();
-  return await client.post<TRoot<TForm>>(
+  return await client.post<TRoot<TServiceFormRes>>(
     `/services/form/${serviceId}`,
     formInfo
   );
@@ -65,7 +62,10 @@ export const updateServiceForm = async ({
   formInfo: TFormCreate;
 }) => {
   const client = await Client();
-  return await client.put<TRoot<TForm>>(`/services/form/${id}`, formInfo);
+  return await client.put<TRoot<TServiceFormRes>>(
+    `/services/form/${id}`,
+    formInfo
+  );
 };
 
 export const deleteServiceForm = async (id: string) => {
@@ -75,12 +75,14 @@ export const deleteServiceForm = async (id: string) => {
 
 export const getServiceForm = async (id: string) => {
   const client = await Client();
-  return await client.get<TRoot<TFormGet>>(`/services/form/${id}`);
+  return await client.get<TRoot<TServiceFormGet>>(`/services/form/${id}`);
 };
 
 export const getServiceForms = async (serviceId: string) => {
   const client = await Client();
-  return await client.get<TRoot<TFormGet[]>>(`/services/forms/${serviceId}`);
+  return await client.get<TRoot<TServiceFormGet[]>>(
+    `/services/forms/${serviceId}`
+  );
 };
 
 // Service subform endpoints

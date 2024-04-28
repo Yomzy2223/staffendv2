@@ -1,4 +1,4 @@
-import { TSubFormCreate } from "@/services/service/types";
+import { TSubFormCreate } from "@/services";
 import {
   CheckSquare,
   ChevronDown,
@@ -209,7 +209,7 @@ export const fieldOptionsFull = [
   },
 ];
 
-export const formOptions: FormType[] = [
+export const formOptions: (FormType & { icon?: LucideIcon })[] = [
   {
     type: "form",
     title: "Title",

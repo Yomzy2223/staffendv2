@@ -2,9 +2,8 @@ import React, { Dispatch, SetStateAction } from "react";
 import DraggableScroll from "@/components/wrappers/draggableScroll";
 import AnalyticsCard2 from "@/components/dashboard/analytics/analyticsCard2";
 import OverviewChart from "@/components/dashboard/analytics/overviewChart";
-import { subDays, subMonths } from "date-fns";
+import { subDays } from "date-fns";
 import { IUser } from "@/hooks/api/types";
-import { TStatus } from "@/app/(dashboard)/(mainpages)/page";
 import { IReq } from "@/app/(dashboard)/(mainpages)/actions";
 
 const OverviewSection = ({
@@ -18,11 +17,13 @@ const OverviewSection = ({
   setSelectedOverview,
   formatStr,
   showCompare,
+  hideUserCard,
 }: IProps) => {
   const compareFrom = subDays(dateFrom, daysDiff);
   const bottomText = daysDiff > 1 ? `vs previous ${daysDiff} months` : "";
 
   const handleSelect = (status: TStatus) => {
+    if (!setSelectedOverview) return;
     if (status === selectedOverview) {
       setSelectedOverview(undefined);
       return;
@@ -40,11 +41,13 @@ const OverviewSection = ({
             total="163.5K"
             className="snap-start"
           /> */}
-        <AnalyticsCard2
-          title="User signups"
-          total={users?.length || 0}
-          className="snap-start"
-        />
+        {!hideUserCard && (
+          <AnalyticsCard2
+            title="User signups"
+            total={users?.length || 0}
+            className="snap-start"
+          />
+        )}
         <OverviewChart
           title="Unpaid Drafts"
           current={requestsByStatus.unPaidDrafts}
@@ -129,8 +132,9 @@ interface IProps {
   users: IUser[];
   requestsByStatus: IReq;
   requestsVsByStatus: IReq;
-  selectedOverview: TStatus;
-  setSelectedOverview: Dispatch<SetStateAction<TStatus | undefined>>;
+  selectedOverview?: TabItemStatus;
+  setSelectedOverview?: Dispatch<SetStateAction<TStatus | undefined>>;
   formatStr: string;
   showCompare: boolean;
+  hideUserCard: boolean;
 }

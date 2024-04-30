@@ -7,7 +7,6 @@ import { BriefcaseIcon } from "lucide-react";
 import React, { useState } from "react";
 import { shareholders } from "./constants";
 import { useActions } from "./actions";
-import { IBusiness, IRequesForm, IRequestSubForm } from "@/hooks/api/types";
 import { Button } from "flowbite-react";
 import DoChecks from "@/components/DoChecks";
 import PartnerAssignDialog from "@/components/dialogs/partnerAssign";
@@ -26,7 +25,7 @@ const Request = ({ params }: { params: { requestId: string } }) => {
   });
 
   const requestForms = request?.requestQA;
-  const businessInfo: IBusiness = request?.process;
+  const businessInfo = request?.process;
 
   const partnerId = request?.partnerInCharge;
 

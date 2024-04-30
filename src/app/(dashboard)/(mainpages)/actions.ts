@@ -1,10 +1,10 @@
-import useRequestApi from "@/hooks/useRequestApi";
 import { differenceInDays, isWithinInterval, subDays } from "date-fns";
 import useUserApi from "@/hooks/useUserApi";
 import { useParams } from "next/navigation";
 import slugify from "slugify";
 import { useGetAllServicesQuery } from "@/services/service";
-import { IRequest } from "@/hooks/api/types";
+import { useGetServiceRequestsQuery } from "@/services/request";
+import { TRequestAll } from "@/services/request/types";
 
 // Requests Actions
 export const useRequestActions = ({
@@ -27,8 +27,7 @@ export const useRequestActions = ({
     (el) => el.name === (selectedService || servicesNames?.[0])
   );
 
-  const { useGetServiceRequestQuery } = useRequestApi();
-  const requestsResponse = useGetServiceRequestQuery({
+  const requestsResponse = useGetServiceRequestsQuery({
     serviceId: activeService?.id || "",
   });
   const requests = requestsResponse.data?.data?.data;
@@ -36,7 +35,7 @@ export const useRequestActions = ({
   let daysDiff = differenceInDays(dateTo, dateFrom) + 1; // Complements for the last day
 
   // Return filtered requests
-  const filteredRequests = requests?.filter((el: IRequest) =>
+  const filteredRequests = requests?.filter((el) =>
     isWithinInterval(new Date(el.createdAt), {
       start: dateFrom,
       end: dateTo,
@@ -44,7 +43,7 @@ export const useRequestActions = ({
   );
 
   // Return filtered requests
-  const requestsVs = requests?.filter((el: IRequest) =>
+  const requestsVs = requests?.filter((el) =>
     isWithinInterval(new Date(el.createdAt), {
       // Same days difference (with selected range) backwards
       start: subDays(dateFrom, daysDiff),
@@ -54,38 +53,36 @@ export const useRequestActions = ({
 
   // The requests within the selected date range
   const requestsByStatus: IReq = {
-    allPaid: filteredRequests?.filter((el: IRequest) => el.paid),
-    unPaidDrafts: filteredRequests?.filter(
-      (el: IRequest) => el.status === "PENDING" && !el.paid
-    ),
-    paidDrafts: filteredRequests?.filter(
-      (el: IRequest) => el.status === "PENDING" && el.paid
-    ),
-    submitted: filteredRequests?.filter(
-      (el: IRequest) => el.status === "SUBMITTED"
-    ),
-    inProgress: filteredRequests?.filter(
-      (el: IRequest) => el.status === "ASSIGNED" || el.status === "REJECTED"
-    ),
-    completed: filteredRequests?.filter(
-      (el: IRequest) => el.status === "COMPLETED"
-    ),
+    allPaid: filteredRequests?.filter((el) => el.paid) || [],
+    unPaidDrafts:
+      filteredRequests?.filter((el) => el.status === "PENDING" && !el.paid) ||
+      [],
+    paidDrafts:
+      filteredRequests?.filter((el) => el.status === "PENDING" && el.paid) ||
+      [],
+    submitted:
+      filteredRequests?.filter((el) => el.status === "SUBMITTED") || [],
+    inProgress:
+      filteredRequests?.filter(
+        (el) => el.status === "ASSIGNED" || el.status === "REJECTED"
+      ) || [],
+    completed:
+      filteredRequests?.filter((el) => el.status === "COMPLETED") || [],
   };
 
   // The requests to be compared with
   const requestsVsByStatus: IReq = {
-    allPaid: filteredRequests?.filter((el: IRequest) => el.paid),
-    unPaidDrafts: requestsVs?.filter(
-      (el: IRequest) => el.status === "PENDING" && !el.paid
-    ),
-    paidDrafts: requestsVs?.filter(
-      (el: IRequest) => el.status === "PENDING" && el.paid
-    ),
-    submitted: requestsVs?.filter((el: IRequest) => el.status === "SUBMITTED"),
-    inProgress: requestsVs?.filter(
-      (el: IRequest) => el.status === "ASSIGNED" || el.status === "REJECTED"
-    ),
-    completed: requestsVs?.filter((el: IRequest) => el.status === "COMPLETED"),
+    allPaid: filteredRequests?.filter((el) => el.paid) || [],
+    unPaidDrafts:
+      requestsVs?.filter((el) => el.status === "PENDING" && !el.paid) || [],
+    paidDrafts:
+      requestsVs?.filter((el) => el.status === "PENDING" && el.paid) || [],
+    submitted: requestsVs?.filter((el) => el.status === "SUBMITTED") || [],
+    inProgress:
+      requestsVs?.filter(
+        (el) => el.status === "ASSIGNED" || el.status === "REJECTED"
+      ) || [],
+    completed: requestsVs?.filter((el) => el.status === "COMPLETED") || [],
   };
 
   return {
@@ -171,10 +168,10 @@ export const useRouteActions = () => {
 };
 
 export interface IReq {
-  unPaidDrafts: IRequest[];
-  paidDrafts: IRequest[];
-  submitted: IRequest[];
-  inProgress: IRequest[];
-  completed: IRequest[];
-  allPaid: IRequest[];
+  unPaidDrafts: TRequestAll[];
+  paidDrafts: TRequestAll[];
+  submitted: TRequestAll[];
+  inProgress: TRequestAll[];
+  completed: TRequestAll[];
+  allPaid: TRequestAll[];
 }

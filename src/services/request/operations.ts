@@ -5,6 +5,7 @@ import {
   TRequesForm,
   TRequestAll,
   TRequestGet,
+  TSearchReqPayload,
   TServiceReqPayload,
 } from "./types";
 // import { IRequest } from "./types";
@@ -35,19 +36,30 @@ export const getServiceRequests = async ({
   serviceId,
   page,
   pageSize,
+  startDate,
+  endDate,
 }: TServiceReqPayload) => {
   const client = await Client();
-  return await client.get<TRoot<TRequestAll[]>>(
-    `/productRequest/service/${serviceId}?page=${page}&pageSize=${pageSize}`
-  );
+  let url = `/productRequest/service/${serviceId}?`;
+  if (page && pageSize) url = url + `page=${page}&pageSize=${pageSize}`;
+  if (startDate && endDate)
+    url = url + `startDate=${startDate}&endDate=${endDate}`;
+
+  return await client.get<TRoot<TRequestAll[]>>(url);
 };
 
-export const getAllRequests = async ({ page, pageSize }: TAllReqPayload) => {
+export const getAllRequests = async ({
+  page,
+  pageSize,
+  startDate,
+  endDate,
+}: TAllReqPayload) => {
   const client = await Client();
-  let endpoint = `/productRequest`;
-  if (page && pageSize)
-    endpoint = `/productRequest?page=${page}&pageSize=${pageSize}`;
-  return await client.get<TRoot<TRequestAll[]>>(endpoint);
+  let url = `/productRequest?`;
+  if (page && pageSize) url = url + `page=${page}&pageSize=${pageSize}`;
+  if (startDate && endDate)
+    url = url + `startDate=${startDate}&endDate=${endDate}`;
+  return await client.get<TRoot<TRequestAll[]>>(url);
 };
 
 export const getRequestForm = async (requestId: string) => {
@@ -90,17 +102,14 @@ export const unAssignRequest = async ({
 
 export const searchRequest = async ({
   formInfo,
-}: {
-  formInfo: {
-    queryString: string;
-    serviceId: string;
-  };
-}) => {
+  page,
+  pageSize,
+}: TSearchReqPayload) => {
   const client = await Client();
-  return await client.post<TRoot<TRequestAll[]>>(
-    `/productRequest/search`,
-    formInfo
-  );
+  let url = `/productRequest/search?`;
+  if (page && pageSize) url = url + `page=${page}&pageSize=${pageSize}`;
+
+  return await client.post<TRoot<TRequestAll[]>>(url, formInfo);
 };
 
 // Request form endpoints

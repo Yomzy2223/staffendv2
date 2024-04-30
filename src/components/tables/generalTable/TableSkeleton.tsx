@@ -14,16 +14,18 @@ const TableSkeleton = () => {
 
         {/* Table body */}
         <div className="flex flex-col gap-4 w-full border-t-0 rounded-lg">
-          {[1, 2, 3, 4, 5, 6].map((row, i) => (
-            <div
-              key={i}
-              className="grid grid-cols-7 grid-flow-row gap-4 items-center px-10 py-2"
-            >
-              {skeletonRows.map((el, i) => (
-                <Skeleton key={i} className={`${el} w-full h-4`} />
-              ))}
-            </div>
-          ))}
+          {Array(10)
+            .fill("")
+            .map((row, i) => (
+              <div
+                key={i}
+                className="grid grid-cols-7 grid-flow-row gap-4 items-center px-10 py-2"
+              >
+                {skeletonRows.map((el, i) => (
+                  <Skeleton key={i} className={`${el} w-full h-4`} />
+                ))}
+              </div>
+            ))}
         </div>
       </div>
 

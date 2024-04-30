@@ -17,6 +17,7 @@ const Header = ({
   type,
   fields,
   setValue,
+  disallowPerson,
 }: IProps) => {
   const [open, setOpen] = useState(false);
   const { compulsory, handleOptionSelect, setDependsOn, cancelDependsChanges } =
@@ -78,6 +79,7 @@ const Header = ({
             handleSelect={handleOptionSelect}
             isForm={false}
             disabled={loading}
+            disallowPerson={disallowPerson}
           >
             <Button
               size="fit"
@@ -104,4 +106,5 @@ interface IProps {
   type: string;
   fields?: TDependsOn[];
   setValue: UseFormSetValue<{ [x: string]: any }>;
+  disallowPerson?: boolean;
 }

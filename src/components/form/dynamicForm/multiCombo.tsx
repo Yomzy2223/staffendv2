@@ -33,76 +33,81 @@ const MultiCombo = ({
   handleSelect2,
 }: IProps) => {
   return (
-    <div className="flex border border-border rounded-md overflow-hidden max-w-max">
-      <div className="">
-        {type1 === "select" ? (
-          <ComboBox
-            name={name1}
-            options={select1Options}
-            setValue={setValue}
-            selectProp={select1Prop}
-            handleSelect={handleSelect1}
-            fieldName={fieldName1}
-            defaultValue={defaultValue1}
-            disabled={disabled1}
-            optionsLoading={options1Loading}
-            isMultiCombo
-          />
-        ) : (
-          register &&
-          name1 && (
-            <TextInput
-              id={name1}
-              type={type1}
-              sizing={size1 || "md"}
-              helperText={<>{errMsg1}</>}
-              color={errMsg1 && "failure"}
+    <div className="w-full">
+      <div className="flex border border-border rounded-md overflow-hidden">
+        <div className="w-full">
+          {type1 === "select" ? (
+            <ComboBox
+              name={name1}
+              options={select1Options}
+              setValue={setValue}
+              selectProp={select1Prop}
+              handleSelect={handleSelect1}
+              fieldName={fieldName1}
+              defaultValue={defaultValue1}
               disabled={disabled1}
-              {...input1Prop}
-              className={cn(
-                { "focus:[&_input]:outline-none": errMsg1 },
-                input1Prop?.className
-              )}
-              {...register(name1)}
+              optionsLoading={options1Loading}
+              isMultiCombo
             />
-          )
-        )}
-      </div>
+          ) : (
+            register &&
+            name1 && (
+              <TextInput
+                id={name1}
+                type={type1}
+                sizing={size1 || "md"}
+                // helperText={<>{errMsg1}</>}
+                color={errMsg1 && "failure"}
+                disabled={disabled1}
+                {...input1Prop}
+                className={cn(
+                  "w-full [&_input]:rounded-none [&_input]:flex-1 [&_input]:!border-0 [&_input]:!ring-0",
+                  { "focus:[&_input]:outline-none": errMsg1 },
+                  input1Prop?.className
+                )}
+                {...register(name1)}
+              />
+            )
+          )}
+        </div>
 
-      <div className=" border-l border-border">
-        {type2 === "select" ? (
-          <ComboBox
-            name={name2}
-            options={select2Options}
-            setValue={setValue}
-            selectProp={select2Prop}
-            handleSelect={handleSelect2}
-            fieldName={fieldName2}
-            defaultValue={defaultValue2}
-            disabled={disabled2}
-            optionsLoading={options2Loading}
-            isMultiCombo
-          />
-        ) : (
-          register &&
-          name2 && (
-            <TextInput
-              id={name2}
-              type={type2}
-              sizing={size2 || "md"}
-              helperText={<>{errMsg2}</>}
-              color={errMsg2 && "failure"}
+        <div className=" border-l border-border">
+          {type2 === "select" ? (
+            <ComboBox
+              name={name2}
+              options={select2Options}
+              setValue={setValue}
+              selectProp={select2Prop}
+              handleSelect={handleSelect2}
+              fieldName={fieldName2}
+              defaultValue={defaultValue2}
               disabled={disabled2}
-              {...input2Prop}
-              className={cn(
-                { "focus:[&_input]:outline-none": errMsg2 },
-                input2Prop?.className
-              )}
-              {...register(name2)}
+              optionsLoading={options2Loading}
+              isMultiCombo
             />
-          )
-        )}
+          ) : (
+            register &&
+            name2 && (
+              <TextInput
+                id={name2}
+                type={type2}
+                sizing={size2 || "md"}
+                helperText={<>{errMsg2}</>}
+                color={errMsg2 && "failure"}
+                disabled={disabled2}
+                {...input2Prop}
+                className={cn(
+                  { "focus:[&_input]:outline-none": errMsg2 },
+                  input2Prop?.className
+                )}
+                {...register(name2)}
+              />
+            )
+          )}
+        </div>
       </div>
+      <p className="text-sm text-destructive-foreground mt-1">{errMsg1}</p>
+      <p className="text-sm text-destructive-foreground mt-1">{errMsg2}</p>
     </div>
   );
 };

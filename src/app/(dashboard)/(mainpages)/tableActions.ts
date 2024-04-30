@@ -42,7 +42,7 @@ export const useTableActions = ({
   dateTo: Date;
 }) => {
   const [searchValue, setSearchValue] = useState("");
-  const { getReqStatusColor } = useGlobalFunctions();
+  const { getReqStatusColor, deleteQueryString } = useGlobalFunctions();
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -58,11 +58,15 @@ export const useTableActions = ({
   const allRequestsResponse = useGetAllRequestsQuery({
     page: tablePage,
     pageSize: itemsPerPage,
+    startDate: format(dateFrom, "yyyy-MM-dd"),
+    endDate: format(dateTo, "yyyy-MM-dd"),
   });
   const serviceRequestsResponse = useGetServiceRequestsQuery({
     serviceId: selectedServiceId || "",
     page: tablePage,
     pageSize: itemsPerPage,
+    startDate: format(dateFrom, "yyyy-MM-dd"),
+    endDate: format(dateTo, "yyyy-MM-dd"),
   });
 
   const allRequests = allRequestsResponse.data?.data;
@@ -118,9 +122,16 @@ export const useTableActions = ({
   }));
 
   const handleSearchChange = (value: string) => {
-    searchRequestMutation.mutate({
-      formInfo: { queryString: value, serviceId: selectedServiceId || "" },
-    });
+    searchRequestMutation.mutate(
+      {
+        formInfo: { queryString: value, serviceId: selectedServiceId || "" },
+        page: 1,
+        pageSize: itemsPerPage,
+      },
+      {
+        onSuccess: () => deleteQueryString("page"),
+      }
+    );
     setSearchValue(value);
   };
 

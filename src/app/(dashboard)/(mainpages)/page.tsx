@@ -7,6 +7,7 @@ import { format, isSameYear, startOfMonth, subDays } from "date-fns";
 import React, { useState } from "react";
 import TableSection from "./tableSection";
 import { useRequestActions } from "./actions";
+import { TRequestStatus } from "@/services/request/types";
 
 const Home = () => {
   const [dateFrom, setDateFrom] = useState(startOfMonth(new Date()));
@@ -14,7 +15,7 @@ const Home = () => {
   const [selectedService, setSelectedService] = useState("");
   const [showCompare, setShowCompare] = useState(false);
 
-  const [selectedOverview, setSelectedOverview] = useState<TStatus>();
+  const [selectedOverview, setSelectedOverview] = useState<TRequestStatus>();
 
   const {
     activeService,
@@ -102,11 +103,3 @@ const Home = () => {
 };
 
 export default Home;
-
-export type TStatus =
-  | "unPaidDrafts"
-  | "paidDrafts"
-  | "submitted"
-  | "inProgress"
-  | "completed"
-  | undefined;

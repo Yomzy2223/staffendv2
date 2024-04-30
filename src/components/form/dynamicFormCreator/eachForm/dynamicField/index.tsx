@@ -10,7 +10,7 @@ import Options from "./allFieldTypes/options";
 import DocumentTemplate from "./allFieldTypes/documentTemplate";
 import { getDynamicFieldSchema, useFormFieldActions } from "./actions";
 import { uploadFileToCloudinary } from "@/hooks/globalFunctions";
-import ComboBox from "@/components/form/dynamicForm/comboBox";
+import MultiCombo from "@/components/form/dynamicForm/multiCombo";
 import { useSession } from "next-auth/react";
 import { TSubFormCreate, TSubFormGet } from "@/services";
 
@@ -125,27 +125,46 @@ const DynamicField = ({
           }))
           ?.filter((field, i) => i + 1 !== number)}
         setValue={setValue}
+        disallowPerson={info?.type !== "person"}
       />
       <form
         onSubmit={handleSubmit(onSubmit)}
         className={cn({ "space-y-4": isEdit })}
       >
         <div className="flex">
-          <TextInput
-            id="question"
-            type="text"
-            sizing="md"
-            placeholder="Enter field title (field name, question, etc.)"
-            helperText={<>{errorMsg}</>}
-            color={errorMsg && "failure"}
-            className={cn("flex-1", {
-              "focus:[&_input]:outline-none": errorMsg,
-              "[&>input]:!ring-0 !outline-none !ring-0": isDoc,
-            })}
-            disabled={!edit || isLoading}
-            {...register("question")}
-          />
-          {isDoc && (
+          {!isDoc ? (
+            <TextInput
+              id="question"
+              type="text"
+              sizing="md"
+              placeholder="Enter field title (field name, question, etc.)"
+              helperText={<>{errorMsg}</>}
+              color={errorMsg && "failure"}
+              className={cn("flex-1", {
+                "focus:[&_input]:outline-none": errorMsg,
+                "[&>input]:!ring-0 !outline-none !ring-0": isDoc,
+              })}
+              disabled={!edit || isLoading}
+              {...register("question")}
+            />
+          ) : (
+            <MultiCombo
+              name1="question"
+              name2="documentType"
+              type1="text"
+              type2="select"
+              disabled1={!edit || isLoading}
+              disabled2={!edit || isLoading}
+              errMsg1={errors["question"]?.message as string}
+              errMsg2={errors["documentType"]?.message as string}
+              fieldName2="document type"
+              setValue={setValue}
+              select2Options={["NIN", "Proof of address"]}
+              defaultValue2={fieldInfo.documentType}
+              register={register}
+            />
+          )}
+          {/* {isDoc && (
             <ComboBox
               name="documentType"
               fieldName="document type"
@@ -160,7 +179,7 @@ const DynamicField = ({
                   "flex-0 w-1/3 [&_div]:whitespace-nowrap text-ellipsis",
               }}
             />
-          )}
+          )} */}
         </div>
 
         {/* Dynamic Types */}

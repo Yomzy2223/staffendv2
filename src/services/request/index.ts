@@ -39,15 +39,16 @@ export const useGetRequestQuery = (id: string) =>
 
 export const useGetServiceRequestsQuery = (arg: TServiceReqPayload) =>
   useQuery({
-    queryKey: ["request", arg.serviceId],
-    queryFn: ({ queryKey }) => getServiceRequests(arg),
+    queryKey: ["request", arg],
+    queryFn: ({ queryKey }) =>
+      getServiceRequests(queryKey[1] as TServiceReqPayload),
     enabled: !!arg.serviceId,
   });
 
 export const useGetAllRequestsQuery = (arg: TAllReqPayload) =>
   useQuery({
-    queryKey: ["request"],
-    queryFn: ({ queryKey }) => getAllRequests(arg),
+    queryKey: ["request", arg],
+    queryFn: ({ queryKey }) => getAllRequests(queryKey[1] as TAllReqPayload),
   });
 
 export const useGetRequestFormQuery = (requestId: string) =>

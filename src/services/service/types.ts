@@ -54,7 +54,6 @@ export type TFieldTypes =
   | "document upload"
   | "select"
   | "email"
-  | "email address"
   | "paragraph"
   | "objectives"
   | "phone number"

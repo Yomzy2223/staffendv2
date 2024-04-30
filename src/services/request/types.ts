@@ -98,9 +98,22 @@ export type TServiceReqPayload = {
   serviceId: string;
   page?: number | string;
   pageSize?: number | string;
+  startDate?: string;
+  endDate?: string;
 };
 
 export type TAllReqPayload = {
   page?: number | string;
   pageSize?: number | string;
+  startDate?: string;
+  endDate?: string;
+};
+
+export type TSearchReqPayload = {
+  page?: number | string;
+  pageSize?: number | string;
+  formInfo: {
+    queryString: string;
+    serviceId: string;
+  };
 };

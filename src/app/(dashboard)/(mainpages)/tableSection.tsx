@@ -3,8 +3,7 @@
 import ConfirmAction from "@/components/confirmAction";
 import PartnerAssignDialog from "@/components/dialogs/partnerAssign";
 import GeneralTable from "@/components/tables/generalTable";
-import CardWrapper from "@/components/wrappers/cardWrapper";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { useState } from "react";
 import { useTableActions } from "./tableActions";
 
 const TableSection = ({
@@ -52,7 +51,7 @@ const TableSection = ({
         tableHeaders={tableHeaders}
         tableBody={tableBody}
         tableNav={serviceTableNav}
-        itemsLength={totalRequests}
+        itemsLength={totalRequests || 0}
         itemsPerPage={itemsPerPage}
         onRowSelect={(selected) => setSelectedRequests(selected)}
         onSearchChange={handleSearchChange}

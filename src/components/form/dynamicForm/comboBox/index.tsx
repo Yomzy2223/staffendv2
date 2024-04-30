@@ -63,7 +63,7 @@ const ComboBox = ({
             "w-full [&_span]:justify-between [&>span]:!p-2.5",
             {
               "border-primary ring-primary ring-1": openSelect && !isMultiCombo,
-              "[&_span]:rounded-none rounded-none border-none bg-transparent":
+              "[&_span]:rounded-none rounded-none border-none bg-transparent whitespace-nowrap":
                 isMultiCombo,
             },
             className

@@ -20,8 +20,8 @@ import {
   CartesianGrid,
 } from "recharts";
 import Wrapper from "./wrapper";
-import { IRequest } from "@/hooks/api/types";
 import { TStatus } from "@/app/(dashboard)/(mainpages)/page";
+import { TRequestAll } from "@/services/request/types";
 
 const RevenueChart = ({
   status,
@@ -184,7 +184,7 @@ const CustomTooltip = (props: any) => {
     showCompare,
   } = props;
   const activeDate = setYear(new Date(label), new Date().getFullYear());
-  const vsDayData = compare?.filter((el: IRequest) =>
+  const vsDayData = compare?.filter((el: TRequestAll) =>
     isSameDay(new Date(el.createdAt), subDays(activeDate, daysInRange))
   );
 
@@ -208,8 +208,8 @@ const CustomTooltip = (props: any) => {
 
 interface IProps {
   status: string;
-  compare: IRequest[];
-  current: IRequest[];
+  compare: TRequestAll[];
+  current: TRequestAll[];
   bottomText?: string;
   className?: string;
   compareFrom: Date;

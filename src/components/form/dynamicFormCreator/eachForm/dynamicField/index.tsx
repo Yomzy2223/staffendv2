@@ -106,6 +106,7 @@ const DynamicField = ({
     type === "checkbox" ||
     type === "objectives" ||
     type === "dropdown" ||
+    type === "select" ||
     type === "multiple choice";
 
   return (
@@ -131,7 +132,7 @@ const DynamicField = ({
         onSubmit={handleSubmit(onSubmit)}
         className={cn({ "space-y-4": isEdit })}
       >
-        <div className="flex">
+        <div>
           {!isDoc ? (
             <TextInput
               id="question"

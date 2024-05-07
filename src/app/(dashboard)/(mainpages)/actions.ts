@@ -139,6 +139,10 @@ export const useRouteActions = () => {
       to: "/bank-accounts",
     },
     {
+      name: "FAQ",
+      to: "/faq",
+    },
+    {
       name: "Rewards",
       to: "/rewards",
     },

@@ -43,7 +43,7 @@ const Products = () => {
   };
 
   return (
-    <div className="-mx-5 md:-mx-8 space-y-4 lg:space-y-6">
+    <div className="space-y-4 lg:space-y-6">
       <ProoductsHeader title={productInfo?.name || ""} />
       <ItemsWrapper
         title="Products"
@@ -52,7 +52,7 @@ const Products = () => {
         emptyText="You have not added any product"
         btnText="Add product"
       >
-        {serviceProducts?.map((product: TProductGet, i: number) => (
+        {serviceProducts?.map((product, i: number) => (
           <ProductCard
             key={i}
             info={product}

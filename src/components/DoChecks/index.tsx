@@ -30,7 +30,7 @@ const DoChecks = ({
 
   if (items?.length === 0)
     return (
-      <div className="flex flex-col justify-center gap-4 items-center flex-1 w-max my-10 m-auto">
+      <div className="flex flex-col justify-center gap-4 items-center flex-1 w-max my-10 m-auto ">
         <Image src={EmptyContentSvg} alt="empty" />
         <p className="sb-text-20 text-center">{emptyText}</p>
         {btnAction && btnText && (

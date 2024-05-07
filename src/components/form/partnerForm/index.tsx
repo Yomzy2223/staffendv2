@@ -6,7 +6,7 @@ import DynamicFormCreator from "../dynamicFormCreator";
 import { useParterFormActions } from "./actions";
 
 const PartnerForm = ({ open, setOpen }: IProps) => {
-  const { deleteQueryString } = useGlobalFunctions();
+  const { deleteQueryStrings } = useGlobalFunctions();
 
   const {
     partnerFormInfo,
@@ -26,8 +26,7 @@ const PartnerForm = ({ open, setOpen }: IProps) => {
 
   const resetDialog = () => {
     setOpen(false);
-    deleteQueryString("action");
-    deleteQueryString("country");
+    deleteQueryStrings(["action", "country"]);
   };
 
   const wide = partnerFormData?.length > 1;

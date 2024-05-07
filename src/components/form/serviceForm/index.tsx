@@ -11,7 +11,7 @@ import { section1FormInfo, serviceInfoSchema } from "./constants";
 
 const ServiceForm = ({ open, setOpen }: IProps) => {
   const [section, setSection] = useState(1);
-  const { isDesktop, deleteQueryString } = useGlobalFunctions();
+  const { isDesktop, deleteQueryStrings } = useGlobalFunctions();
 
   const { isEdit, serviceInfo, submitServiceInfo, serviceLoading } =
     useServiceInfoActions({ section, setSection });
@@ -47,7 +47,7 @@ const ServiceForm = ({ open, setOpen }: IProps) => {
   const resetDialog = () => {
     setOpen(false);
     setSection(1);
-    deleteQueryString("action");
+    deleteQueryStrings(["action"]);
   };
 
   const wide = (serviceFormData?.length ?? 0) > 1 && section !== 1;

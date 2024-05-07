@@ -109,12 +109,6 @@ export const BusinessObjectives = [
 
 export const fieldOptions: (TSubFormCreate & { icon: LucideIcon })[] = [
   {
-    type: "address",
-    icon: MapPin,
-    question: "Enter your organization's address",
-    compulsory: true,
-  },
-  {
     type: "business name",
     icon: MapPin,
     question:
@@ -197,7 +191,7 @@ export const fieldOptionsFull = [
   ...fieldOptions,
   {
     type: "document template",
-    question: "Kindly download, fill, and upload back",
+    question: "Upload appropriate document",
     icon: File,
     compulsory: true,
   },

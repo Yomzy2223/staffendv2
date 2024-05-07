@@ -3,6 +3,7 @@
 import ConfirmAction from "@/components/confirmAction";
 import PartnerAssignDialog from "@/components/dialogs/partnerAssign";
 import GeneralTable from "@/components/tables/generalTable";
+import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import React, { useState } from "react";
 import { useTableActions } from "./tableActions";
 
@@ -21,6 +22,8 @@ const TableSection = ({
   const [selectedRequests, setSelectedRequests] = useState<string[]>([]);
   const [partnerId, setPartnerId] = useState("");
   const [activeStatus, setActiveStatus] = useState("");
+
+  const { deleteQueryStrings } = useGlobalFunctions();
 
   const itemsPerPage = 10;
 
@@ -57,7 +60,10 @@ const TableSection = ({
         onSearchChange={handleSearchChange}
         onSearchSubmit={handleSearchSubmit}
         dataLoading={requestsLoading}
-        handleFilter={(value) => setActiveStatus(value || "")}
+        handleFilter={(value) => {
+          setActiveStatus(value || "");
+          deleteQueryStrings(["page"]);
+        }}
       />
       <PartnerAssignDialog
         setOpen={setOpenAssign}

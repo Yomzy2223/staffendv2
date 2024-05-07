@@ -18,33 +18,39 @@ export const useGlobalFunctions = () => {
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   // Get a new searchParams string by merging the current
-  // searchParams with a provided key/value pair
+  // searchParams with a provided key/value pair(s)
   const createQueryString = useCallback(
-    (name: string, value: string | number) => {
+    (queries?: { name: string; value: string | string[] }[]) => {
       const params = new URLSearchParams(searchParams.toString());
-      params.set(name, value.toString());
+      if (!queries) return params;
+      queries.forEach((query) => {
+        params.set(query.name, query.value.toString());
+      });
 
       return params.toString();
     },
     [searchParams]
   );
 
-  const deleteQueryString = useCallback(
-    (name: string) => {
+  const setQuery = (name: string, value: string | number) => {
+    router.push(
+      pathname + "?" + createQueryString([{ name, value: value.toString() }]),
+      {
+        scroll: false,
+      }
+    );
+  };
+
+  const deleteQueryStrings = useCallback(
+    (names: string[]) => {
       const newQuery = new URLSearchParams(searchParams.toString());
-      newQuery.delete(name);
+      names.forEach((name) => newQuery.delete(name));
       router.push(pathname + "?" + newQuery.toString(), { scroll: false });
 
       return newQuery.toString();
     },
     [searchParams]
   );
-
-  const setQuery = (name: string, value: string | number) => {
-    router.push(pathname + "?" + createQueryString(name, value), {
-      scroll: false,
-    });
-  };
 
   const getRandColor = (i: number) => {
     return tagColors[i % 5];
@@ -65,13 +71,37 @@ export const useGlobalFunctions = () => {
       return "[&_span]:bg-success [&_span]:text-success-foreground";
   };
 
+  // Use this to set a pathname (uses current pathname, if not provided)
+  // alongside queries (uses current queries, if not provided)
+  const setQueriesWithPath = ({
+    path,
+    addPath,
+    queries,
+    returnUrl,
+  }: {
+    path?: string;
+    addPath?: string;
+    queries?: { name: string; value: string | string[] }[];
+    returnUrl?: boolean;
+  }) => {
+    let realPath = path || pathname;
+    if (addPath) realPath = realPath + "/" + addPath;
+    realPath = realPath + "?" + createQueryString(queries);
+
+    if (returnUrl) return realPath;
+    router.push(realPath, {
+      scroll: false,
+    });
+  };
+
   return {
     createQueryString,
-    deleteQueryString,
+    deleteQueryStrings,
     setQuery,
     isDesktop,
     getRandColor,
     getReqStatusColor,
+    setQueriesWithPath,
   };
 };
 

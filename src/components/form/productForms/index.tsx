@@ -15,7 +15,7 @@ import { productInfoSchema } from "./constants";
 
 const ProductForm = ({ open, setOpen }: IProps) => {
   const [section, setSection] = useState(1);
-  const { isDesktop, deleteQueryString } = useGlobalFunctions();
+  const { isDesktop, deleteQueryStrings } = useGlobalFunctions();
   const { section1FormInfo } = useSectionInfo();
 
   const { title1, productInfo, submitProductInfo, productLoading } =
@@ -49,8 +49,7 @@ const ProductForm = ({ open, setOpen }: IProps) => {
   const resetDialog = () => {
     setOpen(false);
     setSection(1);
-    deleteQueryString("action");
-    deleteQueryString("productId");
+    deleteQueryStrings(["action", "productId"]);
   };
 
   const wide = productFormData?.length > 1;

@@ -8,7 +8,7 @@ import { useCountryActions } from "./actions";
 import { countrySchema } from "./constants";
 
 const CountryForm = ({ open, setOpen }: IProps) => {
-  const { deleteQueryString } = useGlobalFunctions();
+  const { deleteQueryStrings } = useGlobalFunctions();
 
   const {
     formInfo,
@@ -24,7 +24,7 @@ const CountryForm = ({ open, setOpen }: IProps) => {
 
   const resetDialog = () => {
     setOpen(false);
-    deleteQueryString("countryId");
+    deleteQueryStrings(["countryId"]);
   };
 
   console.log(countryLoading);

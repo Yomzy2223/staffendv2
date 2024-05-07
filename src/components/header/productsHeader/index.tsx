@@ -20,7 +20,7 @@ const ProoductsHeader = ({ title }: { title: string }) => {
   };
 
   return (
-    <div className="bg-primary/30 flex justify-between items-center gap-6 shadow-md px-5 py-4 lg:px-8">
+    <div className="bg-primary/30 flex justify-between items-center gap-6 shadow-md px-5 py-4 -mx-5 md:-mx-8 lg:px-8">
       <div className="flex items-center">
         <Button color="ghost" size="fit">
           <ArrowLeft onClick={() => push("/services/" + serviceId)} />

@@ -13,15 +13,16 @@ const ItemsWrapper = ({
   emptyText,
   onSearchChange,
   onSearchSubmit,
+  tabNav,
 }: IProps) => {
   return (
     <DoChecks
       items={items}
-      emptyText={btnText}
-      btnText={emptyText}
+      emptyText={emptyText}
+      btnText={btnText}
       btnAction={btnAction}
     >
-      <CardWrapper className="border border-border shadow-sm mx-5 my-4 lg:mx-8 lg:my-6">
+      <div className="border border-border shadow-sm my-4 px-4 py-6 lg:my-6">
         <div className="border-b border-border pb-4">
           <div className="flex items-center gap-6">
             <span>
@@ -40,11 +41,12 @@ const ItemsWrapper = ({
             wrapperClassName="flex md:hidden mt-4"
           />
         </div>
+        {tabNav}
 
         <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4 pt-4 sm:gap-6">
           {children}
         </div>
-      </CardWrapper>
+      </div>
     </DoChecks>
   );
 };
@@ -60,4 +62,7 @@ interface IProps {
   emptyText: string;
   onSearchChange?: (e: string) => void;
   onSearchSubmit?: (e: string) => void;
+  tabNav?: any;
 }
+//  mx - 5;
+//  lg: mx - 8;

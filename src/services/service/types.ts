@@ -45,7 +45,6 @@ export type TProductFormGet = TProductFormRes & {
 export type TFieldTypes =
   | "text"
   | "password"
-  | "address"
   | "business name"
   | "checkbox"
   | "countries-operation"

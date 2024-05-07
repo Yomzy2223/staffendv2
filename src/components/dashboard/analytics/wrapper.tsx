@@ -27,8 +27,8 @@ const Wrapper = ({
   children: ReactNode;
 }) => {
   const title = selectedOverview
-    ? status + " requests"
-    : activeService + " revenue";
+    ? (status || "") + " requests"
+    : (activeService || "") + " revenue";
 
   const description = activeService + " " + (status || "revenue") + " between ";
   return (

@@ -26,6 +26,7 @@ export interface IDynamicFormField {
   fileProp?: Record<string, any>;
   selectOptions?: string[];
   leftContent?: string | ReactNode;
+  placeholder?: string;
   errors?: {
     empty: string;
     length?: string;

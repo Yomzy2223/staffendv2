@@ -13,10 +13,11 @@ export const customTheme: ThemeProps = {
       },
     },
     tabs: {
+      base: "flex flex-col flex-1",
       tablist: {
         base: "flex",
         tabitem: {
-          base: "flex items-center justify-center p-2 rounded-t-lg text-sm font-medium transition transition-all first:ml-0 disabled:cursor-not-allowed disabled:text-gray-400 disabled:dark:text-gray-500 ",
+          base: "flex items-center justify-center p-2 rounded-t-lg text-sm font-medium transition transition-all first:ml-0 disabled:cursor-not-allowed disabled:text-gray-400 disabled:dark:text-gray-500",
           styles: {
             default: {
               base: "rounded-t-lg",
@@ -42,6 +43,16 @@ export const customTheme: ThemeProps = {
           },
         },
       },
+      tabitemcontainer: {
+        base: "flex flex-col flex-1",
+        styles: {
+          default: "",
+          underline: "",
+          pills: "",
+          fullWidth: "",
+        },
+      },
+      tabpanel: "flex-1",
     },
     button: {
       base: "w-max h-max focus:!ring-0 hover:opacity-80 active:opacity-90 transition transition-all text-sm",

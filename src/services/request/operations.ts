@@ -41,7 +41,7 @@ export const getServiceRequests = async ({
 }: TServiceReqPayload) => {
   const client = await Client();
   let url = `/productRequest/service/${serviceId}?`;
-  if (page && pageSize) url = url + `page=${page}&pageSize=${pageSize}`;
+  if (page && pageSize) url = url + `page=${page}&pageSize=${pageSize}&`;
   if (startDate && endDate)
     url = url + `startDate=${startDate}&endDate=${endDate}`;
 
@@ -56,7 +56,7 @@ export const getAllRequests = async ({
 }: TAllReqPayload) => {
   const client = await Client();
   let url = `/productRequest?`;
-  if (page && pageSize) url = url + `page=${page}&pageSize=${pageSize}`;
+  if (page && pageSize) url = url + `page=${page}&pageSize=${pageSize}&`;
   if (startDate && endDate)
     url = url + `startDate=${startDate}&endDate=${endDate}`;
   return await client.get<TRoot<TRequestAll[]>>(url);

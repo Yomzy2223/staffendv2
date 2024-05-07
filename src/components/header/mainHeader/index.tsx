@@ -2,15 +2,8 @@
 
 import Image from "next/image";
 import { SidebriefLogo } from "@/assets/images";
-import {
-  BellRing,
-  ChevronDown,
-  MenuIcon,
-  Search,
-  Settings,
-} from "lucide-react";
+import { BellRing, ChevronDown, MenuIcon, Settings } from "lucide-react";
 import { Avatar, Button } from "flowbite-react";
-import SearchComp from "../../search";
 import { useRouter } from "next/navigation";
 import {
   Popover,

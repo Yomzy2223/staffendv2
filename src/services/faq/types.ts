@@ -1,7 +1,9 @@
+import { TRequestState } from "../request/types";
+
 export type TCreateFAQ = {
   serviceId: string;
   productId: string;
-  requestState: string;
+  requestState: TRequestState;
   question: string;
   answer: string;
 };

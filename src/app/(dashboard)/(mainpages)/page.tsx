@@ -8,7 +8,6 @@ import React, { useState } from "react";
 import TableSection from "./tableSection";
 import { useRequestActions } from "./actions";
 import { TRequestStatus } from "@/services/request/types";
-import { useSession } from "next-auth/react";
 
 const Home = () => {
   const [dateFrom, setDateFrom] = useState(startOfMonth(new Date()));
@@ -17,9 +16,6 @@ const Home = () => {
   const [showCompare, setShowCompare] = useState(false);
 
   const [selectedOverview, setSelectedOverview] = useState<TRequestStatus>();
-
-  // const session = useSession();
-  // console.log(session.data);
 
   const {
     activeService,

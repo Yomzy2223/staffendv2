@@ -4,8 +4,8 @@ import {
   useGetFAQQuery,
   useUpdateFAQMutation,
 } from "@/services/faq";
-import { TCreateFAQ } from "@/services/faq/types";
 import { useGetServiceProductsQuery } from "@/services/product";
+import { TRequestState } from "@/services/request/types";
 import { useSearchParams } from "next/navigation";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { IDynamicFormField } from "../dynamicForm/constants";
@@ -38,7 +38,7 @@ export const useActions = ({
     const payload = {
       serviceId,
       productId,
-      requestState: formInfo.requestState,
+      requestState: formInfo.requestState.toUpperCase() as TRequestState,
       question: formInfo.question,
       answer: formInfo.answer,
     };
@@ -48,7 +48,7 @@ export const useActions = ({
         { formInfo: payload, id: FAQId },
         {
           onSuccess: () => {
-            setOpen(false);
+            resetDialog();
             console.log("Faq updated successfully");
           },
         }
@@ -57,7 +57,7 @@ export const useActions = ({
     }
     createFAQMutation.mutate(payload, {
       onSuccess: () => {
-        setOpen(false);
+        resetDialog();
         console.log("Faq created successfully");
       },
     });
@@ -95,12 +95,7 @@ export const useActions = ({
       type: "select",
       label: "Request state",
       placeholder: "Select request state",
-      selectOptions: [
-        "Product info",
-        "Service form",
-        "Payment",
-        "Product form",
-      ],
+      selectOptions: ["SERVICEFORM", "PAYMENT", "PRODUCTFORM", "REVIEW"],
     },
   ];
 

@@ -6,7 +6,12 @@ export type TRequestStatus =
   | "ASSIGNED"
   | "REJECTED"
   | "COMPLETED";
-export type TRequestState = "SERVICEFORM" | "PAYMENT";
+
+export type TRequestState =
+  | "SERVICEFORM"
+  | "PAYMENT"
+  | "PRODUCTFORM"
+  | "REVIEW";
 
 export type TRequestCF = {
   id: string;

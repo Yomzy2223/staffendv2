@@ -20,7 +20,6 @@ export const useActions = ({
     setQueriesWithPath({
       queries: [
         { name: "faqId", value: info.id },
-        { name: "serviceId", value: info.serviceId },
         { name: "productId", value: info.productId },
       ],
     });
@@ -41,5 +40,5 @@ export const useActions = ({
     },
   ];
 
-  return { popoverInfo };
+  return { popoverInfo, handleEdit };
 };

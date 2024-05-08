@@ -3,6 +3,7 @@ import { TCreateFAQ, TFAQ } from "./types";
 
 export const createFAQ = async (formInfo: TCreateFAQ) => {
   const client = await Client();
+  const payload = {};
   return await client.post<TRoot<TFAQ>>(`/faqs`, formInfo);
 };
 

@@ -1,9 +1,14 @@
 import ConfirmAction from "@/components/confirmAction";
 import PopoverMenu from "@/components/features/popoverMenu";
 import { TFAQ } from "@/services/faq/types";
-import { Accordion } from "flowbite-react";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { useActions } from "./actions";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const FAQCard = ({ info, setOpenEdit, handleDelete, isLoading }: IProps) => {
   const [openConfirm, setOpenConfirm] = useState(false);
@@ -11,17 +16,26 @@ const FAQCard = ({ info, setOpenEdit, handleDelete, isLoading }: IProps) => {
   const { popoverInfo } = useActions({ setOpenEdit, info, setOpenConfirm });
 
   return (
-    <div>
-      <Accordion>
-        <Accordion.Panel>
-          <Accordion.Title>{info.question}</Accordion.Title>
-          <Accordion.Content>
+    <div className="max-w-[500px]">
+      <Accordion type="single" collapsible>
+        <AccordionItem
+          value="item-1"
+          className=" px-5 border border-border rounded-lg"
+        >
+          <div className="flex items-center justify-between gap-4">
+            <AccordionTrigger
+              className="text-start hover:no-underline"
+              hideArrow
+            >
+              {info.question}
+            </AccordionTrigger>
+            <PopoverMenu menuInfo={popoverInfo} vertical />
+          </div>
+          <AccordionContent>
             <p>{info.answer}</p>
-          </Accordion.Content>
-        </Accordion.Panel>
+          </AccordionContent>
+        </AccordionItem>
       </Accordion>
-
-      <PopoverMenu menuInfo={popoverInfo} />
 
       {openConfirm && (
         <ConfirmAction

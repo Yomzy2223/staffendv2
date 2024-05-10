@@ -7,10 +7,11 @@ import DynamicForm from "../dynamicForm";
 import { useActions } from "./action";
 import { formSchema } from "./constants";
 
-const FAQForm = ({ open, setOpen, isUpdate }: IProps) => {
+const FAQForm = ({ open, setOpen, isUpdate, serviceId }: IProps) => {
   const { submitFAQ, FAQRes, isPending, formInfo, defaultValues, resetDialog } =
     useActions({
       setOpen,
+      serviceId,
     });
 
   const searchParams = useSearchParams();
@@ -57,4 +58,5 @@ interface IProps {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   isUpdate?: boolean;
+  serviceId: string;
 }

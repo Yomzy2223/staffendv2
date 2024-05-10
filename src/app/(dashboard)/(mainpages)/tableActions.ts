@@ -5,7 +5,7 @@ import {
   IRowInfo,
   ITableBody,
 } from "@/components/tables/generalTable/constants";
-import { format } from "date-fns";
+import { compareAsc, format } from "date-fns";
 import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { useGetAllServicesQuery } from "@/services/service";
@@ -52,7 +52,6 @@ export const useTableActions = ({
 
   const tablePage = parseInt(searchParams.get("page") || "1");
 
-  console.log(dateFrom, dateTo);
   const assignRequestMutation = useAssignRequestMutation();
   const unAssignRequestMutation = useUnAssignRequestMutation();
   const searchRequestMutation = useSearchRequestMutation();
@@ -91,23 +90,25 @@ export const useTableActions = ({
     serviceRequestsResponse.isLoading ||
     searchRequestMutation.isPending;
 
-  let filteredRequests = requests?.filter((request) => {
-    if (!activeStatus) return true;
-    if (activeStatus.toLowerCase() === "unpaid drafts")
-      return request.status === "PENDING" && !request.paid;
-    else if (activeStatus.toLowerCase() === "paid drafts")
-      return request.status === "PENDING" && request.paid;
-    else if (activeStatus.toLowerCase() === "submitted")
-      return request.status === "SUBMITTED";
-    else if (activeStatus.toLowerCase() === "assigned")
-      return request.status === "ASSIGNED";
-    else if (activeStatus.toLowerCase() === "rejected")
-      return request.status === "REJECTED";
-    else if (activeStatus.toLowerCase() === "in progress")
-      return request.status === "ASSIGNED";
-    else if (activeStatus.toLowerCase() === "completed")
-      return request.status === "COMPLETED";
-  });
+  let filteredRequests = requests
+    ?.sort((a, b) => compareAsc(new Date(b?.createdAt), new Date(a?.createdAt)))
+    ?.filter((request) => {
+      if (!activeStatus) return true;
+      if (activeStatus.toLowerCase() === "unpaid drafts")
+        return request.status === "PENDING" && !request.paid;
+      else if (activeStatus.toLowerCase() === "paid drafts")
+        return request.status === "PENDING" && request.paid;
+      else if (activeStatus.toLowerCase() === "submitted")
+        return request.status === "SUBMITTED";
+      else if (activeStatus.toLowerCase() === "assigned")
+        return request.status === "ASSIGNED";
+      else if (activeStatus.toLowerCase() === "rejected")
+        return request.status === "REJECTED";
+      else if (activeStatus.toLowerCase() === "in progress")
+        return request.status === "ASSIGNED";
+      else if (activeStatus.toLowerCase() === "completed")
+        return request.status === "COMPLETED";
+    });
 
   // filteredRequests = requests?.filter((el: IRequest) =>
   //   isWithinInterval(new Date(el.createdAt), {

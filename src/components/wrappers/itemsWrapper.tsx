@@ -43,8 +43,12 @@ const ItemsWrapper = ({
               ) : (
                 <Search color="#727474" />
               )}
-              <Button color="primary" size="lg" onClick={itemAction}>
-                {itemActionText}
+              <Button
+                color="primary"
+                size="lg"
+                onClick={itemAction || btnAction}
+              >
+                {itemActionText || btnText}
               </Button>
             </div>
           </div>
@@ -71,8 +75,8 @@ interface IProps {
   onSearchChange?: (e: string) => void;
   onSearchSubmit?: (e: string) => void;
   navbar?: any;
-  itemActionText: string;
-  itemAction: () => void;
+  itemActionText?: string;
+  itemAction?: () => void;
 }
 //  mx - 5;
 //  lg: mx - 8;

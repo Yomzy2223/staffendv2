@@ -15,7 +15,7 @@ const Options = ({ info, setValue, edit, error, type }: IProps) => {
     let optionCopy = [...options];
     optionCopy[i] = e.target.value;
     setOptions(optionCopy);
-    setValue("options", optionCopy);
+    setValue("options", optionCopy, { shouldValidate: true });
   };
 
   const handleKeyDown = (
@@ -27,7 +27,7 @@ const Options = ({ info, setValue, edit, error, type }: IProps) => {
       e.preventDefault();
       if (options.length === i + 1 && !options.some((el) => el.trim() === "")) {
         setOptions([...options, ""]);
-        setValue("options", [...options, ""]);
+        setValue("options", [...options, "", { shouldValidate: true }]);
       }
       focusElement("option" + id + (i + 1));
     } else if (e.key === "Backspace" && e.currentTarget.value.length === 0) {
@@ -40,12 +40,12 @@ const Options = ({ info, setValue, edit, error, type }: IProps) => {
     let optionCopy = [...options];
     if (optionCopy.length === 1) {
       setOptions([""]);
-      setValue("options", [""]);
+      setValue("options", [""], { shouldValidate: true });
     } else {
       optionCopy = optionCopy.filter((el) => el !== option);
       if (optionCopy.length === 0) optionCopy = [""];
       setOptions(optionCopy);
-      setValue("options", optionCopy);
+      setValue("options", optionCopy, { shouldValidate: true });
     }
   };
 
@@ -68,6 +68,7 @@ const Options = ({ info, setValue, edit, error, type }: IProps) => {
           className={cn("text-sm", {
             "text-foreground-5": !edit,
           })}
+          onClick={() => setAllowOther(!allowOther)}
         >
           Allow other
         </label>

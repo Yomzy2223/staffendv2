@@ -1,7 +1,8 @@
 import { Client, TRoot } from "..";
 import {
   TAllReqPayload,
-  TBusinessData,
+  TBusinessInfoCreate,
+  TBusinessInfoGet,
   TRequesForm,
   TRequestAll,
   TRequestGet,
@@ -64,14 +65,14 @@ export const getAllRequests = async ({
 
 export const getRequestForm = async (requestId: string) => {
   const client = await Client();
-  return await client.get<TRoot<TRequesForm>>(
+  return await client.get<TRoot<TRequesForm[]>>(
     `/productRequest/form/${requestId}`
   );
 };
 
 export const getBusinessDetails = async (requestId: string) => {
   const client = await Client();
-  return await client.get<TRoot<TBusinessData>>(
+  return await client.get<TRoot<TBusinessInfoGet>>(
     `/processRequest/request/${requestId}`
   );
 };
@@ -112,4 +113,23 @@ export const searchRequest = async ({
   return await client.post<TRoot<TRequestAll[]>>(url, formInfo);
 };
 
-// Request form endpoints
+export const getRequestBusiness = async (requestId: string) => {
+  const client = await Client();
+  return client.get<TRoot<TBusinessInfoGet[]>>(
+    `/businessRequest/request/${requestId}`
+  );
+};
+
+export const updateBusinessInfo = async ({
+  id,
+  formInfo,
+}: {
+  id: string;
+  formInfo: TBusinessInfoCreate;
+}) => {
+  const client = await Client();
+  return client.post<TRoot<TBusinessInfoGet>>(
+    `/businessRequest/${id}`,
+    formInfo
+  );
+};

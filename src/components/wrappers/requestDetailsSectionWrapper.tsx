@@ -13,8 +13,8 @@ const RequestDetailsSectionWrapper = ({
 }: {
   children: ReactNode;
   title: string;
-  raiseIssueAction: Function;
-  icon: any;
+  raiseIssueAction?: Function;
+  icon?: any;
   className?: string;
 }) => {
   return (
@@ -37,7 +37,7 @@ const RequestDetailsSectionWrapper = ({
 
       <div
         className={cn(
-          "flex-1 rounded border border-border p-4 w-[max(542px,70%)] max-w-[60%] overflow-auto shadow-none",
+          "flex-1 rounded border border-border p-4 w-full max-w-[542px] overflow-auto shadow-none",
           className
         )}
       >

@@ -1,162 +1,107 @@
 "use client";
 
 import PersonsCard from "@/components/cards/personsCard";
-import RequestDetailsSectionWrapper from "@/components/wrappers/requestDetailsSectionWrapper";
+import { FileInput } from "@/components/file/fileInput";
 import TextWithDetails from "@/components/texts/textWithDetails";
-import { BriefcaseIcon } from "lucide-react";
-import React, { useState } from "react";
-import { shareholders } from "./constants";
-import { useActions } from "./actions";
+import RequestDetailsSectionWrapper from "@/components/wrappers/requestDetailsSectionWrapper";
+import {
+  useGetRequestBusinessQuery,
+  useGetRequestFormQuery,
+} from "@/services/request";
 import { Button } from "flowbite-react";
-import DoChecks from "@/components/DoChecks";
-import PartnerAssignDialog from "@/components/dialogs/partnerAssign";
-import ConfirmAction from "@/components/confirmAction";
+import { BriefcaseIcon } from "lucide-react";
+import React from "react";
 
-const Request = ({ params }: { params: { requestId: string } }) => {
-  const [openAssign, setOpenAssign] = useState(false);
-  const [openUnAssign, setOpenUnAssign] = useState(false);
-  const [openInfo, setOpenInfo] = useState(false);
-  const [selectedRequests, setSelectedRequests] = useState<string[]>([]);
-
+const page = ({ params }: { params: { requestId: string } }) => {
   const { requestId } = params;
+  const requestQAFormsRes = useGetRequestFormQuery(requestId);
+  const requestQAForms = requestQAFormsRes.data?.data?.data;
 
-  const { request, requestResponse, unAssignRequestMutation } = useActions({
-    requestId,
-  });
+  const requestBusinessRes = useGetRequestBusinessQuery({ requestId });
+  const requestBusiness = requestBusinessRes.data?.data?.data?.[0];
 
-  const requestForms = request?.requestQA;
-  const businessInfo = request?.process;
-
-  const partnerId = request?.partnerInCharge;
-
-  // console.log(requestForms);
-  const handeAssignUnassign = () => {
-    if (partnerId) {
-      setOpenUnAssign(true);
-      setSelectedRequests([requestId]);
-      return;
-    }
-    setSelectedRequests([requestId]);
-    setOpenAssign(true);
-  };
-
-  const reStructureInfo = (subForm: IRequestSubForm[]) => {
-    const person = subForm?.map((el) => ({
-      field: el.question,
-      value: el.answer[0],
-      document: {
-        fileLink: el.fileLink,
-        fileName: el.fileName,
-        fileSize: el.fileSize,
-        fileType: el.fileType,
-      },
-    }));
-    // console.log(person);
-    return person;
-  };
+  const nonPersonForms = requestQAForms?.filter((el) => el.type !== "person");
+  const personForms = requestQAForms?.filter((el) => el.type === "person");
+  const titles = [...new Set(personForms?.map((el) => el.title))];
+  const personFormByTitle = titles?.map((title) =>
+    personForms?.filter((form) => form.title === title)
+  );
 
   return (
-    <div className="flex flex-col gap-6">
-      <RequestDetailsSectionWrapper
-        title="Business Details"
-        icon={<BriefcaseIcon />}
-        raiseIssueAction={() => {}}
-        className="flex flex-col gap-6"
-      >
-        <TextWithDetails
-          title={businessInfo?.businessName}
-          list={[businessInfo?.businessName]}
-        />
-      </RequestDetailsSectionWrapper>
-      <RequestDetailsSectionWrapper
-        title="Payment"
-        icon={<BriefcaseIcon />}
-        raiseIssueAction={() => {}}
-        className="flex flex-col gap-6"
-      >
-        <TextWithDetails title={businessInfo?.businessName} list={[]} />
-      </RequestDetailsSectionWrapper>
-      <DoChecks
-        items={requestForms}
-        emptyText="User has not submitted any form"
-        isLoading={requestResponse.isLoading}
-        className="flex-1 flex flex-col justify-between gap-8"
-      >
-        {requestForms?.map((form: IRequesForm) => {
-          if (form.type === "form")
-            return (
-              <RequestDetailsSectionWrapper
-                key={form.id}
-                title={form.title}
-                icon={<BriefcaseIcon />}
-                raiseIssueAction={() => {}}
-                className="flex flex-col gap-6"
-              >
-                {form?.subForm?.map((el) => (
-                  <TextWithDetails
-                    key={el.id}
-                    title={el.question}
-                    list={el.answer}
-                  />
-                ))}
-              </RequestDetailsSectionWrapper>
-            );
-        })}
-        {requestForms?.map((form: IRequesForm) => {
-          if (form.type === "person")
-            return (
-              <RequestDetailsSectionWrapper
-                key={form.id}
-                title={form.title}
-                icon={<BriefcaseIcon />}
-                raiseIssueAction={() => {}}
-                className="flex flex-col gap-6 border-none p-0"
-              >
-                <PersonsCard title={form?.title} info={shareholders} />
-              </RequestDetailsSectionWrapper>
-            );
-        })}
-
-        <div className="flex gap-2 self-end">
-          {partnerId && (
-            <Button color="primary" outline className="self-end">
-              See partner info
-            </Button>
-          )}
-          <Button color="primary" onClick={handeAssignUnassign}>
-            {partnerId ? "Unassign Task" : "Assign Task"}
-          </Button>
-        </div>
-        <PartnerAssignDialog
-          setOpen={setOpenAssign}
-          open={openAssign}
-          selectedRequests={selectedRequests}
-          setSelectedRequests={setSelectedRequests}
-        />
-        {openUnAssign && (
-          <ConfirmAction
-            open={openUnAssign}
-            setOpen={setOpenUnAssign}
-            confirmAction={() =>
-              unAssignRequestMutation.mutate(
-                {
-                  formInfo: { userId: partnerId, requestIds: selectedRequests },
-                },
-                {
-                  onSuccess: () => setOpenUnAssign(false),
-                }
-              )
-            }
-            title="Unassign Task"
-            description="Are you sure you want to unasssign this task? Partner will be notified."
-            isLoading={unAssignRequestMutation.isPending}
-            dismissible
-            isDelete
-          />
+    <div className="py-6">
+      <div className="flex flex-col gap-8">
+        {requestBusiness?.companyEmail && (
+          <RequestDetailsSectionWrapper
+            title="Business Information"
+            icon={<BriefcaseIcon />}
+            raiseIssueAction={() => {}}
+            className="flex flex-col gap-6"
+          >
+            {/* <TextWithDetails title="Operational Country" text={requestDetails?.product.country} />
+          <TextWithDetails title="Product Type" text={requestDetails?.currentState} />{" "} */}
+          </RequestDetailsSectionWrapper>
         )}
-      </DoChecks>
+
+        {nonPersonForms?.map((form) => (
+          <RequestDetailsSectionWrapper
+            key={form.id}
+            title={form.title}
+            icon={<BriefcaseIcon />}
+            raiseIssueAction={() => {}}
+            className="flex flex-col gap-6"
+          >
+            {form.subForm
+              ?.filter((field) => field.answer)
+              ?.map((field) => (
+                <TextWithDetails
+                  key={field.id}
+                  title={field.question}
+                  list={field.answer}
+                />
+              ))}
+          </RequestDetailsSectionWrapper>
+        ))}
+
+        {personFormByTitle?.map((formGroup, i) => {
+          return (
+            <RequestDetailsSectionWrapper
+              key={i}
+              title={titles[i]}
+              icon={<BriefcaseIcon />}
+              raiseIssueAction={() => {}}
+              className="flex flex-col gap-6 p-0 w-[600px] max-w-max"
+            >
+              <PersonsCard
+                title={titles[i]}
+                info={formGroup?.map((form) =>
+                  form.subForm.map((field) => ({
+                    field: field.question,
+                    value: field.answer,
+                    type: field.type,
+                    fileName: field.fileName,
+                    fileLink: field.fileLink,
+                    fileType: field.fileType,
+                    fileSize: field.fileSize,
+                  }))
+                )}
+              />
+            </RequestDetailsSectionWrapper>
+          );
+        })}
+        {/* <RequestDetailsSectionWrapper
+          title="Upload Documents"
+          icon={<BriefcaseIcon />}
+          raiseIssueAction={() => {}}
+          className="flex flex-col gap-6"
+        >
+          <DocSection
+            businessId={requestBusiness?.id || ""}
+            requestId={requestId}
+          />
+        </RequestDetailsSectionWrapper> */}
+      </div>
     </div>
   );
 };
 
-export default Request;
+export default page;

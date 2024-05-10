@@ -8,6 +8,7 @@ export type TRequestStatus =
   | "COMPLETED";
 
 export type TRequestState =
+  | "PRODUCTINFO"
   | "SERVICEFORM"
   | "PAYMENT"
   | "PRODUCTFORM"
@@ -44,10 +45,26 @@ export type TRequestAll = TRequestCF & {
 export type TRequestGet = TRequestCF & {
   requestQA: TRequesForm[];
   product: TProductGet;
-  business: TBusinessData;
+  business: TBusinessInfoGet;
 };
 
-export type TBusinessData = {
+export type TBusinessInfoCreate = {
+  rcNumber: number;
+  companyName: string;
+  companyEmail: string;
+  companyType: string;
+  branchAddress: string;
+  city: string;
+  classification: string;
+  headOfficeAddress: string;
+  lga: string;
+  affiliates: number;
+  shareCapital: string;
+  state: string;
+  status: string;
+};
+
+export type TBusinessInfoGet = {
   id: string;
   rcNumber: string;
   companyName: string;

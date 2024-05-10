@@ -6,7 +6,6 @@ import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { countries, getEmojiFlag, TCountryCode } from "countries-list";
 import { Button } from "flowbite-react";
 import { MoreHorizontal } from "lucide-react";
-import Image from "next/image";
 import React, { Dispatch, SetStateAction, useState } from "react";
 
 const PartnerReqCard = ({

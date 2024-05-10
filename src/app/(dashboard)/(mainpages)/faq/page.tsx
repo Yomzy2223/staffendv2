@@ -9,7 +9,7 @@ import { TFAQ } from "@/services/faq/types";
 import { useGetServiceProductsQuery } from "@/services/product";
 import { useGetAllServicesQuery } from "@/services/service";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { useState } from "react";
 import FAQNavbar from "./navbar";
 
 const FAQ = () => {
@@ -84,7 +84,7 @@ const FAQ = () => {
           emptyText={
             (products?.length ?? 0) > 0
               ? "You have not created any FAQ"
-              : "You have not created any product for this service"
+              : "You have not created any product for this service, hence cannot add FAQ"
           }
           btnText={(products?.length ?? 0) > 0 ? "Add FAQ" : "Add Product"}
           btnAction={handleEmptyAction}
@@ -102,7 +102,7 @@ const FAQ = () => {
         </DoChecks>
       </ItemsWrapper>
 
-      <FAQForm open={open} setOpen={setOpen} />
+      <FAQForm open={open} setOpen={setOpen} serviceId={serviceId} />
     </div>
   );
 };

@@ -184,7 +184,12 @@ export const getDynamicFieldSchema = ({
     }),
   };
 
-  if (type === "checkbox" || type === "objectives" || type === "select") {
+  if (
+    type === "checkbox" ||
+    type === "objectives" ||
+    type === "select" ||
+    type === "multiple choice"
+  ) {
     schema = {
       ...schema,
       options: z

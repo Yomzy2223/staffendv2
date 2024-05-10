@@ -13,14 +13,15 @@ import { FormType } from "./constants";
 
 export const useActions = ({
   setOpen,
+  serviceId,
 }: {
   setOpen: Dispatch<SetStateAction<boolean>>;
+  serviceId: string;
 }) => {
   const { deleteQueryStrings } = useGlobalFunctions();
 
   const searchParams = useSearchParams();
   const FAQId = searchParams.get("faqId") || "";
-  const serviceId = searchParams.get("serviceId") || "";
   const productId = searchParams.get("productId") || "";
 
   const createFAQMutation = useCreateFAQMutation();
@@ -30,7 +31,7 @@ export const useActions = ({
 
   const productsRes = useGetServiceProductsQuery(serviceId);
   const products = productsRes.data?.data?.data;
-  const productsNames = products?.map((el) => el.name);
+  const productsNames = products?.map((el) => el.name) || [];
 
   const submitFAQ = (formInfo: FormType) => {
     const productId =
@@ -95,7 +96,7 @@ export const useActions = ({
       type: "select",
       label: "Request state",
       placeholder: "Select request state",
-      selectOptions: ["SERVICEFORM", "PAYMENT", "PRODUCTFORM", "REVIEW"],
+      selectOptions: ["PRODUCTINFO", "SERVICEFORM", "PAYMENT", "PRODUCTFORM"],
     },
   ];
 

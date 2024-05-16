@@ -20,7 +20,7 @@ export const Header = () => {
   };
 
   return (
-    <div className="sticky top-0 bg-background border-b px-5 md:px-8 z-[10]">
+    <div className="sticky top-0 left-0 bg-background border-b px-5 md:px-8 z-[10]">
       {/* Desktop header */}
       <div className="hidden items-center w-full h-20 divide-x md:flex">
         <Image

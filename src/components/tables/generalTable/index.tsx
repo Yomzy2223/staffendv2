@@ -21,6 +21,7 @@ const GeneralTable = ({
   onSearchSubmit,
   handleFilter,
   dataLoading,
+  preview,
 }: IProps) => {
   const [selectOn, setSelectOn] = useState(false);
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
@@ -30,8 +31,13 @@ const GeneralTable = ({
 
   const offset = (tablePage - 1) * itemsPerPage;
 
+  const tableBodyPreview = tableBody.map((row) => ({
+    ...row,
+    rowInfo: row.rowInfo.slice(0, 3),
+  }));
+
   return (
-    <CardWrapper className="pb-0">
+    <CardWrapper className="pb-0 flex-1">
       <div>
         <HeaderSection
           selectOn={selectOn}
@@ -42,6 +48,7 @@ const GeneralTable = ({
           onSearchChange={onSearchChange}
           onSearchSubmit={onSearchSubmit}
           handleFilter={handleFilter}
+          preview={preview}
         />
 
         <DoChecks
@@ -56,8 +63,8 @@ const GeneralTable = ({
             selectOn={selectOn}
             selectedRows={selectedRows}
             setSelectedRows={setSelectedRows}
-            tableBody={tableBody}
-            tableHeaders={tableHeaders}
+            tableBody={preview ? tableBodyPreview : tableBody}
+            tableHeaders={preview ? tableHeaders.slice(0, 3) : tableHeaders}
           />
           {itemsLength > itemsPerPage && (
             <div className="flex flex-col justify-between gap-4 sticky left-0 p-4 md:flex-row md:items-center md:py-5">
@@ -95,4 +102,5 @@ interface IProps extends IPagination {
   onSearchSubmit: (value: string) => void;
   handleFilter: (value?: string) => void;
   dataLoading?: boolean;
+  preview?: string;
 }

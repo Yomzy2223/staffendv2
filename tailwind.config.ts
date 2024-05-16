@@ -27,6 +27,7 @@ const config = {
         foreground: {
           DEFAULT: "hsl(var(--foreground))",
           1: "hsl(var(--foreground-1))",
+          2: "hsl(var(--foreground-2))",
           3: "hsl(var(--foreground-3))",
           4: "hsl(var(--foreground-4))",
           5: "hsl(var(--foreground-5))",

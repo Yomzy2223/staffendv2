@@ -116,6 +116,12 @@ export const customTheme: ThemeProps = {
     },
     datepicker: {
       popup: {
+        root: {
+          base: "absolute top-10 z-100 block pt-2",
+          inline: "relative top-0 z-auto",
+          inner:
+            "inline-block rounded-lg bg-white p-4 shadow-lg dark:bg-gray-700",
+        },
         footer: {
           base: "mt-2 flex space-x-2",
           button: {

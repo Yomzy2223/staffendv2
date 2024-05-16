@@ -1,11 +1,16 @@
 "use client";
 
-import DetailedAnalytics from "@/components/dashboard/detailedAnalytics";
-import OverviewSection from "@/components/dashboard/overview";
-import DashboardHeader from "@/components/dashboard/header";
-import { format, isSameYear, startOfMonth, subDays } from "date-fns";
-import React, { useState } from "react";
-import TableSection from "./tableSection";
+import DetailedAnalytics from "@/components/features/dashboard/detailedAnalytics";
+import OverviewSection from "@/components/features/dashboard/overview";
+import DashboardHeader from "@/components/features/dashboard/header";
+import {
+  differenceInDays,
+  format,
+  isSameYear,
+  startOfMonth,
+  subDays,
+} from "date-fns";
+import React, { useEffect, useState } from "react";
 import { useRequestActions } from "./actions";
 import { TRequestStatus } from "@/services/request/types";
 
@@ -17,11 +22,16 @@ const Home = () => {
 
   const [selectedOverview, setSelectedOverview] = useState<TRequestStatus>();
 
+  let daysDiff = differenceInDays(dateTo, dateFrom) + 1; // Complements for the last day
+
+  const [compareFrom, setCompareFrom] = useState(subDays(dateFrom, daysDiff));
+  const [compareTo, setCompareTo] = useState(subDays(dateTo, daysDiff));
+
   const {
     activeService,
     servicesNames,
     servicesRes,
-    daysDiff,
+    // daysDiff,
     requestsByStatus,
     requestsVsByStatus,
     users,
@@ -31,8 +41,13 @@ const Home = () => {
     selectedService,
   });
 
-  const compareFrom = subDays(dateFrom, daysDiff);
-  const compareTo = subDays(dateTo, daysDiff);
+  useEffect(() => {
+    setCompareFrom(subDays(dateFrom, daysDiff));
+    setCompareTo(subDays(dateTo, daysDiff));
+  }, [dateFrom, dateTo]);
+
+  // const compareFrom = subDays(dateFrom, daysDiff);
+  // const compareTo = subDays(dateTo, daysDiff);
   const formatStr = isSameYear(compareFrom, dateFrom)
     ? "MMMM dd"
     : "MMMM dd, yyy";
@@ -47,13 +62,16 @@ const Home = () => {
         dateTo={dateTo}
         setDateFrom={setDateFrom}
         setDateTo={setDateTo}
+        compareFrom={compareFrom}
+        compareTo={compareTo}
+        setCompareFrom={setCompareFrom}
+        setCompareTo={setCompareTo}
         daysDiff={daysDiff}
         isLoading={servicesRes.isLoading}
         errorMsg={servicesRes.error?.message}
         selectedService={activeService?.name || ""}
         setSelectedService={setSelectedService}
         servicesNames={servicesNames}
-        compareLabel={compareLabel}
         showCompare={showCompare}
         setShowCompare={setShowCompare}
       />
@@ -92,11 +110,11 @@ const Home = () => {
             partner
           />
         </div>
-        <TableSection
+        {/* <TableSection
           selectedServiceId={activeService?.id}
           dateFrom={dateFrom}
           dateTo={dateTo}
-        />
+        /> */}
       </div>
     </>
   );

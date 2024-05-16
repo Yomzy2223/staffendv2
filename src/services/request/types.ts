@@ -1,4 +1,5 @@
 import { TProductGet } from "../product/types";
+import { TFieldTypes } from "../service/types";
 
 export type TRequestStatus =
   | "PENDING"
@@ -91,7 +92,7 @@ export type TRequesForm = {
   id: string;
   title: string;
   description: string;
-  type: string;
+  type: TFieldTypes;
   compulsory: boolean;
   isGeneral: boolean;
   createdAt: string;
@@ -106,7 +107,7 @@ export type TRequestSubForm = {
   id: string;
   question: string;
   answer: string[];
-  type: string;
+  type: TFieldTypes;
   fileName: string;
   fileType: string;
   fileLink: string;

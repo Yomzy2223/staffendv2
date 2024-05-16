@@ -4,21 +4,23 @@ import { BriefcaseIcon, LucideIcon } from "lucide-react";
 import Image from "next/image";
 import React, { ReactNode } from "react";
 
-const RequestDetailsSectionWrapper = ({
+const RequestDetailsWrapper = ({
   children,
   title,
   icon,
   raiseIssueAction,
   className,
+  wrapperClassName,
 }: {
   children: ReactNode;
   title: string;
   raiseIssueAction?: Function;
   icon?: any;
   className?: string;
+  wrapperClassName?: string;
 }) => {
   return (
-    <div className="flex flex-col gap-8 sm:flex-row">
+    <div className={cn("flex flex-col gap-8 sm:flex-row", wrapperClassName)}>
       <div className="flex flex-1 gap-2 min-h-full sm:max-w-[360px] rounded">
         <div className="hidden bg-card/25 p-3 rounded h-max sm:block">
           {icon}
@@ -47,4 +49,4 @@ const RequestDetailsSectionWrapper = ({
   );
 };
 
-export default RequestDetailsSectionWrapper;
+export default RequestDetailsWrapper;

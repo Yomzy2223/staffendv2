@@ -122,9 +122,6 @@ export const useRouteActions = () => {
       name: "Services",
       to: "/services",
       type: "select",
-      options: getServicesRoute(),
-      defaultValue:
-        services?.find((el: any) => el.id === serviceId)?.name || "Services",
     },
     {
       name: "Countries",

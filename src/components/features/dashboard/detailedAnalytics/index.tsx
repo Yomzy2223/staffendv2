@@ -1,7 +1,7 @@
 import { IReq } from "@/app/(dashboard)/(mainpages)/actions";
 import { TStatus } from "@/app/(dashboard)/(mainpages)/page";
-import PartnerChart from "@/components/dashboard/analytics/partnerChart";
-import RevenueChart from "@/components/dashboard/analytics/revenueChart";
+import PartnerChart from "@/components/features/dashboard/analytics/partnerChart";
+import RevenueChart from "@/components/features/dashboard/analytics/revenueChart";
 import { subDays, subMonths } from "date-fns";
 import React from "react";
 

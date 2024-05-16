@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction } from "react";
 import DraggableScroll from "@/components/wrappers/draggableScroll";
-import AnalyticsCard2 from "@/components/dashboard/analytics/analyticsCard2";
-import OverviewChart from "@/components/dashboard/analytics/overviewChart";
+import AnalyticsCard2 from "@/components/features/dashboard/analytics/analyticsCard2";
+import OverviewChart from "@/components/features/dashboard/analytics/overviewChart";
 import { subDays } from "date-fns";
 import { IUser } from "@/hooks/api/types";
 import { IReq } from "@/app/(dashboard)/(mainpages)/actions";

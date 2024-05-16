@@ -1,21 +1,31 @@
 "use client";
 
 import DoChecks from "@/components/DoChecks";
+import ServicesSection from "@/components/features/services/servicesSection";
+import ServiceTableSection from "@/components/features/services/serviceTableSection";
 import ServiceForm from "@/components/form/serviceForm";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { useGetAllServicesQuery } from "@/services/service";
-import { redirect } from "next/navigation";
+import { startOfMonth } from "date-fns";
+import { redirect, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 import slugify from "slugify";
 
 const Service = () => {
+  const [dateFrom, setDateFrom] = useState(startOfMonth(new Date()));
+  const [dateTo, setDateTo] = useState(new Date());
+  const [showCompare, setShowCompare] = useState(false);
   const [open, setOpen] = useState(false);
+
   const { setQuery } = useGlobalFunctions();
+  const searchParams = useSearchParams();
+  const serviceId = searchParams.get("serviceId");
 
-  const { data } = useGetAllServicesQuery();
-  const services = data?.data?.data;
+  const servicesRes = useGetAllServicesQuery();
+  const services = servicesRes.data?.data?.data;
 
-  if (services?.[0]) redirect(`/services/${slugify(services[0].id)}`);
+  if (!serviceId && services?.[0])
+    setQuery("serviceId", `${slugify(services[0].id)}`);
 
   const addNewService = () => {
     setOpen(true);
@@ -25,12 +35,17 @@ const Service = () => {
   return (
     <>
       <DoChecks
-        items={[]}
+        items={services || []}
         emptyText="You have not added any service"
         btnText="Add new service"
         btnAction={addNewService}
+        className="flex flex-col gap-8"
       >
-        No service has been added
+        <ServicesSection
+          services={services}
+          isLoading={servicesRes.isLoading}
+        />
+        <ServiceTableSection dateFrom={dateFrom} dateTo={dateTo} />
       </DoChecks>
       <ServiceForm setOpen={setOpen} open={open} />
     </>

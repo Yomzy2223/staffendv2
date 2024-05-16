@@ -1,7 +1,7 @@
 import { format, isSameYear, subDays } from "date-fns";
 import { Datepicker, ToggleSwitch } from "flowbite-react";
 import React, { Dispatch, SetStateAction } from "react";
-import ComboBox from "../form/dynamicForm/comboBox";
+import ComboBox from "../../form/dynamicForm/comboBox";
 
 const ServiceHeader = ({
   dateFrom,

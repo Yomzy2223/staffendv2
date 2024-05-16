@@ -58,4 +58,5 @@ export type TFieldTypes =
   | "phone number"
   | "promocode"
   | "multiple choice"
-  | "short answer";
+  | "short answer"
+  | "person";

@@ -4,15 +4,17 @@ import ConfirmAction from "@/components/confirmAction";
 import PartnerAssignDialog from "@/components/dialogs/partnerAssign";
 import GeneralTable from "@/components/tables/generalTable";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
+import { cn } from "@/lib/utils";
+import { Button } from "flowbite-react";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import PreviewDetails from "./details/previewDetails";
 import { useTableActions } from "./tableActions";
 
-const TableSection = ({
-  selectedServiceId,
+const ServiceTableSection = ({
   dateFrom,
   dateTo,
 }: {
-  selectedServiceId?: string;
   dateFrom: Date;
   dateTo: Date;
 }) => {
@@ -22,6 +24,7 @@ const TableSection = ({
   const [selectedRequests, setSelectedRequests] = useState<string[]>([]);
   const [partnerId, setPartnerId] = useState("");
   const [activeStatus, setActiveStatus] = useState("");
+  const [preview, setPreview] = useState("");
 
   const { deleteQueryStrings } = useGlobalFunctions();
 
@@ -42,29 +45,39 @@ const TableSection = ({
     setOpenUnAssign,
     itemsPerPage,
     setPartnerId,
-    selectedServiceId,
     activeStatus,
     dateFrom,
     dateTo,
+    setPreview,
   });
 
   return (
     <>
-      <GeneralTable
-        tableHeaders={tableHeaders}
-        tableBody={tableBody}
-        tableNav={serviceTableNav}
-        itemsLength={totalRequests || 0}
-        itemsPerPage={itemsPerPage}
-        onRowSelect={(selected) => setSelectedRequests(selected)}
-        onSearchChange={handleSearchChange}
-        onSearchSubmit={handleSearchSubmit}
-        dataLoading={requestsLoading}
-        handleFilter={(value) => {
-          setActiveStatus(value || "");
-          deleteQueryStrings(["page"]);
-        }}
-      />
+      <div
+        className={cn("flex gap-1", {
+          "max-w-[100vw]": preview,
+        })}
+      >
+        <GeneralTable
+          tableHeaders={tableHeaders}
+          tableBody={tableBody}
+          tableNav={serviceTableNav}
+          itemsLength={totalRequests || 0}
+          itemsPerPage={itemsPerPage}
+          onRowSelect={(selected) => setSelectedRequests(selected)}
+          onSearchChange={handleSearchChange}
+          onSearchSubmit={handleSearchSubmit}
+          dataLoading={requestsLoading}
+          preview={preview}
+          handleFilter={(value) => {
+            setActiveStatus(value || "");
+            deleteQueryStrings(["page"]);
+          }}
+        />
+        {preview && (
+          <PreviewDetails selectedRequestId={preview} setPreview={setPreview} />
+        )}
+      </div>
       <PartnerAssignDialog
         setOpen={setOpenAssign}
         open={openAssign}
@@ -97,7 +110,7 @@ const TableSection = ({
   );
 };
 
-export default TableSection;
+export default ServiceTableSection;
 
 const serviceTableNav = [
   "Unpaid Drafts",
@@ -108,36 +121,3 @@ const serviceTableNav = [
   "In Progress",
   "Completed",
 ];
-
-// const serviceTableNav = [
-//   {
-//     name: "status",
-//     value: "all",
-//     text: "All",
-//   },
-//   {
-//     name: "status",
-//     value: "in draft",
-//     text: "Unpaid Drafts",
-//   },
-//   {
-//     name: "status",
-//     value: "in draft",
-//     text: "Paid Drafts",
-//   },
-//   {
-//     name: "status",
-//     value: "submitted",
-//     text: "Submitted",
-//   },
-//   {
-//     name: "status",
-//     value: "in progress",
-//     text: "In Progress",
-//   },
-//   {
-//     name: "status",
-//     value: "completed",
-//     text: "Completed",
-//   },
-// ];

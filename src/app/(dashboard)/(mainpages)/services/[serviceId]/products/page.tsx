@@ -4,7 +4,6 @@ import ProductCard from "@/components/cards/productCard";
 import ProductForm from "@/components/form/productForms";
 import ProoductsHeader from "@/components/header/productsHeader";
 import ItemsWrapper from "@/components/wrappers/itemsWrapper";
-import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import {
   useDeleteProductMutation,
   useGetServiceProductsQuery,

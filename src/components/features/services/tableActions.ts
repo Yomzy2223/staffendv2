@@ -25,10 +25,10 @@ export const useTableActions = ({
   setSelectedRequests,
   setPartnerId,
   itemsPerPage,
-  selectedServiceId,
   activeStatus,
   dateFrom,
   dateTo,
+  setPreview,
 }: {
   setOpenAssign: Dispatch<SetStateAction<boolean>>;
   setOpenUnAssign: Dispatch<SetStateAction<boolean>>;
@@ -36,13 +36,15 @@ export const useTableActions = ({
   setSelectedRequests: Dispatch<SetStateAction<string[]>>;
   setPartnerId: Dispatch<SetStateAction<string>>;
   itemsPerPage: number;
-  selectedServiceId?: string;
   activeStatus: string;
   dateFrom: Date;
   dateTo: Date;
+  setPreview: Dispatch<SetStateAction<string>>;
 }) => {
   const [searchValue, setSearchValue] = useState("");
-  const { getReqStatusColor, deleteQueryStrings } = useGlobalFunctions();
+
+  const { getReqStatusColor, deleteQueryStrings, isDesktop } =
+    useGlobalFunctions();
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -50,6 +52,7 @@ export const useTableActions = ({
   const services = useGetAllServicesQuery();
   const servicesData = services.data?.data?.data || [];
 
+  const selectedServiceId = searchParams.get("serviceId");
   const tablePage = parseInt(searchParams.get("page") || "1");
 
   const assignRequestMutation = useAssignRequestMutation();
@@ -146,7 +149,7 @@ export const useTableActions = ({
     rowId: string,
     rowInfo: IRowInfo[]
   ) => {
-    router.push(`/services/request/${rowId}`);
+    isDesktop ? setPreview(rowId) : router.push(`/services/requests/${rowId}`);
   };
 
   const handleAssignClick = (

@@ -22,6 +22,7 @@ const ComboBox = ({
   optionsErrorMsg,
   isMultiCombo,
   className,
+  hideValue,
 }: IProps) => {
   const [openSelect, setOpenSelect] = useState(false);
   const [selectValue, setSelectValue] = useState(defaultValue);
@@ -60,28 +61,30 @@ const ComboBox = ({
           outline
           role="combobox"
           className={cn(
-            "w-full [&_span]:justify-between [&>span]:!p-2.5",
+            "w-full [&_span]:justify-between [&_span]:gap-2 [&>span]:!p-2.5",
             {
               "border-primary ring-primary ring-1": openSelect && !isMultiCombo,
               "[&_span]:rounded-none rounded-none border-none bg-transparent whitespace-nowrap":
                 isMultiCombo,
+              "w-max [&>span]:!py-1": hideValue,
             },
             className
           )}
           disabled={disabled}
           {...selectProp}
         >
-          {selectValue ? (
-            <div className="flex gap-1">
-              {leftContent && leftContent}
-              <span>{findOriginalValue(selectValue)}</span>
-            </div>
-          ) : optionsLoading ? (
-            "Loading..."
-          ) : (
-            placeholder || "Select " + (fieldName || name)
-          )}
-          <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          {!hideValue &&
+            (selectValue ? (
+              <div className="flex gap-1">
+                {leftContent && leftContent}
+                <span>{findOriginalValue(selectValue)}</span>
+              </div>
+            ) : optionsLoading ? (
+              "Loading..."
+            ) : (
+              placeholder || "Select " + (fieldName || name)
+            ))}
+          <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopOverWrapper>
       {errorMsg && (
@@ -108,4 +111,5 @@ interface IProps {
   optionsErrorMsg?: string;
   isMultiCombo?: boolean;
   className?: string;
+  hideValue?: boolean;
 }

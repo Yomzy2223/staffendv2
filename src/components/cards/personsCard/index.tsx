@@ -1,13 +1,12 @@
 "use client";
 
-import { FileInput } from "@/components/file/fileInput";
 import ComboBox from "@/components/form/dynamicForm/comboBox";
-import TextWithDetails from "@/components/texts/textWithDetails";
 import { cn } from "@/lib/utils";
 import { TFieldTypes } from "@/services/service/types";
 import { Button } from "flowbite-react";
 import { Minus, Plus, User } from "lucide-react";
 import React, { useState } from "react";
+import Content from "./content";
 
 const PersonsCard = ({
   title,
@@ -20,6 +19,7 @@ const PersonsCard = ({
 }) => {
   const [clicked, setClicked] = useState<boolean>(false);
   const [position, setPosition] = useState(0);
+  const [selected, setSelected] = useState("");
 
   const conditionalInfo = clicked ? [info[0]] : info;
 
@@ -110,22 +110,33 @@ const PersonsCard = ({
       </div>
 
       {/* Mobile */}
-      <div className={cn("sm:hidden flex-col", { "sm:flex": previewMode })}>
-        <div>
+      <div
+        className={cn("sm:hidden flex-col gap-4", { "sm:flex": previewMode })}
+      >
+        <div className="flex justify-between items-center gap-4 pt-4 px-2.5">
+          <p className="inline-flex items-center gap-1 text-success-foreground bg-success rounded-lg text-xs px-2.5 py-0.5">
+            <User
+              size={14}
+              color="hsl(var(--success-foreground))"
+              fill="hsl(var(--success-foreground))"
+            />
+            {selected || options[0]}
+          </p>
           <ComboBox
             name={title}
             options={options}
-            handleSelect={(selected) =>
-              setPosition(parseInt(selected?.split(" ").pop() || "1") - 1)
-            }
-            leftContent={<User />}
+            handleSelect={(selected) => {
+              setSelected(selected || "");
+              setPosition(parseInt(selected?.split(" ").pop() || "1") - 1);
+            }}
             defaultValue={options[0]}
+            hideValue
           />
         </div>
         <Content
           details={info[position]}
           clicked={clicked}
-          className="flex flex-col"
+          className="flex flex-col bg-muted p-4 pt-0"
         />
       </div>
     </>
@@ -133,51 +144,6 @@ const PersonsCard = ({
 };
 
 export default PersonsCard;
-
-const Content = ({
-  details,
-  clicked,
-  className,
-}: {
-  details: IPersonCard[];
-  clicked: boolean;
-  className?: string;
-}) => {
-  return (
-    <div className={cn("grid grid-cols-3 gap-4", className)}>
-      {details?.map((el) => (
-        <div key={el?.field}>
-          {el?.type === "document template" ||
-          el?.type === "document upload" ? (
-            el.fileName && el.fileLink && el.fileSize && el.fileType ? (
-              <FileInput
-                fileName={el.fileName}
-                fileLink={el.fileLink}
-                fileSize={el.fileSize}
-                fileType={el.fileType}
-              />
-            ) : (
-              <div>
-                <p className="text-base font-semibold text-foreground-9">
-                  {el.field}
-                </p>
-                <p className="text-foreground-5 text-sm italic">
-                  Document not uploaded yet
-                </p>
-              </div>
-            )
-          ) : (
-            <TextWithDetails
-              title={el?.field}
-              text={typeof el?.value === "string" ? el?.value : ""}
-              list={typeof el?.value !== "string" ? el?.value : []}
-            />
-          )}
-        </div>
-      ))}
-    </div>
-  );
-};
 
 export interface IPersonCard {
   field: string;

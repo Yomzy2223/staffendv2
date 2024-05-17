@@ -34,19 +34,8 @@ const Service = () => {
 
   return (
     <>
-      <DoChecks
-        items={services || []}
-        emptyText="You have not added any service"
-        btnText="Add new service"
-        btnAction={addNewService}
-        className="flex flex-col gap-8"
-      >
-        <ServicesSection
-          services={services}
-          isLoading={servicesRes.isLoading}
-        />
-        <ServiceTableSection dateFrom={dateFrom} dateTo={dateTo} />
-      </DoChecks>
+      <ServicesSection services={services} isLoading={servicesRes.isLoading} />
+      <ServiceTableSection />
       <ServiceForm setOpen={setOpen} open={open} />
     </>
   );

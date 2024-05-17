@@ -42,7 +42,8 @@ const ServiceCard = ({ serviceData, isLoading }: IProps) => {
       className={cn(
         "cursor-pointer flex flex-col justify-center gap-2 rounded-2xl w-full min-w-[276px] max-w-[300px] h-[138px] ring-1 ring-border transition-all px-4 md:px-6",
         {
-          "ring-primary shadow-lg": serviceId === serviceData?.id,
+          "ring-primary shadow-lg bg-primary-8/20":
+            serviceId === serviceData?.id,
         }
       )}
       onClick={() => setQuery("serviceId", serviceData?.id || "")}

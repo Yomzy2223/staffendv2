@@ -13,6 +13,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useRequestActions } from "./actions";
 import { TRequestStatus } from "@/services/request/types";
+import ServiceTableSection from "@/components/features/services/serviceTableSection";
 
 const Home = () => {
   const [dateFrom, setDateFrom] = useState(startOfMonth(new Date()));
@@ -20,12 +21,12 @@ const Home = () => {
   const [selectedService, setSelectedService] = useState("");
   const [showCompare, setShowCompare] = useState(false);
 
-  const [selectedOverview, setSelectedOverview] = useState<TRequestStatus>();
-
   let daysDiff = differenceInDays(dateTo, dateFrom) + 1; // Complements for the last day
 
   const [compareFrom, setCompareFrom] = useState(subDays(dateFrom, daysDiff));
   const [compareTo, setCompareTo] = useState(subDays(dateTo, daysDiff));
+
+  const [selectedOverview, setSelectedOverview] = useState<TRequestStatus>();
 
   const {
     activeService,
@@ -46,8 +47,6 @@ const Home = () => {
     setCompareTo(subDays(dateTo, daysDiff));
   }, [dateFrom, dateTo]);
 
-  // const compareFrom = subDays(dateFrom, daysDiff);
-  // const compareTo = subDays(dateTo, daysDiff);
   const formatStr = isSameYear(compareFrom, dateFrom)
     ? "MMMM dd"
     : "MMMM dd, yyy";
@@ -110,11 +109,7 @@ const Home = () => {
             partner
           />
         </div>
-        {/* <TableSection
-          selectedServiceId={activeService?.id}
-          dateFrom={dateFrom}
-          dateTo={dateTo}
-        /> */}
+        <ServiceTableSection dateFrom={dateFrom} dateTo={dateTo} />
       </div>
     </>
   );

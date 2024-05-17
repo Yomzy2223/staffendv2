@@ -5,8 +5,6 @@ import PartnerAssignDialog from "@/components/dialogs/partnerAssign";
 import GeneralTable from "@/components/tables/generalTable";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { cn } from "@/lib/utils";
-import { Button } from "flowbite-react";
-import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import PreviewDetails from "./details/previewDetails";
 import { useTableActions } from "./tableActions";
@@ -15,8 +13,8 @@ const ServiceTableSection = ({
   dateFrom,
   dateTo,
 }: {
-  dateFrom: Date;
-  dateTo: Date;
+  dateFrom?: Date;
+  dateTo?: Date;
 }) => {
   const [openAssign, setOpenAssign] = useState(false);
   const [openUnAssign, setOpenUnAssign] = useState(false);
@@ -38,6 +36,7 @@ const ServiceTableSection = ({
     handleSearchSubmit,
     unAssignRequestMutation,
     requestsLoading,
+    handleSearch,
   } = useTableActions({
     setOpenAssign,
     setSelectedRequests,
@@ -71,6 +70,7 @@ const ServiceTableSection = ({
           preview={preview}
           handleFilter={(value) => {
             setActiveStatus(value || "");
+            handleSearch(value);
             deleteQueryStrings(["page"]);
           }}
         />

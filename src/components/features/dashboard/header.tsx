@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { format, isSameYear, max, subDays } from "date-fns";
+import { format, isSameYear, max, startOfMonth, subDays } from "date-fns";
 import { Button, Datepicker, TextInput, ToggleSwitch } from "flowbite-react";
 import { Calendar, CalendarDays, ChevronDown } from "lucide-react";
 import React, {
@@ -62,6 +62,7 @@ const DashboardHeader = ({
   };
 
   const opStartDate = new Date(2020, 0, 1);
+
   let minDate = opStartDate;
   switch (openDatePicker) {
     case 2:
@@ -100,9 +101,26 @@ const DashboardHeader = ({
       defaultDate = compareTo;
       break;
   }
-  console.log(defaultDate, minDate);
   defaultDate = max([defaultDate, minDate]);
-  console.log(defaultDate);
+
+  const handleRangeSelect = (range?: string) => {
+    switch (range?.toLowerCase()) {
+      case "all": {
+        setDateFrom(opStartDate);
+        setDateTo(new Date());
+        setCompareFrom(opStartDate);
+        setCompareTo(opStartDate);
+        break;
+      }
+      case "current month" || "custom": {
+        setDateFrom(startOfMonth(new Date()));
+        setDateTo(new Date());
+        setCompareFrom(subDays(startOfMonth(new Date()), daysDiff));
+        setCompareTo(subDays(new Date(), daysDiff));
+        break;
+      }
+    }
+  };
 
   return (
     <>
@@ -123,21 +141,31 @@ const DashboardHeader = ({
           />
         </div>
 
-        <Button
-          color="transparent"
-          size="fit"
-          className="[&_span]:items-stretch [&_span]:gap-4"
-          onClick={() => setOpen(true)}
-        >
-          <div className="inline-flex items-center gap-2 text-sm rounded-l-md border border-border px-3 py-2">
-            Current Month
-            <ChevronDown size={14} strokeWidth={3} />
-          </div>
+        <div className="flex items-stretch gap-4">
+          <ComboBox
+            name="range"
+            placeholder="All"
+            options={["All", "Current month", "Custom"]}
+            handleSelect={handleRangeSelect}
+            defaultValue="All"
+            className="max-w-max [&>span]:px-3 [&>span]:py-2"
+          />
+          <Button
+            color="transparent"
+            size="fit"
+            className="flex bg-yellow-300"
+            onClick={() => setOpen(true)}
+          >
+            {/* <div className="inline-flex items-center gap-2 text-sm rounded-l-md border border-border px-3 py-2">
+              Current Month
+              <ChevronDown size={14} strokeWidth={3} />
+            </div> */}
 
-          <div className="flex items-center px-1.5 bg-muted !min-h-full rounded">
-            <CalendarDays size={22} />
-          </div>
-        </Button>
+            <div className="flex items-center px-1.5 bg-muted !min-h-full rounded">
+              <CalendarDays size={22} />
+            </div>
+          </Button>
+        </div>
       </div>
 
       <DialogWrapper

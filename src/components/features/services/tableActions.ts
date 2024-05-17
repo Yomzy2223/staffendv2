@@ -37,8 +37,8 @@ export const useTableActions = ({
   setPartnerId: Dispatch<SetStateAction<string>>;
   itemsPerPage: number;
   activeStatus: string;
-  dateFrom: Date;
-  dateTo: Date;
+  dateFrom?: Date;
+  dateTo?: Date;
   setPreview: Dispatch<SetStateAction<string>>;
 }) => {
   const [searchValue, setSearchValue] = useState("");
@@ -61,26 +61,27 @@ export const useTableActions = ({
   const allRequestsResponse = useGetAllRequestsQuery({
     page: tablePage,
     pageSize: itemsPerPage,
-    startDate: format(dateFrom, "yyyy-MM-dd"),
-    endDate: format(dateTo, "yyyy-MM-dd"),
+    startDate: dateFrom ? format(dateFrom, "yyyy-MM-dd") : "",
+    endDate: dateTo ? format(dateTo, "yyyy-MM-dd") : "",
   });
   const serviceRequestsResponse = useGetServiceRequestsQuery({
     serviceId: selectedServiceId || "",
     page: tablePage,
     pageSize: itemsPerPage,
-    startDate: format(dateFrom, "yyyy-MM-dd"),
-    endDate: format(dateTo, "yyyy-MM-dd"),
+    startDate: dateFrom ? format(dateFrom, "yyyy-MM-dd") : "",
+    endDate: dateTo ? format(dateTo, "yyyy-MM-dd") : "",
   });
 
   const allRequests = allRequestsResponse.data?.data;
   const serviceRequests = serviceRequestsResponse.data?.data;
   const searchRequests = searchRequestMutation.data?.data;
 
-  const requests = searchValue
-    ? searchRequests?.data
-    : selectedServiceId
-    ? serviceRequests?.data
-    : allRequests?.data;
+  const requests =
+    searchValue || activeStatus
+      ? searchRequests?.data
+      : selectedServiceId
+      ? serviceRequests?.data
+      : allRequests?.data;
 
   const totalRequests = searchValue
     ? searchRequests?.total
@@ -93,25 +94,24 @@ export const useTableActions = ({
     serviceRequestsResponse.isLoading ||
     searchRequestMutation.isPending;
 
-  let filteredRequests = requests
-    ?.sort((a, b) => compareAsc(new Date(b?.createdAt), new Date(a?.createdAt)))
-    ?.filter((request) => {
-      if (!activeStatus) return true;
-      if (activeStatus.toLowerCase() === "unpaid drafts")
-        return request.status === "PENDING" && !request.paid;
-      else if (activeStatus.toLowerCase() === "paid drafts")
-        return request.status === "PENDING" && request.paid;
-      else if (activeStatus.toLowerCase() === "submitted")
-        return request.status === "SUBMITTED";
-      else if (activeStatus.toLowerCase() === "assigned")
-        return request.status === "ASSIGNED";
-      else if (activeStatus.toLowerCase() === "rejected")
-        return request.status === "REJECTED";
-      else if (activeStatus.toLowerCase() === "in progress")
-        return request.status === "ASSIGNED";
-      else if (activeStatus.toLowerCase() === "completed")
-        return request.status === "COMPLETED";
-    });
+  // let filteredRequests = requests?.filter((request) => {
+  //   if (!activeStatus) return true;
+  //   handleSearchChange(activeStatus);
+  // if (activeStatus.toLowerCase() === "unpaid drafts")
+  //   return request.status === "PENDING" && !request.paid;
+  // else if (activeStatus.toLowerCase() === "paid drafts")
+  //   return request.status === "PENDING" && request.paid;
+  // else if (activeStatus.toLowerCase() === "submitted")
+  //   return request.status === "SUBMITTED";
+  // else if (activeStatus.toLowerCase() === "assigned")
+  //   return request.status === "ASSIGNED";
+  // else if (activeStatus.toLowerCase() === "rejected")
+  //   return request.status === "REJECTED";
+  // else if (activeStatus.toLowerCase() === "in progress")
+  //   return request.status === "ASSIGNED";
+  // else if (activeStatus.toLowerCase() === "completed")
+  //   return request.status === "COMPLETED";
+  // });
 
   // filteredRequests = requests?.filter((el: IRequest) =>
   //   isWithinInterval(new Date(el.createdAt), {
@@ -126,7 +126,8 @@ export const useTableActions = ({
     text: service.name,
   }));
 
-  const handleSearchChange = (value: string) => {
+  const handleSearch = (value?: string) => {
+    if (!value) return;
     searchRequestMutation.mutate(
       {
         formInfo: { queryString: value, serviceId: selectedServiceId || "" },
@@ -137,6 +138,10 @@ export const useTableActions = ({
         onSuccess: () => deleteQueryStrings(["page"]),
       }
     );
+  };
+
+  const handleSearchChange = (value: string) => {
+    handleSearch(value);
     setSearchValue(value);
   };
 
@@ -199,7 +204,7 @@ export const useTableActions = ({
 
   // Services table body
   const tableBody =
-    filteredRequests?.map((request, i: number): ITableBody => {
+    requests?.map((request, i: number): ITableBody => {
       const assigned = request.status === "ASSIGNED";
       const completed = request.status === "COMPLETED";
       const assignable =
@@ -263,6 +268,7 @@ export const useTableActions = ({
     handleSearchChange,
     handleSearchSubmit,
     requestsLoading,
+    handleSearch,
   };
 };
 

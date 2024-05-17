@@ -11,6 +11,7 @@ const TableSection = ({
   selectedRows,
   setSelectedRows,
   onSelect,
+  preview,
 }: IProps) => {
   // The selected rows from the current page
   const selectedFromCurrent = tableBody?.map((row: ITableBody) =>
@@ -69,7 +70,10 @@ const TableSection = ({
                   : row?.handleClick &&
                     row.handleClick(e, row.rowId, row.rowInfo)
               }
-              className={cn({ "cursor-pointer": row?.handleClick })}
+              className={cn({
+                "cursor-pointer": row?.handleClick,
+                "border border-primary": preview === row.rowId,
+              })}
             >
               {selectOn && (
                 <Table.Cell
@@ -119,4 +123,5 @@ interface IProps {
   selectedRows: string[];
   setSelectedRows: Dispatch<SetStateAction<string[]>>;
   onSelect: (selected: string[]) => void;
+  preview?: string;
 }

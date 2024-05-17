@@ -1,6 +1,7 @@
 "use client";
 
 import PersonsCard from "@/components/cards/personsCard";
+import DoChecks from "@/components/DoChecks";
 import TextWithDetails from "@/components/texts/textWithDetails";
 import { cn } from "@/lib/utils";
 import {
@@ -9,6 +10,7 @@ import {
 } from "@/services/request";
 import { BriefcaseIcon } from "lucide-react";
 import React from "react";
+import RequestDetailsSkt from "../skeleton/requestDetailsSkt";
 import RequestDetailsWrapper from "./requestDetailsWrapper";
 
 const RequestDetails = ({
@@ -19,10 +21,11 @@ const RequestDetails = ({
   previewMode?: boolean;
 }) => {
   const requestQAFormsRes = useGetRequestFormQuery(requestId);
-  const requestQAForms = requestQAFormsRes.data?.data?.data;
+  const requestQAForms = requestQAFormsRes.data?.data?.data || [];
 
   const requestBusinessRes = useGetRequestBusinessQuery({ requestId });
   const requestBusiness = requestBusinessRes.data?.data?.data?.[0];
+  console.log(requestBusiness);
 
   const nonPersonForms = requestQAForms?.filter((el) => el.type !== "person");
   const personForms = requestQAForms?.filter((el) => el.type === "person");
@@ -32,8 +35,17 @@ const RequestDetails = ({
       (title) => personForms?.filter((form) => form.title === title) || []
     ) || [];
 
+  const removeEmtpyStrings = (array: string[]) =>
+    array.filter((el) => el.trim()?.length > 0);
+
   return (
-    <div className="flex flex-col gap-8 bg-background">
+    <DoChecks
+      items={requestQAForms}
+      isLoading={requestQAFormsRes.isLoading}
+      Skeleton={<RequestDetailsSkt previewMode={previewMode} />}
+      emptyText={`User hasn't submitted any form yet`}
+      className="flex flex-col gap-8 bg-background"
+    >
       {requestBusiness?.companyEmail && (
         <RequestDetailsWrapper
           title="Business Information"
@@ -58,7 +70,7 @@ const RequestDetails = ({
           })}
         >
           {form.subForm
-            ?.filter((field) => field.answer)
+            ?.filter((field) => removeEmtpyStrings(field.answer)?.length > 0)
             ?.map((field) => (
               <TextWithDetails
                 key={field.id}
@@ -86,15 +98,21 @@ const RequestDetails = ({
             <PersonsCard
               title={titles[i]}
               info={formGroup.map((form) =>
-                form.subForm.map((field) => ({
-                  field: field.question,
-                  value: field.answer,
-                  type: field.type,
-                  fileName: field.fileName,
-                  fileLink: field.fileLink,
-                  fileType: field.fileType,
-                  fileSize: field.fileSize,
-                }))
+                form.subForm
+                  ?.filter(
+                    (field) =>
+                      removeEmtpyStrings(field.answer)?.length > 0 ||
+                      field.fileLink
+                  )
+                  .map((field) => ({
+                    field: field.question,
+                    value: field.answer,
+                    type: field.type,
+                    fileName: field.fileName,
+                    fileLink: field.fileLink,
+                    fileType: field.fileType,
+                    fileSize: field.fileSize,
+                  }))
               )}
               previewMode={previewMode}
             />
@@ -112,7 +130,7 @@ const RequestDetails = ({
             requestId={requestId}
           />
         </RequestDetailsWrapper> */}
-    </div>
+    </DoChecks>
   );
 };
 

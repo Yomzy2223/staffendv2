@@ -37,55 +37,53 @@ const GeneralTable = ({
   }));
 
   return (
-    <CardWrapper className="pb-0 flex-1">
-      <div>
-        <HeaderSection
+    <CardWrapper className="flex flex-col flex-1 max-w-full pb-0">
+      <HeaderSection
+        selectOn={selectOn}
+        setSelectOn={setSelectOn}
+        selectedRows={selectedRows}
+        setSelectedRows={setSelectedRows}
+        tableNav={tableNav}
+        onSearchChange={onSearchChange}
+        onSearchSubmit={onSearchSubmit}
+        handleFilter={handleFilter}
+        preview={preview}
+      />
+
+      <DoChecks
+        items={tableBody}
+        emptyText="No data"
+        className="flex flex-col justify-between flex-1 max-w-full overflow-auto"
+        Skeleton={<TableSkeleton />}
+        isLoading={dataLoading}
+      >
+        <TableSection
+          onSelect={onRowSelect}
           selectOn={selectOn}
-          setSelectOn={setSelectOn}
           selectedRows={selectedRows}
           setSelectedRows={setSelectedRows}
-          tableNav={tableNav}
-          onSearchChange={onSearchChange}
-          onSearchSubmit={onSearchSubmit}
-          handleFilter={handleFilter}
+          tableBody={preview ? tableBodyPreview : tableBody}
+          tableHeaders={preview ? tableHeaders.slice(0, 3) : tableHeaders}
           preview={preview}
         />
 
-        <DoChecks
-          items={tableBody}
-          emptyText="No data"
-          className="max-w-full overflow-auto"
-          Skeleton={<TableSkeleton />}
-          isLoading={dataLoading}
-        >
-          <TableSection
-            onSelect={onRowSelect}
-            selectOn={selectOn}
-            selectedRows={selectedRows}
-            setSelectedRows={setSelectedRows}
-            tableBody={preview ? tableBodyPreview : tableBody}
-            tableHeaders={preview ? tableHeaders.slice(0, 3) : tableHeaders}
-          />
-          {itemsLength > itemsPerPage && (
-            <div className="flex flex-col justify-between gap-4 sticky left-0 p-4 md:flex-row md:items-center md:py-5">
-              <p className="inline-flex gap-1 text-sm text-foreground-5">
-                Showing
-                <span className="text-foreground font-medium">
-                  {offset + 1}-{offset + tableBody?.length}
-                </span>
-                of{" "}
-                <span className="text-foreground font-medium">
-                  {itemsLength}
-                </span>
-              </p>
-              <PaginatedItems
-                itemsLength={itemsLength}
-                itemsPerPage={itemsPerPage}
-              />
-            </div>
-          )}
-        </DoChecks>
-      </div>
+        {itemsLength > itemsPerPage && (
+          <div className="flex flex-col justify-between gap-4 sticky left-0 p-4 md:flex-row md:items-center md:py-5">
+            <p className="inline-flex gap-1 text-sm text-foreground-5">
+              Showing
+              <span className="text-foreground font-medium whitespace-nowrap">
+                {offset + 1}-{offset + tableBody?.length}
+              </span>
+              of{" "}
+              <span className="text-foreground font-medium">{itemsLength}</span>
+            </p>
+            <PaginatedItems
+              itemsLength={itemsLength}
+              itemsPerPage={itemsPerPage}
+            />
+          </div>
+        )}
+      </DoChecks>
     </CardWrapper>
   );
 };

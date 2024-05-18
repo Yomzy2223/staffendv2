@@ -11,6 +11,7 @@ const RequestDetailsWrapper = ({
   raiseIssueAction,
   className,
   wrapperClassName,
+  previewMode,
 }: {
   children: ReactNode;
   title: string;
@@ -18,13 +19,16 @@ const RequestDetailsWrapper = ({
   icon?: any;
   className?: string;
   wrapperClassName?: string;
+  previewMode?: boolean;
 }) => {
   return (
     <div className={cn("flex flex-col gap-8 sm:flex-row", wrapperClassName)}>
       <div className="flex flex-1 gap-2 min-h-full sm:max-w-[360px] rounded">
-        <div className="hidden bg-card/25 p-3 rounded h-max sm:block">
-          {icon}
-        </div>
+        {!previewMode && (
+          <div className="hidden bg-card/25 p-3 rounded h-max sm:block">
+            {icon}
+          </div>
+        )}
         <div className="bg-card/25 flex flex-row justify-between gap-6 p-4 rounded w-full sm:flex-col">
           <p className="sb-text-16 font-semibold uppercase">{title}</p>
           <Button

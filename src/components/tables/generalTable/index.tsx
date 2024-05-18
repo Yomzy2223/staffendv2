@@ -11,6 +11,7 @@ import CardWrapper from "@/components/wrappers/cardWrapper";
 import TableSkeleton from "./TableSkeleton";
 
 const GeneralTable = ({
+  title,
   tableHeaders,
   tableBody,
   tableNav,
@@ -39,6 +40,7 @@ const GeneralTable = ({
   return (
     <CardWrapper className="flex flex-col flex-1 max-w-full pb-0">
       <HeaderSection
+        title={title}
         selectOn={selectOn}
         setSelectOn={setSelectOn}
         selectedRows={selectedRows}
@@ -91,6 +93,7 @@ const GeneralTable = ({
 export default GeneralTable;
 
 interface IProps extends IPagination {
+  title: string;
   tableHeaders: string[];
   tableBody: ITableBody[];
   tableNav: string[];

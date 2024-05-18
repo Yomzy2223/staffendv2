@@ -1,59 +1,107 @@
 import CardWrapper from "@/components/wrappers/cardWrapper";
 import { cn } from "@/lib/utils";
-import { addDays, differenceInDays, format, isSameDay } from "date-fns";
+import { TRequestAll } from "@/services/request/types";
+import {
+  addDays,
+  compareAsc,
+  differenceInDays,
+  format,
+  isSameDay,
+  subDays,
+} from "date-fns";
 import React, { MouseEventHandler } from "react";
 import { LineChart, Line, ResponsiveContainer } from "recharts";
 
 const OverviewChart = ({
   title,
-  compare,
-  current,
+  compareData,
+  rangeData,
   className,
+  dateFrom,
+  dateTo,
   compareFrom,
-  currentFrom,
-  currentTo,
+  compareTo,
   selected,
   onClick,
   formatStr,
   showCompare,
+  reqsDateData,
+  compareDateData,
 }: {
   title: string;
-  compare: any[];
-  current: any[];
+  compareData: any[];
+  rangeData: any[];
   bottomText?: string;
   className?: string;
-  compareFrom: Date;
-  currentFrom: Date;
-  currentTo: Date;
+  dateFrom?: Date;
+  dateTo?: Date;
+  compareFrom?: Date;
+  compareTo?: Date;
   selected: boolean;
   onClick: MouseEventHandler<HTMLDivElement>;
   formatStr: string;
   showCompare: boolean;
+  reqsDateData: { firstDate: Date; lastDate: Date; daysDiff: number };
+  compareDateData: { firstDate: Date; lastDate: Date; daysDiff: number };
 }) => {
-  const totalCurrent = current?.length || 0;
-  const totalCompare = compare?.length || 0;
+  const totalCurrent = rangeData?.length || 0;
+  const totalCompare = compareData?.length || 0;
 
-  const daysInRange = differenceInDays(currentTo, currentFrom) + 1;
+  // const getDataRangeInfo = (data: TRequestAll[]) => {
+  //   const sortedData = data?.sort((a, b) =>
+  //     compareAsc(a?.createdAt, b?.createdAt)
+  //   );
+  //   const firstDate = sortedData?.[0]?.createdAt;
+  //   const lastDate = sortedData?.[sortedData?.length - 1]?.createdAt;
+  //   const daysDiff =
+  //     firstDate && lastDate ? differenceInDays(lastDate, firstDate) + 1 : 0;
+  //   return {
+  //     daysDiff,
+  //     firstDate: new Date(firstDate),
+  //     lastDate: new Date(lastDate),
+  //   };
+  // };
+
+  // const daysInDateRange =
+  //   dateTo && dateFrom
+  //     ? differenceInDays(dateTo, dateFrom) + 1
+  //     : getDataRangeInfo(rangeData)?.daysDiff;
+  // const daysInCompareRange =
+  //   compareTo && compareFrom
+  //     ? differenceInDays(compareTo, compareFrom) + 1
+  //     : getDataRangeInfo(compareData)?.daysDiff;
 
   // Returns the data for each day
   const getDayData = (inc: number, isCompare: boolean) => {
-    const allData = isCompare ? compare : current;
+    const allData = isCompare ? compareData : rangeData;
     const dayDate = isCompare
-      ? addDays(compareFrom, inc)
-      : addDays(currentFrom, inc);
-    const dayData = allData?.filter((el) =>
-      isSameDay(new Date(el.createdAt), dayDate)
-    );
+      ? compareFrom
+        ? addDays(compareFrom, inc)
+        : addDays(
+            subDays(compareDateData.firstDate, compareDateData.daysDiff),
+            inc
+          )
+      : dateFrom
+      ? addDays(dateFrom, inc)
+      : addDays(reqsDateData.firstDate, inc);
+    if (dayDate) {
+      const dayData = allData?.filter((el) =>
+        isSameDay(new Date(el.createdAt), dayDate)
+      );
 
-    return {
-      dayDate: format(dayDate, formatStr),
-      dayData,
-    };
+      return {
+        dayDate: format(dayDate, formatStr),
+        dayData,
+      };
+    }
   };
 
   // Returns the data for selected range, if isCompare is true. Returns for compare range, if otherwise
   const getRangeData = (isCompare: boolean) => {
     let rangeData: any[] = [];
+    const daysInRange = isCompare
+      ? compareDateData.daysDiff
+      : reqsDateData.daysDiff;
     for (let i = 0; i < daysInRange; i++) {
       const dayData = getDayData(i, isCompare);
       rangeData = [...rangeData, dayData];
@@ -61,19 +109,18 @@ const OverviewChart = ({
     return rangeData;
   };
 
-  const rangeData: IDayData[] = getRangeData(false);
-  const rangeVsData: IDayData[] = getRangeData(true);
+  const rangeChartData: IDayData[] = getRangeData(false);
+  const compareChartData: IDayData[] = getRangeData(true);
 
   // Returns the data to be passed to the chart
-  const data = rangeData.map((el, i) => {
+  const data = rangeChartData.map((el, i) => {
     return {
-      date: rangeData[i].dayDate,
-      current: rangeData?.[i]?.dayData?.length || 0,
-      compare: rangeVsData?.[i]?.dayData?.length || 0,
+      date: rangeChartData[i].dayDate,
+      current: rangeChartData?.[i]?.dayData?.length || 0,
+      compare: compareChartData?.[i]?.dayData?.length || 0,
     };
   });
-
-  // if (title === "Drafts") console.log(data);
+  // if (title === "Submitted") console.log(getDataRangeInfo(rangeData));
 
   return (
     <CardWrapper

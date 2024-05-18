@@ -6,6 +6,7 @@ import { Search } from "lucide-react";
 import React, { ChangeEventHandler, Dispatch, SetStateAction } from "react";
 
 const HeaderSection = ({
+  title,
   tableNav,
   selectOn,
   setSelectOn,
@@ -19,7 +20,7 @@ const HeaderSection = ({
   return (
     <div className="flex justify-between gap-6 py-1">
       <div>
-        <p className="sb-text-24 font-semibold mb-3">Recent services</p>
+        <p className="sb-text-24 font-semibold mb-3">{title}</p>
         <div className="flex flex-col gap-3 text-sm font-normal mb-6 md:gap-4 md:flex-row md:items-center">
           <span>Show only:</span>
           <ComboBox
@@ -70,7 +71,7 @@ const HeaderSection = ({
 export default HeaderSection;
 
 interface IProps {
-  // tableNav: { name: string; value: string; text: string }[];
+  title: string;
   tableNav: string[];
   selectOn: boolean;
   setSelectOn: Dispatch<SetStateAction<boolean>>;

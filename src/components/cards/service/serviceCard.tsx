@@ -15,7 +15,7 @@ import ServiceCardSkeleton from "./serviceCardSkeleton";
 const ServiceCard = ({ serviceData, isLoading }: IProps) => {
   const [open, setOpen] = useState(false);
 
-  const { setQuery } = useGlobalFunctions();
+  const { setQuery, setQueriesWithPath } = useGlobalFunctions();
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -46,7 +46,12 @@ const ServiceCard = ({ serviceData, isLoading }: IProps) => {
             serviceId === serviceData?.id,
         }
       )}
-      onClick={() => setQuery("serviceId", serviceData?.id || "")}
+      onClick={() => {
+        setQueriesWithPath({
+          queries: [{ name: "serviceId", value: serviceData?.id || "" }],
+          rmQueries: ["page"],
+        });
+      }}
       tabIndex={0}
     >
       <div>

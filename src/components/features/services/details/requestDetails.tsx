@@ -52,6 +52,7 @@ const RequestDetails = ({
           icon={<BriefcaseIcon />}
           raiseIssueAction={() => {}}
           className="flex flex-col gap-6"
+          previewMode={previewMode}
         >
           {/* <TextWithDetails title="Operational Country" text={requestDetails?.product.country} />
           <TextWithDetails title="Product Type" text={requestDetails?.currentState} />{" "} */}
@@ -65,6 +66,7 @@ const RequestDetails = ({
           icon={<BriefcaseIcon />}
           raiseIssueAction={() => {}}
           className="flex flex-col gap-6"
+          previewMode={previewMode}
           wrapperClassName={cn({
             "gap-0": previewMode,
           })}
@@ -88,6 +90,7 @@ const RequestDetails = ({
             title={titles[i]}
             icon={<BriefcaseIcon />}
             raiseIssueAction={() => {}}
+            previewMode={previewMode}
             className={cn("flex flex-col gap-6 p-0 w-[600px] max-w-max", {
               "overflow-visible": previewMode,
             })}
@@ -124,6 +127,7 @@ const RequestDetails = ({
           icon={<BriefcaseIcon />}
           raiseIssueAction={() => {}}
           className="flex flex-col gap-6"
+          previewMode={previewMode}
         >
           <DocSection
             businessId={requestBusiness?.id || ""}

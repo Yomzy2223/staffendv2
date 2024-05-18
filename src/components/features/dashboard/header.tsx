@@ -1,15 +1,11 @@
 import { cn } from "@/lib/utils";
-import { format, isSameYear, max, startOfMonth, subDays } from "date-fns";
-import { Button, Datepicker, TextInput, ToggleSwitch } from "flowbite-react";
-import { Calendar, CalendarDays, ChevronDown } from "lucide-react";
-import React, {
-  Dispatch,
-  MouseEventHandler,
-  SetStateAction,
-  useState,
-} from "react";
+import { startOfMonth, subDays } from "date-fns";
+import { Button } from "flowbite-react";
+import { CalendarDays } from "lucide-react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import ComboBox from "../../form/dynamicForm/comboBox";
 import DialogWrapper from "../../wrappers/dialogWrapper";
+import CustomDate from "./customDate";
 
 const DashboardHeader = ({
   dateFrom,
@@ -28,26 +24,10 @@ const DashboardHeader = ({
   showCompare,
   errorMsg,
   setShowCompare,
-}: {
-  dateFrom: Date;
-  dateTo: Date;
-  setDateFrom: Dispatch<SetStateAction<Date>>;
-  setDateTo: Dispatch<SetStateAction<Date>>;
-  compareFrom: Date;
-  compareTo: Date;
-  setCompareFrom: Dispatch<SetStateAction<Date>>;
-  setCompareTo: Dispatch<SetStateAction<Date>>;
-  daysDiff: number;
-  selectedService: string;
-  setSelectedService: Dispatch<SetStateAction<string>>;
-  servicesNames: string[];
-  isLoading: boolean;
-  errorMsg?: string;
-  showCompare: boolean;
-  setShowCompare: Dispatch<SetStateAction<boolean>>;
-}) => {
+}: IProps) => {
   const [open, setOpen] = useState(false);
   const [openDatePicker, setOpenDatePicker] = useState<number>();
+  const [range, setRange] = useState("");
 
   // let defaultDate = dateTo;
   // let minDate = dateFrom;
@@ -63,56 +43,24 @@ const DashboardHeader = ({
 
   const opStartDate = new Date(2020, 0, 1);
 
-  let minDate = opStartDate;
-  switch (openDatePicker) {
-    case 2:
-      minDate = dateFrom;
-      break;
-    case 3:
-      minDate = opStartDate;
-      break;
-    case 4:
-      minDate = compareFrom;
-      break;
-  }
-
-  let maxDate = new Date();
-  switch (openDatePicker) {
-    case 1:
-      maxDate = dateTo;
-      break;
-    case 3:
-      maxDate = compareTo;
-      break;
-    case 4:
-      maxDate = dateFrom;
-      break;
-  }
-
-  let defaultDate = dateFrom;
-  switch (openDatePicker) {
-    case 2:
-      defaultDate = dateTo;
-      break;
-    case 3:
-      defaultDate = compareFrom;
-      break;
-    case 4:
-      defaultDate = compareTo;
-      break;
-  }
-  defaultDate = max([defaultDate, minDate]);
-
   const handleRangeSelect = (range?: string) => {
+    setRange(range || "");
     switch (range?.toLowerCase()) {
       case "all": {
-        setDateFrom(opStartDate);
-        setDateTo(new Date());
-        setCompareFrom(opStartDate);
-        setCompareTo(opStartDate);
+        setDateFrom(undefined);
+        setDateTo(undefined);
+        setCompareFrom(undefined);
+        setCompareTo(undefined);
         break;
       }
-      case "current month" || "custom": {
+      case "current month": {
+        setDateFrom(startOfMonth(new Date()));
+        setDateTo(new Date());
+        setCompareFrom(subDays(startOfMonth(new Date()), daysDiff));
+        setCompareTo(subDays(new Date(), daysDiff));
+        break;
+      }
+      case "custom": {
         setDateFrom(startOfMonth(new Date()));
         setDateTo(new Date());
         setCompareFrom(subDays(startOfMonth(new Date()), daysDiff));
@@ -137,7 +85,7 @@ const DashboardHeader = ({
             defaultValue={selectedService}
             optionsLoading={isLoading}
             optionsErrorMsg={errorMsg}
-            className="max-w-max"
+            className="max-w-max !border-none [&>span]:!p-0 !ring-0"
           />
         </div>
 
@@ -148,23 +96,23 @@ const DashboardHeader = ({
             options={["All", "Current month", "Custom"]}
             handleSelect={handleRangeSelect}
             defaultValue="All"
-            className="max-w-max [&>span]:px-3 [&>span]:py-2"
+            className={cn({
+              "[&>span]:!rounded-r-none rounded-r-none":
+                range.toLowerCase() === "custom",
+            })}
           />
-          <Button
-            color="transparent"
-            size="fit"
-            className="flex bg-yellow-300"
-            onClick={() => setOpen(true)}
-          >
-            {/* <div className="inline-flex items-center gap-2 text-sm rounded-l-md border border-border px-3 py-2">
-              Current Month
-              <ChevronDown size={14} strokeWidth={3} />
-            </div> */}
-
-            <div className="flex items-center px-1.5 bg-muted !min-h-full rounded">
-              <CalendarDays size={22} />
-            </div>
-          </Button>
+          {range.toLowerCase() === "custom" && (
+            <Button
+              color="transparent"
+              size="fit"
+              className="flex"
+              onClick={() => setOpen(true)}
+            >
+              <div className="flex items-center px-2 bg-muted py-2.5 rounded-r-md">
+                <CalendarDays size={22} />
+              </div>
+            </Button>
+          )}
         </div>
       </div>
 
@@ -175,122 +123,24 @@ const DashboardHeader = ({
         classNames={{ body: "flex flex-col gap-6" }}
         dismissible
       >
-        <ToggleSwitch
-          checked={showCompare}
-          label="Compare"
-          onChange={setShowCompare}
-          color="primary"
-          className="shrink-0"
+        <CustomDate
+          dateFrom={dateFrom}
+          dateTo={dateTo}
+          compareFrom={compareFrom}
+          compareTo={compareTo}
+          showCompare={showCompare}
+          setShowCompare={setShowCompare}
+          openDatePicker={openDatePicker}
+          setOpenDatePicker={setOpenDatePicker}
+          onSelectedDateChanged={onSelectedDateChanged}
+          setOpen={setOpen}
         />
-        <div
-          className={cn("flex flex-col gap-2", {
-            "sm:flex-row items-end": showCompare,
-          })}
-        >
-          <DateSelector
-            id="dateFrom"
-            date={dateFrom}
-            onClick={() => setOpenDatePicker(1)}
-            isActive={openDatePicker === 1}
-            label="Start date"
-          />
-          {showCompare && <span className="my-3">to</span>}
-          <DateSelector
-            id="dateTo"
-            date={dateTo}
-            onClick={() => setOpenDatePicker(2)}
-            isActive={openDatePicker === 2}
-            label="End date"
-          />
-        </div>
-        {showCompare && (
-          <div className="space-y-6">
-            <p className="mx-auto w-max text-sm font-normal">against</p>
-            <div className="flex flex-col gap-2 sm:flex-row">
-              <DateSelector
-                id="compareFrom"
-                date={compareFrom}
-                onClick={() => setOpenDatePicker(3)}
-                isActive={openDatePicker === 3}
-                label="Start date"
-              />
-              <span className="my-3">to</span>
-              <DateSelector
-                id="compareTo"
-                date={compareTo}
-                onClick={() => setOpenDatePicker(4)}
-                isActive={openDatePicker === 4}
-                label="End date"
-              />
-            </div>
-          </div>
-        )}
-        {!!openDatePicker && (
-          <Datepicker
-            inline
-            defaultDate={defaultDate}
-            minDate={minDate}
-            maxDate={maxDate}
-            onSelectedDateChanged={onSelectedDateChanged}
-            theme={{
-              popup: {
-                root: {
-                  inner: "w-full py-2",
-                },
-                view: {
-                  base: "[&_div]:w-full",
-                },
-              },
-            }}
-          />
-        )}
       </DialogWrapper>
     </>
   );
 };
 
 export default DashboardHeader;
-
-export const DateSelector = ({
-  id,
-  label,
-  isActive,
-  date,
-  onClick,
-  labelClassName,
-}: {
-  id: string;
-  label: string;
-  isActive?: boolean;
-  date: Date;
-  onClick: MouseEventHandler<HTMLButtonElement>;
-  labelClassName?: string;
-}) => {
-  return (
-    <div className="!flex-1">
-      <label
-        htmlFor={id}
-        className={cn("text-sm text-foreground-2", labelClassName)}
-      >
-        {label}
-      </label>
-      <Button
-        outline
-        id={id}
-        onClick={onClick}
-        className={cn("!w-full !max-w-full [&_span]:!justify-start", {
-          "ring-1 ring-primary border-primary focus:!ring-1 [&_span]focus:!border-primary":
-            isActive,
-        })}
-      >
-        <div className="rounded-lg">
-          <Calendar fill="hsl(var(--foreground-5))" color="white" />
-        </div>
-        {format(date, "MMM dd, yyyy")}
-      </Button>
-    </div>
-  );
-};
 
 //  <div className={cn("sb-text-16")}>
 //    <label
@@ -319,3 +169,22 @@ export const DateSelector = ({
 //                   maxDate={dateTo}
 //                   onSelectedDateChanged={(date) => setDateFrom(date)}
 //                 />
+
+interface IProps {
+  dateFrom?: Date;
+  dateTo?: Date;
+  setDateFrom: Dispatch<SetStateAction<Date | undefined>>;
+  setDateTo: Dispatch<SetStateAction<Date | undefined>>;
+  compareFrom?: Date;
+  compareTo?: Date;
+  setCompareFrom: Dispatch<SetStateAction<Date | undefined>>;
+  setCompareTo: Dispatch<SetStateAction<Date | undefined>>;
+  daysDiff: number;
+  selectedService: string;
+  setSelectedService: Dispatch<SetStateAction<string>>;
+  servicesNames: string[];
+  isLoading: boolean;
+  errorMsg?: string;
+  showCompare: boolean;
+  setShowCompare: Dispatch<SetStateAction<boolean>>;
+}

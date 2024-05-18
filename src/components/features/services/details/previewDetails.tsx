@@ -12,7 +12,6 @@ const PreviewDetails = ({
   setPreview: Dispatch<SetStateAction<string>>;
 }) => {
   const router = useRouter();
-  const { deleteQueryStrings } = useGlobalFunctions();
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -24,8 +23,6 @@ const PreviewDetails = ({
     <div
       ref={ref}
       className="flex flex-1 flex-col gap-6 bg-background min-h-[max(500px,100%)] max-h-[700px] max-w-[50%] overflow-auto rounded-lg p-4 pt-0"
-      tabIndex={0}
-      onBlur={() => deleteQueryStrings(["preview"])}
     >
       <div className="flex flex-row justify-end gap-6 sticky top-0 bg-background py-4">
         <Button

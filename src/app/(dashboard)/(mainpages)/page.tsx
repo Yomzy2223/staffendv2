@@ -1,58 +1,65 @@
 "use client";
 
-import DetailedAnalytics from "@/components/features/dashboard/detailedAnalytics";
-import OverviewSection from "@/components/features/dashboard/overview";
+import OverviewSection, {
+  IOverviewStatus,
+} from "@/components/features/dashboard/overview";
 import DashboardHeader from "@/components/features/dashboard/header";
 import {
+  compareAsc,
   differenceInDays,
   format,
   isSameYear,
-  startOfMonth,
   subDays,
 } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { useRequestActions } from "./actions";
-import { TRequestStatus } from "@/services/request/types";
-import ServiceTableSection from "@/components/features/services/serviceTableSection";
 
 const Home = () => {
-  const [dateFrom, setDateFrom] = useState(startOfMonth(new Date()));
-  const [dateTo, setDateTo] = useState(new Date());
+  const [dateFrom, setDateFrom] = useState<Date>();
+  const [dateTo, setDateTo] = useState<Date>();
+  const [compareFrom, setCompareFrom] = useState<Date>();
+  const [compareTo, setCompareTo] = useState<Date>();
   const [selectedService, setSelectedService] = useState("");
   const [showCompare, setShowCompare] = useState(false);
+  const [selectedOverview, setSelectedOverview] = useState<IOverviewStatus>();
 
-  let daysDiff = differenceInDays(dateTo, dateFrom) + 1; // Complements for the last day
-
-  const [compareFrom, setCompareFrom] = useState(subDays(dateFrom, daysDiff));
-  const [compareTo, setCompareTo] = useState(subDays(dateTo, daysDiff));
-
-  const [selectedOverview, setSelectedOverview] = useState<TRequestStatus>();
+  const rangeSelected = dateFrom && dateTo;
 
   const {
     activeService,
     servicesNames,
     servicesRes,
-    // daysDiff,
     requestsByStatus,
     requestsVsByStatus,
     users,
+    reqsDateData,
+    compareDateData,
   } = useRequestActions({
     dateFrom,
     dateTo,
+    compareFrom,
+    compareTo,
     selectedService,
   });
 
   useEffect(() => {
-    setCompareFrom(subDays(dateFrom, daysDiff));
-    setCompareTo(subDays(dateTo, daysDiff));
+    if (rangeSelected) {
+      setCompareFrom(subDays(dateFrom, compareDateData.daysDiff));
+      setCompareTo(subDays(dateTo, compareDateData.daysDiff));
+    }
   }, [dateFrom, dateTo]);
 
-  const formatStr = isSameYear(compareFrom, dateFrom)
-    ? "MMMM dd"
-    : "MMMM dd, yyy";
+  const formatStr =
+    compareFrom && dateFrom
+      ? isSameYear(compareFrom, dateFrom)
+        ? "MMMM dd"
+        : "MMMM dd, yyy"
+      : "MMMM dd, yyy";
 
   const compareLabel =
-    format(compareFrom, formatStr) + " - " + format(compareTo, formatStr);
+    compareFrom && compareTo
+      ? format(compareFrom, formatStr) + " - " + format(compareTo, formatStr)
+      : "";
 
   return (
     <>
@@ -65,7 +72,7 @@ const Home = () => {
         compareTo={compareTo}
         setCompareFrom={setCompareFrom}
         setCompareTo={setCompareTo}
-        daysDiff={daysDiff}
+        daysDiff={reqsDateData.daysDiff}
         isLoading={servicesRes.isLoading}
         errorMsg={servicesRes.error?.message}
         selectedService={activeService?.name || ""}
@@ -78,7 +85,10 @@ const Home = () => {
         <OverviewSection
           dateFrom={dateFrom}
           dateTo={dateTo}
-          daysDiff={daysDiff}
+          compareFrom={compareFrom}
+          compareTo={compareTo}
+          reqsDateData={reqsDateData}
+          compareDateData={compareDateData}
           requestsByStatus={requestsByStatus}
           requestsVsByStatus={requestsVsByStatus}
           users={users}
@@ -87,7 +97,7 @@ const Home = () => {
           formatStr={formatStr}
           showCompare={showCompare}
         />
-        <div className="flex flex-col gap-8 lg:flex-row">
+        {/* <div className="flex flex-col gap-8 lg:flex-row">
           <DetailedAnalytics
             dateFrom={dateFrom}
             dateTo={dateTo}
@@ -109,7 +119,7 @@ const Home = () => {
             partner
           />
         </div>
-        <ServiceTableSection dateFrom={dateFrom} dateTo={dateTo} />
+        <ServiceTableSection dateFrom={dateFrom} dateTo={dateTo} /> */}
       </div>
     </>
   );

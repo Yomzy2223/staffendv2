@@ -33,7 +33,7 @@ const PersonsCard = ({
   };
 
   const headers = clicked ? info?.length : 1;
-  const options = Array(headers)
+  const options = Array(info?.length)
     .fill("")
     ?.map((el, i) => title + " " + (i + 1));
 

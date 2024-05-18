@@ -6,6 +6,7 @@ const RequestDetailsSkt = ({ previewMode }: { previewMode?: boolean }) => {
   return (
     <div className="flex flex-col gap-6">
       <div className={cn("flex gap-4", { "gap-0": previewMode })}>
+        {!previewMode && <Skeleton className="h-10 w-10 mr-4 shrink-0" />}
         <Skeleton className={cn("h-80 w-96", { "h-52 w-60": previewMode })} />
         <div className="h-52 w-80 space-y-6">
           <div>
@@ -23,6 +24,7 @@ const RequestDetailsSkt = ({ previewMode }: { previewMode?: boolean }) => {
         </div>
       </div>
       <div className={cn("flex gap-4", { "gap-0": previewMode })}>
+        {!previewMode && <Skeleton className="h-10 w-10 mr-4 shrink-0" />}
         <Skeleton className={cn("h-80 w-96", { "h-40 w-60": previewMode })} />
         <div className="h-40 w-80 space-y-6">
           <div>
@@ -75,6 +77,7 @@ const RequestDetailsSkt = ({ previewMode }: { previewMode?: boolean }) => {
         </div>
       ) : (
         <div className={cn("flex gap-4", { "gap-0": previewMode })}>
+          <Skeleton className="h-10 w-10 mr-4 shrink-0" />
           <Skeleton className="h-80 w-96" />
           <div className="h-40 w-80 space-y-6">
             <div>

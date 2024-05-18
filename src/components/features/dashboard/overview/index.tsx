@@ -2,14 +2,14 @@ import React, { Dispatch, SetStateAction } from "react";
 import DraggableScroll from "@/components/wrappers/draggableScroll";
 import AnalyticsCard2 from "@/components/features/dashboard/analytics/analyticsCard2";
 import OverviewChart from "@/components/features/dashboard/analytics/overviewChart";
-import { subDays } from "date-fns";
 import { IUser } from "@/hooks/api/types";
 import { IReq } from "@/app/(dashboard)/(mainpages)/actions";
 
 const OverviewSection = ({
   dateFrom,
   dateTo,
-  daysDiff,
+  compareFrom,
+  compareTo,
   users,
   requestsByStatus,
   requestsVsByStatus,
@@ -17,12 +17,13 @@ const OverviewSection = ({
   setSelectedOverview,
   formatStr,
   showCompare,
-  hideUserCard,
+  reqsDateData,
+  compareDateData,
 }: IProps) => {
-  const compareFrom = subDays(dateFrom, daysDiff);
-  const bottomText = daysDiff > 1 ? `vs previous ${daysDiff} months` : "";
+  // const bottomText = daysDiff > 1 ? `vs previous ${daysDiff} months` : "";
+  const bottomText = "";
 
-  const handleSelect = (status: TStatus) => {
+  const handleSelect = (status: IOverviewStatus) => {
     if (!setSelectedOverview) return;
     if (status === selectedOverview) {
       setSelectedOverview(undefined);
@@ -41,82 +42,95 @@ const OverviewSection = ({
             total="163.5K"
             className="snap-start"
           /> */}
-        {!hideUserCard && (
-          <AnalyticsCard2
-            title="User signups"
-            total={users?.length || 0}
-            className="snap-start"
-          />
-        )}
+        <AnalyticsCard2
+          title="User signups"
+          total={users?.length || 0}
+          className="snap-start"
+        />
         <OverviewChart
           title="Unpaid Drafts"
-          current={requestsByStatus.unPaidDrafts}
-          compare={requestsVsByStatus.unPaidDrafts}
+          rangeData={requestsByStatus.unPaidDrafts}
+          compareData={requestsVsByStatus.unPaidDrafts}
           className="snap-start"
           bottomText={bottomText}
-          currentTo={dateTo}
-          currentFrom={dateFrom}
+          dateFrom={dateFrom}
+          dateTo={dateTo}
           compareFrom={compareFrom}
+          compareTo={compareTo}
           selected={selectedOverview === "unPaidDrafts"}
           onClick={(e) => handleSelect("unPaidDrafts")}
           formatStr={formatStr}
           showCompare={showCompare}
+          reqsDateData={reqsDateData}
+          compareDateData={compareDateData}
         />
         <OverviewChart
           title="Paid Drafts"
-          current={requestsByStatus.paidDrafts}
-          compare={requestsVsByStatus.paidDrafts}
+          rangeData={requestsByStatus.paidDrafts}
+          compareData={requestsVsByStatus.paidDrafts}
           className="snap-start"
           bottomText={bottomText}
-          currentTo={dateTo}
-          currentFrom={dateFrom}
+          dateFrom={dateFrom}
+          dateTo={dateTo}
           compareFrom={compareFrom}
+          compareTo={compareTo}
           selected={selectedOverview === "paidDrafts"}
           onClick={(e) => handleSelect("paidDrafts")}
           formatStr={formatStr}
           showCompare={showCompare}
+          reqsDateData={reqsDateData}
+          compareDateData={compareDateData}
         />
         <OverviewChart
           title="Submitted"
-          current={requestsByStatus.submitted}
-          compare={requestsVsByStatus.submitted}
+          rangeData={requestsByStatus.submitted}
+          compareData={requestsVsByStatus.submitted}
           className="snap-start"
           bottomText={bottomText}
-          currentTo={dateTo}
-          currentFrom={dateFrom}
+          dateFrom={dateFrom}
+          dateTo={dateTo}
           compareFrom={compareFrom}
+          compareTo={compareTo}
           selected={selectedOverview === "submitted"}
           onClick={(e) => handleSelect("submitted")}
           formatStr={formatStr}
           showCompare={showCompare}
+          reqsDateData={reqsDateData}
+          compareDateData={compareDateData}
         />
         <OverviewChart
           title="In Progress"
-          current={requestsByStatus.inProgress}
-          compare={requestsVsByStatus.inProgress}
+          rangeData={requestsByStatus.inProgress}
+          compareData={requestsVsByStatus.inProgress}
           className="snap-start"
           bottomText={bottomText}
-          currentTo={dateTo}
-          currentFrom={dateFrom}
+          dateFrom={dateFrom}
+          dateTo={dateTo}
           compareFrom={compareFrom}
+          compareTo={compareTo}
           selected={selectedOverview === "inProgress"}
           onClick={(e) => handleSelect("inProgress")}
           formatStr={formatStr}
           showCompare={showCompare}
+          reqsDateData={reqsDateData}
+          compareDateData={compareDateData}
         />
         <OverviewChart
           title="Completed"
-          current={requestsByStatus.completed}
-          compare={requestsVsByStatus.completed}
+          rangeData={requestsByStatus.completed}
+          compareData={requestsVsByStatus.completed}
           className="snap-start"
           bottomText={bottomText}
-          currentTo={dateTo}
-          currentFrom={dateFrom}
+          dateFrom={dateFrom}
+          dateTo={dateTo}
           compareFrom={compareFrom}
+          compareTo={compareTo}
           selected={selectedOverview === "completed"}
           onClick={(e) => handleSelect("completed")}
           formatStr={formatStr}
           showCompare={showCompare}
+          reqsDateData={reqsDateData}
+          compareDateData={compareDateData}
         />
       </DraggableScroll>
     </div>
@@ -126,15 +140,25 @@ const OverviewSection = ({
 export default OverviewSection;
 
 interface IProps {
-  dateFrom: Date;
-  dateTo: Date;
-  daysDiff: number;
+  dateFrom?: Date;
+  dateTo?: Date;
+  compareFrom?: Date;
+  compareTo?: Date;
   users: IUser[];
   requestsByStatus: IReq;
   requestsVsByStatus: IReq;
-  selectedOverview?: TabItemStatus;
-  setSelectedOverview?: Dispatch<SetStateAction<TStatus | undefined>>;
+  selectedOverview?: IOverviewStatus;
+  setSelectedOverview?: Dispatch<SetStateAction<IOverviewStatus | undefined>>;
   formatStr: string;
   showCompare: boolean;
-  hideUserCard: boolean;
+  reqsDateData: { firstDate: Date; lastDate: Date; daysDiff: number };
+  compareDateData: { firstDate: Date; lastDate: Date; daysDiff: number };
 }
+
+export type IOverviewStatus =
+  | "unPaidDrafts"
+  | "paidDrafts"
+  | "submitted"
+  | "inProgress"
+  | "completed"
+  | "allPaid";

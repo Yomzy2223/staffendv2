@@ -55,7 +55,7 @@ export const FileInput = ({
     <div
       {...getRootProps()}
       className={cn(
-        "bg-gray-50 px-8 py-4 cursor-pointer rounded-lg border-2 border-gray-200 border-dashed flex flex-col gap-2 items-center justify-center",
+        "bg-gray-50 px-8 py-4 cursor-pointer rounded-lg border-2 border-gray-200 border-dashed flex flex-col gap-2 items-center justify-center min-w-36",
         {
           "border-solid cursor-default p-2": file || fileName,
         }
@@ -87,7 +87,7 @@ export const FileInput = ({
           </p>
         )
       ) : (
-        <div className="flex w-full justify-between">
+        <div className="flex w-full justify-between gap-2">
           <div
             className={cn("flex items-center space-x-3", {
               "text-foreground-5": !editMode,
@@ -101,7 +101,9 @@ export const FileInput = ({
               />
             </div>
             <div>
-              <p className="text-sm underline">{file?.name || fileName}</p>
+              <p className="text-sm underline text-ellipsis whitespace-nowrap">
+                {file?.name || fileName}
+              </p>
               <p className="text-xs">{size || 0}</p>
             </div>
           </div>

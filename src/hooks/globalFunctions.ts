@@ -42,12 +42,17 @@ export const useGlobalFunctions = () => {
   };
 
   const deleteQueryStrings = useCallback(
-    (names: string[]) => {
-      const newQuery = new URLSearchParams(searchParams.toString());
-      names.forEach((name) => newQuery.delete(name));
-      router.push(pathname + "?" + newQuery.toString(), { scroll: false });
+    (
+      names: string[],
+      newQueries?: string | URLSearchParams,
+      dontPush?: boolean
+    ) => {
+      const params = new URLSearchParams(newQueries || searchParams.toString());
+      names.forEach((name) => params.delete(name));
+      if (!dontPush)
+        router.push(pathname + "?" + params.toString(), { scroll: false });
 
-      return newQuery.toString();
+      return params.toString();
     },
     [searchParams]
   );
@@ -77,16 +82,20 @@ export const useGlobalFunctions = () => {
     path,
     addPath,
     queries,
+    rmQueries,
     returnUrl,
   }: {
     path?: string;
     addPath?: string;
     queries?: { name: string; value: string | string[] }[];
+    rmQueries?: string[];
     returnUrl?: boolean;
   }) => {
     let realPath = path || pathname;
+    let newQueries = createQueryString(queries);
+    if (rmQueries) newQueries = deleteQueryStrings(rmQueries, newQueries, true);
     if (addPath) realPath = realPath + "/" + addPath;
-    realPath = realPath + "?" + createQueryString(queries);
+    realPath = realPath + "?" + newQueries;
 
     if (returnUrl) return realPath;
     router.push(realPath, {

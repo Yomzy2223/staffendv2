@@ -37,6 +37,7 @@ const ServiceTableSection = ({
     unAssignRequestMutation,
     requestsLoading,
     handleSearch,
+    requestsErrorMsg,
   } = useTableActions({
     setOpenAssign,
     setSelectedRequests,
@@ -68,6 +69,7 @@ const ServiceTableSection = ({
           onSearchChange={handleSearchChange}
           onSearchSubmit={handleSearchSubmit}
           dataLoading={requestsLoading}
+          errorMsg={requestsErrorMsg}
           preview={preview}
           handleFilter={(value) => {
             setActiveStatus(value || "");

@@ -21,6 +21,7 @@ const GeneralTable = ({
   onSearchSubmit,
   handleFilter,
   dataLoading,
+  errorMsg,
   preview,
 }: IProps) => {
   const [selectOn, setSelectOn] = useState(false);
@@ -56,6 +57,7 @@ const GeneralTable = ({
         emptyText="No data"
         className="flex flex-col justify-between flex-1 max-w-full overflow-auto"
         Skeleton={<TableSkeleton />}
+        errorText={errorMsg}
         isLoading={dataLoading}
       >
         <TableSection
@@ -102,5 +104,6 @@ interface IProps extends IPagination {
   onSearchSubmit: (value: string) => void;
   handleFilter: (value?: string) => void;
   dataLoading?: boolean;
+  errorMsg?: string;
   preview?: string;
 }

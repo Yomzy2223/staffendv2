@@ -10,6 +10,7 @@ import {
 import { TProductGet } from "@/services/product/types";
 import { useSearchParams } from "next/navigation";
 import React, { Dispatch, SetStateAction, useState } from "react";
+import ProductsSkt from "./skeleton/productsSkt";
 
 const ProductsSection = () => {
   const [open, setOpen] = useState(false);
@@ -17,7 +18,7 @@ const ProductsSection = () => {
   const searchParams = useSearchParams();
   const serviceId = searchParams.get("serviceId") || "";
 
-  const { data } = useGetServiceProductsQuery(serviceId);
+  const { data, isLoading, error } = useGetServiceProductsQuery(serviceId);
   const serviceProducts = data?.data?.data;
 
   const deleteProductMutation = useDeleteProductMutation();
@@ -46,6 +47,10 @@ const ProductsSection = () => {
         items={serviceProducts || []}
         emptyText="You have not added any product"
         btnText="Add product"
+        errorText={error?.message}
+        isLoading={isLoading}
+        Skeleton={<ProductsSkt />}
+        btnOutline
       >
         {serviceProducts?.map((product, i: number) => (
           <ProductCard

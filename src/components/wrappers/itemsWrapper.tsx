@@ -13,11 +13,15 @@ const ItemsWrapper = ({
   title,
   btnText,
   emptyText,
+  errorText,
+  isLoading,
+  Skeleton,
   onSearchChange,
   onSearchSubmit,
   navbar,
   itemActionText,
   itemAction,
+  btnOutline,
 }: IProps) => {
   const { isDesktop } = useGlobalFunctions();
 
@@ -25,13 +29,16 @@ const ItemsWrapper = ({
     <DoChecks
       items={items}
       emptyText={emptyText}
+      errorText={errorText}
       btnText={btnText}
       btnAction={btnAction}
+      isLoading={isLoading}
+      Skeleton={Skeleton}
     >
-      <div className="border border-border rounded shadow-sm my-4  px-4 lg:px-6 py-6 lg:my-6">
+      <div className="border border-border rounded shadow-sm my-4 px-4 lg:px-6 py-6 lg:my-6">
         <div className="border-b border-border pb-4">
           <div className="flex items-center gap-6">
-            <span>
+            <span className="sb-text-20 font-semibold">
               {title} ({items?.length || 0})
             </span>
             <div className="flex items-center gap-6 flex-1 justify-end">
@@ -44,9 +51,11 @@ const ItemsWrapper = ({
                 <Search color="#727474" />
               )}
               <Button
-                color="primary"
+                outline={btnOutline ? true : false}
+                color={btnOutline ? "outline" : "primary"}
                 size="lg"
                 onClick={itemAction || btnAction}
+                className={btnOutline ? "[&>span]:text-primary" : ""}
               >
                 {itemActionText || btnText}
               </Button>
@@ -72,11 +81,15 @@ interface IProps {
   title: string;
   btnText: string;
   emptyText: string;
+  errorText?: string;
+  isLoading?: boolean;
+  Skeleton?: ReactNode;
   onSearchChange?: (e: string) => void;
   onSearchSubmit?: (e: string) => void;
   navbar?: any;
   itemActionText?: string;
   itemAction?: () => void;
+  btnOutline?: boolean;
 }
 //  mx - 5;
 //  lg: mx - 8;

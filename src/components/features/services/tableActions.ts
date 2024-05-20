@@ -94,31 +94,10 @@ export const useTableActions = ({
     serviceRequestsResponse.isLoading ||
     searchRequestMutation.isPending;
 
-  // let filteredRequests = requests?.filter((request) => {
-  //   if (!activeStatus) return true;
-  //   handleSearchChange(activeStatus);
-  // if (activeStatus.toLowerCase() === "unpaid drafts")
-  //   return request.status === "PENDING" && !request.paid;
-  // else if (activeStatus.toLowerCase() === "paid drafts")
-  //   return request.status === "PENDING" && request.paid;
-  // else if (activeStatus.toLowerCase() === "submitted")
-  //   return request.status === "SUBMITTED";
-  // else if (activeStatus.toLowerCase() === "assigned")
-  //   return request.status === "ASSIGNED";
-  // else if (activeStatus.toLowerCase() === "rejected")
-  //   return request.status === "REJECTED";
-  // else if (activeStatus.toLowerCase() === "in progress")
-  //   return request.status === "ASSIGNED";
-  // else if (activeStatus.toLowerCase() === "completed")
-  //   return request.status === "COMPLETED";
-  // });
-
-  // filteredRequests = requests?.filter((el: IRequest) =>
-  //   isWithinInterval(new Date(el.createdAt), {
-  //     start: dateFrom,
-  //     end: dateTo,
-  //   })
-  // );
+  const requestsErrorMsg =
+    allRequestsResponse.error?.message ||
+    serviceRequestsResponse.error?.message;
+  // searchRequestMutation.isPending;
 
   const serviceTableNav = servicesData?.map((service) => ({
     name: "serviceId",
@@ -268,6 +247,7 @@ export const useTableActions = ({
     handleSearchChange,
     handleSearchSubmit,
     requestsLoading,
+    requestsErrorMsg,
     handleSearch,
   };
 };

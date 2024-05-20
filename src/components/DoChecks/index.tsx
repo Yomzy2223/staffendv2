@@ -26,7 +26,15 @@ const DoChecks = ({
   Skeleton?: any;
   hideImg?: boolean;
 }) => {
-  if (errorText) return <p>{errorText}</p>;
+  if (errorText)
+    return (
+      <div className="flex flex-col justify-center gap-4 items-center flex-1 w-max my-10 m-auto ">
+        <Image src={EmptyContentSvg} alt="empty" />
+        <p className="sb-text-18 text-center lowercase first-letter:uppercase text-destructive-foreground">
+          {errorText}
+        </p>
+      </div>
+    );
 
   if (isLoading) return Skeleton || <div></div>;
 

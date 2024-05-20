@@ -14,7 +14,7 @@ const Loading = () => {
           </div>
           <div className="flex items-center">
             <Skeleton className="w-40 h-10 mr-3" />
-            <Skeleton className="w-40 h-14" />
+            {/* <Skeleton className="w-40 h-14" /> */}
           </div>
         </div>
         <div className="flex max-w-[100vw] overflow-x-auto gap-6 md:gap-8 pt-1 p-4 sm:p-6">
@@ -23,6 +23,7 @@ const Loading = () => {
           ))}
         </div>
       </div>
+
       <TableSkeleton />
     </div>
   );

@@ -13,9 +13,11 @@ import React, { useState } from "react";
 const ServicesSection = ({
   services,
   isLoading,
+  errMsg,
 }: {
   services?: TService[];
   isLoading?: boolean;
+  errMsg?: string;
 }) => {
   const [open, setOpen] = useState(false);
 
@@ -41,7 +43,7 @@ const ServicesSection = ({
           <Button
             size="fit"
             color="ghost"
-            className="text-primary"
+            className="sb-text-16 text-primary"
             onClick={openServiceForm}
           >
             <Image src={GridPlusIcon} alt="" />
@@ -59,6 +61,7 @@ const ServicesSection = ({
         items={services || []}
         isLoading={isLoading}
         className="flex max-w-[100vw] overflow-x-auto gap-6 md:gap-8 p-4 md:px-6 pt-1"
+        errorText={errMsg}
         Skeleton={
           <div className="flex max-w-[100vw] overflow-x-auto gap-6 md:gap-8 p-6 pt-1">
             {["1", "2", "3", "4", "5"].map((el) => (

@@ -30,7 +30,7 @@ export const useServiceInfoActions = ({
 }) => {
   const router = useRouter();
   const { get } = useSearchParams();
-  const { serviceId } = useParams();
+  const serviceId = get("serviceId");
   const isEdit = serviceId && get("action") == "edit";
 
   const serviceInfo = useGetServiceQuery(serviceId as string);
@@ -51,7 +51,7 @@ export const useServiceInfoActions = ({
       : createServiceMutation.mutate(values, {
           onSuccess: (data) => {
             setSection(section + 1);
-            router.push(`/services/${data.data.data.id}?action=add`);
+            router.push(`/services/?serviceId=${data.data.data.id}&action=add`);
           },
         });
   };
@@ -72,9 +72,10 @@ export const useServiceInfoActions = ({
 
 // Actions for service form section
 export const useServiceFormActions = () => {
-  const { serviceId } = useParams();
+  const searchParams = useSearchParams();
+  const serviceId = searchParams.get("serviceId") || "";
 
-  const serviceFormInfo = useGetServiceFormsQuery(serviceId as string);
+  const serviceFormRes = useGetServiceFormsQuery(serviceId);
   const createServiceFormMutation = useCreateServiceFormMutation();
   const updateServiceFormMutation = useUpdateServiceFormMutation();
   const deleteServiceFormMutation = useDeleteServiceFormMutation();
@@ -171,7 +172,7 @@ export const useServiceFormActions = () => {
   };
 
   return {
-    serviceFormInfo,
+    serviceFormRes,
     submitServiceForm,
     submitServiceFormField,
     serviceFormState,

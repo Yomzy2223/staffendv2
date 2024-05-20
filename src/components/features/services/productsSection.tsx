@@ -2,25 +2,22 @@
 
 import ProductCard from "@/components/cards/productCard";
 import ProductForm from "@/components/form/productForms";
-import ProoductsHeader from "@/components/header/productsHeader";
 import ItemsWrapper from "@/components/wrappers/itemsWrapper";
 import {
   useDeleteProductMutation,
   useGetServiceProductsQuery,
 } from "@/services/product";
 import { TProductGet } from "@/services/product/types";
-import { useGetServiceQuery } from "@/services/service";
-import { useParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import React, { Dispatch, SetStateAction, useState } from "react";
 
-const Products = () => {
+const ProductsSection = () => {
   const [open, setOpen] = useState(false);
 
-  const { serviceId } = useParams();
-  const { data } = useGetServiceProductsQuery(serviceId.toString());
-  const product = useGetServiceQuery(serviceId.toString());
-  const productInfo = product.data?.data?.data;
+  const searchParams = useSearchParams();
+  const serviceId = searchParams.get("serviceId") || "";
 
+  const { data } = useGetServiceProductsQuery(serviceId);
   const serviceProducts = data?.data?.data;
 
   const deleteProductMutation = useDeleteProductMutation();
@@ -42,8 +39,7 @@ const Products = () => {
   };
 
   return (
-    <div className="space-y-4 lg:space-y-6">
-      <ProoductsHeader title={productInfo?.name || ""} />
+    <div>
       <ItemsWrapper
         title="Products"
         btnAction={addNewProduct}
@@ -66,4 +62,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default ProductsSection;

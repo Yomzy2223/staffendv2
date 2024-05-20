@@ -11,6 +11,7 @@ import {
 } from "./eachForm/types";
 import { v4 as uuidv4 } from "uuid";
 import { TSubFormGet } from "@/services";
+import { TProductFormGet, TServiceFormGet } from "@/services/service/types";
 
 const DynamicFormCreator = ({
   fieldTitle,
@@ -72,7 +73,7 @@ const DynamicFormCreator = ({
           <EachForm
             key={info.title + i}
             number={i + 1}
-            fieldsInfo={info?.subForm || info?.productSubForm}
+            fieldsInfo={info?.subForm}
             fieldTitle={fieldTitle}
             fieldSubmitHandler={onEachSubmit}
             formSubmitHandler={(arg) => {
@@ -156,15 +157,15 @@ interface IProps {
   onEachDelete: (id: string) => void;
   onFormSubmit: (values: IFormSubmitHandlerArg) => void;
   onFormDelete: (id: string) => void;
-  formInfo: {
-    id: string;
-    type: string;
-    title: string;
-    description: string;
-    compulsory: boolean;
-    subForm: TSubFormGet[];
-    productSubForm: TSubFormGet[];
-  }[];
+  // formInfo: {
+  //   id: string;
+  //   type: string;
+  //   title: string;
+  //   description: string;
+  //   compulsory: boolean;
+  //   subForm: TSubFormGet[];
+  // }[];
+  formInfo: (TServiceFormGet | TProductFormGet)[];
   formState: {
     formLoading: boolean;
     formSuccess: boolean;

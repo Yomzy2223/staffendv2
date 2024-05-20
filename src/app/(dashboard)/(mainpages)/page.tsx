@@ -1,18 +1,15 @@
 "use client";
 
 import OverviewSection, {
-  IOverviewStatus,
+  TOverviewStatus,
 } from "@/components/features/dashboard/overview";
 import DashboardHeader from "@/components/features/dashboard/header";
-import {
-  compareAsc,
-  differenceInDays,
-  format,
-  isSameYear,
-  subDays,
-} from "date-fns";
-import React, { useEffect, useState } from "react";
+import { format, isSameYear } from "date-fns";
+import React, { useState } from "react";
 import { useRequestActions } from "./actions";
+import ServiceTableSection from "@/components/features/services/serviceTableSection";
+import RevenueChart from "@/components/features/dashboard/analytics/revenueChart";
+import PartnerChart from "@/components/features/dashboard/analytics/partnerChart";
 
 const Home = () => {
   const [dateFrom, setDateFrom] = useState<Date>();
@@ -21,9 +18,7 @@ const Home = () => {
   const [compareTo, setCompareTo] = useState<Date>();
   const [selectedService, setSelectedService] = useState("");
   const [showCompare, setShowCompare] = useState(false);
-  const [selectedOverview, setSelectedOverview] = useState<IOverviewStatus>();
-
-  const rangeSelected = dateFrom && dateTo;
+  const [selectedOverview, setSelectedOverview] = useState<TOverviewStatus>();
 
   const {
     activeService,
@@ -34,6 +29,8 @@ const Home = () => {
     users,
     reqsDateData,
     compareDateData,
+    requestsLoading,
+    requestsVsLoading,
   } = useRequestActions({
     dateFrom,
     dateTo,
@@ -41,13 +38,6 @@ const Home = () => {
     compareTo,
     selectedService,
   });
-
-  useEffect(() => {
-    if (rangeSelected) {
-      setCompareFrom(subDays(dateFrom, compareDateData.daysDiff));
-      setCompareTo(subDays(dateTo, compareDateData.daysDiff));
-    }
-  }, [dateFrom, dateTo]);
 
   const formatStr =
     compareFrom && dateFrom
@@ -72,7 +62,7 @@ const Home = () => {
         compareTo={compareTo}
         setCompareFrom={setCompareFrom}
         setCompareTo={setCompareTo}
-        daysDiff={reqsDateData.daysDiff}
+        reqsDateData={reqsDateData}
         isLoading={servicesRes.isLoading}
         errorMsg={servicesRes.error?.message}
         selectedService={activeService?.name || ""}
@@ -96,30 +86,38 @@ const Home = () => {
           setSelectedOverview={setSelectedOverview}
           formatStr={formatStr}
           showCompare={showCompare}
+          requestsLoading={requestsLoading}
+          requestsVsLoading={requestsVsLoading}
         />
-        {/* <div className="flex flex-col gap-8 lg:flex-row">
-          <DetailedAnalytics
-            dateFrom={dateFrom}
-            dateTo={dateTo}
-            daysDiff={daysDiff}
-            requestsByStatus={requestsByStatus}
-            requestsVsByStatus={requestsVsByStatus}
-            showCompare={showCompare}
-            compareLabel={compareLabel}
-            activeService={activeService?.name}
+        <div className="flex flex-col gap-8 lg:flex-row">
+          <RevenueChart
             selectedOverview={selectedOverview}
-          />
-          <DetailedAnalytics
-            dateFrom={dateFrom}
             dateTo={dateTo}
-            daysDiff={daysDiff}
-            requestsByStatus={requestsByStatus}
-            requestsVsByStatus={requestsVsByStatus}
+            dateFrom={dateFrom}
+            compareFrom={compareFrom}
+            compareLabel={compareLabel}
             showCompare={showCompare}
-            partner
+            activeService={activeService?.name || ""}
+            daysDiff={reqsDateData.daysDiff}
+            compareDateData={compareDateData}
+            reqsDateData={reqsDateData}
+            formatStr={formatStr}
+            isLoading={requestsLoading || requestsVsLoading}
+            rangeData={
+              selectedOverview
+                ? requestsByStatus[selectedOverview] // Passed status filtered request data
+                : requestsByStatus.allPaid // Passed service revenue data
+            }
+            compareData={
+              selectedOverview
+                ? requestsVsByStatus[selectedOverview] // Passed status filtered request compare data
+                : requestsVsByStatus.allPaid // Passed service revenue compare data
+            }
           />
+
+          <PartnerChart />
         </div>
-        <ServiceTableSection dateFrom={dateFrom} dateTo={dateTo} /> */}
+        <ServiceTableSection dateFrom={dateFrom} dateTo={dateTo} />
       </div>
     </>
   );

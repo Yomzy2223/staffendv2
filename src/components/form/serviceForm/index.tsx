@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import DynamicForm from "../dynamicForm";
 import { Button } from "flowbite-react";
 import { cn } from "@/lib/utils";
@@ -9,7 +9,7 @@ import { Oval } from "react-loading-icons";
 import { useServiceFormActions, useServiceInfoActions } from "./actions";
 import { section1FormInfo, serviceInfoSchema } from "./constants";
 
-const ServiceForm = ({ open, setOpen }: IProps) => {
+const ServiceForm = ({ open, setOpen, priority }: IProps) => {
   const [section, setSection] = useState(1);
   const { isDesktop, deleteQueryStrings } = useGlobalFunctions();
 
@@ -17,7 +17,7 @@ const ServiceForm = ({ open, setOpen }: IProps) => {
     useServiceInfoActions({ section, setSection });
 
   const {
-    serviceFormInfo,
+    serviceFormRes,
     submitServiceForm,
     submitServiceFormField,
     serviceFormState,
@@ -27,7 +27,7 @@ const ServiceForm = ({ open, setOpen }: IProps) => {
   } = useServiceFormActions();
 
   const serviceData = serviceInfo?.data?.data?.data;
-  const serviceFormData = serviceFormInfo?.data?.data?.data;
+  const serviceFormData = serviceFormRes?.data?.data?.data || [];
 
   const title1 = isEdit ? "Update Service" : "Create Service";
   const title2 =
@@ -56,7 +56,7 @@ const ServiceForm = ({ open, setOpen }: IProps) => {
     name: isEdit ? serviceData?.name : "",
     description: isEdit ? serviceData?.description : "",
     label: isEdit ? serviceData?.label : "",
-    priority: isEdit ? serviceData?.priority : "",
+    priority: isEdit ? serviceData?.priority : priority,
   };
 
   return (
@@ -125,4 +125,5 @@ export default ServiceForm;
 interface IProps {
   open: boolean;
   setOpen: (open: boolean) => void;
+  priority?: number;
 }

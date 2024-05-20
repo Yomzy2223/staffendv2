@@ -28,7 +28,7 @@ const ItemsWrapper = ({
       btnText={btnText}
       btnAction={btnAction}
     >
-      <div className="border border-border rounded shadow-sm my-4 px-4 py-6 lg:my-6">
+      <div className="border border-border rounded shadow-sm my-4  px-4 lg:px-6 py-6 lg:my-6">
         <div className="border-b border-border pb-4">
           <div className="flex items-center gap-6">
             <span>

@@ -58,6 +58,7 @@ const ServiceTableSection = ({
         })}
       >
         <GeneralTable
+          title={"Requests"}
           tableHeaders={tableHeaders}
           tableBody={tableBody}
           tableNav={serviceTableNav}

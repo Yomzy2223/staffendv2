@@ -38,6 +38,7 @@ export type TProductFormRes = TFormCreate & {
 export type TServiceFormGet = TServiceFormRes & {
   subForm: TSubFormGet[];
 };
+
 export type TProductFormGet = TProductFormRes & {
   subForm: TSubFormGet[];
 };

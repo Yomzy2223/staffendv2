@@ -19,7 +19,7 @@ const ServicesSection = ({
 }) => {
   const [open, setOpen] = useState(false);
 
-  const { setQuery } = useGlobalFunctions();
+  const { setQuery, isDesktop } = useGlobalFunctions();
 
   const openServiceForm = () => {
     setQuery("action", "add");
@@ -28,9 +28,9 @@ const ServicesSection = ({
 
   return (
     <div className="flex flex-col border border-border">
-      <div className="flex justify-between items-center gap-6 w-full px-6 py-10 border-b border-border">
+      <div className="flex justify-between items-center gap-6 w-full px-4 lg:px-6 py-10 border-b border-border">
         <div>
-          <h2 className="sb-text-20 font-semibold">
+          <h2 className="sb-text-24 font-semibold">
             Services ({services?.length || 0} available)
           </h2>
           <p className="text-sm text-foreground-4">
@@ -45,20 +45,20 @@ const ServicesSection = ({
             onClick={openServiceForm}
           >
             <Image src={GridPlusIcon} alt="" />
-            Add new service
-          </Button>
-          <Button color="primary">
-            <span>View all</span>
-            <ArrowRight className="ml-1" />
+            {isDesktop ? "Add new service" : "New"}
           </Button>
         </div>
       </div>
-      <ServiceForm setOpen={setOpen} open={open} />
+      <ServiceForm
+        setOpen={setOpen}
+        open={open}
+        priority={(services?.length ?? 0) + 1}
+      />
 
       <DoChecks
         items={services || []}
         isLoading={isLoading}
-        className="flex max-w-[100vw] overflow-x-auto gap-6 md:gap-8 p-6 pt-1"
+        className="flex max-w-[100vw] overflow-x-auto gap-6 md:gap-8 p-4 md:px-6 pt-1"
         Skeleton={
           <div className="flex max-w-[100vw] overflow-x-auto gap-6 md:gap-8 p-6 pt-1">
             {["1", "2", "3", "4", "5"].map((el) => (

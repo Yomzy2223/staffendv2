@@ -13,6 +13,7 @@ const DoChecks = ({
   btnText,
   isLoading,
   Skeleton,
+  hideImg,
 }: {
   children: ReactNode;
   items: any[];
@@ -23,12 +24,13 @@ const DoChecks = ({
   btnText?: string;
   isLoading?: boolean;
   Skeleton?: any;
+  hideImg?: boolean;
 }) => {
   if (errorText) return <p>{errorText}</p>;
 
   if (isLoading) return Skeleton || <div></div>;
 
-  if (items?.length === 0)
+  if (items?.length === 0 && !hideImg)
     return (
       <div className="flex flex-col justify-center gap-4 items-center flex-1 w-max my-10 m-auto ">
         <Image src={EmptyContentSvg} alt="empty" />

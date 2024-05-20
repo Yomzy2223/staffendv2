@@ -1,43 +1,117 @@
 "use client";
 
-import DoChecks from "@/components/DoChecks";
+import ConfirmAction from "@/components/confirmAction";
+import ProductsSection from "@/components/features/services/productsSection";
 import ServicesSection from "@/components/features/services/servicesSection";
 import ServiceTableSection from "@/components/features/services/serviceTableSection";
 import ServiceForm from "@/components/form/serviceForm";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
-import { useGetAllServicesQuery } from "@/services/service";
-import { startOfMonth } from "date-fns";
-import { redirect, useSearchParams } from "next/navigation";
-import React, { useState } from "react";
+import {
+  useDeleteServiceFormMutation,
+  useGetAllServicesQuery,
+} from "@/services/service";
+import { Button, Tabs, TabsRef } from "flowbite-react";
+import { useSearchParams } from "next/navigation";
+import React, { useEffect, useRef, useState } from "react";
 import slugify from "slugify";
 
 const Service = () => {
-  const [dateFrom, setDateFrom] = useState(startOfMonth(new Date()));
-  const [dateTo, setDateTo] = useState(new Date());
-  const [showCompare, setShowCompare] = useState(false);
   const [open, setOpen] = useState(false);
+  const [openConfirm, setOpenConfirm] = useState(false);
+
+  const tabsRef = useRef<TabsRef>(null);
 
   const { setQuery } = useGlobalFunctions();
   const searchParams = useSearchParams();
-  const serviceId = searchParams.get("serviceId");
+  const serviceId = searchParams.get("serviceId") || "";
+  const activeTab = searchParams.get("activeTab") || "0";
 
+  const deleteService = useDeleteServiceFormMutation();
   const servicesRes = useGetAllServicesQuery();
-  const services = servicesRes.data?.data?.data;
+  const services = servicesRes.data?.data?.data?.sort(
+    (a, b) => a.priority - b.priority
+  );
 
-  if (!serviceId && services?.[0])
-    setQuery("serviceId", `${slugify(services[0].id)}`);
+  useEffect(() => {
+    tabsRef.current?.setActiveTab(parseInt(activeTab));
+  }, [activeTab]);
 
-  const addNewService = () => {
-    setOpen(true);
-    setQuery("action", "edit");
+  useEffect(() => {
+    if (!serviceId && services?.[0])
+      setQuery("serviceId", `${slugify(services[0].id)}`);
+  }, [serviceId, services]);
+
+  const activeServices = services?.find((el) => el.id === serviceId);
+
+  const handleDeleteService = () => {
+    deleteService.mutate(serviceId, {
+      onSuccess: () => {
+        setOpenConfirm(false);
+      },
+    });
   };
 
   return (
-    <>
+    <div className="space-y-8">
       <ServicesSection services={services} isLoading={servicesRes.isLoading} />
-      <ServiceTableSection />
+      <div className="px-4 lg:px-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-6">
+          <div>
+            <h3 className="sb-text-24 font-semibold first-letter:uppercase">
+              {activeServices?.name}
+            </h3>
+            <p className="sb-text-16 text-foreground-3 first-letter:uppercase max-w-[500px]">
+              {activeServices?.description}
+            </p>
+          </div>
+          <div className="flex items-center gap-6">
+            <Button
+              color="transparent"
+              size="fit"
+              onClick={() => setOpenConfirm(true)}
+              className="[&>span]:text-destructive-foreground"
+            >
+              Delete
+            </Button>
+            <Button
+              outline
+              onClick={() => {
+                serviceId && setOpen(true);
+                serviceId && setQuery("action", "edit");
+              }}
+              className="[&>span]:text-primary"
+            >
+              Edit service
+            </Button>
+          </div>
+        </div>
+        {openConfirm && (
+          <ConfirmAction
+            open={openConfirm}
+            setOpen={setOpenConfirm}
+            confirmAction={handleDeleteService}
+            title={`Delete ${activeServices?.name}`}
+            description="Are you sure you want to delete this service?"
+            isLoading={deleteService.isPending}
+            dismissible={!deleteService.isPending}
+            isDelete
+          />
+        )}
+        <Tabs
+          ref={tabsRef}
+          aria-label="tabs"
+          style="underline"
+          onActiveTabChange={(active) => setQuery("activeTab", active)}
+          className="gap-6 max-w-max"
+        >
+          <Tabs.Item active title="Requests" />
+          <Tabs.Item active title="Available Products" />
+        </Tabs>
+      </div>
+      {activeTab === "0" && <ServiceTableSection />}
+      {activeTab === "1" && <ProductsSection />}
       <ServiceForm setOpen={setOpen} open={open} />
-    </>
+    </div>
   );
 };
 

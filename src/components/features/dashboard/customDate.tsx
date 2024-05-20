@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { format, max } from "date-fns";
+import { differenceInDays, format, max, subDays } from "date-fns";
 import { Button, Datepicker, ToggleSwitch } from "flowbite-react";
 import { Calendar } from "lucide-react";
 import React, { Dispatch, MouseEventHandler, SetStateAction } from "react";
@@ -10,6 +10,9 @@ const CustomDate = ({
   compareTo,
   compareFrom,
   showCompare,
+  setCompareFrom,
+  setCompareTo,
+  reqsDateData,
   setShowCompare,
   openDatePicker,
   setOpenDatePicker,
@@ -59,13 +62,21 @@ const CustomDate = ({
   defaultDate =
     defaultDate && minDate ? max([defaultDate, minDate]) : undefined;
 
+  const handleToggle = (checked: boolean) => {
+    setCompareFrom(
+      subDays(dateFrom || reqsDateData.firstDate, reqsDateData.daysDiff)
+    );
+    setCompareTo(subDays(dateFrom || reqsDateData.lastDate, 1));
+    setShowCompare(checked);
+  };
+
   return (
     <div className="flex flex-1 flex-col justify-between gap-6">
       <div className="flex flex-col gap-6">
         <ToggleSwitch
           checked={showCompare}
           label="Compare"
-          onChange={setShowCompare}
+          onChange={handleToggle}
           color="primary"
           className="shrink-0"
         />
@@ -191,6 +202,9 @@ interface IProps {
   dateTo?: Date;
   compareFrom?: Date;
   compareTo?: Date;
+  setCompareFrom: Dispatch<SetStateAction<Date | undefined>>;
+  setCompareTo: Dispatch<SetStateAction<Date | undefined>>;
+  reqsDateData: { firstDate: Date; lastDate: Date; daysDiff: number };
   showCompare: boolean;
   openDatePicker?: number;
   setShowCompare: Dispatch<SetStateAction<boolean>>;

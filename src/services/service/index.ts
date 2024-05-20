@@ -54,7 +54,7 @@ export const useUpdateServiceMutation = () => {
   });
 };
 
-export const deleteServiceMutation = () => {
+export const useDeleteServiceMutation = () => {
   const { handleError, handleSuccess } = useResponse();
   const queryClient = useQueryClient();
 

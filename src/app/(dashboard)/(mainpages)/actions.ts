@@ -2,6 +2,8 @@ import {
   compareAsc,
   differenceInDays,
   format,
+  isDate,
+  isValid,
   isWithinInterval,
   subDays,
 } from "date-fns";
@@ -9,8 +11,12 @@ import useUserApi from "@/hooks/useUserApi";
 import { useParams } from "next/navigation";
 import slugify from "slugify";
 import { useGetAllServicesQuery } from "@/services/service";
-import { useGetServiceRequestsQuery } from "@/services/request";
+import {
+  useGetAllRequestsQuery,
+  useGetServiceRequestsQuery,
+} from "@/services/request";
 import { TRequestAll } from "@/services/request/types";
+import { TService } from "@/services/service/types";
 
 // Requests Actions
 export const useRequestActions = ({
@@ -32,30 +38,49 @@ export const useRequestActions = ({
 
   const servicesRes = useGetAllServicesQuery();
   const services = servicesRes.data?.data?.data || [];
-  const servicesNames = services?.map((el) => el?.name);
-  const activeService = services?.find(
-    (el) => el.name === (selectedService || servicesNames?.[0])
-  );
+  const servicesNames = services
+    ?.sort((a, b) => a.priority - b.priority)
+    ?.map((el) => el?.name);
+  const activeService = services?.find((el) => el.name === selectedService);
+  // (el) => el.name === (selectedService || servicesNames?.[0])
+
+  const allRequestsRes = useGetAllRequestsQuery({
+    startDate: dateFrom ? format(dateFrom, "yyyy-MM-dd") : "",
+    endDate: dateTo ? format(dateTo, "yyyy-MM-dd") : "",
+  });
+  const allRequests = allRequestsRes.data?.data?.data;
 
   // Return filtered requests
-  const requestsRes = useGetServiceRequestsQuery({
+  const servicesRequestsRes = useGetServiceRequestsQuery({
     serviceId: activeService?.id || "",
     startDate: dateFrom ? format(dateFrom, "yyyy-MM-dd") : "",
     endDate: dateTo ? format(dateTo, "yyyy-MM-dd") : "",
   });
-  const requests = requestsRes.data?.data?.data;
+
+  const servicesRequests = servicesRequestsRes.data?.data?.data;
+
+  const requests = activeService ? servicesRequests : allRequests;
+
+  const allRequestsVsRes = useGetAllRequestsQuery({
+    startDate: compareFrom ? format(compareFrom, "yyyy-MM-dd") : "",
+    endDate: compareTo ? format(compareTo, "yyyy-MM-dd") : "",
+  });
+  const allRequestsVs = allRequestsVsRes.data?.data?.data;
 
   // Return filtered requests
-  const requestsVsRes = useGetServiceRequestsQuery({
+  const servicesRequestsVsRes = useGetServiceRequestsQuery({
     serviceId: activeService?.id || "",
     startDate: compareFrom ? format(compareFrom, "yyyy-MM-dd") : "",
     endDate: compareTo ? format(compareTo, "yyyy-MM-dd") : "",
   });
-  const requestsVs = requestsVsRes.data?.data?.data;
+  const servicesRequestsVs = servicesRequestsVsRes.data?.data?.data;
+
+  const requestsVs = activeService ? servicesRequestsVs : allRequestsVs;
 
   // The requests within the selected date range
   const requestsByStatus: IReq = {
     all: requests || [],
+    allPaid: requests?.filter((el) => el.paid) || [],
     unPaidDrafts:
       requests?.filter((el) => el.status === "PENDING" && !el.paid) || [],
     paidDrafts:
@@ -71,6 +96,7 @@ export const useRequestActions = ({
   // The requests to be compared with
   const requestsVsByStatus: IReq = {
     all: requestsVs || [],
+    allPaid: requestsVs?.filter((el) => el.paid) || [],
     unPaidDrafts: requestsVs?.filter((el) => el.paid) || [],
     paidDrafts:
       requestsVs?.filter((el) => el.status === "PENDING" && el.paid) || [],
@@ -83,22 +109,25 @@ export const useRequestActions = ({
   };
 
   const getDateData = (reqs?: TRequestAll[], from?: Date, to?: Date) => {
-    const sortedReqs = reqs?.sort((a, b) =>
-      compareAsc(a?.createdAt, b?.createdAt)
-    );
-    const daysDiff = to && from ? differenceInDays(to, from) + 1 : 0; // Complements for the last day
-    const firstDate = new Date(sortedReqs?.[0]?.createdAt || "");
-    const lastDate = new Date(
-      sortedReqs?.[sortedReqs?.length - 1]?.createdAt || ""
-    );
+    const sortedReqs =
+      reqs?.sort((a, b) => compareAsc(a?.createdAt, b?.createdAt)) || [];
+    const daysDiff = to && from ? differenceInDays(to, from) + 1 : 0; // 1 complements for the last day
+    const firstDate = new Date(sortedReqs?.[0]?.createdAt);
+    const lastDate = new Date(sortedReqs?.[sortedReqs?.length - 1]?.createdAt);
     const reqsDaysDiff =
       firstDate && lastDate ? differenceInDays(lastDate, firstDate) + 1 : 0;
+
     return {
-      firstDate,
-      lastDate,
+      firstDate: isValid(firstDate) ? firstDate : new Date(),
+      lastDate: isValid(lastDate) ? lastDate : new Date(),
       daysDiff: daysDiff ? daysDiff : reqsDaysDiff,
     };
   };
+
+  const requestsLoading =
+    allRequestsRes.isLoading || servicesRequestsRes.isLoading;
+  const requestsVsLoading =
+    allRequestsVsRes.isLoading || servicesRequestsVsRes.isLoading;
 
   return {
     activeService,
@@ -109,6 +138,8 @@ export const useRequestActions = ({
     requestsVsByStatus,
     reqsDateData: getDateData(requests, dateFrom, dateTo),
     compareDateData: getDateData(requestsVs, compareFrom, compareTo),
+    requestsLoading,
+    requestsVsLoading,
   };
 };
 
@@ -185,10 +216,11 @@ export const useRouteActions = () => {
 };
 
 export interface IReq {
+  all: TRequestAll[];
   unPaidDrafts: TRequestAll[];
   paidDrafts: TRequestAll[];
   submitted: TRequestAll[];
   inProgress: TRequestAll[];
   completed: TRequestAll[];
-  all: TRequestAll[];
+  allPaid: TRequestAll[];
 }

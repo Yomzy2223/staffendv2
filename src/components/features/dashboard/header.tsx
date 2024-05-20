@@ -1,11 +1,11 @@
 import { cn } from "@/lib/utils";
-import { startOfMonth, subDays } from "date-fns";
+import { differenceInDays, startOfMonth, subDays } from "date-fns";
 import { Button } from "flowbite-react";
 import { CalendarDays } from "lucide-react";
 import React, { Dispatch, SetStateAction, useState } from "react";
-import ComboBox from "../../form/dynamicForm/comboBox";
-import DialogWrapper from "../../wrappers/dialogWrapper";
 import CustomDate from "./customDate";
+import ComboBox from "@/components/form/dynamicForm/comboBox";
+import DialogWrapper from "@/components/wrappers/dialogWrapper";
 
 const DashboardHeader = ({
   dateFrom,
@@ -16,9 +16,9 @@ const DashboardHeader = ({
   compareTo,
   setCompareFrom,
   setCompareTo,
-  daysDiff,
   selectedService,
   setSelectedService,
+  reqsDateData,
   servicesNames,
   isLoading,
   showCompare,
@@ -29,10 +29,6 @@ const DashboardHeader = ({
   const [openDatePicker, setOpenDatePicker] = useState<number>();
   const [range, setRange] = useState("");
 
-  // let defaultDate = dateTo;
-  // let minDate = dateFrom;
-  // let maxDate = new Date();
-
   const onSelectedDateChanged = (date: Date) => {
     setOpenDatePicker(0);
     openDatePicker === 1 && setDateFrom(date);
@@ -41,9 +37,9 @@ const DashboardHeader = ({
     openDatePicker === 4 && setCompareTo(date);
   };
 
-  const opStartDate = new Date(2020, 0, 1);
-
   const handleRangeSelect = (range?: string) => {
+    const daysDiff = differenceInDays(new Date(), startOfMonth(new Date())) + 1;
+
     setRange(range || "");
     switch (range?.toLowerCase()) {
       case "all": {
@@ -57,14 +53,14 @@ const DashboardHeader = ({
         setDateFrom(startOfMonth(new Date()));
         setDateTo(new Date());
         setCompareFrom(subDays(startOfMonth(new Date()), daysDiff));
-        setCompareTo(subDays(new Date(), daysDiff));
+        setCompareTo(subDays(startOfMonth(new Date()), 1));
         break;
       }
       case "custom": {
         setDateFrom(startOfMonth(new Date()));
         setDateTo(new Date());
         setCompareFrom(subDays(startOfMonth(new Date()), daysDiff));
-        setCompareTo(subDays(new Date(), daysDiff));
+        setCompareTo(subDays(startOfMonth(new Date()), 1));
         break;
       }
     }
@@ -128,8 +124,11 @@ const DashboardHeader = ({
           dateTo={dateTo}
           compareFrom={compareFrom}
           compareTo={compareTo}
+          setCompareFrom={setCompareFrom}
+          setCompareTo={setCompareTo}
           showCompare={showCompare}
           setShowCompare={setShowCompare}
+          reqsDateData={reqsDateData}
           openDatePicker={openDatePicker}
           setOpenDatePicker={setOpenDatePicker}
           onSelectedDateChanged={onSelectedDateChanged}
@@ -142,34 +141,6 @@ const DashboardHeader = ({
 
 export default DashboardHeader;
 
-//  <div className={cn("sb-text-16")}>
-//    <label
-//      htmlFor="dateTo"
-//      className={cn("sb-text-16 ", {
-//        "items-end": showCompare,
-//      })}
-//    >
-//      End date
-//    </label>
-//    <Datepicker
-//      id="dateTo"
-//      defaultDate={dateTo}
-//      minDate={dateFrom}
-//      maxDate={new Date()}
-//      onSelectedDateChanged={(date) => setDateTo(date)}
-//    />
-//  </div>;
-//  <label htmlFor="dateFrom" className="sb-text-16 ">
-//                   Start date
-//                 </label>
-//                 <Datepicker
-//                   id="dateFrom"
-//                   defaultDate={dateFrom}
-//                   minDate={new Date(2018, 1, 1)}
-//                   maxDate={dateTo}
-//                   onSelectedDateChanged={(date) => setDateFrom(date)}
-//                 />
-
 interface IProps {
   dateFrom?: Date;
   dateTo?: Date;
@@ -179,7 +150,7 @@ interface IProps {
   compareTo?: Date;
   setCompareFrom: Dispatch<SetStateAction<Date | undefined>>;
   setCompareTo: Dispatch<SetStateAction<Date | undefined>>;
-  daysDiff: number;
+  reqsDateData: { firstDate: Date; lastDate: Date; daysDiff: number };
   selectedService: string;
   setSelectedService: Dispatch<SetStateAction<string>>;
   servicesNames: string[];

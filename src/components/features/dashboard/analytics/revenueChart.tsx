@@ -20,86 +20,80 @@ import {
   CartesianGrid,
 } from "recharts";
 import Wrapper from "./wrapper";
-import { TStatus } from "@/app/(dashboard)/(mainpages)/page";
 import { TRequestAll } from "@/services/request/types";
+import { TOverviewStatus } from "../overview";
+import { useActions } from "./actions";
 
 const RevenueChart = ({
-  status,
-  compare,
-  current,
+  dateFrom,
+  dateTo,
   compareFrom,
-  currentFrom,
-  currentTo,
   compareLabel,
   showCompare,
   activeService,
   selectedOverview,
+  formatStr,
+  rangeData,
+  compareData,
+  reqsDateData,
+  compareDateData,
+  daysDiff,
+  isLoading,
 }: IProps) => {
-  const totalCurrent = current?.length || 0;
-  const totalCompare = compare?.length || 0;
+  // TODO: calculate the total paid amount
+  const total = selectedOverview ? rangeData?.length || 0 : 0;
+  const totalCompare = selectedOverview ? compareData?.length || 0 : 0;
 
-  // const difference = totalCurrent - totalCompare;
-  let perc = ((totalCurrent - totalCompare) / (totalCompare || 1)) * 100;
+  const { getRangeData } = useActions({
+    formatStr,
+    compareFrom,
+    dateFrom,
+    rangeData,
+    compareData,
+    reqsDateData,
+    compareDateData,
+  });
+
+  // const difference = total - totalCompare;
+  let perc = ((total - totalCompare) / (totalCompare || 1)) * 100;
   perc = parseFloat(perc.toFixed(2));
 
   // let perc = 100 * difference || 0;
   const decreased = perc < 0;
 
-  const formatStr = isSameYear(compareFrom, currentFrom)
-    ? "MMMM dd"
-    : "MMMM dd, yyy";
+  // const formatStr = isSameYear(compareFrom, dateFrom)
+  //   ? "MMMM dd"
+  //   : "MMMM dd, yyy";
 
   const rangeLabel =
-    format(currentFrom, formatStr) + " - " + format(currentTo, formatStr);
-
-  const daysInRange = differenceInDays(currentTo, currentFrom) + 1;
-
-  // Returns the data for each day
-  const getDayData = (inc: number, isCompare: boolean) => {
-    const allData = isCompare ? compare : current;
-    const dayDate = isCompare
-      ? addDays(compareFrom, inc)
-      : addDays(currentFrom, inc);
-    const dayData = allData?.filter((el) =>
-      isSameDay(new Date(el.createdAt), dayDate)
-    );
-
-    return {
-      dayDate: format(dayDate, formatStr),
-      dayData,
-    };
-  };
-
-  // Returns the data for selected range, if isCompare is true. Returns for compare range, if otherwise
-  const getRangeData = (isCompare: boolean) => {
-    let rangeData: any[] = [];
-    for (let i = 0; i < daysInRange; i++) {
-      const dayData = getDayData(i, isCompare);
-      rangeData = [...rangeData, dayData];
-    }
-    return rangeData;
-  };
-
-  const rangeData: IDayData[] = getRangeData(false);
-  const rangeVsData: IDayData[] = getRangeData(true);
+    dateFrom && dateTo
+      ? format(dateFrom, formatStr) + " - " + format(dateTo, formatStr)
+      : reqsDateData.firstDate && reqsDateData.lastDate
+      ? format(reqsDateData.firstDate, formatStr) +
+        " - " +
+        format(reqsDateData.lastDate, formatStr)
+      : "";
 
   // Returns the data to be passed to the chart
-  const data = rangeData.map((el, i) => {
+  const rangeChartData: IDayData[] = getRangeData(false);
+  const compareChartData: IDayData[] = getRangeData(true);
+
+  // Returns the data to be passed to the chart
+  const data = rangeChartData?.map((el, i) => {
     return {
-      date: rangeData[i].dayDate,
-      current: rangeData?.[i]?.dayData?.length || 0,
-      compare: rangeVsData?.[i]?.dayData?.length || 0,
+      date: rangeChartData[i].dayDate,
+      current: rangeChartData?.[i]?.dayData?.length || 0,
+      compare: compareChartData?.[i]?.dayData?.length || 0,
     };
   });
 
   return (
     <Wrapper
-      status={status}
       activeService={activeService}
       compareLabel={compareLabel}
       rangeLabel={rangeLabel}
       totalCompare={totalCompare}
-      totalCurrent={totalCurrent}
+      total={total}
       selectedOverview={selectedOverview}
       showCompare={showCompare}
       className="gap-6"
@@ -119,12 +113,12 @@ const RevenueChart = ({
           >
             <CartesianGrid strokeDasharray="3 3" vertical />
             <XAxis dataKey="date" axisLine={false} />
-            <YAxis axisLine={false} />
+            <YAxis axisLine={false} allowDecimals={false} />
             <Tooltip
               content={
                 <CustomTooltip
-                  daysInRange={daysInRange}
-                  compare={compare}
+                  daysInRange={daysDiff}
+                  compareData={compareData}
                   formatStr={formatStr}
                   showCompare={showCompare}
                 />
@@ -133,8 +127,8 @@ const RevenueChart = ({
             <Area
               type="monotone"
               dataKey="current"
-              stroke="#8884d8"
-              fill="#8884d8"
+              stroke="#84d892"
+              fill="#3dc39067"
             />
             {showCompare && (
               <Area
@@ -179,16 +173,15 @@ const CustomTooltip = (props: any) => {
     payload,
     label,
     daysInRange,
-    compare,
+    compareData,
     formatStr,
     showCompare,
   } = props;
   const activeDate = setYear(new Date(label), new Date().getFullYear());
-  const vsDayData = compare?.filter((el: TRequestAll) =>
+  const vsDayData = compareData?.filter((el: TRequestAll) =>
     isSameDay(new Date(el.createdAt), subDays(activeDate, daysInRange))
   );
 
-  // console.log(props);
   if (active && payload && payload.length) {
     return (
       <div className="bg-background opacity-90 px-2 py-1 border border-border rounded shadow-sm">
@@ -207,18 +200,21 @@ const CustomTooltip = (props: any) => {
 };
 
 interface IProps {
-  status: string;
-  compare: TRequestAll[];
-  current: TRequestAll[];
-  bottomText?: string;
   className?: string;
-  compareFrom: Date;
-  currentFrom: Date;
-  currentTo: Date;
+  dateFrom?: Date;
+  dateTo?: Date;
+  compareFrom?: Date;
   compareLabel: string;
   showCompare: boolean;
   activeService?: string;
-  selectedOverview: TStatus;
+  selectedOverview?: TOverviewStatus;
+  formatStr: string;
+  rangeData?: TRequestAll[];
+  compareData?: TRequestAll[];
+  reqsDateData: { firstDate: Date; lastDate: Date; daysDiff: number };
+  compareDateData: { firstDate: Date; lastDate: Date; daysDiff: number };
+  daysDiff: number;
+  isLoading: boolean;
 }
 
 interface IDayData {

@@ -41,10 +41,6 @@ export const serviceInfoSchema = z.object({
     .string()
     .min(3, "Service name should be at least 3 characters")
     .max(30, "Service name should not be more than 30 characters"),
-  description: z
-    .string({ required_error: "Provide service description" })
-    .min(20, "Description should be at least 20 characters")
-    .max(50, "Description should not be more than 50 characters"),
   label: z
     .string({ required_error: "Provide service label" })
     .min(3, "Label should be at least 3 characters")
@@ -53,6 +49,10 @@ export const serviceInfoSchema = z.object({
     .number({ required_error: "Provide service priority" })
     .min(1, { message: "Priority should be at least 1" })
     .max(10, { message: "Priority cannot be more than 10" }),
+  description: z
+    .string({ required_error: "Provide service description" })
+    .min(20, "Description should be at least 20 characters")
+    .max(100, "Description should not be more than 100 characters"),
 });
 
 export type serviceInfoType = z.infer<typeof serviceInfoSchema>;

@@ -7,7 +7,6 @@ import { useSearchParams } from "next/navigation";
 import DoChecks from "@/components/DoChecks";
 import TableSection from "./tableSection";
 import HeaderSection from "./headerSection";
-import CardWrapper from "@/components/wrappers/cardWrapper";
 import TableSkeleton from "./TableSkeleton";
 
 const GeneralTable = ({
@@ -38,7 +37,7 @@ const GeneralTable = ({
   }));
 
   return (
-    <CardWrapper className="flex flex-col flex-1 max-w-full pb-0">
+    <div className="flex flex-col flex-1 max-w-full pb-0 bg-background rounded-lg shadow-md px-4 lg:px-6">
       <HeaderSection
         title={title}
         selectOn={selectOn}
@@ -86,7 +85,7 @@ const GeneralTable = ({
           </div>
         )}
       </DoChecks>
-    </CardWrapper>
+    </div>
   );
 };
 

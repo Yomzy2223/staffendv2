@@ -28,11 +28,13 @@ const Countries = () => {
         items={serviceProducts}
         emptyText="You have not added any country"
         btnText="Add country"
+        isLoading={isLoading}
+        LoadingSkt={Array(4)
+          .fill("")
+          .map((el, i) => (
+            <CountryCardSkeleton key={i} />
+          ))}
       >
-        {isLoading &&
-          Array(4)
-            .fill("")
-            .map((el, i) => <CountryCardSkeleton key={i} />)}
         {serviceProducts?.map((country: ICountryFull, i: number) => (
           <CountryCard key={i} info={country} setOpen={setOpen} />
         ))}

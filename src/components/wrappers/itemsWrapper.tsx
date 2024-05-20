@@ -4,7 +4,7 @@ import { Search } from "lucide-react";
 import React, { ReactNode } from "react";
 import DoChecks from "../DoChecks";
 import SearchComp from "../search";
-import CardWrapper from "./cardWrapper";
+import ItemsWrapperSkt from "./skeleton/itemsWrapperSkt";
 
 const ItemsWrapper = ({
   children,
@@ -15,7 +15,7 @@ const ItemsWrapper = ({
   emptyText,
   errorText,
   isLoading,
-  Skeleton,
+  LoadingSkt,
   onSearchChange,
   onSearchSubmit,
   navbar,
@@ -33,7 +33,7 @@ const ItemsWrapper = ({
       btnText={btnText}
       btnAction={btnAction}
       isLoading={isLoading}
-      Skeleton={Skeleton}
+      Skeleton={<ItemsWrapperSkt LoadingSkt={LoadingSkt} />}
     >
       <div className="border border-border rounded shadow-sm my-4 px-4 lg:px-6 py-6 lg:my-6">
         <div className="border-b border-border pb-4">
@@ -83,7 +83,7 @@ interface IProps {
   emptyText: string;
   errorText?: string;
   isLoading?: boolean;
-  Skeleton?: ReactNode;
+  LoadingSkt?: ReactNode;
   onSearchChange?: (e: string) => void;
   onSearchSubmit?: (e: string) => void;
   navbar?: any;

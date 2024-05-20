@@ -49,7 +49,7 @@ const ProductsSection = () => {
         btnText="Add product"
         errorText={error?.message}
         isLoading={isLoading}
-        Skeleton={<ProductsSkt />}
+        LoadingSkt={<ProductsSkt />}
         btnOutline
       >
         {serviceProducts?.map((product, i: number) => (

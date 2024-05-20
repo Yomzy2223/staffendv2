@@ -61,7 +61,7 @@ const Service = () => {
       />
       <div className="px-4 lg:px-6">
         {servicesRes.isLoading && (
-          <div className="flex justify-between gap-6">
+          <div className="flex justify-between gap-6 mb-6">
             <div>
               <Skeleton className="h-8 w-64 mb-1" />
               <Skeleton className="h-6 w-96" />

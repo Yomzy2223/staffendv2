@@ -1,7 +1,6 @@
 "use client";
 
 import PartnerReqCard from "@/components/cards/partnerReqCard";
-import PartnerForm from "@/components/form/partnerForm";
 import ItemsWrapper from "@/components/wrappers/itemsWrapper";
 import { ICountryFull } from "@/hooks/api/types";
 import { useCountryApi } from "@/hooks/useCountryApi";
@@ -56,8 +55,6 @@ const Partners = () => {
           />
         ))}
       </ItemsWrapper>
-
-      {open && <PartnerForm open={open} setOpen={setOpen} />}
     </div>
   );
 };

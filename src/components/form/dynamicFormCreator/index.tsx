@@ -12,6 +12,7 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import { TSubFormGet } from "@/services";
 import { TProductFormGet, TServiceFormGet } from "@/services/service/types";
+import { TPartnerFormGet } from "@/services/partner/types";
 
 const DynamicFormCreator = ({
   fieldTitle,
@@ -165,7 +166,7 @@ interface IProps {
   //   compulsory: boolean;
   //   subForm: TSubFormGet[];
   // }[];
-  formInfo: (TServiceFormGet | TProductFormGet)[];
+  formInfo: (TServiceFormGet | TProductFormGet | TPartnerFormGet)[];
   formState: {
     formLoading: boolean;
     formSuccess: boolean;

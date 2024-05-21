@@ -1,33 +1,71 @@
 import DialogWrapper from "@/components/wrappers/dialogWrapper";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { Button } from "flowbite-react";
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { Oval } from "react-loading-icons";
 import DynamicForm from "../dynamicForm";
-import { useCountryActions } from "./actions";
+import DynamicFormCreator from "../dynamicFormCreator";
+import { useCountryActions, useParterFormActions } from "./actions";
 import { countrySchema } from "./constants";
 
 const CountryForm = ({ open, setOpen }: IProps) => {
+  const [section, setSection] = useState(1);
+
   const { deleteQueryStrings } = useGlobalFunctions();
 
   const {
     formInfo,
     isEdit,
-    countryInfo,
+    activeCountry,
     submitCountry,
     countryLoading,
-    countrySuccess,
     defaultValues,
-  } = useCountryActions({ setOpen });
+  } = useCountryActions({ setOpen, section, setSection });
 
-  const title = (isEdit ? "Update " : "Add ") + "Country";
+  const {
+    partnerFormRes,
+    submitPartnerForm,
+    submitPartnerFormField,
+    partnerFormState,
+    handleFieldDelete,
+    handleFormDelete,
+  } = useParterFormActions({ country: activeCountry?.name });
+
+  const partnerFormData = partnerFormRes?.data?.data?.data || [];
+
+  const title1 = (isEdit ? "Update" : "Add") + " Country";
+  const title2 =
+    ((partnerFormData?.length ?? 0) > 0 ? "Update" : "Add") +
+    " Partner Activation Form";
+  const title3 =
+    ((partnerFormData?.length ?? 0) > 0 ? "Update" : "Add") +
+    " Onboarding Form";
+  let title = title1;
+
+  switch (section) {
+    case 2:
+      title = title2;
+      break;
+    case 3:
+      title = title3;
+      break;
+  }
+
+  const handleBack = () => {
+    if (section === 1) {
+      setOpen(false);
+      return;
+    }
+    setSection(section - 1);
+  };
 
   const resetDialog = () => {
     setOpen(false);
     deleteQueryStrings(["countryId"]);
   };
 
-  console.log(countryLoading);
+  const wide = (partnerFormData?.length ?? 0) > 1 && section !== 1;
+
   return (
     <DialogWrapper
       open={open}
@@ -35,30 +73,78 @@ const CountryForm = ({ open, setOpen }: IProps) => {
         open ? setOpen(open) : resetDialog();
       }}
       title={title}
-      size="3xl"
+      size={wide ? "5xl" : ""}
       dismissible={!countryLoading}
     >
-      <DynamicForm
-        formInfo={formInfo}
-        defaultValues={defaultValues}
-        formSchema={countrySchema}
-        onFormSubmit={submitCountry}
-        className={"gap-4"}
-      >
-        <div className="bg-white flex items-center justify-end pt-4 sticky bottom-0">
-          <Button
-            type="submit"
-            color="primary"
-            isProcessing={countryLoading}
-            disabled={countryLoading}
-            processingSpinner={
-              <Oval color="white" strokeWidth={4} className="h-5 w-5" />
-            }
-          >
-            {!countryLoading && (isEdit ? "Update" : "Create")}
-          </Button>
+      {section === 1 && (
+        <DynamicForm
+          formInfo={formInfo}
+          defaultValues={defaultValues}
+          formSchema={countrySchema}
+          onFormSubmit={submitCountry}
+          className={"gap-4"}
+        >
+          <div className="bg-white flex items-center justify-end pt-4 sticky bottom-0">
+            <Button
+              type="submit"
+              color="primary"
+              isProcessing={countryLoading}
+              disabled={countryLoading}
+              processingSpinner={
+                <Oval color="white" strokeWidth={4} className="h-5 w-5" />
+              }
+            >
+              {!countryLoading && (isEdit ? "Update" : "Create")}
+            </Button>
+          </div>
+        </DynamicForm>
+      )}
+
+      {section === 2 && (
+        <div className="flex flex-col justify-between gap-6 flex-1">
+          <DynamicFormCreator
+            formInfo={partnerFormData}
+            onEachSubmit={submitPartnerFormField}
+            onEachDelete={handleFieldDelete}
+            onFormSubmit={submitPartnerForm}
+            onFormDelete={handleFormDelete}
+            formState={partnerFormState}
+            wide={wide}
+            disallowPerson
+          />
+          <div className="bg-white flex items-center justify-end gap-4 pt-4 sticky bottom-0">
+            <Button color="outline" outline onClick={handleBack}>
+              Back
+            </Button>
+            <Button color="primary" onClick={() => setSection(section + 1)}>
+              Next
+            </Button>
+          </div>
         </div>
-      </DynamicForm>
+      )}
+
+      {section === 3 && (
+        <div className="flex flex-col justify-between gap-6 flex-1">
+          <DynamicFormCreator
+            formInfo={partnerFormData}
+            onEachSubmit={submitPartnerFormField}
+            onEachDelete={handleFieldDelete}
+            onFormSubmit={submitPartnerForm}
+            onFormDelete={handleFormDelete}
+            formState={partnerFormState}
+            wide={wide}
+            disallowPerson
+          />
+          <div className="bg-white flex items-center justify-end gap-4 pt-4 sticky bottom-0">
+            <Button color="outline" outline onClick={handleBack}>
+              Back
+            </Button>
+            <Button color="primary" onClick={resetDialog}>
+              Done
+            </Button>
+          </div>
+        </div>
+      )}
     </DialogWrapper>
   );
 };

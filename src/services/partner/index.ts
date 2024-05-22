@@ -1,12 +1,16 @@
-import { createPartnerForm } from "@/hooks/api/partnerApi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useResponse } from "..";
 import {
+  activatePartner,
+  createPartnerForm,
   createPartnerSubForm,
+  deActivatePartner,
+  declinePartner,
   deletePartnerForm,
   deletePartnerSubForm,
   getCountryPartnerForm,
   getPartnerForm,
+  getPartnerFormQA,
   getPartnerSubForm,
   updatePartnerForm,
   updatePartnerSubForm,
@@ -129,3 +133,58 @@ export const useGetPartnerSubFormQuery = (id: string) =>
     queryFn: ({ queryKey }) => getPartnerSubForm(queryKey[1]),
     enabled: !!id,
   });
+
+export const useGetPartnerFormQAQuery = (userId: string) =>
+  useQuery({
+    queryKey: ["Partner Form", userId],
+    queryFn: ({ queryKey }) => getPartnerFormQA(queryKey[1]),
+    enabled: !!userId,
+  });
+
+export const useActivatePartnerMutation = () => {
+  const { handleError, handleSuccess } = useResponse();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: activatePartner,
+    onError(error, variables, context) {
+      handleError({ title: "Failed", error });
+    },
+    onSuccess(data, variables, context) {
+      handleSuccess({ data });
+      queryClient.invalidateQueries({ queryKey: ["Partner Form"] });
+    },
+  });
+};
+
+export const useDeactivatePartnerMutation = () => {
+  const { handleError, handleSuccess } = useResponse();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deActivatePartner,
+    onError(error, variables, context) {
+      handleError({ title: "Failed", error });
+    },
+    onSuccess(data, variables, context) {
+      handleSuccess({ data });
+      queryClient.invalidateQueries({ queryKey: ["Partner Form"] });
+    },
+  });
+};
+
+export const useDeclinePartnerMutation = () => {
+  const { handleError, handleSuccess } = useResponse();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: declinePartner,
+    onError(error, variables, context) {
+      handleError({ title: "Failed", error });
+    },
+    onSuccess(data, variables, context) {
+      handleSuccess({ data });
+      queryClient.invalidateQueries({ queryKey: ["Partner Form"] });
+    },
+  });
+};

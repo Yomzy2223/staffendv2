@@ -22,7 +22,13 @@ const RequestDetailsWrapper = ({
   previewMode?: boolean;
 }) => {
   return (
-    <div className={cn("flex flex-col gap-8 sm:flex-row", wrapperClassName)}>
+    <div
+      className={cn(
+        "flex flex-col gap-8 sm:flex-row",
+        { "gap-0": previewMode },
+        wrapperClassName
+      )}
+    >
       <div className="flex flex-1 gap-2 min-h-full sm:max-w-[360px] rounded">
         {!previewMode && (
           <div className="hidden bg-card/25 p-3 rounded h-max sm:block">

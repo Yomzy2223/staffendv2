@@ -4,31 +4,31 @@ import PersonsCard from "@/components/cards/personsCard";
 import DoChecks from "@/components/DoChecks";
 import TextWithDetails from "@/components/texts/textWithDetails";
 import { cn } from "@/lib/utils";
-import {
-  useGetRequestBusinessQuery,
-  useGetRequestFormQuery,
-} from "@/services/request";
+import { TPartnerFormQA } from "@/services/partner/types";
+import { TBusinessInfoGet, TRequestForm } from "@/services/request/types";
+import { TUser } from "@/services/user/types";
 import { BriefcaseIcon } from "lucide-react";
 import React from "react";
-import RequestDetailsSkt from "../skeleton/requestDetailsSkt";
-import RequestDetailsWrapper from "./requestDetailsWrapper";
+import RequestDetailsSkt from "../skeleton/detailsSkt";
+import RequestDetailsWrapper from "./detailsWrapper";
 
-const RequestDetails = ({
-  requestId,
+const TableDetails = ({
   previewMode,
+  QAForms,
+  business,
+  partner,
+  isLoading,
+  errorMsg,
 }: {
-  requestId: string;
   previewMode?: boolean;
+  QAForms: (TPartnerFormQA | TRequestForm)[];
+  business?: TBusinessInfoGet;
+  partner?: TUser;
+  isLoading?: boolean;
+  errorMsg?: string;
 }) => {
-  const requestQAFormsRes = useGetRequestFormQuery(requestId);
-  const requestQAForms = requestQAFormsRes.data?.data?.data || [];
-
-  const requestBusinessRes = useGetRequestBusinessQuery({ requestId });
-  const requestBusiness = requestBusinessRes.data?.data?.data?.[0];
-  console.log(requestBusiness);
-
-  const nonPersonForms = requestQAForms?.filter((el) => el.type !== "person");
-  const personForms = requestQAForms?.filter((el) => el.type === "person");
+  const nonPersonForms = QAForms?.filter((el) => el.type !== "person");
+  const personForms = QAForms?.filter((el) => el.type === "person");
   const titles = [...new Set(personForms?.map((el) => el.title))] || [];
   const personFormByTitle =
     titles.map(
@@ -40,13 +40,14 @@ const RequestDetails = ({
 
   return (
     <DoChecks
-      items={requestQAForms}
-      isLoading={requestQAFormsRes.isLoading}
+      items={QAForms}
+      isLoading={isLoading}
       Skeleton={<RequestDetailsSkt previewMode={previewMode} />}
-      emptyText={`User hasn't submitted any form yet`}
+      emptyText="No form submitted yet"
       className="flex flex-col gap-8 bg-background"
+      errorText={errorMsg}
     >
-      {requestBusiness?.companyEmail && (
+      {business?.companyEmail && (
         <RequestDetailsWrapper
           title="Business Information"
           icon={<BriefcaseIcon />}
@@ -54,8 +55,27 @@ const RequestDetails = ({
           className="flex flex-col gap-6"
           previewMode={previewMode}
         >
-          {/* <TextWithDetails title="Operational Country" text={requestDetails?.product.country} />
-          <TextWithDetails title="Product Type" text={requestDetails?.currentState} />{" "} */}
+          {/* <TextWithDetails
+            title="Operational Country"
+            text={business?.companyName}
+          />
+          <TextWithDetails title="Product Type" text={business?.rcNumber} /> */}
+        </RequestDetailsWrapper>
+      )}
+
+      {partner && (
+        <RequestDetailsWrapper
+          title="Partner Information"
+          icon={<BriefcaseIcon />}
+          raiseIssueAction={() => {}}
+          className="flex flex-col gap-6"
+          previewMode={previewMode}
+        >
+          <TextWithDetails title="Full name" text={partner?.fullName} />
+          <TextWithDetails title="Email" text={partner?.email} />
+          <TextWithDetails title="Country" text={partner?.country} />
+          <TextWithDetails title="Phone" text={partner?.phone} />
+          <TextWithDetails title="Signed Up At" text={partner?.createdAt} />
         </RequestDetailsWrapper>
       )}
 
@@ -67,11 +87,8 @@ const RequestDetails = ({
           raiseIssueAction={() => {}}
           className="flex flex-col gap-6"
           previewMode={previewMode}
-          wrapperClassName={cn({
-            "gap-0": previewMode,
-          })}
         >
-          {form.subForm
+          {[...form.subForm]
             ?.filter((field) => removeEmtpyStrings(field.answer)?.length > 0)
             ?.map((field) => (
               <TextWithDetails
@@ -94,14 +111,11 @@ const RequestDetails = ({
             className={cn("flex flex-col gap-6 p-0 w-[600px] max-w-max", {
               "overflow-visible": previewMode,
             })}
-            wrapperClassName={cn({
-              "gap-0": previewMode,
-            })}
           >
             <PersonsCard
               title={titles[i]}
               info={formGroup.map((form) =>
-                form.subForm
+                [...form.subForm]
                   ?.filter(
                     (field) =>
                       removeEmtpyStrings(field.answer)?.length > 0 ||
@@ -138,4 +152,4 @@ const RequestDetails = ({
   );
 };
 
-export default RequestDetails;
+export default TableDetails;

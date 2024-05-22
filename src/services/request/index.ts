@@ -1,4 +1,3 @@
-import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useResponse } from "..";
 import {

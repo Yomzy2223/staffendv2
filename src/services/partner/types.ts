@@ -11,3 +11,18 @@ export type TPartnerFormRes = TFormCreate & {
 export type TPartnerFormGet = TPartnerFormRes & {
   subForm: TSubFormGet[];
 };
+
+export type TPartnerFormQA = TFormCreate & {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  formId: string;
+  isDeprecated: false;
+  userId: string;
+  subForm: TPartnerSubFormQA[];
+};
+
+export type TPartnerSubFormQA = TSubFormGet & {
+  answer: string[];
+  formId: string;
+};

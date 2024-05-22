@@ -2,11 +2,15 @@
 
 import ConfirmAction from "@/components/confirmAction";
 import PartnerAssignDialog from "@/components/dialogs/partnerAssign";
+import PreviewDetails from "@/components/tables/details/previewDetails";
 import GeneralTable from "@/components/tables/generalTable";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { cn } from "@/lib/utils";
+import {
+  useGetRequestBusinessQuery,
+  useGetRequestFormQuery,
+} from "@/services/request";
 import React, { useState } from "react";
-import PreviewDetails from "./details/previewDetails";
 import { useTableActions } from "./tableActions";
 
 const ServiceTableSection = ({
@@ -23,6 +27,12 @@ const ServiceTableSection = ({
   const [partnerId, setPartnerId] = useState("");
   const [activeStatus, setActiveStatus] = useState("");
   const [preview, setPreview] = useState("");
+
+  const requestQAFormsRes = useGetRequestFormQuery(preview);
+  const requestQAForms = requestQAFormsRes.data?.data?.data || [];
+
+  const requestBusinessRes = useGetRequestBusinessQuery({ requestId: preview });
+  const requestBusiness = requestBusinessRes.data?.data?.data?.[0];
 
   const { deleteQueryStrings } = useGlobalFunctions();
 
@@ -78,7 +88,14 @@ const ServiceTableSection = ({
           }}
         />
         {preview && (
-          <PreviewDetails selectedRequestId={preview} setPreview={setPreview} />
+          <PreviewDetails
+            selectedRequestId={preview}
+            setPreview={setPreview}
+            QAForms={requestQAForms}
+            business={requestBusiness}
+            isLoading={requestQAFormsRes.isLoading}
+            detailsUrl={`/services/requests/${preview}`}
+          />
         )}
       </div>
       <PartnerAssignDialog

@@ -1,10 +1,10 @@
-import RequestDetailsSkt from "@/components/features/services/skeleton/requestDetailsSkt";
+import TableDetailsSkt from "@/components/tables/skeleton/detailsSkt";
 import React from "react";
 
 const Loading = () => {
   return (
     <div className="py-6">
-      <RequestDetailsSkt />
+      <TableDetailsSkt />
     </div>
   );
 };

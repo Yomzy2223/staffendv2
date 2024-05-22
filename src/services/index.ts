@@ -2,6 +2,7 @@
 import { useToast } from "@/components/ui/use-toast";
 import defaultAxios, { AxiosError } from "axios";
 import { getSession } from "next-auth/react";
+import { TFieldTypes } from "./service/types";
 
 export type TRoot<T = any> = {
   message: string;
@@ -88,7 +89,7 @@ export type TFormCreate = {
 
 export type TSubFormCreate = {
   question: string;
-  type: string;
+  type: TFieldTypes;
   options?: string[];
   compulsory: boolean;
   allowOther?: boolean;

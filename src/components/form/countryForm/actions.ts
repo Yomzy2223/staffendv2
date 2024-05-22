@@ -1,4 +1,3 @@
-import { deletePartnerSubForm } from "@/hooks/api/partnerApi";
 import { ICountry } from "@/hooks/api/types";
 import { useCountryApi } from "@/hooks/useCountryApi";
 import { TSubFormCreate } from "@/services";

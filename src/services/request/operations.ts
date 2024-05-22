@@ -3,7 +3,7 @@ import {
   TAllReqPayload,
   TBusinessInfoCreate,
   TBusinessInfoGet,
-  TRequesForm,
+  TRequestForm,
   TRequestAll,
   TRequestGet,
   TSearchReqPayload,
@@ -65,7 +65,7 @@ export const getAllRequests = async ({
 
 export const getRequestForm = async (requestId: string) => {
   const client = await Client();
-  return await client.get<TRoot<TRequesForm[]>>(
+  return await client.get<TRoot<TRequestForm[]>>(
     `/productRequest/form/${requestId}`
   );
 };

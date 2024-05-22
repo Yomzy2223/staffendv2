@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import React from "react";
 
-const RequestDetailsSkt = ({ previewMode }: { previewMode?: boolean }) => {
+const TableDetailsSkt = ({ previewMode }: { previewMode?: boolean }) => {
   return (
     <div className="flex flex-col gap-6">
       <div className={cn("flex gap-4", { "gap-0": previewMode })}>
@@ -103,4 +103,4 @@ const RequestDetailsSkt = ({ previewMode }: { previewMode?: boolean }) => {
   );
 };
 
-export default RequestDetailsSkt;
+export default TableDetailsSkt;

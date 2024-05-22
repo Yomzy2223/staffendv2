@@ -1,5 +1,5 @@
 import ServiceCardSkeleton from "@/components/cards/service/serviceCardSkeleton";
-import TableSkeleton from "@/components/tables/generalTable/TableSkeleton";
+import TableSkeleton from "@/components/tables/skeleton/TableSkeleton";
 import { Skeleton } from "@/components/ui/skeleton";
 import React from "react";
 

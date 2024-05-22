@@ -1,61 +1,107 @@
 "use client";
 
-import PartnerReqCard from "@/components/cards/partnerReqCard";
-import ItemsWrapper from "@/components/wrappers/itemsWrapper";
-import { ICountryFull } from "@/hooks/api/types";
-import { useCountryApi } from "@/hooks/useCountryApi";
-import usePartnerApi from "@/hooks/usePartnerApi";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import ConfirmAction from "@/components/confirmAction";
+import PreviewDetails from "@/components/tables/details/previewDetails";
+import GeneralTable from "@/components/tables/generalTable";
+import { cn } from "@/lib/utils";
+import { useGetPartnerFormQAQuery } from "@/services/partner";
+import React, { useState } from "react";
+import { useActions } from "./actions";
 
 const Partners = () => {
-  const [open, setOpen] = useState(false);
+  const [openActivate, setOpenActivate] = useState(false);
+  const [openDeactivate, setOpenDeactivate] = useState(false);
+  const [selectedPartner, setSelectedPartner] = useState<string[]>();
+  const [preview, setPreview] = useState("");
+  const [status, setStatus] = useState("");
 
-  const { deletePartnerFormMutation } = usePartnerApi();
+  const partnerFormQARes = useGetPartnerFormQAQuery(preview);
+  const partnerFormQA = partnerFormQARes.data?.data?.data || [];
 
-  const { getAllCountriesQuery } = useCountryApi();
-  const countries = getAllCountriesQuery;
-  const countriesData = countries.data?.data?.data;
-
-  const createRequirement = () => {
-    setOpen(true);
-  };
-
-  const deleteForm = ({
-    info,
-    setOpenConfirm,
-  }: {
-    info: ICountryFull;
-    setOpenConfirm: Dispatch<SetStateAction<boolean>>;
-  }) => {
-    deletePartnerFormMutation.mutate(info.id, {
-      onSuccess: () => setOpenConfirm(false),
-    });
-  };
+  const {
+    partnerTableNav,
+    tableHeaders,
+    tableBody,
+    activatePartner,
+    deactivatePartner,
+    declinePartner,
+    partnersLoading,
+    partnersErrMsg,
+    handleSearch,
+    activePartner,
+  } = useActions({
+    setOpenActivate,
+    setOpenDeactivate,
+    setSelectedPartner,
+    preview,
+    setPreview,
+    status,
+  });
 
   return (
-    <div className="-mx-5 md:-mx-8 space-y-4 lg:space-y-6">
-      <div className="bg-primary/30 flex justify-between items-center gap-6 shadow-md px-5 py-4 lg:px-8">
-        <h2 className="sb-text-24 font-semibold capitalize">Partner</h2>
-      </div>
-
-      <ItemsWrapper
-        title="Products"
-        btnAction={createRequirement}
-        items={countriesData}
-        emptyText="You have not added any product"
-        btnText="Add product"
+    <>
+      <div
+        className={cn("flex gap-1 pt-10", {
+          "max-w-[100vw]": preview,
+        })}
       >
-        {countriesData?.map((country: ICountryFull, i: number) => (
-          <PartnerReqCard
-            key={i}
-            info={country}
-            setOpenEdit={setOpen}
-            handleDelete={deleteForm}
-            isLoading={deletePartnerFormMutation.isPending}
+        <GeneralTable
+          title="Partners"
+          tableHeaders={tableHeaders}
+          tableBody={tableBody}
+          tableNav={partnerTableNav}
+          onRowSelect={(selected) => setSelectedPartner(selected)}
+          onSearchChange={handleSearch}
+          onSearchSubmit={handleSearch}
+          dataLoading={partnersLoading}
+          errorMsg={partnersErrMsg}
+          preview={preview}
+          handleFilter={(value) => setStatus(value || "")}
+        />
+        {preview && (
+          <PreviewDetails
+            selectedRequestId={preview}
+            setPreview={setPreview}
+            QAForms={partnerFormQA}
+            partner={activePartner}
+            isLoading={partnerFormQARes.isLoading}
+            detailsUrl={`/partners/${preview}`}
           />
-        ))}
-      </ItemsWrapper>
-    </div>
+        )}
+      </div>
+      {openActivate && (
+        <ConfirmAction
+          open={openActivate}
+          setOpen={setOpenActivate}
+          confirmAction={() =>
+            activatePartner.mutate(selectedPartner?.[0] || "", {
+              onSuccess: () => setOpenActivate(false),
+            })
+          }
+          title="Activate Partner"
+          description="Are you sure you want to activate this partner? Partner will be notified."
+          isLoading={activatePartner.isPending}
+          dismissible
+          isDelete
+        />
+      )}
+      {openDeactivate && (
+        <ConfirmAction
+          open={openDeactivate}
+          setOpen={setOpenDeactivate}
+          confirmAction={() =>
+            deactivatePartner.mutate(selectedPartner?.[0] || "", {
+              onSuccess: () => setOpenDeactivate(false),
+            })
+          }
+          title="Deactivate Partner"
+          description="Are you sure you want to deactivate this partner? Partner will be notified."
+          isLoading={deactivatePartner.isPending}
+          dismissible
+          isDelete
+        />
+      )}
+    </>
   );
 };
 

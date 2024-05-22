@@ -44,7 +44,7 @@ export type TRequestAll = TRequestCF & {
 };
 
 export type TRequestGet = TRequestCF & {
-  requestQA: TRequesForm[];
+  requestQA: TRequestForm[];
   product: TProductGet;
   business: TBusinessInfoGet;
 };
@@ -88,7 +88,7 @@ export type TBusinessInfoGet = {
   userId: string;
 };
 
-export type TRequesForm = {
+export type TRequestForm = {
   id: string;
   title: string;
   description: string;

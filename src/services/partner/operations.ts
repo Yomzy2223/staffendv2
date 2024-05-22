@@ -1,5 +1,5 @@
 import { Client, TFormCreate, TRoot, TSubFormCreate, TSubFormGet } from "..";
-import { TPartnerFormGet, TPartnerFormRes } from "./types";
+import { TPartnerFormGet, TPartnerFormQA, TPartnerFormRes } from "./types";
 
 // Partner form endpoints
 export const createPartnerForm = async ({
@@ -83,4 +83,26 @@ export const deletePartnerSubForm = async (id: string) => {
 export const getPartnerSubForm = async (id: string) => {
   const client = await Client();
   return await client.get<TRoot<TSubFormGet>>(`/partner/subform/${id}`);
+};
+
+export const getPartnerFormQA = async (userId: string) => {
+  const client = await Client();
+  return await client.get<TRoot<TPartnerFormQA[]>>(
+    `/partner/formAnswer/${userId}`
+  );
+};
+
+export const activatePartner = async (userId: string) => {
+  const client = await Client();
+  return await client.post<TRoot>(`/partner/activate/${userId}`);
+};
+
+export const deActivatePartner = async (userId: string) => {
+  const client = await Client();
+  return await client.post<TRoot>(`/partner/deactivate/${userId}`);
+};
+
+export const declinePartner = async (userId: string) => {
+  const client = await Client();
+  return await client.post<TRoot>(`/partner/decline/${userId}`);
 };

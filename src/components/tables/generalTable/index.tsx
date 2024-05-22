@@ -2,12 +2,12 @@
 
 import React, { useState } from "react";
 import { ITableBody } from "./constants";
-import PaginatedItems, { IPagination } from "./pagination";
+import PaginatedItems from "./pagination";
 import { useSearchParams } from "next/navigation";
 import DoChecks from "@/components/DoChecks";
 import TableSection from "./tableSection";
 import HeaderSection from "./headerSection";
-import TableSkeleton from "./TableSkeleton";
+import TableSkeleton from "../skeleton/TableSkeleton";
 
 const GeneralTable = ({
   title,
@@ -30,7 +30,7 @@ const GeneralTable = ({
   const searchParams = useSearchParams();
   const tablePage = parseInt(searchParams.get("page") || "1");
 
-  const offset = (tablePage - 1) * itemsPerPage;
+  const offset = itemsPerPage ? (tablePage - 1) * itemsPerPage : 0;
 
   const tableBodyPreview = tableBody.map((row) => ({
     ...row,
@@ -70,7 +70,7 @@ const GeneralTable = ({
           preview={preview}
         />
 
-        {itemsLength > itemsPerPage && (
+        {itemsLength && itemsPerPage && itemsLength > itemsPerPage && (
           <div className="flex flex-col justify-between gap-4 sticky left-0 p-4 md:flex-row md:items-center md:py-5">
             <p className="inline-flex gap-1 text-sm text-foreground-5">
               Showing
@@ -93,12 +93,11 @@ const GeneralTable = ({
 
 export default GeneralTable;
 
-interface IProps extends IPagination {
+interface IProps {
   title: string;
   tableHeaders: string[];
   tableBody: ITableBody[];
   tableNav: string[];
-  // tableNav: { name: string; value: string; text: string }[];
   onRowSelect: (selected: string[]) => void;
   onSearchChange: (value: string) => void;
   onSearchSubmit: (value: string) => void;
@@ -106,4 +105,6 @@ interface IProps extends IPagination {
   dataLoading?: boolean;
   errorMsg?: string;
   preview?: string;
+  itemsPerPage?: number;
+  itemsLength?: number;
 }

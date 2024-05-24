@@ -110,7 +110,7 @@ export const getSearchRequest = async ({
   endDate,
 }: TSearchReqArgs) => {
   const client = await Client();
-  let url = `/productRequest/search?queryString=${queryString}`;
+  let url = `/productRequest/general/search?queryString=${queryString}`;
 
   if (page && pageSize) url = url + `&page=${page}&pageSize=${pageSize}`;
   if (serviceId) url = url + `&serviceId=${serviceId}`;

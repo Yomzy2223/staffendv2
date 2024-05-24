@@ -5,6 +5,7 @@ import PreviewDetails from "@/components/tables/details/previewDetails";
 import GeneralTable from "@/components/tables/generalTable";
 import { cn } from "@/lib/utils";
 import { useGetPartnerFormQAQuery } from "@/services/partner";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useActions } from "./actions";
 
@@ -14,6 +15,8 @@ const Partners = () => {
   const [selectedPartner, setSelectedPartner] = useState<string[]>();
   const [preview, setPreview] = useState("");
   const [status, setStatus] = useState("");
+
+  const router = useRouter();
 
   const partnerFormQARes = useGetPartnerFormQAQuery(preview);
   const partnerFormQA = partnerFormQARes.data?.data?.data || [];
@@ -65,7 +68,7 @@ const Partners = () => {
             QAForms={partnerFormQA}
             partner={activePartner}
             isLoading={partnerFormQARes.isLoading}
-            detailsUrl={`/partners/${preview}`}
+            onExpand={() => router.push(`/partners/${preview}`)}
           />
         )}
       </div>

@@ -8,7 +8,7 @@ import ServiceForm from "@/components/form/serviceForm";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import {
-  useDeleteServiceFormMutation,
+  useDeleteServiceMutation,
   useGetAllServicesQuery,
 } from "@/services/service";
 import { Button, Tabs, TabsRef } from "flowbite-react";
@@ -27,7 +27,7 @@ const Service = () => {
   const serviceId = searchParams.get("serviceId") || "";
   const activeTab = searchParams.get("activeTab") || "0";
 
-  const deleteService = useDeleteServiceFormMutation();
+  const deleteService = useDeleteServiceMutation();
   const servicesRes = useGetAllServicesQuery();
   const services = servicesRes.data?.data?.data?.sort(
     (a, b) => a.priority - b.priority

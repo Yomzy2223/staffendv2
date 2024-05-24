@@ -29,7 +29,7 @@ const DynamicField = ({
   setFieldsEditState,
 }: IProps) => {
   const [edit, setEdit] = useState(isNew || false);
-  const [type, setType] = useState(info?.type);
+  const [type, setType] = useState<string>(info?.type);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [hasSelectedFile, setHasSelectedFile] = useState(false);
 
@@ -105,7 +105,6 @@ const DynamicField = ({
   const showOptions =
     type === "checkbox" ||
     type === "objectives" ||
-    type === "dropdown" ||
     type === "select" ||
     type === "multiple choice";
 

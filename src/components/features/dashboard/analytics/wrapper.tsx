@@ -21,7 +21,7 @@ const Wrapper = ({
   totalCompare: number;
   className?: string;
   selectedOverview?: TOverviewStatus;
-  showCompare: boolean;
+  showCompare?: boolean;
   children: ReactNode;
 }) => {
   let status =

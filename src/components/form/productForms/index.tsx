@@ -32,7 +32,7 @@ const ProductForm = ({ open, setOpen }: IProps) => {
   } = useProductFormActions();
 
   const productData = productInfo?.data?.data?.data;
-  const productFormData = productFormInfo?.data?.data?.data;
+  const productFormData = productFormInfo?.data?.data?.data || [];
 
   const title2 =
     productFormData?.length > 0 ? "Update Product Form" : "Add Product Form";

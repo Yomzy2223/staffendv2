@@ -86,7 +86,7 @@ export const deleteProductForm = async (id: string) => {
 
 export const getProductForm = async (productId: string) => {
   const client = await Client();
-  return await client.get<TRoot<TProductFormGet>>(
+  return await client.get<TRoot<TProductFormGet[]>>(
     `/products/formByProduct/${productId}`
   );
 };

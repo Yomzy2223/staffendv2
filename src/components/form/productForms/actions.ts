@@ -1,7 +1,7 @@
-import { getCountries } from "@/hooks/api/countryApi";
-import { ICountry, ISubForm } from "@/hooks/api/types";
+import { ICountry } from "@/hooks/api/types";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { useCountryApi } from "@/hooks/useCountryApi";
+import { TSubFormCreate } from "@/services";
 import {
   useCreateMultipleProductSubFormsMutation,
   useCreateProductFormMutation,
@@ -24,7 +24,6 @@ import {
   FormType,
 } from "../dynamicFormCreator/eachForm/constants";
 import {
-  FieldType,
   IFieldSubmitHandlerArg,
   IFormSubmitHandlerArg,
 } from "../dynamicFormCreator/eachForm/types";
@@ -138,7 +137,7 @@ export const useProductFormActions = () => {
       ? updateProductSubFormMutation.mutate(
           {
             id: fieldId,
-            formInfo: values as ISubForm,
+            formInfo: values as TSubFormCreate,
           },
           {
             onSuccess: (data) => onSuccess && onSuccess(data),
@@ -148,7 +147,7 @@ export const useProductFormActions = () => {
         createProductSubFormMutation.mutate(
           {
             formId,
-            formInfo: values as ISubForm,
+            formInfo: values as TSubFormCreate,
           },
           {
             onSuccess: (data) => onSuccess && onSuccess(data),
@@ -161,12 +160,12 @@ export const useProductFormActions = () => {
     values,
   }: {
     formId: string;
-    values: FieldType[];
+    values: TSubFormCreate[];
   }) => {
     if (!formId) return;
     createMultipleProductSubFormsMutation.mutate({
       formId,
-      formInfo: values as ISubForm[],
+      formInfo: values as TSubFormCreate[],
     });
   };
 

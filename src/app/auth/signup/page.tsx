@@ -2,6 +2,7 @@
 
 import AuthFormWrapper from "@/components/features/auth/authFormWrapper";
 import DynamicForm from "@/components/form/dynamicForm";
+import { IDynamicFormField } from "@/components/form/dynamicForm/constants";
 import { AuthStepper } from "@/components/stepper/auth";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { useResponse } from "@/hooks/useResponse";
@@ -109,7 +110,7 @@ const SignUp = () => {
 
 export default SignUp;
 
-const formInfo = [
+const formInfo: IDynamicFormField[] = [
   {
     name: "name",
     label: "Hello, Tell us your name",

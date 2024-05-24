@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { useResponse } from "@/hooks/useResponse";
 import { Oval } from "react-loading-icons";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
+import { IDynamicFormField } from "@/components/form/dynamicForm/constants";
 
 const SignIn = () => {
   const [isPending, setIsPending] = useState(false);
@@ -106,7 +107,7 @@ const SignIn = () => {
 
 export default SignIn;
 
-const formInfo = [
+const formInfo: IDynamicFormField[] = [
   {
     name: "email",
     label: "Enter Email Address",

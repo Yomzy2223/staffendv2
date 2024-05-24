@@ -14,7 +14,14 @@ import Wrapper from "./wrapper";
 
 const PartnerChart = () => {
   return (
-    <Wrapper activeService="Partner analytics" className="gap-6">
+    <Wrapper
+      activeService="Partner analytics"
+      className="gap-6"
+      rangeLabel=""
+      total={0}
+      totalCompare={0}
+      compareLabel=""
+    >
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart

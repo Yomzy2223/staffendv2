@@ -12,7 +12,7 @@ import { useGetUserQuery } from "@/services/user";
 import { Button } from "flowbite-react";
 import React, { useState } from "react";
 
-const page = ({ params }: { params: { userId: string } }) => {
+const Page = ({ params }: { params: { userId: string } }) => {
   const [openActivate, setOpenActivate] = useState(false);
   const [openDeactivate, setOpenDeactivate] = useState(false);
   const [openDecline, setOpenDecline] = useState(false);
@@ -128,4 +128,4 @@ const page = ({ params }: { params: { userId: string } }) => {
   );
 };
 
-export default page;
+export default Page;

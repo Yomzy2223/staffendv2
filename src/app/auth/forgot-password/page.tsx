@@ -10,6 +10,7 @@ import useUserApi from "@/hooks/useUserApi";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { useSearchParams } from "next/navigation";
 import { Oval } from "react-loading-icons";
+import { IDynamicFormField } from "@/components/form/dynamicForm/constants";
 
 const ForgotPassword = () => {
   const [formValue, setformValue] = useState<forgotPasswordType>({ email: "" });
@@ -123,7 +124,7 @@ const ForgotPassword = () => {
 
 export default ForgotPassword;
 
-const formInfo = [
+const formInfo: IDynamicFormField[] = [
   {
     name: "email",
     label: "Enter Email Address",

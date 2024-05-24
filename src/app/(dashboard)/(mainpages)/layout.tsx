@@ -9,7 +9,7 @@ import Image from "next/image";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { useRouteActions } from "./actions";
 
-const layout = ({ children }: { children: ReactNode }) => {
+const Layout = ({ children }: { children: ReactNode }) => {
   const [open, setOpen] = useState(false);
   const { navRoutes } = useRouteActions();
   const { setQuery } = useGlobalFunctions();
@@ -45,4 +45,4 @@ const layout = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export default layout;
+export default Layout;

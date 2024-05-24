@@ -9,6 +9,7 @@ import * as z from "zod";
 import { useParams, useRouter } from "next/navigation";
 import useUserApi from "@/hooks/useUserApi";
 import { Oval } from "react-loading-icons";
+import { IDynamicFormField } from "@/components/form/dynamicForm/constants";
 
 const ResetPassword = () => {
   const { resetPasswordMutation } = useUserApi();
@@ -57,7 +58,7 @@ const ResetPassword = () => {
 
 export default ResetPassword;
 
-const formInfo = [
+const formInfo: IDynamicFormField[] = [
   {
     name: "password",
     label: "Enter Password",

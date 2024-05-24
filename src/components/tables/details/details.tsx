@@ -40,12 +40,9 @@ const TableDetails = ({
   const personForms = QAForms?.filter((el) => el.type === "person");
   const titles = [...new Set(personForms?.map((el) => el.title))] || [];
   const personFormByTitle =
-    titles.map(
-      (title) => personForms?.filter((form) => form.title === title) || []
-    ) || [];
+    titles.map((title) => personForms?.filter((form) => form.title === title) || []) || [];
 
-  const removeEmtpyStrings = (array: string[]) =>
-    array.filter((el) => el.trim()?.length > 0);
+  const removeEmtpyStrings = (array: string[]) => array.filter((el) => el.trim()?.length > 0);
 
   return (
     <DoChecks
@@ -61,9 +58,7 @@ const TableDetails = ({
           <Breadcrumb.Item href={prev.path + "?" + searchParams.toString()}>
             <span className="first-letter:uppercase">{prev.text}</span>
           </Breadcrumb.Item>
-          <Breadcrumb.Item>
-            {business?.companyName || "Business"}
-          </Breadcrumb.Item>
+          <Breadcrumb.Item>{business?.companyName || "Business"}</Breadcrumb.Item>
         </Breadcrumb>
       )}
 
@@ -75,11 +70,8 @@ const TableDetails = ({
           className="flex flex-col gap-6"
           previewMode={previewMode}
         >
-          {/* <TextWithDetails
-            title="Operational Country"
-            text={business?.companyName}
-          />
-          <TextWithDetails title="Product Type" text={business?.rcNumber} /> */}
+          <TextWithDetails title="Operational Country" text={business?.companyName} />
+          <TextWithDetails title="Product Type" text={business?.rcNumber} />
         </TableDetailsWrapper>
       )}
 
@@ -111,11 +103,7 @@ const TableDetails = ({
           {[...form.subForm]
             ?.filter((field) => removeEmtpyStrings(field.answer)?.length > 0)
             ?.map((field) => (
-              <TextWithDetails
-                key={field.id}
-                title={field.question}
-                list={field.answer}
-              />
+              <TextWithDetails key={field.id} title={field.question} list={field.answer} />
             ))}
         </TableDetailsWrapper>
       ))}
@@ -137,9 +125,7 @@ const TableDetails = ({
               info={formGroup.map((form) =>
                 [...form.subForm]
                   ?.filter(
-                    (field) =>
-                      removeEmtpyStrings(field.answer)?.length > 0 ||
-                      field.fileLink
+                    (field) => removeEmtpyStrings(field.answer)?.length > 0 || field.fileLink
                   )
                   .map((field) => ({
                     field: field.question,

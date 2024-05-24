@@ -8,7 +8,7 @@ import {
 import { useSearchParams } from "next/navigation";
 import React from "react";
 
-const page = ({ params }: { params: { requestId: string } }) => {
+const Page = ({ params }: { params: { requestId: string } }) => {
   const { requestId } = params;
 
   const searchParams = useSearchParams();
@@ -37,4 +37,4 @@ const page = ({ params }: { params: { requestId: string } }) => {
   );
 };
 
-export default page;
+export default Page;

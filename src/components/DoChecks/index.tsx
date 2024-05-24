@@ -36,7 +36,7 @@ const DoChecks = ({
       </div>
     );
 
-  if (isLoading) return Skeleton || <div></div>;
+  if (isLoading) return <div className={className}>{Skeleton}</div>;
 
   if (items?.length === 0 && !hideImg)
     return (

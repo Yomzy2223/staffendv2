@@ -8,12 +8,12 @@ import {
   getRequest,
   getRequestBusiness,
   getRequestForm,
+  getSearchRequest,
   getServiceRequests,
-  searchRequest,
   unAssignRequest,
   updateBusinessInfo,
 } from "./operations";
-import { TAllReqPayload, TServiceReqPayload } from "./types";
+import { TAllReqPayload, TSearchReqArgs, TServiceReqPayload } from "./types";
 
 export const useDeleteRequestMutation = () => {
   const { handleError, handleSuccess } = useResponse();
@@ -50,6 +50,7 @@ export const useGetAllRequestsQuery = (arg: TAllReqPayload) =>
   useQuery({
     queryKey: ["request", arg],
     queryFn: ({ queryKey }) => getAllRequests(queryKey[1] as TAllReqPayload),
+    enabled: !arg.disabled,
   });
 
 export const useGetRequestFormQuery = (requestId: string) =>
@@ -98,21 +99,12 @@ export const useUnAssignRequestMutation = () => {
   });
 };
 
-export const useSearchRequestMutation = () => {
-  const { handleError, handleSuccess } = useResponse();
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: searchRequest,
-    onError(error, variables, context) {
-      handleError({ title: "Failed", error });
-    },
-    onSuccess(data, variables, context) {
-      handleSuccess({ data });
-      queryClient.invalidateQueries({ queryKey: ["request"] });
-    },
+export const useGetSearchRequestQuery = (args: TSearchReqArgs) =>
+  useQuery({
+    queryKey: ["request", args],
+    queryFn: ({ queryKey }) => getSearchRequest(queryKey[1] as TSearchReqArgs),
+    enabled: !!args.queryString,
   });
-};
 
 export const useGetRequestBusinessQuery = ({
   requestId,

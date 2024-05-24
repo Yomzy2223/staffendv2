@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "flowbite-react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   Select,
@@ -24,6 +24,9 @@ export const Navigation = ({
 
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const basePath = (searchParams.get("basePath") || "").toLowerCase();
 
   return (
     <motion.div
@@ -40,6 +43,15 @@ export const Navigation = ({
             ? el.options.some((each) => pathname.includes(each.to))
             : isActive;
 
+        if (basePath) {
+          console.log(el.to);
+          if (i === 0)
+            basePath === "home" ? (isActive = true) : (isActive = false);
+          else
+            el.to?.toLowerCase()?.includes(basePath)
+              ? (isActive = true)
+              : (isActive = false);
+        }
         return (
           <div key={i}>
             {el?.type === "select" && el?.options ? (

@@ -4,102 +4,86 @@ import React from "react";
 
 const TableDetailsSkt = ({ previewMode }: { previewMode?: boolean }) => {
   return (
-    <div className="flex flex-col gap-6">
-      <div className={cn("flex gap-4", { "gap-0": previewMode })}>
-        {!previewMode && <Skeleton className="h-10 w-10 mr-4 shrink-0" />}
-        <Skeleton className={cn("h-80 w-96", { "h-52 w-60": previewMode })} />
-        <div className="h-52 w-80 space-y-6">
-          <div>
-            <Skeleton className="h-5 w-10 mb-1" />
-            <Skeleton className="h-5 w-16" />
+    <>
+      {!previewMode && <Skeleton className="w-44 h-5" />}
+
+      {[1, 2].map((el) => (
+        <div key={el} className={cn("flex gap-2", { "gap-0": previewMode })}>
+          {!previewMode && (
+            <Skeleton className="hidden md:block h-12 w-12 shrink-0" />
+          )}
+          <div
+            className={cn("flex flex-col md:flex-row gap-2 md:gap-8", {
+              "gap-0": previewMode,
+            })}
+          >
+            <Skeleton
+              className={cn(
+                { "h-10 lg:h-72 w-full md:w-[304px]": !previewMode },
+                { "h-52 w-60": previewMode }
+              )}
+            />
+            <div className="flex-1 w-[90vw] md:w-[542px] h-full border border-border rounded-md p-4">
+              <Skeleton className="h-5 w-4/5 mb-3" />
+              <Skeleton className="h-8 w-1/2 mb-6" />
+              <Skeleton className="h-5 w-3/5 mb-3" />
+              <div className="flex gap-2 mb-6">
+                <Skeleton className="h-8 w-2/5 mb-3" />
+                <Skeleton className="h-8 w-2/5 mb-3" />
+              </div>
+              <div>
+                <Skeleton className="h-4 w-1/2 mb-3" />
+                <Skeleton className="h-8 w-2/5" />
+              </div>
+            </div>
           </div>
-          <div>
-            <Skeleton className="h-4 w-8 mb-1" />
-            <Skeleton className="h-5 w-32" />
-          </div>
-          <div>
-            <Skeleton className="h-4 w-6 mb-1" />
-            <Skeleton className="h-5 w-9" />
+        </div>
+      ))}
+
+      <div
+        className={cn("flex gap-2 sm:hidden", { "sm:flex gap-0": previewMode })}
+      >
+        {!previewMode && (
+          <Skeleton className="hidden md:block h-12 w-12 shrink-0" />
+        )}
+        <div
+          className={cn("flex flex-col md:flex-row gap-2 md:gap-8", {
+            "gap-0": previewMode,
+          })}
+        >
+          <Skeleton
+            className={cn(
+              { "h-10 lg:h-72 w-full md:w-[304px]": !previewMode },
+              { "h-52 w-60": previewMode }
+            )}
+          />
+          <div className="flex-1 w-[90vw] md:w-[542px] h-full border border-border rounded-md p-4">
+            <Skeleton className="h-5 w-4/5 mb-3" />
+            <Skeleton className="h-8 w-1/2 mb-6" />
+            <Skeleton className="h-5 w-3/5 mb-3" />
+            <div className="flex gap-2 mb-6">
+              <Skeleton className="h-8 w-2/5 mb-3" />
+              <Skeleton className="h-8 w-2/5 mb-3" />
+            </div>
+            <div>
+              <Skeleton className="h-4 w-1/2 mb-3" />
+              <Skeleton className="h-8 w-2/5" />
+            </div>
           </div>
         </div>
       </div>
-      <div className={cn("flex gap-4", { "gap-0": previewMode })}>
-        {!previewMode && <Skeleton className="h-10 w-10 mr-4 shrink-0" />}
-        <Skeleton className={cn("h-80 w-96", { "h-40 w-60": previewMode })} />
-        <div className="h-40 w-80 space-y-6">
-          <div>
-            <Skeleton className="h-4 w-6 mb-1" />
-            <Skeleton className="h-5 w-9" />
-          </div>
-          <div>
-            <Skeleton className="h-4 w-8 mb-1" />
-            <Skeleton className="h-5 w-32" />
-          </div>
-          <div>
-            <Skeleton className="h-5 w-10 mb-1" />
-            <Skeleton className="h-5 w-16" />
-          </div>
-          <div>
-            <Skeleton className="h-4 w-6 mb-1" />
-            <Skeleton className="h-5 w-9" />
+
+      <div className={cn("hidden gap-2 sm:flex")}>
+        <Skeleton className="hidden md:block h-12 w-12 shrink-0" />
+        <div className={cn("flex flex-col md:flex-row gap-2 md:gap-8")}>
+          <Skeleton className={cn("h-10 md:h-40 w-full md:w-[304px]")} />
+          <div className="flex gap-3 w-[542px] h-40 border border-border rounded-md p-4">
+            <Skeleton className="h-full w-1/2" />
+            <Skeleton className="h-full w-1/2" />
           </div>
         </div>
       </div>
-      {previewMode ? (
-        <div className={cn("flex gap-4", { "gap-0": previewMode })}>
-          <Skeleton className="h-96 w-60" />
-          <div className="h-40 w-80 space-y-6">
-            <div className="flex justify-between gap-6">
-              <Skeleton className="h-4 w-12 mb-1" />
-              <Skeleton className="h-4 w-4" />
-            </div>
-            <div>
-              <Skeleton className="h-4 w-12 mb-1" />
-              <Skeleton className="h-5 w-32" />
-            </div>
-            <div>
-              <Skeleton className="h-4 w-12 mb-1" />
-              <Skeleton className="h-5 w-32" />
-            </div>
-            <div>
-              <Skeleton className="h-4 w-12 mb-1" />
-              <Skeleton className="h-5 w-32" />
-            </div>
-            <div>
-              <Skeleton className="h-5 w-10 mb-1" />
-              <Skeleton className="h-5 w-16" />
-            </div>
-            <div>
-              <Skeleton className="h-4 w-6 mb-1" />
-              <Skeleton className="h-5 w-9" />
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className={cn("flex gap-4", { "gap-0": previewMode })}>
-          <Skeleton className="h-10 w-10 mr-4 shrink-0" />
-          <Skeleton className="h-80 w-96" />
-          <div className="h-40 w-80 space-y-6">
-            <div>
-              <Skeleton className="h-4 w-6 mb-1" />
-              <Skeleton className="h-5 w-9" />
-            </div>
-            <div>
-              <Skeleton className="h-4 w-8 mb-1" />
-              <Skeleton className="h-5 w-32" />
-            </div>
-            <div>
-              <Skeleton className="h-5 w-10 mb-1" />
-              <Skeleton className="h-5 w-16" />
-            </div>
-            <div>
-              <Skeleton className="h-4 w-6 mb-1" />
-              <Skeleton className="h-5 w-9" />
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+    </>
   );
 };
 

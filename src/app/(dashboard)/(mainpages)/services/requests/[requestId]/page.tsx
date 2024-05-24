@@ -5,10 +5,14 @@ import {
   useGetRequestFormQuery,
   useGetRequestBusinessQuery,
 } from "@/services/request";
+import { useSearchParams } from "next/navigation";
 import React from "react";
 
 const page = ({ params }: { params: { requestId: string } }) => {
   const { requestId } = params;
+
+  const searchParams = useSearchParams();
+  const basePath = searchParams.get("basePath") || "";
 
   const requestQARes = useGetRequestFormQuery(requestId);
   const requestQA = requestQARes.data?.data?.data || [];
@@ -24,6 +28,10 @@ const page = ({ params }: { params: { requestId: string } }) => {
         QAForms={requestQA}
         isLoading={requestQARes.isLoading}
         business={businessDetails}
+        prev={{
+          path: basePath !== "home" ? "/" + basePath : "/",
+          text: basePath,
+        }}
       />
     </div>
   );

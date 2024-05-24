@@ -16,9 +16,11 @@ import { useTableActions } from "./tableActions";
 const ServiceTableSection = ({
   dateFrom,
   dateTo,
+  basePath,
 }: {
   dateFrom?: Date;
   dateTo?: Date;
+  basePath: string;
 }) => {
   const [openAssign, setOpenAssign] = useState(false);
   const [openUnAssign, setOpenUnAssign] = useState(false);
@@ -48,6 +50,7 @@ const ServiceTableSection = ({
     requestsLoading,
     handleSearch,
     requestsErrorMsg,
+    goToDetailsPage,
   } = useTableActions({
     setOpenAssign,
     setSelectedRequests,
@@ -59,6 +62,7 @@ const ServiceTableSection = ({
     dateFrom,
     dateTo,
     setPreview,
+    basePath,
   });
 
   return (
@@ -94,7 +98,7 @@ const ServiceTableSection = ({
             QAForms={requestQAForms}
             business={requestBusiness}
             isLoading={requestQAFormsRes.isLoading}
-            detailsUrl={`/services/requests/${preview}`}
+            onExpand={() => goToDetailsPage(preview)}
           />
         )}
       </div>

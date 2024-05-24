@@ -70,7 +70,7 @@ const GeneralTable = ({
           preview={preview}
         />
 
-        {itemsLength && itemsPerPage && itemsLength > itemsPerPage && (
+        {itemsLength && itemsPerPage && itemsLength > itemsPerPage ? (
           <div className="flex flex-col justify-between gap-4 sticky left-0 p-4 md:flex-row md:items-center md:py-5">
             <p className="inline-flex gap-1 text-sm text-foreground-5">
               Showing
@@ -85,6 +85,8 @@ const GeneralTable = ({
               itemsPerPage={itemsPerPage}
             />
           </div>
+        ) : (
+          ""
         )}
       </DoChecks>
     </div>

@@ -7,10 +7,12 @@ import { cn } from "@/lib/utils";
 import { TPartnerFormQA } from "@/services/partner/types";
 import { TBusinessInfoGet, TRequestForm } from "@/services/request/types";
 import { TUser } from "@/services/user/types";
+import { Breadcrumb } from "flowbite-react";
 import { BriefcaseIcon } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import React from "react";
 import RequestDetailsSkt from "../skeleton/detailsSkt";
-import RequestDetailsWrapper from "./detailsWrapper";
+import TableDetailsWrapper from "./detailsWrapper";
 
 const TableDetails = ({
   previewMode,
@@ -19,6 +21,7 @@ const TableDetails = ({
   partner,
   isLoading,
   errorMsg,
+  prev,
 }: {
   previewMode?: boolean;
   QAForms: (TPartnerFormQA | TRequestForm)[];
@@ -26,7 +29,13 @@ const TableDetails = ({
   partner?: TUser;
   isLoading?: boolean;
   errorMsg?: string;
+  prev?: {
+    path: string;
+    text: string;
+  };
 }) => {
+  const searchParams = useSearchParams();
+
   const nonPersonForms = QAForms?.filter((el) => el.type !== "person");
   const personForms = QAForms?.filter((el) => el.type === "person");
   const titles = [...new Set(personForms?.map((el) => el.title))] || [];
@@ -47,8 +56,19 @@ const TableDetails = ({
       className="flex flex-col gap-8 bg-background"
       errorText={errorMsg}
     >
+      {prev && (
+        <Breadcrumb aria-label="Request details">
+          <Breadcrumb.Item href={prev.path + "?" + searchParams.toString()}>
+            <span className="first-letter:uppercase">{prev.text}</span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            {business?.companyName || "Business"}
+          </Breadcrumb.Item>
+        </Breadcrumb>
+      )}
+
       {business?.companyEmail && (
-        <RequestDetailsWrapper
+        <TableDetailsWrapper
           title="Business Information"
           icon={<BriefcaseIcon />}
           raiseIssueAction={() => {}}
@@ -60,11 +80,11 @@ const TableDetails = ({
             text={business?.companyName}
           />
           <TextWithDetails title="Product Type" text={business?.rcNumber} /> */}
-        </RequestDetailsWrapper>
+        </TableDetailsWrapper>
       )}
 
       {partner && (
-        <RequestDetailsWrapper
+        <TableDetailsWrapper
           title="Partner Information"
           icon={<BriefcaseIcon />}
           raiseIssueAction={() => {}}
@@ -76,11 +96,11 @@ const TableDetails = ({
           <TextWithDetails title="Country" text={partner?.country} />
           <TextWithDetails title="Phone" text={partner?.phone} />
           <TextWithDetails title="Signed Up At" text={partner?.createdAt} />
-        </RequestDetailsWrapper>
+        </TableDetailsWrapper>
       )}
 
       {nonPersonForms?.map((form) => (
-        <RequestDetailsWrapper
+        <TableDetailsWrapper
           key={form.id}
           title={form.title}
           icon={<BriefcaseIcon />}
@@ -97,12 +117,12 @@ const TableDetails = ({
                 list={field.answer}
               />
             ))}
-        </RequestDetailsWrapper>
+        </TableDetailsWrapper>
       ))}
 
       {personFormByTitle.map((formGroup, i) => {
         return (
-          <RequestDetailsWrapper
+          <TableDetailsWrapper
             key={i}
             title={titles[i]}
             icon={<BriefcaseIcon />}
@@ -133,10 +153,10 @@ const TableDetails = ({
               )}
               previewMode={previewMode}
             />
-          </RequestDetailsWrapper>
+          </TableDetailsWrapper>
         );
       })}
-      {/* <RequestDetailsWrapper
+      {/* <TableDetailsWrapper
           title="Upload Documents"
           icon={<BriefcaseIcon />}
           raiseIssueAction={() => {}}
@@ -147,7 +167,7 @@ const TableDetails = ({
             businessId={requestBusiness?.id || ""}
             requestId={requestId}
           />
-        </RequestDetailsWrapper> */}
+        </TableDetailsWrapper> */}
     </DoChecks>
   );
 };

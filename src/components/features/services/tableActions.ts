@@ -6,7 +6,13 @@ import {
   ITableBody,
 } from "@/components/tables/generalTable/constants";
 import { compareAsc, format } from "date-fns";
-import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
+import {
+  Dispatch,
+  MouseEvent,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { useGetAllServicesQuery } from "@/services/service";
 import {
@@ -14,8 +20,8 @@ import {
   useGetAllRequestsQuery,
   useGetRequestBusinessQuery,
   useGetRequestFormQuery,
+  useGetSearchRequestQuery,
   useGetServiceRequestsQuery,
-  useSearchRequestMutation,
   useUnAssignRequestMutation,
 } from "@/services/request";
 
@@ -31,6 +37,7 @@ export const useTableActions = ({
   dateFrom,
   dateTo,
   setPreview,
+  basePath,
 }: {
   setOpenAssign: Dispatch<SetStateAction<boolean>>;
   setOpenUnAssign: Dispatch<SetStateAction<boolean>>;
@@ -42,11 +49,16 @@ export const useTableActions = ({
   dateFrom?: Date;
   dateTo?: Date;
   setPreview: Dispatch<SetStateAction<string>>;
+  basePath: string;
 }) => {
   const [searchValue, setSearchValue] = useState("");
 
-  const { getReqStatusColor, deleteQueryStrings, isDesktop } =
-    useGlobalFunctions();
+  const {
+    getReqStatusColor,
+    deleteQueryStrings,
+    isDesktop,
+    setQueriesWithPath,
+  } = useGlobalFunctions();
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -54,17 +66,26 @@ export const useTableActions = ({
   const services = useGetAllServicesQuery();
   const servicesData = services.data?.data?.data || [];
 
-  const selectedServiceId = searchParams.get("serviceId");
+  const selectedServiceId = searchParams.get("serviceId") || "";
   const tablePage = parseInt(searchParams.get("page") || "1");
 
   const assignRequestMutation = useAssignRequestMutation();
   const unAssignRequestMutation = useUnAssignRequestMutation();
-  const searchRequestMutation = useSearchRequestMutation();
+  const searchRequestQuery = useGetSearchRequestQuery({
+    queryString: searchValue,
+    page: tablePage,
+    pageSize: itemsPerPage,
+    startDate: dateFrom ? format(dateFrom, "yyyy-MM-dd") : "",
+    endDate: dateTo ? format(dateTo, "yyyy-MM-dd") : "",
+    serviceId: selectedServiceId,
+  });
+
   const allRequestsResponse = useGetAllRequestsQuery({
     page: tablePage,
     pageSize: itemsPerPage,
     startDate: dateFrom ? format(dateFrom, "yyyy-MM-dd") : "",
     endDate: dateTo ? format(dateTo, "yyyy-MM-dd") : "",
+    disabled: !!selectedServiceId,
   });
   const serviceRequestsResponse = useGetServiceRequestsQuery({
     serviceId: selectedServiceId || "",
@@ -76,7 +97,7 @@ export const useTableActions = ({
 
   const allRequests = allRequestsResponse.data?.data;
   const serviceRequests = serviceRequestsResponse.data?.data;
-  const searchRequests = searchRequestMutation.data?.data;
+  const searchRequests = searchRequestQuery.data?.data;
 
   const requests =
     searchValue || activeStatus
@@ -94,12 +115,12 @@ export const useTableActions = ({
   const requestsLoading =
     allRequestsResponse.isLoading ||
     serviceRequestsResponse.isLoading ||
-    searchRequestMutation.isPending;
+    searchRequestQuery.isLoading;
 
   const requestsErrorMsg =
     allRequestsResponse.error?.message ||
-    serviceRequestsResponse.error?.message;
-  // searchRequestMutation.isPending;
+    serviceRequestsResponse.error?.message ||
+    searchRequestQuery.error?.message;
 
   const serviceTableNav = servicesData?.map((service) => ({
     name: "serviceId",
@@ -109,17 +130,12 @@ export const useTableActions = ({
 
   const handleSearch = (value?: string) => {
     if (!value) return;
-    searchRequestMutation.mutate(
-      {
-        formInfo: { queryString: value, serviceId: selectedServiceId || "" },
-        page: tablePage,
-        pageSize: itemsPerPage,
-      },
-      {
-        onSuccess: () => deleteQueryStrings(["page"]),
-      }
-    );
+    setSearchValue(value);
   };
+
+  useEffect(() => {
+    if (searchRequestQuery.isSuccess) deleteQueryStrings(["page"]);
+  }, [searchRequestQuery.isSuccess, searchValue]);
 
   const handleSearchChange = (value: string) => {
     handleSearch(value);
@@ -135,7 +151,14 @@ export const useTableActions = ({
     rowId: string,
     rowInfo: IRowInfo[]
   ) => {
-    isDesktop ? setPreview(rowId) : router.push(`/services/requests/${rowId}`);
+    isDesktop ? setPreview(rowId) : goToDetailsPage(rowId);
+  };
+
+  const goToDetailsPage = (rowId: string) => {
+    setQueriesWithPath({
+      path: `/services/requests/${rowId}`,
+      queries: [{ name: "basePath", value: basePath }],
+    });
   };
 
   const handleAssignClick = (
@@ -251,6 +274,7 @@ export const useTableActions = ({
     requestsLoading,
     requestsErrorMsg,
     handleSearch,
+    goToDetailsPage,
   };
 };
 

@@ -1,10 +1,8 @@
 import { cn } from "@/lib/utils";
-import { Button, Card } from "flowbite-react";
-import { BriefcaseIcon, LucideIcon } from "lucide-react";
-import Image from "next/image";
+import { Button } from "flowbite-react";
 import React, { ReactNode } from "react";
 
-const RequestDetailsWrapper = ({
+const TableDetailsWrapper = ({
   children,
   title,
   icon,
@@ -24,8 +22,8 @@ const RequestDetailsWrapper = ({
   return (
     <div
       className={cn(
-        "flex flex-col gap-8 sm:flex-row",
-        { "gap-0": previewMode },
+        "flex flex-col gap-2 md:gap-8 sm:flex-row",
+        { "gap-0 md:gap-0": previewMode },
         wrapperClassName
       )}
     >
@@ -49,7 +47,7 @@ const RequestDetailsWrapper = ({
 
       <div
         className={cn(
-          "flex-1 rounded border border-border p-4 w-full max-w-[542px] overflow-auto shadow-none",
+          "flex-1 rounded border border-border p-4 min-w-full sm:min-w-20 w-full max-w-[542px] overflow-auto shadow-none",
           className
         )}
       >
@@ -59,4 +57,4 @@ const RequestDetailsWrapper = ({
   );
 };
 
-export default RequestDetailsWrapper;
+export default TableDetailsWrapper;

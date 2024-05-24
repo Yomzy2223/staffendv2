@@ -128,7 +128,7 @@ const Service = () => {
           <Tabs.Item active title="Available Products" />
         </Tabs>
       </div>
-      {activeTab === "0" && <ServiceTableSection />}
+      {activeTab === "0" && <ServiceTableSection basePath="services" />}
       {activeTab === "1" && <ProductsSection />}
       <ServiceForm setOpen={setOpen} open={open} />
     </div>

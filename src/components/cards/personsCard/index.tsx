@@ -111,7 +111,9 @@ const PersonsCard = ({
 
       {/* Mobile */}
       <div
-        className={cn("sm:hidden flex-col gap-4", { "sm:flex": previewMode })}
+        className={cn("sm:hidden flex flex-col gap-4", {
+          "sm:flex": previewMode,
+        })}
       >
         <div className="flex justify-between items-center gap-4 pt-4 px-2.5">
           <p className="inline-flex items-center gap-1 text-success-foreground bg-success rounded-lg text-xs px-2.5 py-0.5">

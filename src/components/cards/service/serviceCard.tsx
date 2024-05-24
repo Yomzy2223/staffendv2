@@ -69,7 +69,9 @@ const ServiceCard = ({ serviceData, isLoading }: IProps) => {
             className="w-max [&_span]:gap-1 text-primary"
             onClick={(e) => {
               e.stopPropagation();
-              router.push(`/services/${serviceData?.id}/products`);
+              setQueriesWithPath({
+                queries: [{ name: "activeTab", value: "1" }],
+              });
             }}
           >
             <span className="text-sm font-normal mr-1">See all</span>

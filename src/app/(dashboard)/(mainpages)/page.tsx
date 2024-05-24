@@ -117,7 +117,11 @@ const Home = () => {
 
           <PartnerChart />
         </div>
-        <ServiceTableSection dateFrom={dateFrom} dateTo={dateTo} />
+        <ServiceTableSection
+          dateFrom={dateFrom}
+          dateTo={dateTo}
+          basePath="home"
+        />
       </div>
     </>
   );

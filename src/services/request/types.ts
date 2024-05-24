@@ -130,13 +130,14 @@ export type TAllReqPayload = {
   pageSize?: number | string;
   startDate?: string;
   endDate?: string;
+  disabled?: boolean;
 };
 
-export type TSearchReqPayload = {
+export type TSearchReqArgs = {
+  queryString: string;
   page?: number | string;
   pageSize?: number | string;
-  formInfo: {
-    queryString: string;
-    serviceId: string;
-  };
+  serviceId?: string;
+  startDate?: string;
+  endDate?: string;
 };

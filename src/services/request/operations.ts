@@ -6,7 +6,7 @@ import {
   TRequestForm,
   TRequestAll,
   TRequestGet,
-  TSearchReqPayload,
+  TSearchReqArgs,
   TServiceReqPayload,
 } from "./types";
 // import { IRequest } from "./types";
@@ -101,16 +101,23 @@ export const unAssignRequest = async ({
   return await client.put<TRoot>(`/productRequest/unassign`, formInfo);
 };
 
-export const searchRequest = async ({
-  formInfo,
+export const getSearchRequest = async ({
+  queryString,
   page,
   pageSize,
-}: TSearchReqPayload) => {
+  serviceId,
+  startDate,
+  endDate,
+}: TSearchReqArgs) => {
   const client = await Client();
-  let url = `/productRequest/search?`;
-  if (page && pageSize) url = url + `page=${page}&pageSize=${pageSize}`;
+  let url = `/productRequest/search?queryString=${queryString}`;
 
-  return await client.post<TRoot<TRequestAll[]>>(url, formInfo);
+  if (page && pageSize) url = url + `&page=${page}&pageSize=${pageSize}`;
+  if (serviceId) url = url + `&serviceId=${serviceId}`;
+  if (startDate && endDate)
+    url = url + `&startDate=${startDate}&endDate=${endDate}`;
+
+  return await client.get<TRoot<TRequestAll[]>>(url);
 };
 
 export const getRequestBusiness = async (requestId: string) => {

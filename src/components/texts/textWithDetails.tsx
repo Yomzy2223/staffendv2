@@ -15,7 +15,7 @@ const TextWithDetails = ({
 }) => {
   return (
     <div>
-      <p className="text-base font-normal text-foreground-9">{title}</p>
+      <p className="text-base font-medium text-foreground-9">{title}</p>
 
       {text && (
         <p

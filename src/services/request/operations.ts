@@ -43,38 +43,28 @@ export const getServiceRequests = async ({
   const client = await Client();
   let url = `/productRequest/service/${serviceId}?`;
   if (page && pageSize) url = url + `page=${page}&pageSize=${pageSize}&`;
-  if (startDate && endDate)
-    url = url + `startDate=${startDate}&endDate=${endDate}`;
+  if (startDate && endDate) url = url + `startDate=${startDate}&endDate=${endDate}`;
 
   return await client.get<TRoot<TRequestAll[]>>(url);
 };
 
-export const getAllRequests = async ({
-  page,
-  pageSize,
-  startDate,
-  endDate,
-}: TAllReqPayload) => {
+export const getAllRequests = async ({ page, pageSize, startDate, endDate }: TAllReqPayload) => {
   const client = await Client();
-  let url = `/productRequest?`;
-  if (page && pageSize) url = url + `page=${page}&pageSize=${pageSize}&`;
-  if (startDate && endDate)
-    url = url + `startDate=${startDate}&endDate=${endDate}`;
-  return await client.get<TRoot<TRequestAll[]>>(url);
+  let path = `/productRequest`;
+  let query;
+  if (page && pageSize) query = `page=${page}&pageSize=${pageSize}&`;
+  if (startDate && endDate) query = query + `startDate=${startDate}&endDate=${endDate}`;
+  return await client.get<TRoot<TRequestAll[]>>(query ? path + "?" + query : path);
 };
 
 export const getRequestForm = async (requestId: string) => {
   const client = await Client();
-  return await client.get<TRoot<TRequestForm[]>>(
-    `/productRequest/form/${requestId}`
-  );
+  return await client.get<TRoot<TRequestForm[]>>(`/productRequest/form/${requestId}`);
 };
 
 export const getBusinessDetails = async (requestId: string) => {
   const client = await Client();
-  return await client.get<TRoot<TBusinessInfoGet>>(
-    `/processRequest/request/${requestId}`
-  );
+  return await client.get<TRoot<TBusinessInfoGet>>(`/processRequest/request/${requestId}`);
 };
 
 export const assignRequest = async ({
@@ -114,17 +104,14 @@ export const getSearchRequest = async ({
 
   if (page && pageSize) url = url + `&page=${page}&pageSize=${pageSize}`;
   if (serviceId) url = url + `&serviceId=${serviceId}`;
-  if (startDate && endDate)
-    url = url + `&startDate=${startDate}&endDate=${endDate}`;
+  if (startDate && endDate) url = url + `&startDate=${startDate}&endDate=${endDate}`;
 
   return await client.get<TRoot<TRequestAll[]>>(url);
 };
 
 export const getRequestBusiness = async (requestId: string) => {
   const client = await Client();
-  return client.get<TRoot<TBusinessInfoGet[]>>(
-    `/businessRequest/request/${requestId}`
-  );
+  return client.get<TRoot<TBusinessInfoGet[]>>(`/businessRequest/request/${requestId}`);
 };
 
 export const updateBusinessInfo = async ({
@@ -135,8 +122,5 @@ export const updateBusinessInfo = async ({
   formInfo: TBusinessInfoCreate;
 }) => {
   const client = await Client();
-  return client.post<TRoot<TBusinessInfoGet>>(
-    `/businessRequest/${id}`,
-    formInfo
-  );
+  return client.post<TRoot<TBusinessInfoGet>>(`/businessRequest/${id}`, formInfo);
 };

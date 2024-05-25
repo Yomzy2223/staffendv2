@@ -5,15 +5,11 @@ export type TRequestStatus =
   | "PENDING"
   | "SUBMITTED"
   | "ASSIGNED"
+  | "ACCEPTED"
   | "REJECTED"
   | "COMPLETED";
 
-export type TRequestState =
-  | "PRODUCTINFO"
-  | "SERVICEFORM"
-  | "PAYMENT"
-  | "PRODUCTFORM"
-  | "REVIEW";
+export type TRequestState = "PRODUCTINFO" | "SERVICEFORM" | "PAYMENT" | "PRODUCTFORM" | "REVIEW";
 
 export type TRequestCF = {
   id: string;
@@ -27,6 +23,8 @@ export type TRequestCF = {
   completedAt: string;
   submittedAt: string;
   assignedAt: string;
+  acceptedAt: string;
+  rejectedAt: string;
   businessId: string;
   productId: string;
   createdBy: string; // To be added to get request response in the backend

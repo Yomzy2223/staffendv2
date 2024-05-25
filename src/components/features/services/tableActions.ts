@@ -1,25 +1,13 @@
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
-import {
-  IRowInfo,
-  ITableBody,
-} from "@/components/tables/generalTable/constants";
-import { compareAsc, format } from "date-fns";
-import {
-  Dispatch,
-  MouseEvent,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
+import { IRowInfo, ITableBody } from "@/components/tables/generalTable/constants";
+import { format } from "date-fns";
+import { Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { useGetAllServicesQuery } from "@/services/service";
 import {
   useAssignRequestMutation,
   useGetAllRequestsQuery,
-  useGetRequestBusinessQuery,
-  useGetRequestFormQuery,
   useGetSearchRequestQuery,
   useGetServiceRequestsQuery,
   useUnAssignRequestMutation,
@@ -53,14 +41,9 @@ export const useTableActions = ({
 }) => {
   const [searchValue, setSearchValue] = useState("");
 
-  const {
-    getReqStatusColor,
-    deleteQueryStrings,
-    isDesktop,
-    setQueriesWithPath,
-  } = useGlobalFunctions();
+  const { getReqStatusColor, deleteQueryStrings, isDesktop, setQueriesWithPath } =
+    useGlobalFunctions();
 
-  const router = useRouter();
   const searchParams = useSearchParams();
 
   const services = useGetAllServicesQuery();
@@ -146,11 +129,7 @@ export const useTableActions = ({
     setSearchValue(value);
   };
 
-  const handleClick = (
-    e: MouseEvent<HTMLTableRowElement>,
-    rowId: string,
-    rowInfo: IRowInfo[]
-  ) => {
+  const handleClick = (e: MouseEvent<HTMLTableRowElement>, rowId: string, rowInfo: IRowInfo[]) => {
     isDesktop ? setPreview(rowId) : goToDetailsPage(rowId);
   };
 
@@ -161,11 +140,7 @@ export const useTableActions = ({
     });
   };
 
-  const handleAssignClick = (
-    e: MouseEvent<HTMLTableCellElement>,
-    rowId: string,
-    text: string
-  ) => {
+  const handleAssignClick = (e: MouseEvent<HTMLTableCellElement>, rowId: string, text: string) => {
     e.stopPropagation();
     setOpenAssign(true);
     setSelectedRequests([rowId]);
@@ -179,16 +154,10 @@ export const useTableActions = ({
     e.stopPropagation();
     setOpenUnAssign(true);
     setSelectedRequests([rowId]);
-    setPartnerId(
-      requests?.find((el) => el.id === rowId)?.partnerInCharge || ""
-    );
+    setPartnerId(requests?.find((el) => el.id === rowId)?.partnerInCharge || "");
   };
 
-  const handleViewClick = (
-    e: MouseEvent<HTMLTableCellElement>,
-    rowId: string,
-    text: string
-  ) => {
+  const handleViewClick = (e: MouseEvent<HTMLTableCellElement>, rowId: string, text: string) => {
     e.stopPropagation();
     setOpenInfo(true);
     setSelectedRequests([rowId]);
@@ -211,13 +180,13 @@ export const useTableActions = ({
     requests?.map((request, i: number): ITableBody => {
       const assigned = request.status === "ASSIGNED";
       const completed = request.status === "COMPLETED";
-      const assignable =
-        request.status === "SUBMITTED" || request.status === "REJECTED";
+      const assignable = request.status === "SUBMITTED" || request.status === "REJECTED";
 
       let actionText = "";
       if (assignable) actionText = "Assign";
       if (request.status === "PENDING") actionText = "Not submitted yet";
       if (assigned) actionText = "Unassign";
+      if (request.status === "ACCEPTED") actionText = "Processing...";
       if (completed) actionText = "Partner info";
 
       const currentNumber = (tablePage - 1) * itemsPerPage + i + 1;
@@ -253,8 +222,7 @@ export const useTableActions = ({
                 },
             cellProps: {
               className: cn(" text-foreground-5 italic", {
-                "text-primary underline not-italic":
-                  assignable || assigned || completed,
+                "text-primary underline not-italic": assignable || assigned || completed,
               }),
             },
           },

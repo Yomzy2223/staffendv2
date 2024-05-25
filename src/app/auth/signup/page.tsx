@@ -52,7 +52,7 @@ const SignUp = () => {
 
   return (
     <AuthFormWrapper
-      title="Create an account for free"
+      title="Welcome to Sidebrief"
       description="Join our 500+ customers to scale your business."
       handlers={{
         google: handleSignUpWithGoogle,
@@ -81,12 +81,7 @@ const SignUp = () => {
         <div className="flex items-center justify-between gap-14">
           <p className="sb-text-16 text-foreground-3">
             {isDesktop && <span>Have an account? </span>}
-            <Button
-              color="plain"
-              size="fit"
-              className="text-primary"
-              href="/auth/signin"
-            >
+            <Button color="plain" size="fit" className="text-primary" href="/auth/signin">
               Sign In
             </Button>
           </p>
@@ -95,12 +90,9 @@ const SignUp = () => {
             color="secondary"
             isProcessing={isPending}
             disabled={isPending}
-            processingSpinner={
-              <Oval color="white" strokeWidth={4} className="h-6 w-6" />
-            }
+            processingSpinner={<Oval color="white" strokeWidth={4} className="h-6 w-6" />}
           >
-            Click to create account{" "}
-            {!isPending && <ArrowRightCircle className="ml-1" />}
+            Click to create account {!isPending && <ArrowRightCircle className="ml-1" />}
           </Button>
         </div>
       </DynamicForm>
@@ -142,23 +134,13 @@ const formInfo: IDynamicFormField[] = [
     selectProp: {
       placeholder: "Select a referral",
     },
-    selectOptions: [
-      "Facebook",
-      "Twitter",
-      "Google",
-      "Instagram",
-      "WhatsApp",
-      "Recommendation",
-    ],
+    selectOptions: ["Facebook", "Twitter", "Google", "Instagram", "WhatsApp", "Recommendation"],
   },
 ];
 
 const signUpSchema = z.object({
   name: z.string().min(1, { message: "Enter your first name" }),
-  email: z
-    .string()
-    .email("Enter a valid email")
-    .min(1, { message: "Enter your email address" }),
+  email: z.string().email("Enter a valid email").min(1, { message: "Enter your email address" }),
   password: z.string().min(6, "Password must be 6 or more characters"),
   referral: z.string().min(1, { message: "Select an option" }),
 });

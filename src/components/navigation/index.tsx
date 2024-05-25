@@ -14,12 +14,7 @@ import {
 } from "@/components/ui/select";
 import { ReactNode, useState } from "react";
 
-export const Navigation = ({
-  navRoutes,
-  className,
-  inactiveClassName = "",
-  others,
-}: IProps) => {
+export const Navigation = ({ navRoutes, className, inactiveClassName = "", others }: IProps) => {
   const [open, setOpen] = useState(false);
 
   const router = useRouter();
@@ -44,13 +39,8 @@ export const Navigation = ({
             : isActive;
 
         if (basePath) {
-          console.log(el.to);
-          if (i === 0)
-            basePath === "home" ? (isActive = true) : (isActive = false);
-          else
-            el.to?.toLowerCase()?.includes(basePath)
-              ? (isActive = true)
-              : (isActive = false);
+          if (i === 0) basePath === "home" ? (isActive = true) : (isActive = false);
+          else el.to?.toLowerCase()?.includes(basePath) ? (isActive = true) : (isActive = false);
         }
         return (
           <div key={i}>
@@ -80,10 +70,7 @@ export const Navigation = ({
                         {each.name}
                       </SelectItem>
                     ))}
-                  <div
-                    onClick={() => setOpen(false)}
-                    className="border-t border-border"
-                  >
+                  <div onClick={() => setOpen(false)} className="border-t border-border">
                     {others}
                   </div>
                 </SelectContent>

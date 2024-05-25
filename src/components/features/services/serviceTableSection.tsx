@@ -6,10 +6,7 @@ import PreviewDetails from "@/components/tables/details/previewDetails";
 import GeneralTable from "@/components/tables/generalTable";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { cn } from "@/lib/utils";
-import {
-  useGetRequestBusinessQuery,
-  useGetRequestFormQuery,
-} from "@/services/request";
+import { useGetRequestBusinessQuery, useGetRequestFormQuery } from "@/services/request";
 import React, { useState } from "react";
 import { useTableActions } from "./tableActions";
 
@@ -106,7 +103,7 @@ const ServiceTableSection = ({
         setOpen={setOpenAssign}
         open={openAssign}
         selectedRequests={selectedRequests}
-        setSelectedRequests={setSelectedRequests}
+        onSuccess={() => setSelectedRequests([])}
       />
 
       {openUnAssign && (

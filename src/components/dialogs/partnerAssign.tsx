@@ -12,12 +12,12 @@ const PartnerAssignDialog = ({
   open,
   setOpen,
   selectedRequests,
-  setSelectedRequests,
+  onSuccess,
 }: {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   selectedRequests: string[];
-  setSelectedRequests: Dispatch<SetStateAction<string[]>>;
+  onSuccess?: () => void;
 }) => {
   const [selectedPartnerId, setSelectedPartnerId] = useState("");
 
@@ -43,7 +43,7 @@ const PartnerAssignDialog = ({
       },
       {
         onSuccess: () => {
-          setSelectedRequests([]);
+          onSuccess && onSuccess();
           setOpen(false);
         },
       }
@@ -67,8 +67,7 @@ const PartnerAssignDialog = ({
       >
         <div>
           <p className="font-semibold mb-8">
-            This partner will be notified to begin the request(s) process
-            immediately
+            This partner will be notified to begin the request(s) process immediately
           </p>
           <div className="flex flex-col gap-5">
             {partners?.map((el: IUser) => (
@@ -76,15 +75,12 @@ const PartnerAssignDialog = ({
                 <Radio
                   id={el.id}
                   name="partners"
+                  checked={el.id === selectedPartnerId}
                   onChange={() => setSelectedPartnerId(el.id)}
                 />
                 <label htmlFor={el.id}>
-                  <p className="sb-text-16 font-medium">
-                    {el.fullName + " " + `(${el.country})`}
-                  </p>
-                  <p className="text-xs text-foreground-5 font-normal">
-                    {el.email}
-                  </p>
+                  <p className="sb-text-16 font-medium">{el.fullName + " " + `(${el.country})`}</p>
+                  <p className="text-xs text-foreground-5 font-normal">{el.email}</p>
                 </label>
               </div>
             ))}
@@ -104,9 +100,7 @@ const PartnerAssignDialog = ({
             disabled={!selectedPartnerId || assignRequestMutation.isPending}
             onClick={handleAssignRequests}
             isProcessing={assignRequestMutation.isPending}
-            processingSpinner={
-              <Oval color="white" strokeWidth={4} className="h-4 w-4" />
-            }
+            processingSpinner={<Oval color="white" strokeWidth={4} className="h-4 w-4" />}
           >
             Assign
           </Button>

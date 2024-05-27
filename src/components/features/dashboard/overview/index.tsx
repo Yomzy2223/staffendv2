@@ -1,11 +1,11 @@
 import React, { Dispatch, SetStateAction } from "react";
 import DraggableScroll from "@/components/wrappers/draggableScroll";
 import OverviewChart from "@/components/features/dashboard/analytics/overviewChart";
-import { IUser } from "@/hooks/api/types";
 import { IReq } from "@/app/(dashboard)/(mainpages)/actions";
 import DoChecks from "@/components/DoChecks";
 import OverviewChartSkt from "../analytics/skeleton/overviewChartSkt";
 import UserAnalytics from "@/components/features/dashboard/analytics/userAnalytics";
+import { TUser } from "@/services/users/types";
 
 const OverviewSection = ({
   dateFrom,
@@ -46,11 +46,7 @@ const OverviewSection = ({
             total="163.5K"
             className="snap-start"
           /> */}
-        <UserAnalytics
-          title="User signups"
-          total={users?.length || 0}
-          className="snap-start"
-        />
+        <UserAnalytics title="User signups" total={users?.length || 0} className="snap-start" />
 
         <OverviewChart
           title="All"
@@ -160,7 +156,7 @@ interface IProps {
   dateTo?: Date;
   compareFrom?: Date;
   compareTo?: Date;
-  users: IUser[];
+  users: TUser[];
   requestsByStatus: IReq;
   requestsVsByStatus: IReq;
   selectedOverview?: TOverviewStatus;

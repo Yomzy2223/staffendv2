@@ -69,7 +69,7 @@ const Page = ({ params }: { params: { requestId: string } }) => {
         <div className="self-end space-x-2">
           {request?.status === "ASSIGNED" && (
             <>
-              <span>Partner hasn't accepted this task.</span>
+              <span>Partner hasn&#39;t accepted this task.</span>
               <Button
                 size="fit"
                 color="transparent"

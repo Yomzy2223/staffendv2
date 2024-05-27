@@ -5,7 +5,7 @@ import React, { Dispatch, SetStateAction, useState } from "react";
 import { Oval } from "react-loading-icons";
 import DynamicForm from "../dynamicForm";
 import DynamicFormCreator from "../dynamicFormCreator";
-import { useCountryActions, useParterFormActions } from "./actions";
+import { useCountryActions, useOnboardingFormActions, useParterFormActions } from "./actions";
 import { countrySchema } from "./constants";
 
 const CountryForm = ({ open, setOpen }: IProps) => {
@@ -13,33 +13,33 @@ const CountryForm = ({ open, setOpen }: IProps) => {
 
   const { deleteQueryStrings } = useGlobalFunctions();
 
-  const {
-    formInfo,
-    isEdit,
-    activeCountry,
-    submitCountry,
-    countryLoading,
-    defaultValues,
-  } = useCountryActions({ setOpen, section, setSection });
+  const { formInfo, isEdit, activeCountry, submitCountry, countryLoading, defaultValues } =
+    useCountryActions({ setOpen, section, setSection });
 
   const {
     partnerFormRes,
     submitPartnerForm,
     submitPartnerFormField,
     partnerFormState,
-    handleFieldDelete,
-    handleFormDelete,
+    handlePartnerFieldDelete,
+    handlePartnerFormDelete,
   } = useParterFormActions({ country: activeCountry?.name });
-
   const partnerFormData = partnerFormRes?.data?.data?.data || [];
+
+  const {
+    onboardFormRes,
+    submitOnboardForm,
+    submitOnboardFormField,
+    onboardFormState,
+    handleOnboardFieldDelete,
+    handleOnboardFormDelete,
+  } = useOnboardingFormActions({ country: activeCountry?.name });
+  const onboardFormData = onboardFormRes?.data?.data?.data || [];
 
   const title1 = (isEdit ? "Update" : "Add") + " Country";
   const title2 =
-    ((partnerFormData?.length ?? 0) > 0 ? "Update" : "Add") +
-    " Partner Activation Form";
-  const title3 =
-    ((partnerFormData?.length ?? 0) > 0 ? "Update" : "Add") +
-    " Onboarding Form";
+    ((partnerFormData?.length ?? 0) > 0 ? "Update" : "Add") + " Partner Activation Form";
+  const title3 = ((partnerFormData?.length ?? 0) > 0 ? "Update" : "Add") + " Onboarding Form";
   let title = title1;
 
   switch (section) {
@@ -90,9 +90,7 @@ const CountryForm = ({ open, setOpen }: IProps) => {
               color="primary"
               isProcessing={countryLoading}
               disabled={countryLoading}
-              processingSpinner={
-                <Oval color="white" strokeWidth={4} className="h-5 w-5" />
-              }
+              processingSpinner={<Oval color="white" strokeWidth={4} className="h-5 w-5" />}
             >
               {!countryLoading && (isEdit ? "Update" : "Create")}
             </Button>
@@ -105,9 +103,9 @@ const CountryForm = ({ open, setOpen }: IProps) => {
           <DynamicFormCreator
             formInfo={partnerFormData}
             onEachSubmit={submitPartnerFormField}
-            onEachDelete={handleFieldDelete}
+            onEachDelete={handlePartnerFieldDelete}
             onFormSubmit={submitPartnerForm}
-            onFormDelete={handleFormDelete}
+            onFormDelete={handlePartnerFormDelete}
             formState={partnerFormState}
             wide={wide}
             disallowPerson
@@ -126,12 +124,12 @@ const CountryForm = ({ open, setOpen }: IProps) => {
       {section === 3 && (
         <div className="flex flex-col justify-between gap-6 flex-1">
           <DynamicFormCreator
-            formInfo={partnerFormData}
-            onEachSubmit={submitPartnerFormField}
-            onEachDelete={handleFieldDelete}
-            onFormSubmit={submitPartnerForm}
-            onFormDelete={handleFormDelete}
-            formState={partnerFormState}
+            formInfo={onboardFormData}
+            onEachSubmit={submitOnboardFormField}
+            onEachDelete={handleOnboardFieldDelete}
+            onFormSubmit={submitOnboardForm}
+            onFormDelete={handleOnboardFormDelete}
+            formState={onboardFormState}
             wide={wide}
             disallowPerson
           />

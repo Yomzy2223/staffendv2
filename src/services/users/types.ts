@@ -3,11 +3,13 @@ export type TSignIn = {
   password: string;
 };
 
-export type TSignUp = {
+export type TSignUp = TSignIn & {
   fullName: string;
+  organization: string;
   referral: string;
   isPartner: boolean;
   isStaff: boolean;
+  address: string;
 };
 
 export type TResetPassword = {
@@ -15,7 +17,26 @@ export type TResetPassword = {
   password: string;
 };
 
-export type TUser = {
+export type TUserDocCreate = {
+  name: string;
+  link: string;
+  type: string;
+  size: string;
+  isReceived: boolean;
+  requestId: string;
+  userId: string;
+};
+
+export type TUserDocGet = TUserDocCreate & {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  isApproved: boolean;
+  isDeprecated: boolean;
+  requestSubFormId: string;
+};
+
+export interface TUser {
   country?: string;
   createdAt: string;
   email: string;
@@ -23,12 +44,6 @@ export type TUser = {
   googleId?: string;
   id: string;
   isActivated: boolean;
-  partnerStatus?:
-    | "INACTIVE"
-    | "ACTIVE"
-    | "SUBMITTED"
-    | "DEACTIVATED"
-    | "DECLINED";
   isDeprecated: boolean;
   isIdentificationRegistered: boolean;
   isIdentificationVerified: boolean;
@@ -47,4 +62,5 @@ export type TUser = {
   updatedAt: string;
   userPermission: string[];
   username?: string;
-};
+  partnerStatus: "INACTIVE" | "SUBMITTED" | "ACTIVATED" | "DEACTIVATED" | "DECLINED";
+}

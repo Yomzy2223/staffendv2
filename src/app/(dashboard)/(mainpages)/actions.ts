@@ -1,22 +1,10 @@
-import {
-  compareAsc,
-  differenceInDays,
-  format,
-  isDate,
-  isValid,
-  isWithinInterval,
-  subDays,
-} from "date-fns";
-import useUserApi from "@/hooks/useUserApi";
+import { compareAsc, differenceInDays, format, isValid } from "date-fns";
 import { useParams } from "next/navigation";
 import slugify from "slugify";
 import { useGetAllServicesQuery } from "@/services/service";
-import {
-  useGetAllRequestsQuery,
-  useGetServiceRequestsQuery,
-} from "@/services/request";
+import { useGetAllRequestsQuery, useGetServiceRequestsQuery } from "@/services/request";
 import { TRequestAll } from "@/services/request/types";
-import { TService } from "@/services/service/types";
+import { useGetAllUsersQuery } from "@/services/users";
 
 // Requests Actions
 export const useRequestActions = ({
@@ -32,15 +20,12 @@ export const useRequestActions = ({
   compareTo?: Date;
   selectedService: string;
 }) => {
-  const { useGetAllUsersQuery } = useUserApi();
   const usersResponse = useGetAllUsersQuery({});
   const users = usersResponse.data?.data?.data || [];
 
   const servicesRes = useGetAllServicesQuery();
   const services = servicesRes.data?.data?.data || [];
-  const servicesNames = services
-    ?.sort((a, b) => a.priority - b.priority)
-    ?.map((el) => el?.name);
+  const servicesNames = services?.sort((a, b) => a.priority - b.priority)?.map((el) => el?.name);
   const activeService = services?.find((el) => el.name === selectedService);
   // (el) => el.name === (selectedService || servicesNames?.[0])
 
@@ -81,15 +66,11 @@ export const useRequestActions = ({
   const requestsByStatus: IReq = {
     all: requests || [],
     allPaid: requests?.filter((el) => el.paid) || [],
-    unPaidDrafts:
-      requests?.filter((el) => el.status === "PENDING" && !el.paid) || [],
-    paidDrafts:
-      requests?.filter((el) => el.status === "PENDING" && el.paid) || [],
+    unPaidDrafts: requests?.filter((el) => el.status === "PENDING" && !el.paid) || [],
+    paidDrafts: requests?.filter((el) => el.status === "PENDING" && el.paid) || [],
     submitted: requests?.filter((el) => el.status === "SUBMITTED") || [],
     inProgress:
-      requests?.filter(
-        (el) => el.status === "ASSIGNED" || el.status === "REJECTED"
-      ) || [],
+      requests?.filter((el) => el.status === "ASSIGNED" || el.status === "REJECTED") || [],
     completed: requests?.filter((el) => el.status === "COMPLETED") || [],
   };
 
@@ -98,24 +79,19 @@ export const useRequestActions = ({
     all: requestsVs || [],
     allPaid: requestsVs?.filter((el) => el.paid) || [],
     unPaidDrafts: requestsVs?.filter((el) => el.paid) || [],
-    paidDrafts:
-      requestsVs?.filter((el) => el.status === "PENDING" && el.paid) || [],
+    paidDrafts: requestsVs?.filter((el) => el.status === "PENDING" && el.paid) || [],
     submitted: requestsVs?.filter((el) => el.status === "SUBMITTED") || [],
     inProgress:
-      requestsVs?.filter(
-        (el) => el.status === "ASSIGNED" || el.status === "REJECTED"
-      ) || [],
+      requestsVs?.filter((el) => el.status === "ASSIGNED" || el.status === "REJECTED") || [],
     completed: requestsVs?.filter((el) => el.status === "COMPLETED") || [],
   };
 
   const getDateData = (reqs?: TRequestAll[], from?: Date, to?: Date) => {
-    const sortedReqs =
-      reqs?.sort((a, b) => compareAsc(a?.createdAt, b?.createdAt)) || [];
+    const sortedReqs = reqs?.sort((a, b) => compareAsc(a?.createdAt, b?.createdAt)) || [];
     const daysDiff = to && from ? differenceInDays(to, from) + 1 : 0; // 1 complements for the last day
     const firstDate = new Date(sortedReqs?.[0]?.createdAt);
     const lastDate = new Date(sortedReqs?.[sortedReqs?.length - 1]?.createdAt);
-    const reqsDaysDiff =
-      firstDate && lastDate ? differenceInDays(lastDate, firstDate) + 1 : 0;
+    const reqsDaysDiff = firstDate && lastDate ? differenceInDays(lastDate, firstDate) + 1 : 0;
 
     return {
       firstDate: isValid(firstDate) ? firstDate : new Date(),
@@ -124,10 +100,8 @@ export const useRequestActions = ({
     };
   };
 
-  const requestsLoading =
-    allRequestsRes.isLoading || servicesRequestsRes.isLoading;
-  const requestsVsLoading =
-    allRequestsVsRes.isLoading || servicesRequestsVsRes.isLoading;
+  const requestsLoading = allRequestsRes.isLoading || servicesRequestsRes.isLoading;
+  const requestsVsLoading = allRequestsVsRes.isLoading || servicesRequestsVsRes.isLoading;
 
   return {
     activeService,

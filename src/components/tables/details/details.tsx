@@ -2,15 +2,16 @@
 
 import PersonsCard from "@/components/cards/personsCard";
 import DoChecks from "@/components/DoChecks";
+import { FileInput } from "@/components/file/fileInput";
 import TextWithDetails from "@/components/texts/textWithDetails";
 import { cn } from "@/lib/utils";
 import { TPartnerFormQA } from "@/services/partner/types";
 import { TBusinessInfoGet, TRequestForm } from "@/services/request/types";
-import { TUser } from "@/services/user/types";
+import { TUser } from "@/services/users/types";
 import { Breadcrumb } from "flowbite-react";
 import { BriefcaseIcon } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import React from "react";
+import React, { ReactNode } from "react";
 import RequestDetailsSkt from "../skeleton/detailsSkt";
 import TableDetailsWrapper from "./detailsWrapper";
 
@@ -22,6 +23,7 @@ const TableDetails = ({
   isLoading,
   errorMsg,
   prev,
+  children,
 }: {
   previewMode?: boolean;
   QAForms: (TPartnerFormQA | TRequestForm)[];
@@ -33,6 +35,7 @@ const TableDetails = ({
     path: string;
     text: string;
   };
+  children?: ReactNode;
 }) => {
   const searchParams = useSearchParams();
 
@@ -62,16 +65,34 @@ const TableDetails = ({
         </Breadcrumb>
       )}
 
-      {business?.companyEmail && (
+      {business?.companyName && (
         <TableDetailsWrapper
           title="Business Information"
           icon={<BriefcaseIcon />}
           raiseIssueAction={() => {}}
-          className="flex flex-col gap-6"
+          className="flex flex-col gap-6 md:grid md:grid-cols-2"
           previewMode={previewMode}
         >
-          <TextWithDetails title="Operational Country" text={business?.companyName} />
-          <TextWithDetails title="Product Type" text={business?.rcNumber} />
+          <TextWithDetails title="Company name" text={business?.companyName} />
+          {business?.rcNumber && <TextWithDetails title="RC Number" text={business?.rcNumber} />}
+          {business?.companyEmail && (
+            <TextWithDetails title="Company email" text={business?.companyEmail} />
+          )}
+          {business?.companyType && (
+            <TextWithDetails title="Company type" text={business?.companyType} />
+          )}
+          {business?.shareCapital && (
+            <TextWithDetails title="Share capital" text={business?.shareCapital} />
+          )}
+          {business?.status && <TextWithDetails title="Business status" text={business?.status} />}
+          {business?.affiliates && (
+            <TextWithDetails title="Affliates" text={business?.affiliates} />
+          )}
+          <TextWithDetails title="Classification" text={business?.classification} />
+          <TextWithDetails title="Head office address" text={business?.headOfficeAddress} />
+          <TextWithDetails title="LGA" text={business?.lga} />
+          <TextWithDetails title="City" text={business?.city} />
+          <TextWithDetails title="State" text={business?.state} />
         </TableDetailsWrapper>
       )}
 
@@ -142,18 +163,8 @@ const TableDetails = ({
           </TableDetailsWrapper>
         );
       })}
-      {/* <TableDetailsWrapper
-          title="Upload Documents"
-          icon={<BriefcaseIcon />}
-          raiseIssueAction={() => {}}
-          className="flex flex-col gap-6"
-          previewMode={previewMode}
-        >
-          <DocSection
-            businessId={requestBusiness?.id || ""}
-            requestId={requestId}
-          />
-        </TableDetailsWrapper> */}
+
+      {children}
     </DoChecks>
   );
 };

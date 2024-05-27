@@ -91,6 +91,11 @@ export const unAssignRequest = async ({
   return await client.put<TRoot>(`/productRequest/unassign`, formInfo);
 };
 
+export const completeRequest = async (id: string) => {
+  const client = await Client();
+  return await client.put<TRoot>(`/productRequest/complete/${id}`);
+};
+
 export const getSearchRequest = async ({
   queryString,
   page,

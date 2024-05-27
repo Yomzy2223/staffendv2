@@ -1,6 +1,5 @@
-import { IUser } from "@/hooks/api/types";
-import useUserApi from "@/hooks/useUserApi";
 import { useAssignRequestMutation } from "@/services/request";
+import { useGetAllUsersQuery } from "@/services/users";
 import { Button, Radio } from "flowbite-react";
 import { useRouter } from "next/navigation";
 import React, { Dispatch, SetStateAction, useState } from "react";
@@ -29,9 +28,8 @@ const PartnerAssignDialog = ({
 
   const assignRequestMutation = useAssignRequestMutation();
 
-  const { useGetAllUsersQuery } = useUserApi();
   const users = useGetAllUsersQuery({ isPartner: true });
-  const partners = users.data?.data?.data;
+  const partners = users.data?.data?.data || [];
 
   const handleAssignRequests = () => {
     assignRequestMutation.mutate(
@@ -66,11 +64,12 @@ const PartnerAssignDialog = ({
         className="flex-1 flex flex-col justify-between"
       >
         <div>
-          <p className="font-semibold mb-8">
-            This partner will be notified to begin the request(s) process immediately
+          <p className="font-medium mb-8">
+            This partner will be notified to begin the{" "}
+            {selectedRequests?.length > 1 ? "requests" : "request"} process immediately
           </p>
           <div className="flex flex-col gap-5">
-            {partners?.map((el: IUser) => (
+            {partners?.map((el) => (
               <div key={el.id} className="flex items-center gap-3">
                 <Radio
                   id={el.id}

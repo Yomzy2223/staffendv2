@@ -2,6 +2,15 @@ import { ICountry } from "@/hooks/api/types";
 import { useCountryApi } from "@/hooks/useCountryApi";
 import { TSubFormCreate } from "@/services";
 import {
+  useCreateOnboardFormMutation,
+  useCreateOnboardSubFormMutation,
+  useDeleteOnboardFormMutation,
+  useDeleteOnboardSubFormMutation,
+  useGetCountryOnboardFormsQuery,
+  useUpdateOnboardFormMutation,
+  useUpdateOnboardSubFormMutation,
+} from "@/services/onboard";
+import {
   useCreatePartnerFormMutation,
   useCreatePartnerSubFormMutation,
   useDeletePartnerFormMutation,
@@ -10,12 +19,7 @@ import {
   useUpdatePartnerFormMutation,
   useUpdatePartnerSubFormMutation,
 } from "@/services/partner";
-import {
-  countries,
-  getCountryCode,
-  getEmojiFlag,
-  TCountryCode,
-} from "countries-list";
+import { countries, getCountryCode, getEmojiFlag, TCountryCode } from "countries-list";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { IDynamicFormField } from "../dynamicForm/constants";
@@ -46,8 +50,7 @@ export const useCountryActions = ({
   const countryId = get("countryId") as string;
   const isEdit = !!countryId;
 
-  const { createCountryMutation, updateCountryMutation, useGetCountryQuery } =
-    useCountryApi();
+  const { createCountryMutation, updateCountryMutation, useGetCountryQuery } = useCountryApi();
 
   const countryRes = useGetCountryQuery(countryId);
   const activeCountry = countryRes.data?.data?.data;
@@ -72,8 +75,7 @@ export const useCountryActions = ({
         );
   };
 
-  const countryLoading =
-    createCountryMutation.isPending || updateCountryMutation.isPending;
+  const countryLoading = createCountryMutation.isPending || updateCountryMutation.isPending;
 
   // Updates other fields when a country is selected
   const handleCountrySelect = (selected?: string) => {
@@ -105,9 +107,7 @@ export const useCountryActions = ({
       label: "Country name",
       type: "select",
       fieldName: "country",
-      selectOptions: Object.keys(countries).map(
-        (el: string) => countries[el as TCountryCode].name
-      ),
+      selectOptions: Object.keys(countries).map((el: string) => countries[el as TCountryCode].name),
       selectProp: {
         placeholder: "Select country",
         disabled: countryRes.isLoading,
@@ -166,11 +166,7 @@ export const useParterFormActions = ({ country }: { country: string }) => {
   const deletePartnerSubForm = useDeletePartnerSubFormMutation();
 
   // SUBMITS A FORM
-  const submitPartnerForm = async ({
-    formId,
-    values,
-    onSuccess,
-  }: IFormSubmitHandlerArg) => {
+  const submitPartnerForm = async ({ formId, values, onSuccess }: IFormSubmitHandlerArg) => {
     formId
       ? updatePartnerForm.mutate(
           { id: formId, formInfo: values },
@@ -214,11 +210,11 @@ export const useParterFormActions = ({ country }: { country: string }) => {
         );
   };
 
-  const handleFormDelete = (id: string) => {
+  const handlePartnerFormDelete = (id: string) => {
     deletePartnerForm.mutate(id);
   };
 
-  const handleFieldDelete = (id: string) => {
+  const handlePartnerFieldDelete = (id: string) => {
     deletePartnerSubForm.mutate(id);
   };
 
@@ -226,10 +222,8 @@ export const useParterFormActions = ({ country }: { country: string }) => {
     formLoading: createPartnerForm.isPending || updatePartnerForm.isPending,
     formSuccess: createPartnerForm.isSuccess || updatePartnerForm.isSuccess,
     formDeleteLoading: deletePartnerForm.isPending,
-    fieldLoading:
-      createPartnerSubForm.isPending || updatePartnerSubForm.isPending,
-    fieldSuccess:
-      createPartnerSubForm.isSuccess || updatePartnerSubForm.isSuccess,
+    fieldLoading: createPartnerSubForm.isPending || updatePartnerSubForm.isPending,
+    fieldSuccess: createPartnerSubForm.isSuccess || updatePartnerSubForm.isSuccess,
     fieldDeleteLoading: deletePartnerSubForm.isPending,
   };
 
@@ -238,7 +232,92 @@ export const useParterFormActions = ({ country }: { country: string }) => {
     submitPartnerForm,
     submitPartnerFormField,
     partnerFormState,
-    handleFieldDelete,
-    handleFormDelete,
+    handlePartnerFieldDelete,
+    handlePartnerFormDelete,
+  };
+};
+
+// Actions for service form section
+export const useOnboardingFormActions = ({ country }: { country: string }) => {
+  const onboardFormRes = useGetCountryOnboardFormsQuery(country);
+  const createOnboardForm = useCreateOnboardFormMutation();
+  const updateOnboardForm = useUpdateOnboardFormMutation();
+  const deleteOnboardForm = useDeleteOnboardFormMutation();
+
+  const createOnboardSubForm = useCreateOnboardSubFormMutation();
+  const updateOnboardSubForm = useUpdateOnboardSubFormMutation();
+  const deleteOnboardSubForm = useDeleteOnboardSubFormMutation();
+
+  // SUBMITS A FORM
+  const submitOnboardForm = async ({ formId, values, onSuccess }: IFormSubmitHandlerArg) => {
+    formId
+      ? updateOnboardForm.mutate(
+          { id: formId, formInfo: values },
+          { onSuccess: (data) => onSuccess && onSuccess(data) }
+        )
+      : createOnboardForm.mutate(
+          {
+            country,
+            formInfo: values,
+          },
+          { onSuccess: (data) => onSuccess && onSuccess(data) }
+        );
+  };
+
+  // SUBMITS A FIELD
+  const submitOnboardFormField = ({
+    formId,
+    fieldId,
+    values,
+    onSuccess,
+  }: IFieldSubmitHandlerArg) => {
+    console.log("formId: ", formId);
+
+    fieldId
+      ? updateOnboardSubForm.mutate(
+          {
+            id: fieldId,
+            formInfo: values as TSubFormCreate,
+          },
+          {
+            onSuccess: (data) => onSuccess && onSuccess(data),
+          }
+        )
+      : formId &&
+        createOnboardSubForm.mutate(
+          {
+            formId,
+            formInfo: values as TSubFormCreate,
+          },
+          {
+            onSuccess: (data) => onSuccess && onSuccess(data),
+          }
+        );
+  };
+
+  const handleOnboardFieldDelete = (id: string) => {
+    deleteOnboardForm.mutate(id);
+  };
+
+  const handleOnboardFormDelete = (id: string) => {
+    deleteOnboardSubForm.mutate(id);
+  };
+
+  const onboardFormState = {
+    formLoading: createOnboardForm.isPending || updateOnboardForm.isPending,
+    formSuccess: createOnboardForm.isSuccess || updateOnboardForm.isSuccess,
+    formDeleteLoading: deleteOnboardForm.isPending,
+    fieldLoading: createOnboardSubForm.isPending || updateOnboardSubForm.isPending,
+    fieldSuccess: createOnboardSubForm.isSuccess || updateOnboardSubForm.isSuccess,
+    fieldDeleteLoading: deleteOnboardSubForm.isPending,
+  };
+
+  return {
+    onboardFormRes,
+    submitOnboardForm,
+    submitOnboardFormField,
+    onboardFormState,
+    handleOnboardFieldDelete,
+    handleOnboardFormDelete,
   };
 };

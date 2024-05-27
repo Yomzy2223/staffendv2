@@ -1,15 +1,20 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useResponse } from "..";
 import {
+  approveUserDoc,
   deleteUser,
   forgotPassword,
   getAllUsers,
   getUser,
+  getUserBusinessDoc,
+  getUserDoc,
+  getUserRequestDoc,
   resetPassword,
   updateUser,
   verifyUserEmail,
 } from "./operations";
 
+//
 export const useForgotPasswordMutation = () => {
   const { handleError, handleSuccess } = useResponse();
 
@@ -39,8 +44,8 @@ export const useResetPasswordMutation = () => {
 };
 
 export const useVerifyUserEmailMutation = () => {
-  const { handleError, handleSuccess } = useResponse();
   const queryClient = useQueryClient();
+  const { handleError, handleSuccess } = useResponse();
 
   return useMutation({
     mutationFn: verifyUserEmail,
@@ -55,8 +60,8 @@ export const useVerifyUserEmailMutation = () => {
 };
 
 export const useUpdateUserMutation = () => {
-  const { handleError, handleSuccess } = useResponse();
   const queryClient = useQueryClient();
+  const { handleError, handleSuccess } = useResponse();
 
   return useMutation({
     mutationFn: updateUser,
@@ -71,8 +76,8 @@ export const useUpdateUserMutation = () => {
 };
 
 export const useDeleteUserMutation = () => {
-  const { handleError, handleSuccess } = useResponse();
   const queryClient = useQueryClient();
+  const { handleError, handleSuccess } = useResponse();
 
   return useMutation({
     mutationFn: deleteUser,
@@ -90,7 +95,7 @@ export const useGetUserQuery = (id: string) =>
   useQuery({
     queryKey: ["user", id],
     queryFn: ({ queryKey }) => getUser(queryKey[1]),
-    enabled: !!id,
+    enabled: id ? true : false,
   });
 
 export const useGetAllUsersQuery = ({
@@ -108,3 +113,48 @@ export const useGetAllUsersQuery = ({
         isPartner: !!queryKey[2],
       }),
   });
+
+//
+
+//  USER DOCUMENTS ENDPOINTS
+
+export const useApproveUserDocMutation = () => {
+  const queryClient = useQueryClient();
+  const { handleError, handleSuccess } = useResponse();
+
+  return useMutation({
+    mutationKey: ["approve user documents"],
+    mutationFn: approveUserDoc,
+    onError(error, variables, context) {
+      handleError({ title: "Failed", error });
+    },
+    onSuccess(data, variables, context) {
+      handleSuccess(data);
+      queryClient.invalidateQueries({ queryKey: ["user documents"] });
+    },
+  });
+};
+
+export const useGetUserDocQuery = ({ id }: { id: string }) => {
+  return useQuery({
+    queryKey: ["user documents", id],
+    queryFn: ({ queryKey }) => getUserDoc(queryKey[1]),
+    enabled: !!id,
+  });
+};
+
+export const useGetUserRequestDocQuery = ({ requestId }: { requestId: string }) => {
+  return useQuery({
+    queryKey: ["user documents", requestId],
+    queryFn: ({ queryKey }) => getUserRequestDoc(queryKey[1]),
+    enabled: !!requestId,
+  });
+};
+
+export const useGetUserBusinessDocQuery = ({ businessId }: { businessId: string }) => {
+  return useQuery({
+    queryKey: ["user documents", businessId],
+    queryFn: ({ queryKey }) => getUserBusinessDoc(queryKey[1]),
+    enabled: !!businessId,
+  });
+};

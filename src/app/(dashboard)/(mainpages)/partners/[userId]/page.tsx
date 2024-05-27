@@ -8,7 +8,7 @@ import {
   useDeclinePartnerMutation,
   useGetPartnerFormQAQuery,
 } from "@/services/partner";
-import { useGetUserQuery } from "@/services/user";
+import { useGetUserQuery } from "@/services/users";
 import { Button } from "flowbite-react";
 import React, { useState } from "react";
 
@@ -61,7 +61,7 @@ const Page = ({ params }: { params: { userId: string } }) => {
             Activate
           </Button>
         )}
-        {partner?.partnerStatus === "ACTIVE" && (
+        {partner?.partnerStatus === "ACTIVATED" && (
           <Button
             size="fit"
             color="transparent"

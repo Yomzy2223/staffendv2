@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useResponse } from "..";
 import {
   assignRequest,
+  completeRequest,
   deleteRequest,
   getAllRequests,
   getBusinessDetails,
@@ -41,8 +42,7 @@ export const useGetRequestQuery = (id: string) =>
 export const useGetServiceRequestsQuery = (arg: TServiceReqPayload) =>
   useQuery({
     queryKey: ["request", arg],
-    queryFn: ({ queryKey }) =>
-      getServiceRequests(queryKey[1] as TServiceReqPayload),
+    queryFn: ({ queryKey }) => getServiceRequests(queryKey[1] as TServiceReqPayload),
     enabled: !!arg.serviceId,
   });
 
@@ -99,6 +99,22 @@ export const useUnAssignRequestMutation = () => {
   });
 };
 
+export const useCompleteRequestMutation = () => {
+  const { handleError, handleSuccess } = useResponse();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: completeRequest,
+    onError(error, variables, context) {
+      handleError({ title: "Failed", error });
+    },
+    onSuccess(data, variables, context) {
+      handleSuccess({ data });
+      queryClient.invalidateQueries({ queryKey: ["request"] });
+    },
+  });
+};
+
 export const useGetSearchRequestQuery = (args: TSearchReqArgs) =>
   useQuery({
     queryKey: ["request", args],
@@ -106,11 +122,7 @@ export const useGetSearchRequestQuery = (args: TSearchReqArgs) =>
     enabled: !!args.queryString,
   });
 
-export const useGetRequestBusinessQuery = ({
-  requestId,
-}: {
-  requestId: string;
-}) => {
+export const useGetRequestBusinessQuery = ({ requestId }: { requestId: string }) => {
   return useQuery({
     queryKey: ["request", requestId],
     queryFn: ({ queryKey }) => getRequestBusiness(queryKey[1]),

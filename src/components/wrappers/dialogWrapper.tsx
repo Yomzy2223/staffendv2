@@ -32,10 +32,8 @@ const DialogWrapper = ({
           onClose={() => setOpen(false)}
           dismissible={dismissible}
         >
-          <Modal.Header className={classNames?.header}>
-            <span className="text-lg font-semibold text-foreground">
-              {title}
-            </span>
+          <Modal.Header className={cn("items-center py-4", classNames?.header)}>
+            <span className="text-lg font-semibold text-foreground">{title}</span>
           </Modal.Header>
           <Modal.Body
             className={cn(
@@ -57,16 +55,12 @@ const DialogWrapper = ({
             })}
           >
             <DrawerHeader className="flex justify-between px-0">
-              <DrawerTitle className="text-lg font-semibold text-foreground">
-                {title}
-              </DrawerTitle>
+              <DrawerTitle className="text-lg font-semibold text-foreground">{title}</DrawerTitle>
               <DrawerClose>
                 <X color="hsl(var(--foreground-5))" />
               </DrawerClose>
             </DrawerHeader>
-            <div className="flex flex-col overflow-auto flex-1 p-0.5">
-              {children}
-            </div>
+            <div className="flex flex-col overflow-auto flex-1 p-0.5">{children}</div>
           </DrawerContent>
         </Drawer>
       )}

@@ -6,18 +6,17 @@ import { Button } from "flowbite-react";
 import { ArrowRightCircle } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import * as z from "zod";
-import useUserApi from "@/hooks/useUserApi";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { useSearchParams } from "next/navigation";
 import { Oval } from "react-loading-icons";
 import { IDynamicFormField } from "@/components/form/dynamicForm/constants";
+import { useForgotPasswordMutation } from "@/services/users";
 
 const ForgotPassword = () => {
   const [formValue, setformValue] = useState<forgotPasswordType>({ email: "" });
 
   const { setQuery } = useGlobalFunctions();
-  const { forgotPasswordMutation } = useUserApi();
-  const { mutate, isSuccess, isPending } = forgotPasswordMutation;
+  const { mutate, isSuccess, isPending } = useForgotPasswordMutation();
 
   const { get } = useSearchParams();
   const email = get("verification") || "";
@@ -35,20 +34,14 @@ const ForgotPassword = () => {
     window.open(`https://mailto:${email}`, "_blank");
   };
 
-  const emailSnip = email
-    ? email.slice(0, 4) + "......." + email.slice(email.indexOf("@"))
-    : "";
+  const emailSnip = email ? email.slice(0, 4) + "......." + email.slice(email.indexOf("@")) : "";
 
   const description = get("verification")
     ? `A password reset link has been sent to your email address ${emailSnip}`
     : "No worries, recovery is seamless 😋";
 
   return (
-    <AuthFormWrapper
-      title="Forgotten password"
-      description={description}
-      hideSocials
-    >
+    <AuthFormWrapper title="Forgotten password" description={description} hideSocials>
       {!email ? (
         <>
           <DynamicForm
@@ -62,18 +55,14 @@ const ForgotPassword = () => {
               color="secondary"
               isProcessing={isPending}
               disabled={isPending}
-              processingSpinner={
-                <Oval color="white" strokeWidth={4} className="h-6 w-6" />
-              }
+              processingSpinner={<Oval color="white" strokeWidth={4} className="h-6 w-6" />}
             >
               <span>Forgot password</span>
               {!isPending && <ArrowRightCircle className="ml-1" />}
             </Button>
           </DynamicForm>
           <div className="mt-10">
-            <span className="sb-text-18 text-foreground-3">
-              Oh, I have remembered my password!
-            </span>{" "}
+            <span className="sb-text-18 text-foreground-3">Oh, I have remembered my password!</span>{" "}
             <Button
               color="ghost2"
               size="fit"
@@ -90,9 +79,7 @@ const ForgotPassword = () => {
             <span>Go to email</span> <ArrowRightCircle className="ml-1" />
           </Button>
           <div className="mt-11">
-            <span className="sb-text-18 text-foreground-3">
-              Did not recieve link?
-            </span>{" "}
+            <span className="sb-text-18 text-foreground-3">Did not recieve link?</span>{" "}
             <Button
               color="ghost2"
               size="fit"
@@ -104,9 +91,7 @@ const ForgotPassword = () => {
             </Button>
           </div>
           <div className="mt-10">
-            <span className="sb-text-18 text-foreground-3">
-              Oh, I have remembered my password!
-            </span>{" "}
+            <span className="sb-text-18 text-foreground-3">Oh, I have remembered my password!</span>{" "}
             <Button
               color="ghost2"
               size="fit"
@@ -136,10 +121,7 @@ const formInfo: IDynamicFormField[] = [
 ];
 
 const forgotPasswordSchema = z.object({
-  email: z
-    .string()
-    .email("Enter a valid email")
-    .min(1, { message: "Enter your email address" }),
+  email: z.string().email("Enter a valid email").min(1, { message: "Enter your email address" }),
 });
 
 type forgotPasswordType = z.infer<typeof forgotPasswordSchema>;

@@ -22,9 +22,7 @@ export const Client = async () => {
         : "https://h2rwx2fbhm.us-east-1.awsapprunner.com/",
     headers: {
       "Content-Type": "application/json",
-      Authorization: session?.user?.token
-        ? `Bearer ${session?.user?.token}`
-        : ``,
+      Authorization: session?.user?.token ? `Bearer ${session?.user?.token}` : ``,
     },
   });
   return client;
@@ -35,8 +33,7 @@ export const useResponse = () => {
 
   const handleError = ({ error, title, action, hideIcon }: IError) => {
     let errorMessage;
-    if (error?.response?.data?.error)
-      errorMessage = error?.response?.data?.error;
+    if (error?.response?.data?.error) errorMessage = error?.response?.data?.error;
     if (typeof error === "string") errorMessage = error;
     console.log(error);
     toast({
@@ -51,6 +48,7 @@ export const useResponse = () => {
   const handleSuccess = ({ data, title, action, hideIcon }: ISuccess) => {
     let successMessage;
     if (data?.data?.message) successMessage = data?.data?.message;
+    if (data?.message) successMessage = data?.message;
     if (typeof data === "string") successMessage = data;
 
     toast({

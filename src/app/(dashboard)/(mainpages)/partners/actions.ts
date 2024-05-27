@@ -1,7 +1,4 @@
-import {
-  IRowInfo,
-  ITableBody,
-} from "@/components/tables/generalTable/constants";
+import { IRowInfo, ITableBody } from "@/components/tables/generalTable/constants";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
 import { cn } from "@/lib/utils";
 import {
@@ -10,7 +7,7 @@ import {
   useDeclinePartnerMutation,
   useGetPartnerFormQAQuery,
 } from "@/services/partner";
-import { useGetAllUsersQuery } from "@/services/user";
+import { useGetAllUsersQuery } from "@/services/users";
 import { compareAsc, format } from "date-fns";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
@@ -68,11 +65,7 @@ export const useActions = ({
     setSearchValue(value || "");
   };
 
-  const handleClick = (
-    e: MouseEvent<HTMLTableRowElement>,
-    rowId: string,
-    rowInfo: IRowInfo[]
-  ) => {
+  const handleClick = (e: MouseEvent<HTMLTableRowElement>, rowId: string, rowInfo: IRowInfo[]) => {
     isDesktop ? setPreview(rowId) : router.push(`/partners/${rowId}`);
   };
 
@@ -112,9 +105,8 @@ export const useActions = ({
   const tableBody =
     filteredPartners?.map((partner, i: number): ITableBody => {
       const canActivate =
-        partner.partnerStatus === "SUBMITTED" ||
-        partner.partnerStatus === "DEACTIVATED";
-      const isActive = partner.partnerStatus === "ACTIVE";
+        partner.partnerStatus === "SUBMITTED" || partner.partnerStatus === "DEACTIVATED";
+      const isActive = partner.partnerStatus === "ACTIVATED";
       let actionText = "Pending";
       if (canActivate) actionText = "Activate";
       if (isActive) actionText = "Deactivate";
@@ -153,14 +145,7 @@ export const useActions = ({
       };
     }) || [];
 
-  const partnerTableNav = [
-    "All",
-    "Active",
-    "Submitted",
-    "Deactivated",
-    "Declined",
-    "Inactive",
-  ];
+  const partnerTableNav = ["All", "Active", "Submitted", "Deactivated", "Declined", "Inactive"];
 
   return {
     partnerTableNav,

@@ -6,7 +6,7 @@ import { Upload } from "@/assets/icons";
 import { cn } from "@/lib/utils";
 import { FileIcon, defaultStyles, DefaultExtensionType } from "react-file-icon";
 import { Button } from "flowbite-react";
-import { DownloadIcon, PenIcon, PenLineIcon } from "lucide-react";
+import { Check, CheckCircle, DownloadIcon, PenIcon, PenLineIcon } from "lucide-react";
 import { saveAs } from "file-saver";
 
 export const FileInput = ({
@@ -16,6 +16,7 @@ export const FileInput = ({
   editMode = true,
   fileType,
   fileSize,
+  approved,
 }: {
   fileName: string;
   fileLink: string;
@@ -23,6 +24,7 @@ export const FileInput = ({
   fileSize: string;
   onFileChange?: (file: File) => void;
   editMode?: boolean;
+  approved?: boolean;
 }) => {
   const [file, setFile] = useState<File>();
 
@@ -38,16 +40,16 @@ export const FileInput = ({
     noKeyboard: !!file,
     accept: {
       "application/msword": [],
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-        [],
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [],
     },
     disabled: !editMode,
   });
 
   const fileExtension = file?.name.split(".").pop() || fileType;
 
-  let size: string | number =
-    Math.ceil(file?.size ? file?.size / 1000 : 0) || parseInt(fileSize);
+  let size: string | number = Math.ceil(
+    file?.size ? file?.size / 1000 : parseInt(fileSize) ? parseInt(fileSize) / 1000 : 0
+  );
   if (size >= 1000) size = (size / 1000).toFixed(2) + "MB";
   else if (size > 0) size = size + "KB";
 
@@ -67,17 +69,11 @@ export const FileInput = ({
           <>
             <Upload />
             {isDragActive ? (
-              <p className="text-gray-500 text-sm leading-normal">
-                Drop the files here ...
-              </p>
+              <p className="text-gray-500 text-sm leading-normal">Drop the files here ...</p>
             ) : (
               <div className="flex flex-col items-center">
-                <p className="text-gray-500 text-sm leading-normal">
-                  Drag files here to upload
-                </p>
-                <p className="underline text-xs leading-normal text-primary">
-                  or browse for files
-                </p>
+                <p className="text-gray-500 text-sm leading-normal">Drag files here to upload</p>
+                <p className="underline text-xs leading-normal text-primary">or browse for files</p>
               </div>
             )}
           </>
@@ -101,9 +97,21 @@ export const FileInput = ({
               />
             </div>
             <div>
-              <p className="text-sm underline text-ellipsis whitespace-nowrap">
-                {file?.name || fileName}
-              </p>
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-sm underline text-ellipsis whitespace-nowrap">
+                  {file?.name || fileName}
+                </p>
+                {approved && (
+                  <div className="flex items-center gap-1">
+                    <span className="text-xs text-success-foreground">Approved</span>{" "}
+                    <CheckCircle
+                      size={12}
+                      fill="#a8fce050"
+                      stroke="hsl(var(--success-foreground))"
+                    />
+                  </div>
+                )}
+              </div>
               <p className="text-xs">{size || 0}</p>
             </div>
           </div>

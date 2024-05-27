@@ -7,13 +7,12 @@ import { ArrowRightCircle } from "lucide-react";
 import React, { useEffect } from "react";
 import * as z from "zod";
 import { useParams, useRouter } from "next/navigation";
-import useUserApi from "@/hooks/useUserApi";
 import { Oval } from "react-loading-icons";
 import { IDynamicFormField } from "@/components/form/dynamicForm/constants";
+import { useResetPasswordMutation } from "@/services/users";
 
 const ResetPassword = () => {
-  const { resetPasswordMutation } = useUserApi();
-  const { mutate, isPending, isSuccess } = resetPasswordMutation;
+  const { mutate, isPending, isSuccess } = useResetPasswordMutation();
 
   const { token } = useParams();
   const { push } = useRouter();
@@ -44,12 +43,9 @@ const ResetPassword = () => {
           color="secondary"
           isProcessing={isPending}
           disabled={isPending}
-          processingSpinner={
-            <Oval color="white" strokeWidth={4} className="h-6 w-6" />
-          }
+          processingSpinner={<Oval color="white" strokeWidth={4} className="h-6 w-6" />}
         >
-          <span>Reset Password</span>{" "}
-          {!isPending && <ArrowRightCircle className="ml-1" />}
+          <span>Reset Password</span> {!isPending && <ArrowRightCircle className="ml-1" />}
         </Button>
       </DynamicForm>
     </AuthFormWrapper>

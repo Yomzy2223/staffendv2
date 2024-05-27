@@ -1,6 +1,5 @@
-import { Client } from "@/lib/axios";
-import { TRoot } from "..";
-import { TResetPassword, TSignIn, TSignUp, TUser } from "./types";
+import { Client, TRoot } from "..";
+import { TResetPassword, TSignIn, TSignUp, TUser, TUserDocCreate, TUserDocGet } from "./types";
 
 export const signUp = async (formInfo: TSignUp) => {
   const client = await Client();
@@ -27,13 +26,7 @@ export const verifyUserEmail = async (token: string) => {
   return await client.post(`/users/verification/${token}`);
 };
 
-export const updateUser = async ({
-  id,
-  formInfo,
-}: {
-  id: string;
-  formInfo: TSignUp;
-}) => {
+export const updateUser = async ({ id, formInfo }: { id: string; formInfo: TSignUp }) => {
   const client = await Client();
   return await client.put(`/users/${id}`, formInfo);
 };
@@ -56,7 +49,31 @@ export const getAllUsers = async ({
   isStaff?: boolean;
 }) => {
   const client = await Client();
-  return await client.get<TRoot<TUser[]>>(
-    `/users?isPartner=${isPartner}&isStaff=${isStaff}`
-  );
+  return await client.get<TRoot<TUser[]>>(`/users?isPartner=${isPartner}&isStaff=${isStaff}`);
+};
+
+//
+
+//
+
+//
+
+export const approveUserDoc = async (id: string) => {
+  const client = await Client();
+  return client.put<TRoot>(`/userDocument/approve/${id}`);
+};
+
+export const getUserDoc = async (id: string) => {
+  const client = await Client();
+  return client.get<TRoot<TUserDocGet>>(`/userDocument/${id}`);
+};
+
+export const getUserRequestDoc = async (requestId: string) => {
+  const client = await Client();
+  return client.get<TRoot<TUserDocGet[]>>(`/userDocument/request/${requestId}`);
+};
+
+export const getUserBusinessDoc = async (businessId: string) => {
+  const client = await Client();
+  return client.get<TRoot<TUserDocGet>>(`/userDocument/business/${businessId}`);
 };

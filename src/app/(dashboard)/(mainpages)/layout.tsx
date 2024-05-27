@@ -7,11 +7,10 @@ import { Navigation } from "@/components/navigation";
 import { Button } from "flowbite-react";
 import Image from "next/image";
 import { useGlobalFunctions } from "@/hooks/globalFunctions";
-import { useRouteActions } from "./actions";
+import { navRoutes } from "./actions";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   const [open, setOpen] = useState(false);
-  const { navRoutes } = useRouteActions();
   const { setQuery } = useGlobalFunctions();
 
   const openServiceForm = () => {
@@ -25,20 +24,14 @@ const Layout = ({ children }: { children: ReactNode }) => {
         navRoutes={navRoutes}
         className="hidden py-5 md:flex bg-label/[0.02]"
         others={
-          <Button
-            color="ghost"
-            className="text-primary"
-            onClick={openServiceForm}
-          >
+          <Button color="ghost" className="text-primary" onClick={openServiceForm}>
             <Image src={GridPlusIcon} alt="" />
             Add new service
           </Button>
         }
       />
 
-      <div className="flex flex-col flex-1 p-5 pt-0 md:p-8 md:pt-0">
-        {children}
-      </div>
+      <div className="flex flex-col flex-1 p-5 pt-0 md:p-8 md:pt-0">{children}</div>
 
       <ServiceForm setOpen={setOpen} open={open} />
     </>

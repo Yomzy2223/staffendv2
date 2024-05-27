@@ -1,8 +1,6 @@
 "use client";
 
-import OverviewSection, {
-  TOverviewStatus,
-} from "@/components/features/dashboard/overview";
+import OverviewSection, { TOverviewStatus } from "@/components/features/dashboard/overview";
 import DashboardHeader from "@/components/features/dashboard/header";
 import { format, isSameYear } from "date-fns";
 import React, { useState } from "react";
@@ -115,12 +113,21 @@ const Home = () => {
             }
           />
 
-          <PartnerChart />
+          <PartnerChart
+            selectedOverview={selectedOverview}
+            dateTo={dateTo}
+            dateFrom={dateFrom}
+            compareFrom={compareFrom}
+            compareLabel={compareLabel}
+            showCompare={showCompare}
+            activeServiceId={activeService?.id || ""}
+          />
         </div>
         <ServiceTableSection
           dateFrom={dateFrom}
           dateTo={dateTo}
           basePath="home"
+          activeServiceId={activeService?.id}
         />
       </div>
     </>

@@ -117,77 +117,59 @@ export const useRequestActions = ({
   };
 };
 
-// Route actions
-export const useRouteActions = () => {
-  const { data } = useGetAllServicesQuery();
-  const services = data?.data?.data;
+// Dashboard navigation routes
+export const navRoutes = [
+  {
+    name: "Home",
+    to: "/",
+  },
+  {
+    name: "Services",
+    to: "/services",
+    type: "select",
+  },
+  {
+    name: "Countries",
+    to: "/countries",
+  },
+  {
+    name: "FAQ",
+    to: "/faq",
+  },
+  {
+    name: "Partners",
+    to: "/partners",
+  },
+  {
+    name: "Hiring and Payroll",
+    to: "/hiring-and-payroll",
+  },
+  {
+    name: "Bank Accounts",
+    to: "/bank-accounts",
+  },
 
-  const { serviceId } = useParams();
-
-  const getServicesRoute = () => {
-    if (services) {
-      return services.map((service) => ({
-        name: service.name,
-        to: `/services/${slugify(service.id)}`,
-      }));
-    }
-  };
-
-  // Dashboard navigation routes
-  const navRoutes = [
-    {
-      name: "Home",
-      to: "/",
-    },
-    {
-      name: "Services",
-      to: "/services",
-      type: "select",
-    },
-    {
-      name: "Countries",
-      to: "/countries",
-    },
-    {
-      name: "Hiring and Payroll",
-      to: "/hiring-and-payroll",
-    },
-    {
-      name: "Bank Accounts",
-      to: "/bank-accounts",
-    },
-    {
-      name: "FAQ",
-      to: "/faq",
-    },
-    {
-      name: "Rewards",
-      to: "/rewards",
-    },
-    {
-      name: "Promocodes",
-      to: "/promocodes",
-    },
-    {
-      name: "User management",
-      to: "/user-management",
-    },
-    {
-      name: "Payment",
-      to: "/payment",
-    },
-    {
-      name: "Resources",
-      to: "/promocodes",
-    },
-    {
-      name: "Partners",
-      to: "/partners",
-    },
-  ];
-
-  return { navRoutes };
-};
+  {
+    name: "Rewards",
+    to: "/rewards",
+  },
+  {
+    name: "Promocodes",
+    to: "/promocodes",
+  },
+  {
+    name: "User management",
+    to: "/user-management",
+  },
+  {
+    name: "Payment",
+    to: "/payment",
+  },
+  {
+    name: "Resources",
+    to: "/resources",
+  },
+];
 
 export interface IReq {
   all: TRequestAll[];

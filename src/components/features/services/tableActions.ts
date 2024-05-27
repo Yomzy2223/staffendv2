@@ -15,6 +15,7 @@ import {
 
 // Table information
 export const useTableActions = ({
+  activeServiceId,
   setOpenAssign,
   setOpenUnAssign,
   setOpenInfo,
@@ -27,6 +28,7 @@ export const useTableActions = ({
   setPreview,
   basePath,
 }: {
+  activeServiceId?: string;
   setOpenAssign: Dispatch<SetStateAction<boolean>>;
   setOpenUnAssign: Dispatch<SetStateAction<boolean>>;
   setOpenInfo: Dispatch<SetStateAction<boolean>>;
@@ -49,7 +51,7 @@ export const useTableActions = ({
   const services = useGetAllServicesQuery();
   const servicesData = services.data?.data?.data || [];
 
-  const selectedServiceId = searchParams.get("serviceId") || "";
+  const selectedServiceId = searchParams.get("serviceId") || activeServiceId || "";
   const tablePage = parseInt(searchParams.get("page") || "1");
 
   const assignRequestMutation = useAssignRequestMutation();

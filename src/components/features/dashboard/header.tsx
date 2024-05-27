@@ -6,6 +6,7 @@ import React, { Dispatch, SetStateAction, useState } from "react";
 import CustomDate from "./customDate";
 import ComboBox from "@/components/form/dynamicForm/comboBox";
 import DialogWrapper from "@/components/wrappers/dialogWrapper";
+import { useGlobalFunctions } from "@/hooks/globalFunctions";
 
 const DashboardHeader = ({
   dateFrom,
@@ -28,6 +29,8 @@ const DashboardHeader = ({
   const [open, setOpen] = useState(false);
   const [openDatePicker, setOpenDatePicker] = useState<number>();
   const [range, setRange] = useState("");
+
+  const { deleteQueryStrings } = useGlobalFunctions();
 
   const onSelectedDateChanged = (date: Date) => {
     setOpenDatePicker(0);
@@ -68,16 +71,17 @@ const DashboardHeader = ({
 
   return (
     <>
-      <div className="flex flex-col gap-5 w-full pt-6 pb-4 sm:pb-6 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-row justify-between gap-5 w-full pt-6 pb-4 sm:pb-6 sm:flex-row sm:items-center ">
         <div>
           <p className="sb-text-16 font-semibold mb-2">SERVICE OVERVIEW</p>
           <ComboBox
             name="service"
             options={servicesNames}
             fieldName="Service"
-            handleSelect={(selected?: string) =>
-              setSelectedService(selected || "")
-            }
+            handleSelect={(selected?: string) => {
+              setSelectedService(selected || "");
+              deleteQueryStrings(["page"]);
+            }}
             defaultValue={selectedService}
             optionsLoading={isLoading}
             optionsErrorMsg={errorMsg}
@@ -93,17 +97,11 @@ const DashboardHeader = ({
             handleSelect={handleRangeSelect}
             defaultValue="All"
             className={cn({
-              "[&>span]:!rounded-r-none rounded-r-none":
-                range.toLowerCase() === "custom",
+              "[&>span]:!rounded-r-none rounded-r-none": range.toLowerCase() === "custom",
             })}
           />
           {range.toLowerCase() === "custom" && (
-            <Button
-              color="transparent"
-              size="fit"
-              className="flex"
-              onClick={() => setOpen(true)}
-            >
+            <Button color="transparent" size="fit" className="flex" onClick={() => setOpen(true)}>
               <div className="flex items-center px-2 bg-muted py-2.5 rounded-r-md">
                 <CalendarDays size={22} />
               </div>

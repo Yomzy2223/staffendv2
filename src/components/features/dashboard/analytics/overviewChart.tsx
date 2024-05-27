@@ -63,19 +63,13 @@ const OverviewChart = ({
         Skeleton={<OverviewChartSkt />}
         hideImg
       >
-        <p className="sb-text-24 flex flex-row items-center gap-1 text-nowrap h-max font-semibold">
-          {totalCurrent}
-          {showCompare && " : " + totalCompare}
-        </p>
+        <div className="sb-text-24 font-semibold space-y-1">
+          <p>{totalCurrent}</p>
+          <p>{showCompare && totalCompare}</p>
+        </div>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart width={300} height={100} data={data}>
-            <Line
-              type="monotone"
-              dataKey="current"
-              stroke="#84d885"
-              strokeWidth={2}
-              dot={false}
-            />
+            <Line type="monotone" dataKey="current" stroke="#84d885" strokeWidth={2} dot={false} />
             {showCompare && (
               <Line
                 type="monotone"

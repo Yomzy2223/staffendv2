@@ -14,10 +14,12 @@ const ServiceTableSection = ({
   dateFrom,
   dateTo,
   basePath,
+  activeServiceId,
 }: {
   dateFrom?: Date;
   dateTo?: Date;
   basePath: string;
+  activeServiceId?: string;
 }) => {
   const [openAssign, setOpenAssign] = useState(false);
   const [openUnAssign, setOpenUnAssign] = useState(false);
@@ -49,6 +51,7 @@ const ServiceTableSection = ({
     requestsErrorMsg,
     goToDetailsPage,
   } = useTableActions({
+    activeServiceId,
     setOpenAssign,
     setSelectedRequests,
     setOpenInfo,

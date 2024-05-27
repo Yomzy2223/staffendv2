@@ -37,115 +37,113 @@ const OverviewSection = ({
   };
 
   return (
-    <div>
-      <DraggableScroll className="snap snap-mandatory snap-x flex gap-8 p-1 pb-2 scroll-smooth overflow-y-hidden">
-        {/* <AnalyticsCard1
+    <DraggableScroll className="snap snap-mandatory snap-x flex gap-8 p-1 pb-4 scroll-smooth overflow-y-hidden">
+      {/* <AnalyticsCard1
             previous={50}
             current={51}
             title="Website visits"
             total="163.5K"
             className="snap-start"
           /> */}
-        <UserAnalytics title="User signups" total={users?.length || 0} className="snap-start" />
+      <UserAnalytics title="User signups" total={users?.length || 0} className="snap-start" />
 
-        <OverviewChart
-          title="All"
-          rangeData={requestsByStatus.all}
-          compareData={requestsVsByStatus.all}
-          className="snap-start"
-          bottomText={bottomText}
-          dateFrom={dateFrom}
-          compareFrom={compareFrom}
-          selected={selectedOverview === "all"}
-          onClick={(e) => handleSelect("all")}
-          formatStr={formatStr}
-          showCompare={showCompare}
-          reqsDateData={reqsDateData}
-          compareDateData={compareDateData}
-          isLoading={requestsLoading || requestsVsLoading}
-        />
-        <OverviewChart
-          title="Unpaid Drafts"
-          rangeData={requestsByStatus.unPaidDrafts}
-          compareData={requestsVsByStatus.unPaidDrafts}
-          className="snap-start"
-          bottomText={bottomText}
-          dateFrom={dateFrom}
-          compareFrom={compareFrom}
-          selected={selectedOverview === "unPaidDrafts"}
-          onClick={(e) => handleSelect("unPaidDrafts")}
-          formatStr={formatStr}
-          showCompare={showCompare}
-          reqsDateData={reqsDateData}
-          compareDateData={compareDateData}
-          isLoading={requestsLoading || requestsVsLoading}
-        />
-        <OverviewChart
-          title="Paid Drafts"
-          rangeData={requestsByStatus.paidDrafts}
-          compareData={requestsVsByStatus.paidDrafts}
-          className="snap-start"
-          bottomText={bottomText}
-          dateFrom={dateFrom}
-          compareFrom={compareFrom}
-          selected={selectedOverview === "paidDrafts"}
-          onClick={(e) => handleSelect("paidDrafts")}
-          formatStr={formatStr}
-          showCompare={showCompare}
-          reqsDateData={reqsDateData}
-          compareDateData={compareDateData}
-          isLoading={requestsLoading || requestsVsLoading}
-        />
-        <OverviewChart
-          title="Submitted"
-          rangeData={requestsByStatus.submitted}
-          compareData={requestsVsByStatus.submitted}
-          className="snap-start"
-          bottomText={bottomText}
-          dateFrom={dateFrom}
-          compareFrom={compareFrom}
-          selected={selectedOverview === "submitted"}
-          onClick={(e) => handleSelect("submitted")}
-          formatStr={formatStr}
-          showCompare={showCompare}
-          reqsDateData={reqsDateData}
-          compareDateData={compareDateData}
-          isLoading={requestsLoading || requestsVsLoading}
-        />
-        <OverviewChart
-          title="In Progress"
-          rangeData={requestsByStatus.inProgress}
-          compareData={requestsVsByStatus.inProgress}
-          className="snap-start"
-          bottomText={bottomText}
-          dateFrom={dateFrom}
-          compareFrom={compareFrom}
-          selected={selectedOverview === "inProgress"}
-          onClick={(e) => handleSelect("inProgress")}
-          formatStr={formatStr}
-          showCompare={showCompare}
-          reqsDateData={reqsDateData}
-          compareDateData={compareDateData}
-          isLoading={requestsLoading || requestsVsLoading}
-        />
-        <OverviewChart
-          title="Completed"
-          rangeData={requestsByStatus.completed}
-          compareData={requestsVsByStatus.completed}
-          className="snap-start"
-          bottomText={bottomText}
-          dateFrom={dateFrom}
-          compareFrom={compareFrom}
-          selected={selectedOverview === "completed"}
-          onClick={(e) => handleSelect("completed")}
-          formatStr={formatStr}
-          showCompare={showCompare}
-          reqsDateData={reqsDateData}
-          compareDateData={compareDateData}
-          isLoading={requestsLoading || requestsVsLoading}
-        />
-      </DraggableScroll>
-    </div>
+      <OverviewChart
+        title="All"
+        rangeData={requestsByStatus.all}
+        compareData={requestsVsByStatus.all}
+        className="snap-start"
+        bottomText={bottomText}
+        dateFrom={dateFrom}
+        compareFrom={compareFrom}
+        selected={selectedOverview === "all"}
+        onClick={(e) => handleSelect("all")}
+        formatStr={formatStr}
+        showCompare={showCompare}
+        reqsDateData={reqsDateData}
+        compareDateData={compareDateData}
+        isLoading={requestsLoading || requestsVsLoading}
+      />
+      <OverviewChart
+        title="Unpaid Drafts"
+        rangeData={requestsByStatus.unPaidDrafts}
+        compareData={requestsVsByStatus.unPaidDrafts}
+        className="snap-start"
+        bottomText={bottomText}
+        dateFrom={dateFrom}
+        compareFrom={compareFrom}
+        selected={selectedOverview === "unPaidDrafts"}
+        onClick={(e) => handleSelect("unPaidDrafts")}
+        formatStr={formatStr}
+        showCompare={showCompare}
+        reqsDateData={reqsDateData}
+        compareDateData={compareDateData}
+        isLoading={requestsLoading || requestsVsLoading}
+      />
+      <OverviewChart
+        title="Paid Drafts"
+        rangeData={requestsByStatus.paidDrafts}
+        compareData={requestsVsByStatus.paidDrafts}
+        className="snap-start"
+        bottomText={bottomText}
+        dateFrom={dateFrom}
+        compareFrom={compareFrom}
+        selected={selectedOverview === "paidDrafts"}
+        onClick={(e) => handleSelect("paidDrafts")}
+        formatStr={formatStr}
+        showCompare={showCompare}
+        reqsDateData={reqsDateData}
+        compareDateData={compareDateData}
+        isLoading={requestsLoading || requestsVsLoading}
+      />
+      <OverviewChart
+        title="Submitted"
+        rangeData={requestsByStatus.submitted}
+        compareData={requestsVsByStatus.submitted}
+        className="snap-start"
+        bottomText={bottomText}
+        dateFrom={dateFrom}
+        compareFrom={compareFrom}
+        selected={selectedOverview === "submitted"}
+        onClick={(e) => handleSelect("submitted")}
+        formatStr={formatStr}
+        showCompare={showCompare}
+        reqsDateData={reqsDateData}
+        compareDateData={compareDateData}
+        isLoading={requestsLoading || requestsVsLoading}
+      />
+      <OverviewChart
+        title="In Progress"
+        rangeData={requestsByStatus.inProgress}
+        compareData={requestsVsByStatus.inProgress}
+        className="snap-start"
+        bottomText={bottomText}
+        dateFrom={dateFrom}
+        compareFrom={compareFrom}
+        selected={selectedOverview === "inProgress"}
+        onClick={(e) => handleSelect("inProgress")}
+        formatStr={formatStr}
+        showCompare={showCompare}
+        reqsDateData={reqsDateData}
+        compareDateData={compareDateData}
+        isLoading={requestsLoading || requestsVsLoading}
+      />
+      <OverviewChart
+        title="Completed"
+        rangeData={requestsByStatus.completed}
+        compareData={requestsVsByStatus.completed}
+        className="snap-start"
+        bottomText={bottomText}
+        dateFrom={dateFrom}
+        compareFrom={compareFrom}
+        selected={selectedOverview === "completed"}
+        onClick={(e) => handleSelect("completed")}
+        formatStr={formatStr}
+        showCompare={showCompare}
+        reqsDateData={reqsDateData}
+        compareDateData={compareDateData}
+        isLoading={requestsLoading || requestsVsLoading}
+      />
+    </DraggableScroll>
   );
 };
 

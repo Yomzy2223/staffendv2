@@ -3,13 +3,6 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
 import useMediaQuery from "./useMediaQuery";
 import { saveAs } from "file-saver";
-import {
-  MutationFunction,
-  QueryClient,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
-import { useResponse } from "./useResponse";
 
 export const useGlobalFunctions = () => {
   const searchParams = useSearchParams();
@@ -33,24 +26,16 @@ export const useGlobalFunctions = () => {
   );
 
   const setQuery = (name: string, value: string | number) => {
-    router.push(
-      pathname + "?" + createQueryString([{ name, value: value.toString() }]),
-      {
-        scroll: false,
-      }
-    );
+    router.push(pathname + "?" + createQueryString([{ name, value: value.toString() }]), {
+      scroll: false,
+    });
   };
 
   const deleteQueryStrings = useCallback(
-    (
-      names: string[],
-      newQueries?: string | URLSearchParams,
-      dontPush?: boolean
-    ) => {
+    (names: string[], newQueries?: string | URLSearchParams, dontPush?: boolean) => {
       const params = new URLSearchParams(newQueries || searchParams.toString());
       names.forEach((name) => params.delete(name));
-      if (!dontPush)
-        router.push(pathname + "?" + params.toString(), { scroll: false });
+      if (!dontPush) router.push(pathname + "?" + params.toString(), { scroll: false });
 
       return params.toString();
     },
@@ -62,18 +47,13 @@ export const useGlobalFunctions = () => {
   };
 
   const getReqStatusColor = (status: string) => {
-    if (status === "PENDING")
-      return "[&_span]:bg-primary-8 [&_span]:text-primary";
-    if (status === "SUBMITTED")
-      return "[&_span]:bg-success [&_span]:text-success-foreground";
-    if (status === "ASSIGNED")
-      return "[&_span]:bg-success [&_span]:text-success-foreground";
-    if (status === "ACCEPTED")
-      return "[&_span]:bg-tertiary [&_span]:text-tertiary-foreground";
+    if (status === "PENDING") return "[&_span]:bg-primary-8 [&_span]:text-primary";
+    if (status === "SUBMITTED") return "[&_span]:bg-success [&_span]:text-success-foreground";
+    if (status === "ASSIGNED") return "[&_span]:bg-success [&_span]:text-success-foreground";
+    if (status === "ACCEPTED") return "[&_span]:bg-tertiary [&_span]:text-tertiary-foreground";
     if (status === "REJECTED")
       return "[&_span]:bg-destructive [&_span]:text-destructive-foreground";
-    if (status === "COMPLETED")
-      return "[&_span]:bg-success [&_span]:text-success-foreground";
+    if (status === "COMPLETED") return "[&_span]:bg-success [&_span]:text-success-foreground";
   };
 
   // Use this to set a pathname (uses current pathname, if not provided)
@@ -126,28 +106,20 @@ export const uploadFileToCloudinary = async ({
   const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_NAME}/raw/upload`;
   const formData = new FormData();
   formData.append("file", file);
-  formData.append(
-    "upload_preset",
-    `${process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}`
-  );
+  formData.append("upload_preset", `${process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}`);
   formData.append("folder", folderName ? `App V2/${folderName}` : "App V2");
 
   return await axios.post(url, formData, {
     onUploadProgress: (progressEvent) => {
       if (progressEvent.total) {
-        const percentCompleted = Math.round(
-          (progressEvent.loaded * 100) / progressEvent.total
-        );
+        const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
         getProgress(percentCompleted);
       }
     },
   });
 };
 
-export const downloadFileFromCloudinary = (
-  cloudinaryLink: string,
-  fileName: string
-) => {
+export const downloadFileFromCloudinary = (cloudinaryLink: string, fileName: string) => {
   const result = axios
     .get(cloudinaryLink, {
       responseType: "blob",

@@ -114,12 +114,8 @@ const Home = () => {
           />
 
           <PartnerChart
-            selectedOverview={selectedOverview}
             dateTo={dateTo}
             dateFrom={dateFrom}
-            compareFrom={compareFrom}
-            compareLabel={compareLabel}
-            showCompare={showCompare}
             activeServiceId={activeService?.id || ""}
           />
         </div>

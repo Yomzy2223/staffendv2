@@ -28,7 +28,6 @@ const SignUp = () => {
       fullName: values.name,
       email: values.email,
       password: values.password,
-      referral: values.referral,
       isPartner: false,
       isStaff: true,
     });
@@ -127,22 +126,12 @@ const formInfo: IDynamicFormField[] = [
       placeholder: "Enter a password",
     },
   },
-  {
-    name: "referral",
-    label: "How did you hear about us",
-    type: "select",
-    selectProp: {
-      placeholder: "Select a referral",
-    },
-    selectOptions: ["Facebook", "Twitter", "Google", "Instagram", "WhatsApp", "Recommendation"],
-  },
 ];
 
 const signUpSchema = z.object({
   name: z.string().min(1, { message: "Enter your first name" }),
   email: z.string().email("Enter a valid email").min(1, { message: "Enter your email address" }),
   password: z.string().min(6, "Password must be 6 or more characters"),
-  referral: z.string().min(1, { message: "Select an option" }),
 });
 
 type signUpType = z.infer<typeof signUpSchema>;
@@ -151,5 +140,4 @@ const defaultValues = {
   name: "",
   email: "",
   password: "",
-  referral: "",
 };

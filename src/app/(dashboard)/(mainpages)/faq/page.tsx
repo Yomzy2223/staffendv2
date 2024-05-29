@@ -33,8 +33,7 @@ const FAQ = () => {
 
   const FAQs = serviceFAQ.data?.data?.data;
   let filteredFAQ = FAQs;
-  if (productId)
-    filteredFAQ = filteredFAQ?.filter((el) => el.productId === productId);
+  if (productId) filteredFAQ = filteredFAQ?.filter((el) => el.productId === productId);
   if (searchValue) {
     filteredFAQ = filteredFAQ?.filter(
       (el) =>

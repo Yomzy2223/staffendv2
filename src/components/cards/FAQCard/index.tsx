@@ -18,15 +18,9 @@ const FAQCard = ({ info, setOpenEdit, handleDelete, isLoading }: IProps) => {
   return (
     <div className="max-w-[500px]">
       <Accordion type="single" collapsible>
-        <AccordionItem
-          value="item-1"
-          className=" px-5 border border-border rounded-lg"
-        >
+        <AccordionItem value="item-1" className=" px-5 border border-border rounded-lg">
           <div className="flex items-center justify-between gap-4">
-            <AccordionTrigger
-              className="text-start hover:no-underline"
-              hideArrow
-            >
+            <AccordionTrigger className="text-start hover:no-underline" hideArrow>
               {info.question}
             </AccordionTrigger>
             <PopoverMenu menuInfo={popoverInfo} vertical />
@@ -42,8 +36,8 @@ const FAQCard = ({ info, setOpenEdit, handleDelete, isLoading }: IProps) => {
           open={openConfirm}
           setOpen={setOpenConfirm}
           confirmAction={() => handleDelete({ info, setOpenConfirm })}
-          title="Delete Product"
-          description="Are you sure you want to delete this product?"
+          title="Delete FAQ"
+          description="Are you sure you want to delete this FAQ?"
           isLoading={isLoading}
           isDelete
         />

@@ -59,7 +59,6 @@ export const authOptions: AuthOptions = {
             credentials?.fullName &&
             credentials?.email &&
             credentials?.password &&
-            credentials?.referral &&
             credentials?.isStaff
           ) {
             const client = await Client();
@@ -68,7 +67,6 @@ export const authOptions: AuthOptions = {
               fullName,
               email,
               password,
-              referral,
               isStaff: isStaff === "true" ? true : false,
               isPartner: isPartner === "true" ? true : false,
             };
